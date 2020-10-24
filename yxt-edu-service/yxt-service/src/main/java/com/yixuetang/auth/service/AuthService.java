@@ -1,0 +1,28 @@
+package com.yixuetang.auth.service;
+
+/**
+ * @author Colin
+ * @version 1.0.0
+ * @description 认证模块服务层接口
+ * @date 2020/10/23 21:07
+ */
+public interface AuthService {
+
+    /**
+     * 校验用户名和密码的合法性并生成 token
+     *
+     * @param username 用户名
+     * @param password 密码
+     * @return 生成的 token 信息
+     */
+    String authByPwd(String username, String password);
+
+    /**
+     * 校验验证码的正确性并生成 token
+     *
+     * @param email 邮箱地址
+     * @param code  验证码
+     * @return 生成的 token 信息
+     */
+    String authByEmail(String email, String code);
+}

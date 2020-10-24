@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdn.bootcss.com/element-ui/2.13.2/theme-chalk/index.css">
+    <link rel="stylesheet" href="css/yxt.css">
+    <title>首页</title>
+</head>
+
+<body>
+    <div id="app">
+        <el-container>
+            <!-- 头部 -->
+            <el-header>
+                <!-- 导航栏：logo、菜单功能、登录注册 -->
+                <el-row>
+                    <!-- logo -->
+                    <el-col :span="6">
+                        <img src="./images/logo_blue.png">
+                    </el-col>
+                    <!-- 菜单功能 -->
+                    <el-col :span="14">
+                        <el-menu :default-active="activeIndex" mode="horizontal" @select="handleSelect">
+                            <el-menu-item index="1" class="header-text">首页</el-menu-item>
+                            <el-menu-item index="2" class="header-text">关于我们</el-menu-item>
+                            <el-menu-item index="3" class="header-text">联系我们</el-menu-item>
+                        </el-menu>
+                    </el-col>
+                    <!-- 登录注册按钮 -->
+                    <el-col :span="4">
+                        <el-menu class="el-menu-demo" mode="horizontal">
+                            <el-menu-item>
+                                <el-button round class="header-text" @click="window.location = 'login.html'">登录</el-button>
+                            </el-menu-item>
+                            <el-menu-item>
+                                <el-button type="primary" round class="header-text" @click="window.location = 'register.html'">注册</el-button>
+                            </el-menu-item>
+                        </el-menu>
+                    </el-col>
+                </el-row>
+            </el-header>
+            <!-- 中间 -->
+            <el-main>
+                <!-- 轮播图 -->
+                <el-row class="banner-margin-bottom">
+                    <el-carousel height="450px">
+                        <el-carousel-item v-for="(pic, index) in indexBannerPics" :key="index">
+                            <img :src="pic" alt="" srcset="" width="100%">
+                        </el-carousel-item>
+                    </el-carousel>
+                </el-row>
+                <!-- 功能展示 -->
+                <el-row class="show-margin-top-large">
+                    <div class="show-title">混合教学全过程管理</div>
+                    <div class="show-sub-title">课前、课中、课后，线上线下，教学场景全过程管理</div>
+                </el-row>
+                <el-row type="flex" justify="center" :gutter="5" style="margin: 40px;">
+                    <el-col :span="6">
+                        <el-card class="box-card">
+                            <div slot="header" class="show-margin-top-small">
+                                <img src="https://prepc.ketangpai.com/img/task.a6436aca.png" alt="" srcset="">
+                                <h1>作业</h1>
+                            </div>
+                            <div class="show-text">
+                                81 种文档格式作业在线展示和批阅，实时查重，精准对比，避免学生抄袭。 自动管理成绩，一键下载作业数据。
+                            </div>
+                        </el-card>
+                    </el-col>
+                    <el-col :span="6">
+                        <el-card class="box-card">
+                            <div slot="header" class="show-margin-top-small">
+                                <img src="./images/index_card_exam.png" alt="" srcset="">
+                                <h1>考试/练习</h1>
+                            </div>
+                            <div class="show-text">
+                                单选、多选、填空、简答等10余种题型。支持题库随机抽题组卷。支持限时考试、选项随机等防作弊模式。
+                            </div>
+                        </el-card>
+                    </el-col>
+                    <el-col :span="6">
+                        <el-card class="box-card">
+                            <div slot="header" class="show-margin-top-small">
+                                <img src="./images/index_card_data.png" alt="" srcset="">
+                                <h1>课件资料</h1>
+                            </div>
+                            <div class="show-text">
+                                课件、资料、话题、公告等教学内容支撑。在线制作方便快捷，提升备课效率。支持课前发布活动，课中互动，课后巩固。
+                            </div>
+                        </el-card>
+                    </el-col>
+                    <el-col :span="6">
+                        <el-card class="box-card">
+                            <div slot="header" class="show-margin-top-small">
+                                <img src="./images/index_card_in_class.png" alt="" srcset="">
+                                <h1>课中互动</h1>
+                            </div>
+                            <div class="show-text">
+                                课件在线讲解、手机遥控、标记疑问 支持发言、开启弹幕、抢答、提问、话题讨论、黑板、画笔标注课堂要点，让课堂更精彩。
+                            </div>
+                        </el-card>
+                    </el-col>
+                </el-row>
+                <el-row type="flex" justify="center" :gutter="5" style="margin: 40px;">
+                    <el-col :span="6">
+                        <el-card class="box-card">
+                            <div slot="header" class="show-margin-top-small">
+                                <img src="https://prepc.ketangpai.com/img/task.a6436aca.png" alt="" srcset="">
+                                <h1>作业</h1>
+                            </div>
+                            <div class="show-text">
+                                81 种文档格式作业在线展示和批阅，实时查重，精准对比，避免学生抄袭。 自动管理成绩，一键下载作业数据。
+                            </div>
+                        </el-card>
+                    </el-col>
+                    <el-col :span="6">
+                        <el-card class="box-card">
+                            <div slot="header" class="show-margin-top-small">
+                                <img src="./images/index_card_exam.png" alt="" srcset="">
+                                <h1>考试/练习</h1>
+                            </div>
+                            <div class="show-text">
+                                单选、多选、填空、简答等10余种题型。支持题库随机抽题组卷。支持限时考试、选项随机等防作弊模式。
+                            </div>
+                        </el-card>
+                    </el-col>
+                    <el-col :span="6">
+                        <el-card class="box-card">
+                            <div slot="header" class="show-margin-top-small">
+                                <img src="./images/index_card_data.png" alt="" srcset="">
+                                <h1>课件资料</h1>
+                            </div>
+                            <div class="show-text">
+                                课件、资料、话题、公告等教学内容支撑。在线制作方便快捷，提升备课效率。支持课前发布活动，课中互动，课后巩固。
+                            </div>
+                        </el-card>
+                    </el-col>
+                    <el-col :span="6">
+                        <el-card class="box-card">
+                            <div slot="header" class="show-margin-top-small">
+                                <img src="./images/index_card_in_class.png" alt="" srcset="">
+                                <h1>课中互动</h1>
+                            </div>
+                            <div class="show-text">
+                                课件在线讲解、手机遥控、标记疑问 支持发言、开启弹幕、抢答、提问、话题讨论、黑板、画笔标注课堂要点，让课堂更精彩。
+                            </div>
+                        </el-card>
+                    </el-col>
+                </el-row>
+                <!-- 特色展示 -->
+                <el-row class="show-margin-top-large">
+                    <div class="show-title">智慧教学平台</div>
+                </el-row>
+                <el-row type="flex" justify="center" :gutter="5" class="show-margin-top-big">
+                    <el-col :span="6">
+                        <el-card class="box-card">
+                            <div slot="header" class="show-margin-top-small">
+                                <img src="https://prepc.ketangpai.com/img/task.a6436aca.png" alt="" srcset="">
+                                <h1>作业</h1>
+                            </div>
+                            <div class="show-text">
+                                81 种文档格式作业在线展示和批阅，实时查重，精准对比，避免学生抄袭。 自动管理成绩，一键下载作业数据。
+                            </div>
+                        </el-card>
+                    </el-col>
+                    <el-col :span="6">
+                        <el-card class="box-card">
+                            <div slot="header" class="show-margin-top-small">
+                                <img src="./images/index_card_exam.png" alt="" srcset="">
+                                <h1>考试/练习</h1>
+                            </div>
+                            <div class="show-text">
+                                单选、多选、填空、简答等10余种题型。支持题库随机抽题组卷。支持限时考试、选项随机等防作弊模式。
+                            </div>
+                        </el-card>
+                    </el-col>
+                    <el-col :span="6">
+                        <el-card class="box-card">
+                            <div slot="header" class="show-margin-top-small">
+                                <img src="./images/index_card_data.png" alt="" srcset="">
+                                <h1>课件资料</h1>
+                            </div>
+                            <div class="show-text">
+                                课件、资料、话题、公告等教学内容支撑。在线制作方便快捷，提升备课效率。支持课前发布活动，课中互动，课后巩固。
+                            </div>
+                        </el-card>
+                    </el-col>
+                    <el-col :span="6">
+                        <el-card class="box-card">
+                            <div slot="header" class="show-margin-top-small">
+                                <img src="./images/index_card_in_class.png" alt="" srcset="">
+                                <h1>课中互动</h1>
+                            </div>
+                            <div class="show-text">
+                                课件在线讲解、手机遥控、标记疑问 支持发言、开启弹幕、抢答、提问、话题讨论、黑板、画笔标注课堂要点，让课堂更精彩。
+                            </div>
+                        </el-card>
+                    </el-col>
+                </el-row>
+                <el-row type="flex" justify="center" style="margin-top: 50px; margin-bottom: 40px;">
+                    <el-button class="show-btn">了解详细功能</el-button>
+                    <el-button type="primary" style="width: 160px; height: 48px;">立即注册体验</el-button>
+                </el-row>
+            </el-main>
+            <!-- 底部 -->
+            <el-footer>
+                <el-row type="flex" justify="center">
+                    <el-col :span="8"></el-col>
+                    <el-col :span="8" push="1">
+                        <el-menu mode="horizontal">
+                            <el-menu-item>关于我们</el-menu-item>
+                            <el-menu-item>联系我们</el-menu-item>
+                            <el-menu-item>服务条款</el-menu-item>
+                            <el-menu-item>浏览器下载</el-menu-item>
+                            <el-menu-item>更新动态</el-menu-item>
+                        </el-menu>
+                    </el-col>
+                    <el-col :span="8"></el-col>
+                </el-row>
+                <span class="foot-text">Copyright © 2020 yixuetang.com All Rights Reserved. </span>
+            </el-footer>
+        </el-container>
+    </div>
+</body>
+<script src="https://cdn.bootcss.com/vue/2.6.11/vue.min.js"></script>
+<script src="https://cdn.bootcss.com/axios/0.19.2/axios.min.js"></script>
+<script src="https://cdn.bootcss.com/element-ui/2.13.2/index.js"></script>
+
+<script>
+    new Vue({
+        el: '#app',
+        data: {
+            activeIndex: '1',
+            indexBannerPics: [
+                "https://prepc.ketangpai.com/img/banner-home01.9994acf5.jpg",
+                "https://prepc.ketangpai.com/img/banner-home02.ebb3d690.png",
+                "https://prepc.ketangpai.com/img/banner-home03.6c319494.png"
+            ],
+            user: {},
+        },
+        methods: {
+            handleSelect(key, keyPath) {
+                console.log(key, keyPath);
+            }
+        }
+    })
+</script>
+
+</html>

@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdn.bootcss.com/element-ui/2.13.2/theme-chalk/index.css">
+    <link rel="stylesheet" href="css/yxt.css">
+    <title>HomePage</title>
+</head>
+
+<body>
+    <div id="app">
+        <el-container>
+            <!-- 头部 -->
+            <el-header>
+                <!-- 导航栏：logo、菜单功能、头像下拉菜单 -->
+                <el-row>
+                    <!-- logo -->
+                    <el-col :span="4">
+                        <el-image style="margin-top: 10px;" src="./images/logo_blue.png" fit="contain"></el-image>
+                    </el-col>
+                    <!-- 菜单功能 -->
+                    <el-col :span="16">
+                        <el-menu :default-active="activeIndex" mode="horizontal" @select="handleSelect">
+                            <el-menu-item index="1" class="header-text">课堂</el-menu-item>
+                            <el-menu-item index="2" class="header-text">精品课程</el-menu-item>
+                            <el-menu-item index="3" class="header-text">本校课程</el-menu-item>
+                            <el-menu-item index="3" class="header-text">我的精品</el-menu-item>
+                        </el-menu>
+                    </el-col>
+                    <!-- 头像下拉菜单 -->
+                    <el-col :span="4">
+                        <el-menu class="el-menu-demo" mode="horizontal">
+                            <el-menu-item>
+                                <i class="el-icon-bell"></i>
+                                <el-badge is-dot class="item"></el-badge>
+                            </el-menu-item>
+                            <el-submenu>
+                                <template slot="title">
+                                    <el-avatar size="large" :src="user.avatar">
+                                    </el-avatar>
+                                </template>
+                                <el-menu-item><i class="el-icon-setting"></i> 个人设置</el-menu-item>
+                                <el-menu-item><i class="el-icon-s-unfold"></i> 退出账户</el-menu-item>
+                            </el-submenu>
+                        </el-menu>
+                    </el-col>
+                </el-row>
+            </el-header>
+            <!-- 中间 -->
+            <el-main>
+                <div style="line-height: 960px;">MAIN</div>
+            </el-main>
+            <!-- 底部 -->
+            <el-footer>
+                <el-row type="flex" justify="center">
+                    <el-col :span="8"></el-col>
+                    <el-col :span="8" push="1">
+                        <el-menu mode="horizontal">
+                            <el-menu-item>关于我们</el-menu-item>
+                            <el-menu-item>联系我们</el-menu-item>
+                            <el-menu-item>服务条款</el-menu-item>
+                            <el-menu-item>浏览器下载</el-menu-item>
+                            <el-menu-item>更新动态</el-menu-item>
+                        </el-menu>
+                    </el-col>
+                    <el-col :span="8"></el-col>
+                </el-row>
+                <span class="foot-text">Copyright © 2020 yixuetang.com All Rights Reserved. </span>
+            </el-footer>
+        </el-container>
+    </div>
+</body>
+<script src="https://cdn.bootcss.com/vue/2.6.11/vue.min.js"></script>
+<script src="https://cdn.bootcss.com/axios/0.19.2/axios.min.js"></script>
+<script src="https://cdn.bootcss.com/element-ui/2.13.2/index.js"></script>
+<script src="./js/common.js"></script>
+
+<script>
+    new Vue({
+        el: '#app',
+        data: {
+            activeIndex: '1',
+            indexBannerPics: [
+                "https://prepc.ketangpai.com/img/banner-home01.9994acf5.jpg",
+                "https://prepc.ketangpai.com/img/banner-home02.ebb3d690.png",
+                "https://prepc.ketangpai.com/img/banner-home03.6c319494.png"
+            ],
+            user: {},
+        },
+        methods: {
+            handleSelect(key, keyPath) {
+                console.log(key, keyPath);
+            }
+        },
+        created() {
+            yxt.http.get("/auth/verify").then(({ data }) => {
+                if (data.success) {
+                    this.user = data.queryResult.data[0];
+                } else {
+                    this.$message.error("用户身份认证失败！");
+                    setTimeout(() => {
+                        location.href = "index.html"
+                    }, 1000);
+                }
+            })
+        },
+    })
+</script>
+
+</html>

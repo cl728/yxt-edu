@@ -1,0 +1,105 @@
+.el-header,
+.el-footer {
+    color: #333;
+    text-align: center;
+    line-height: 60px;
+}
+
+.el-aside {
+    background-color: #D3DCE6;
+    color: #333;
+    text-align: center;
+    line-height: 200px;
+  }
+
+.el-main {
+    color: #333;
+    text-align: center;
+    padding: 0;
+    height: auto;
+    overflow: hidden;
+}
+
+.text {
+    font-size: 14px;
+}
+
+.item {
+    margin-bottom: 18px;
+}
+
+.el-card {
+    height: 400px;
+    width: 400px;
+    margin-left: 20px;
+}
+
+.banner-margin-bottom {
+    margin-bottom: 20px;
+}
+
+.show-margin-top-large {
+    margin-top: 60px;
+}
+
+.show-margin-top-big {
+    margin-top: 40px;
+}
+
+.show-margin-top-small {
+    margin-top: 20px;
+}
+
+.show-text {
+    font-size: larger; 
+    line-height: 30px; 
+    color: darkgray;
+}
+
+.show-title {
+    font-size: 60px; 
+    color: black;
+}
+
+.show-sub-title {
+    font-size: 30px; 
+    color: darkgray; 
+    margin-top: 10px;
+}
+
+.show-btn {
+    width: 160px; 
+    height: 48px;
+}
+
+.box-card {
+    padding-bottom: 10px;
+}
+
+.foot-text {
+    font-size: medium; 
+    color: darkgray;
+}
+
+.header-text {
+    font-size: larger;
+}
+
+.login-bg {
+    width: 100%;
+    height: 100%;
+    position: fixed;
+    top: 0;
+}
+
+.login-form {
+    margin-top: 50px;
+    width: 480px;
+    position: absolute;
+    left: 35%;
+    top: 35%;
+}
+
+.dialog-footer {
+    height: 150px;
+}

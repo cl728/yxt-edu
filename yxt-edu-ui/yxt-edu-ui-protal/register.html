@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdn.bootcss.com/element-ui/2.13.2/theme-chalk/index.css">
+    <link rel="stylesheet" href="css/yxt.css">
+    <title>注册</title>
+    <style>
+        body {
+            background: url("https://static001.geekbang.org/static/account/img/bg.861423e.jpg");
+        }
+    </style>
+</head>
+
+<body>
+    <div id="app">
+        <!-- 注册表单 -->
+        <el-dialog visible="true" width="30%" center close-on-click-modal="false" close-on-press-escape="false"
+            show-close="false" top="8vh">
+            <div slot="title" class="dialog-title">
+                <h2>账号注册</h2>
+            </div>
+            <el-form :model="user" :rules="registerRule" ref="registerForm">
+                <el-form-item prop="username">
+                    <el-input prefix-icon="el-icon-user" placeholder="请输入用户名" v-model="user.username" autocomplete="off"
+                        clearable></el-input>
+                </el-form-item>
+                <el-form-item prop="password">
+                    <el-input prefix-icon="el-icon-lock" type="password" placeholder="请输入密码" v-model="user.password"
+                        autocomplete="off" show-password></el-input>
+                </el-form-item>
+                <el-form-item prop="confirmPwd">
+                    <el-input prefix-icon="el-icon-lock" type="password" placeholder="请再次输入密码确认"
+                        v-model="user.confirmPwd" autocomplete="off" @blur="checkConfirmPwd()" show-password></el-input>
+                </el-form-item>
+                <el-form-item prop="roleName">
+                    <!-- <div><strong style="font-size: medium;">选择身份</strong></div> -->
+                    <el-radio-group v-model="user.roleName">
+                        <el-radio border label="老师/助教"></el-radio>
+                        <el-radio border label="学生"></el-radio>
+                    </el-radio-group>
+                </el-form-item>
+                <el-form-item prop="realName">
+                    <el-input prefix-icon="el-icon-user" placeholder="请输入姓名" v-model="user.realName" autocomplete="off"
+                        clearable></el-input>
+                </el-form-item>
+                <el-form-item prop="school">
+                    <el-autocomplete style="width: 100%;" class="inline-input" prefix-icon="el-icon-school"
+                        v-model="user.school" :fetch-suggestions="querySearch" placeholder="请选择学校"
+                        @select="handleSelect" clearable>
+                    </el-autocomplete>
+                </el-form-item>
+                <el-form-item prop="email">
+                    <el-input prefix-icon="el-icon-postcard" placeholder="请输入邮箱地址" v-model="user.email"
+                        autocomplete="off" clearable></el-input>
+                </el-form-item>
+                <el-form-item>
+                    <el-row>
+                        <el-col :span="12">
+                            <el-input prefix-icon="el-icon-document" placeholder="请输入验证码" v-model="code"
+                                autocomplete="off" clearable></el-input>
+                        </el-col>
+                        <el-col :span="12">
+                            <el-button type="primary" style="float: right;" @click="sendCode()" v-if="!isSendingMail">
+                                发送验证码
+                            </el-button>
+                            <el-button disabled style="float: right;" v-else>
+                                <span v-text="times + 's后重新发送'"></span>
+                            </el-button>
+                        </el-col>
+                    </el-row>
+                </el-form-item>
+            </el-form>
+            <div slot="footer" class="dialog-footer">
+                <el-row>
+                    <el-button type="primary" @click="register('registerForm')" style="padding: 12px 250px;">注 册
+                    </el-button>
+                </el-row>
+                <el-row style="float: right;margin-top: 20px;">
+                    <span style="font-size: small;">已有账号？</span>
+                    <el-link type="primary" href="login.html" :underline="false">去登录</el-link>
+                </el-row>
+            </div>
+        </el-dialog>
+    </div>
+</body>
+<script src="https://cdn.bootcss.com/vue/2.6.11/vue.min.js"></script>
+<script src="https://cdn.bootcss.com/element-ui/2.13.2/index.js"></script>
+
+<script>
+    new Vue({
+        el: '#app',
+        data: {
+            user: {
+                username: "",
+                password: "",
+                confirmPwd: "",
+                roleName: "老师/助教",
+                email: "",
+                realName: "",
+                school: "",
+            },
+            code: "",
+            isSendingMail: false,
+            times: 60,
+            registerRule: {
+                username: [
+                    { required: true, message: '请输入用户名', trigger: 'blur' },
+                    { min: 3, max: 20, message: '长度在 3 到 20 个字符', trigger: 'blur' }
+                ],
+                password: [
+                    { required: true, message: '请输入密码', trigger: 'blur' },
+                    { min: 3, max: 20, message: '长度在 3 到 20 个字符', trigger: 'blur' }
+                ],
+                confirmPwd: [{ required: true, message: '请再次输入密码确认', trigger: 'blur' }],
+                realName: [{ required: true, message: '请输入姓名', trigger: 'blur' }],
+                school: [{ required: true, message: '请选择学校', trigger: 'blur' }],
+                email: [{ required: true, message: '请输入邮箱地址', trigger: 'blur' },
+                { type: 'email', message: '请输入正确的邮箱地址', trigger: 'blur' }]
+            },
+            schools: []
+        },
+        mounted() {
+            // 加载学校列表
+            this.schools = this.loadSchools();
+        },
+        methods: {
+            handleSelect(key, keyPath) {
+                console.log(key, keyPath);
+            },
+            loadSchools() {
+                // 先返回假数据，后续调用后台接口获取
+                return [
+                    { "value": "中山大学" },
+                    { "value": "广东工业大学" },
+                    { "value": "佛山科学技术学院" },
+                    { "value": "佛山职业技术学院" }
+                ];
+            },
+            sendCode() {
+                // 设置计时器，60s后用户可以重新点击发送验证码
+                this.isSendingMail = true;
+                this.times = 60;
+                var _this = this;
+                this.timer = setInterval(function () {
+                    _this.times--;
+                    if (_this.times === 0) {
+                        _this.isSendingMail = false;
+                        clearInterval(_this.timer)
+                    }
+                }, 1000);
+                // 调用后台接口发送验证码
+
+            },
+            querySearch(queryString, cb) {
+                var schools = this.schools;
+                var results = queryString ? schools.filter(this.createFilter(queryString)) : schools;
+                // 调用 callback 返回学校列表的数据
+                cb(results);
+            },
+            createFilter(queryString) {
+                return (school) => {
+                    return (school.value.toLowerCase().indexOf(queryString.toLowerCase()) === 0);
+                };
+            },
+            checkConfirmPwd() {
+                let flag = false;
+                if (this.user.confirmPwd === "") {
+                    this.$message.error("请再次输入密码确认！")
+                } else if (this.user.confirmPwd !== this.user.password) {
+                    this.$message.error("两次输入密码不一致！")
+                } else {
+                    flag = true;
+                }
+                return flag;
+            },
+            register(registerForm) {
+                this.$refs[registerForm].validate((valid) => {
+                    // 表单项校验 + 确认密码框校验 + 验证码校验
+                    if (valid && this.checkConfirmPwd() && /^\d{6}$/.test(this.code)) {
+                        // 校验通过，调用后台接口完成注册逻辑
+                        this.$message.success("注册成功！")
+                    }
+                })
+            }
+        },
+        created() {
+
+        }
+    })
+</script>
+
+</html>
