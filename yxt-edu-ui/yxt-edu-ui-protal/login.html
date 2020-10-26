@@ -51,7 +51,8 @@
                                 autocomplete="off" clearable></el-input>
                         </el-col>
                         <el-col :span="12">
-                            <el-button type="primary" style="float: right;" @click="sendCode()" v-if="!isSendingMail">
+                            <el-button type="primary" style="float: right;" @click="sendCode()" :disabled="checkEmail()"
+                                v-if="!isSendingMail">
                                 发送验证码
                             </el-button>
                             <el-button disabled style="float: right;" v-else>
@@ -117,6 +118,10 @@
             handleSelect(key, keyPath) {
                 console.log(key, keyPath);
             },
+            checkEmail() {
+                let reg_email = /^[a-zA-Z0-9_-]+@[a-zA-Z0-9_-]+(\.[a-zA-Z0-9_-]+)+$/;
+                return !reg_email.test(this.user.email);
+            },
             sendCode() {
                 // 设置计时器，60s后用户可以重新点击发送验证码
                 this.isSendingMail = true;
@@ -130,7 +135,7 @@
                     }
                 }, 1000);
                 // 调用后台接口发送验证码
-                yxt.http.post("/users/code/1", {email: this.user.email}).then(({ data }) => {
+                yxt.http.post("/users/code/1", { email: this.user.email }).then(({ data }) => {
                     if (data.success) {
                         this.$message.success(data.message);
                     } else {
