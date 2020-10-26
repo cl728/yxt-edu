@@ -1,0 +1,35 @@
+server:
+  port: 8888
+spring:
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: ENC(XU3IJ2x4kfUAKvBBI3hElSp+6MSdm7vJb9xKS+DeDsM3NHx815S8ahybOiX2OfluM4GBF9eDRIT8VZRMd+x4FyDXKkZMb24S9o91tAClsUCS/KYAF0gfb1ICPjUkK2nvtdgywOBR6dg=)
+    username: ENC(aaq+Wjg1D1Z2cQGTwZeidA==)
+    password: ENC(ggQPxMX7xD7eV2gA+GiPTm9Mm9+W6vso)
+  mail:
+    host: ENC(WaLpFXYKnKRNAsG1/p6McGLJrmMYyYN9)
+    username: ENC(FRmnejafWbckb2gjtRaFBjY7S0CIkaK2L5v16Ggurl4=)
+    password: ENC(d92dIj8dWEA9GQdto86LcTs4ZtmUqvTum4J4SccS8vQ=)
+    port: 465
+    properties:
+      mail:
+        smtp:
+          ssl:
+            enable: true
+  redis:
+    host: ENC(xGJHqtnNQ7QY0/Zmn7J3JVevS8FrsCLX)
+    password: ENC(UBm3TeLHwCHy3FZXXk4ffZtulNrEz5zT)
+yxt:
+  jwt:
+    secret: 11YXT_USER_AUTH44@ # 登录校验的密钥
+    pubKeyPath: E:\\projects\\yxt-edu\\yxt-edu-service\\rsa\\rsa.pub # 公钥地址
+    priKeyPath: E:\\projects\\yxt-edu\\yxt-edu-service\\rsa\\rsa.pri # 私钥地址
+    expire: 720 # 过期时间，单位分钟，默认为 900 = 60 * 12 即 12个小时
+    cookieName: YXT_USER_AUTH # cookie名称
+    cookieMaxAge: 43200 # cookie 最大存活时间，单位秒，默认为 43200 = 60 * 60 * 12 即 12 个小时
+logging:
+  level:
+    root: info
+    com.yixuetang: debug
+  file:
+    name: log/yxt-dev.log
