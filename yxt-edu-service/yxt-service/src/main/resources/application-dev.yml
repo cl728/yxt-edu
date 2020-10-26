@@ -22,8 +22,8 @@ spring:
 yxt:
   jwt:
     secret: ENC(YKsuzaRh9wxvSPUYoxdZbNI7UWvy7WBgn8Ki2BF03iw=) # 登录校验的密钥
-    pubKeyPath: E:\\projects\\yxt-edu\\yxt-edu-service\\rsa\\rsa.pub # 公钥地址
-    priKeyPath: E:\\projects\\yxt-edu\\yxt-edu-service\\rsa\\rsa.pri # 私钥地址
+    pubKeyPath: D:\\data\\rsa\\rsa.pub # 公钥地址
+    priKeyPath: D:\\data\\rsa\\rsa.pri # 私钥地址
     expire: 720 # 过期时间，单位分钟，默认为 900 = 60 * 12 即 12个小时
     cookieName: YXT_USER_AUTH # cookie名称
     cookieMaxAge: 43200 # cookie 最大存活时间，单位秒，默认为 43200 = 60 * 60 * 12 即 12 个小时
