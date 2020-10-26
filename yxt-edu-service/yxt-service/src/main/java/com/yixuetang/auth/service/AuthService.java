@@ -11,18 +11,20 @@ public interface AuthService {
     /**
      * 校验用户名和密码的合法性并生成 token
      *
-     * @param username 用户名
-     * @param password 密码
+     * @param username   用户名
+     * @param password   密码
+     * @param rememberMe 下次是否自动登录 true是 false不是
      * @return 生成的 token 信息
      */
-    String authByPwd(String username, String password);
+    String authByPwd(String username, String password, boolean rememberMe);
 
     /**
      * 校验验证码的正确性并生成 token
      *
-     * @param email 邮箱地址
-     * @param code  验证码
+     * @param email      邮箱地址
+     * @param code       验证码
+     * @param rememberMe 下次是否自动登录 true是 false不是
      * @return 生成的 token 信息
      */
-    String authByEmail(String email, String code);
+    String authByEmail(String email, String code, boolean rememberMe);
 }

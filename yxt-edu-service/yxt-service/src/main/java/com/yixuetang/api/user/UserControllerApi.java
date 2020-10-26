@@ -1,7 +1,11 @@
 package com.yixuetang.api.user;
 
+import com.yixuetang.entity.request.user.EmailUser;
+import com.yixuetang.entity.response.CommonResponse;
 import com.yixuetang.entity.response.QueryResponse;
 import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 
 /**
@@ -18,4 +22,13 @@ public interface UserControllerApi {
 
     @ApiOperation("查询所有角色")
     QueryResponse findAllRoles();
+
+    @ApiOperation("查询所有学校")
+    QueryResponse findAllSchools();
+
+    @ApiOperation("发送验证码")
+    @ApiImplicitParam(name = "codeType", value = "因何发送验证码 1登录 2注册 3修改密码", required = true,
+            paramType = "path", dataType = "int")
+    CommonResponse sendCode(int codeType, EmailUser emailUser);
+
 }

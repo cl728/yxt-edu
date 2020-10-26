@@ -1,6 +1,7 @@
 package com.yixuetang.user.service;
 
 
+import com.yixuetang.entity.response.CommonResponse;
 import com.yixuetang.entity.response.QueryResponse;
 
 /**
@@ -25,4 +26,19 @@ public interface UserService {
      */
     QueryResponse findAllRoles();
 
+    /**
+     * 查询所有学校
+     *
+     * @return 响应结果实体类
+     */
+    QueryResponse findAllSchools();
+
+    /**
+     * 发送验证码到用户邮箱并根据 type 以不同的 key 存储到 redis 上
+     *
+     * @param email 用户邮箱地址
+     * @param codeType  因何发送验证码 1登录 2注册 3修改密码
+     * @return 响应结果实体类
+     */
+    CommonResponse sendCode(String email, int codeType);
 }

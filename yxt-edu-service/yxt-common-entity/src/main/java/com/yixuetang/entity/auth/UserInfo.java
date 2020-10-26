@@ -19,6 +19,7 @@ public class UserInfo {
     private String username;
     private String realName;
     private String avatar;
+    private Boolean rememberMe;
 
     public UserInfo(Long id, String username) {
         this.id = id;

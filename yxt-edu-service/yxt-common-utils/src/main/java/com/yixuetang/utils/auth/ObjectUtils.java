@@ -33,4 +33,11 @@ public class ObjectUtils {
     public static Integer toInt(Object obj) {
         return toLong( obj ).intValue();
     }
+
+    public static Boolean toBoolean(Object o) {
+        if (o == null) {
+            return null;
+        }
+        return Boolean.parseBoolean( o.toString() );
+    }
 }

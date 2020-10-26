@@ -10,7 +10,9 @@ import com.yixuetang.entity.response.code.ResponseCode;
  */
 public enum UserCode implements ResponseCode {
 
-    USER_NOT_FOUND( false, 30000, "查询不到用户！" );
+    USER_NOT_FOUND( false, 30000, "查询不到用户！" ),
+
+    USER_NOT_REGISTER( false, 30001, "该邮箱尚未注册，请先进行注册！" );
 
     private boolean success;
     private int code;

@@ -24,4 +24,7 @@ public class LoginUser {
     @ApiModelProperty("验证码")
     private String code;
 
+    @ApiModelProperty("下次是否自动登录 true是 false不是")
+    private boolean rememberMe;
+
 }

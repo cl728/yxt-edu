@@ -17,6 +17,8 @@ public enum CommonCode implements ResponseCode {
 
     INVALID_PARAM( false, 20002, "非法参数！" ),
 
+    UNAUTHORIZED( false, 20003, "用户未经认证！" ),
+
     SERVER_ERROR( false, 29999, "抱歉，系统繁忙，请稍后重试！" );
 
     // 操作是否成功

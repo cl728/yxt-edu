@@ -87,7 +87,9 @@
     </div>
 </body>
 <script src="https://cdn.bootcss.com/vue/2.6.11/vue.min.js"></script>
+<script src="https://cdn.bootcss.com/axios/0.19.2/axios.min.js"></script>
 <script src="https://cdn.bootcss.com/element-ui/2.13.2/index.js"></script>
+<script src="./js/common.js"></script>
 
 <script>
     new Vue({
@@ -124,20 +126,17 @@
         },
         mounted() {
             // 加载学校列表
-            this.schools = this.loadSchools();
+            this.loadSchools();
         },
         methods: {
             handleSelect(key, keyPath) {
                 console.log(key, keyPath);
             },
             loadSchools() {
-                // 先返回假数据，后续调用后台接口获取
-                return [
-                    { "value": "中山大学" },
-                    { "value": "广东工业大学" },
-                    { "value": "佛山科学技术学院" },
-                    { "value": "佛山职业技术学院" }
-                ];
+                // 调用后台接口获取全国高校列表
+                yxt.http.get("users/schools").then(({ data }) => {
+                    this.schools = data.queryResult.data;
+                })
             },
             sendCode() {
                 // 设置计时器，60s后用户可以重新点击发送验证码
@@ -185,9 +184,6 @@
                     }
                 })
             }
-        },
-        created() {
-
         }
     })
 </script>

@@ -35,7 +35,7 @@
                     <el-input prefix-icon="el-icon-lock" type="password" placeholder="请输入密码" v-model="user.password"
                         autocomplete="off" show-password></el-input>
                 </el-form-item>
-                <el-checkbox label="下次自动登录" style="float: left;"></el-checkbox>
+                <el-checkbox label="记住我" style="float: left;" v-model="user.rememberMe"></el-checkbox>
                 <el-link type="primary" style="float: right;" :underline="false">忘记密码？</el-link>
             </el-form>
             <!-- 邮箱登录表单 -->
@@ -60,7 +60,7 @@
                         </el-col>
                     </el-row>
                 </el-form-item>
-                <el-checkbox label="下次自动登录" style="float: left;"></el-checkbox>
+                <el-checkbox label="记住我" style="float: left;" v-model="user.rememberMe"></el-checkbox>
                 <el-link type="primary" style="float: right;" :underline="false" v-show="isLoginByPwd">忘记密码？
                 </el-link>
             </el-form>
@@ -100,7 +100,8 @@
             user: {
                 username: "",
                 password: "",
-                email: ""
+                email: "",
+                rememberMe: true
             },
             code: "",
             isSendingMail: false,
@@ -129,7 +130,14 @@
                     }
                 }, 1000);
                 // 调用后台接口发送验证码
-
+                yxt.http.post("/users/code/1", {email: this.user.email}).then(({ data }) => {
+                    if (data.success) {
+                        this.$message.success(data.message);
+                    } else {
+                        this.$message.error(data.message);
+                        this.isSendingMail = false;
+                    }
+                })
             },
             login(loginForm) {
                 this.$refs[loginForm].validate((valid) => {
@@ -140,14 +148,12 @@
                             // 调用后台接口完成登录逻辑校验
                             let loginUser = {
                                 username: this.user.username,
-                                password: hex_md5(this.user.password)
+                                password: hex_md5(this.user.password),
+                                rememberMe: this.user.rememberMe
                             }
                             yxt.http.post("/auth/login/1", loginUser).then(({ data }) => {
                                 if (data.success) {
-                                    this.$message.success(data.message);
-                                    setTimeout(() => {
-                                        location.href = "homePage.html"
-                                    }, 1000);
+                                    location.href = "homePage.html"
                                 } else {
                                     this.$message.error(data.message);
                                 }
@@ -162,11 +168,12 @@
                                 // 调用后台接口完成登录逻辑校验
                                 let loginUser = {
                                     email: this.user.email,
-                                    code: this.code
+                                    code: this.code,
+                                    rememberMe: this.user.rememberMe
                                 }
                                 yxt.http.post("/auth/login/2", loginUser).then(({ data }) => {
                                     if (data.success) {
-                                        this.$message.success(data.message);
+                                        location.href = "homePage.html"
                                     } else {
                                         this.$message.error(data.message);
                                     }

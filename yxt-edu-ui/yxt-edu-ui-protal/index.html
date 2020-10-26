@@ -14,7 +14,7 @@
         <el-container>
             <!-- 头部 -->
             <el-header>
-                <!-- 导航栏：logo、菜单功能、登录注册 -->
+                <!-- 导航栏：logo、菜单功能、登录注册、进入课堂 -->
                 <el-row>
                     <!-- logo -->
                     <el-col :span="6">
@@ -29,15 +29,23 @@
                         </el-menu>
                     </el-col>
                     <!-- 登录注册按钮 -->
-                    <el-col :span="4">
+                    <el-col :span="4" v-if="!isAuthorized">
                         <el-menu class="el-menu-demo" mode="horizontal">
                             <el-menu-item>
-                                <el-button round class="header-text" @click="window.location = 'login.html'">登录</el-button>
+                                <el-button round class="header-text" @click="window.location = 'login.html'">登录
+                                </el-button>
                             </el-menu-item>
                             <el-menu-item>
-                                <el-button type="primary" round class="header-text" @click="window.location = 'register.html'">注册</el-button>
+                                <el-button type="primary" round class="header-text"
+                                    @click="window.location = 'register.html'">注册</el-button>
                             </el-menu-item>
                         </el-menu>
+                    </el-col>
+                    <!-- 进入课堂按钮 -->
+                    <el-col :span="4" v-else>
+                        <el-button type="primary" round class="header-text" @click="window.location = 'homePage.html'">
+                            进入课堂
+                        </el-button>
                     </el-col>
                 </el-row>
             </el-header>
@@ -226,6 +234,7 @@
 <script src="https://cdn.bootcss.com/vue/2.6.11/vue.min.js"></script>
 <script src="https://cdn.bootcss.com/axios/0.19.2/axios.min.js"></script>
 <script src="https://cdn.bootcss.com/element-ui/2.13.2/index.js"></script>
+<script src="./js/common.js"></script>
 
 <script>
     new Vue({
@@ -237,12 +246,19 @@
                 "https://prepc.ketangpai.com/img/banner-home02.ebb3d690.png",
                 "https://prepc.ketangpai.com/img/banner-home03.6c319494.png"
             ],
-            user: {},
+            isAuthorized: false
         },
         methods: {
             handleSelect(key, keyPath) {
                 console.log(key, keyPath);
             }
+        },
+        created() {
+            yxt.http.get("/auth/verify").then(({ data }) => {
+                if (data.success) {
+                    this.isAuthorized = true;
+                }
+            })
         }
     })
 </script>

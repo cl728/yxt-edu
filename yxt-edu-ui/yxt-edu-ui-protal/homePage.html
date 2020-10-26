@@ -42,7 +42,7 @@
                                     </el-avatar>
                                 </template>
                                 <el-menu-item><i class="el-icon-setting"></i> 个人设置</el-menu-item>
-                                <el-menu-item><i class="el-icon-s-unfold"></i> 退出账户</el-menu-item>
+                                <el-menu-item @click="logout()"><i class="el-icon-s-unfold"></i> 退出账户</el-menu-item>
                             </el-submenu>
                         </el-menu>
                     </el-col>
@@ -92,6 +92,17 @@
         methods: {
             handleSelect(key, keyPath) {
                 console.log(key, keyPath);
+            },
+            logout() {
+                yxt.http.delete("/auth/logout").then(({data}) => {
+                    if (data.success) {
+                        location.href = "login.html"
+                    } else {
+                        this.$message.error("服务器繁忙，请稍候再试！");
+                    }
+                }).catch(() => {
+                    this.$message.error("服务器繁忙，请稍候再试！");
+                })
             }
         },
         created() {
@@ -99,10 +110,7 @@
                 if (data.success) {
                     this.user = data.queryResult.data[0];
                 } else {
-                    this.$message.error("用户身份认证失败！");
-                    setTimeout(() => {
-                        location.href = "index.html"
-                    }, 1000);
+                    location.href = "index.html"
                 }
             })
         },

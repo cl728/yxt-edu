@@ -29,6 +29,7 @@ public class YxtServiceApplication {
         CorsConfiguration config = new CorsConfiguration();
         // 1.1 允许的域,不要写 * ，否则 cookie 就无法使用了
         config.addAllowedOrigin( "http://www.yixuetang.com" );
+        config.addAllowedOrigin( "http://manage.yixuetang.com" );
         // 1.2 是否发送Cookie信息
         config.setAllowCredentials( true );
         // 1.3 允许的请求方式

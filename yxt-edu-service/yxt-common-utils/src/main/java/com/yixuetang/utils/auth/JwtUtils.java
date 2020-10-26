@@ -29,6 +29,7 @@ public class JwtUtils {
                 .claim( JwtConstant.JWT_KEY_USERNAME, userInfo.getUsername() )
                 .claim( JwtConstant.JWT_KEY_REAL_NAME, userInfo.getRealName() )
                 .claim( JwtConstant.JWT_KEY_AVATAR, userInfo.getAvatar() )
+                .claim( JwtConstant.JWT_KEY_REMEMBER_ME, userInfo.getRememberMe())
                 .setExpiration( DateTime.now().plusMinutes( expireMinutes ).toDate() )
                 .signWith( SignatureAlgorithm.RS256, privateKey )
                 .compact();
@@ -49,6 +50,7 @@ public class JwtUtils {
                 .claim( JwtConstant.JWT_KEY_USERNAME, userInfo.getUsername() )
                 .claim( JwtConstant.JWT_KEY_REAL_NAME, userInfo.getRealName() )
                 .claim( JwtConstant.JWT_KEY_AVATAR, userInfo.getAvatar() )
+                .claim( JwtConstant.JWT_KEY_REMEMBER_ME, userInfo.getRememberMe() )
                 .setExpiration( DateTime.now().plusMinutes( expireMinutes ).toDate() )
                 .signWith( SignatureAlgorithm.RS256, RsaUtils.getPrivateKey( privateKey ) )
                 .compact();
@@ -94,8 +96,9 @@ public class JwtUtils {
                 ObjectUtils.toLong( body.get( JwtConstant.JWT_KEY_ID ) ),
                 ObjectUtils.toString( body.get( JwtConstant.JWT_KEY_USERNAME ) ),
                 ObjectUtils.toString( body.get( JwtConstant.JWT_KEY_REAL_NAME ) ),
-                ObjectUtils.toString( body.get( JwtConstant.JWT_KEY_AVATAR ) )
-        );
+                ObjectUtils.toString( body.get( JwtConstant.JWT_KEY_AVATAR ) ),
+                ObjectUtils.toBoolean( body.get( JwtConstant.JWT_KEY_REMEMBER_ME ) )
+                );
     }
 
     /**
@@ -127,6 +130,7 @@ public class JwtUtils {
         static final String JWT_KEY_USERNAME = "username";
         static final String JWT_KEY_AVATAR = "avatar";
         static final String JWT_KEY_REAL_NAME = "realName";
+        static final String JWT_KEY_REMEMBER_ME = "rememberMe";
 
     }
 }

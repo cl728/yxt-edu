@@ -20,11 +20,9 @@ import javax.servlet.http.HttpServletResponse;
 @Api(value = "认证模块接口", description = "认证模块接口，提供认证服务接口")
 public interface AuthControllerApi {
 
-    @ApiOperation("根据用户名和密码进行用户认证")
-    @ApiImplicitParams({
-            @ApiImplicitParam(name = "loginType", value = "登录方式", required = true,
-                    paramType = "path", dataType = "int")
-    })
+    @ApiOperation("根据不同登录方式进行用户授权")
+    @ApiImplicitParam(name = "loginType", value = "登录方式 1账号登录 2邮箱登录", required = true,
+            paramType = "path", dataType = "int")
     CommonResponse login(int loginType, LoginUser loginUser,
                         HttpServletRequest request, HttpServletResponse response);
 
@@ -32,4 +30,7 @@ public interface AuthControllerApi {
     @ApiImplicitParam(name = "token", value = "用户携带的 token 信息", required = true,
             paramType = "path", dataType = "String")
     CommonResponse verify(String token, HttpServletRequest request, HttpServletResponse response);
+
+    @ApiOperation("用户退出登录")
+    CommonResponse logout(HttpServletRequest request, HttpServletResponse response);
 }

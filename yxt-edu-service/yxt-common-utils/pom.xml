@@ -35,6 +35,11 @@
             <groupId>joda-time</groupId>
             <artifactId>joda-time</artifactId>
         </dependency>
+        <!-- mail -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-mail</artifactId>
+        </dependency>
         <!-- entity 模块 -->
         <dependency>
             <groupId>com.yixuetang</groupId>

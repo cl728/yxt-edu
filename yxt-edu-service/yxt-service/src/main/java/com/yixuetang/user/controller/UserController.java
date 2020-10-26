@@ -1,12 +1,20 @@
 package com.yixuetang.user.controller;
 
 import com.yixuetang.api.user.UserControllerApi;
+import com.yixuetang.entity.request.user.EmailUser;
+import com.yixuetang.entity.response.CommonResponse;
 import com.yixuetang.entity.response.QueryResponse;
+import com.yixuetang.entity.response.code.CommonCode;
+import com.yixuetang.entity.user.User;
 import com.yixuetang.user.service.UserService;
+import com.yixuetang.utils.exception.ExceptionThrowUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 /**
  * @author Colin
@@ -31,5 +39,17 @@ public class UserController implements UserControllerApi {
     @GetMapping("roles")
     public QueryResponse findAllRoles() {
         return this.userService.findAllRoles();
+    }
+
+    @Override
+    @GetMapping("schools")
+    public QueryResponse findAllSchools() {
+        return this.userService.findAllSchools();
+    }
+
+    @Override
+    @PostMapping("code/{codeType}")
+    public CommonResponse sendCode(@PathVariable int codeType, @RequestBody EmailUser emailUser) {
+        return this.userService.sendCode( emailUser.getEmail(), codeType );
     }
 }

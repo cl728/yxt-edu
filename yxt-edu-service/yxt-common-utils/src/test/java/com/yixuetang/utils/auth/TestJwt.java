@@ -31,17 +31,16 @@ public class TestJwt {
     @Test
     public void testGenerateToken() throws Exception {
         // 生成token
-        String token = JwtUtils.generateToken( new UserInfo( 20L, "Colin" ), privateKey, 5 );
+        String token = JwtUtils.generateToken( new UserInfo( 20L, "Colin", "庄灿林", "http://www.pava.run/group1/M00/00/00/rBAABV9oD7yAZtXEAAAnvyJPq-0710.jpg", true ), privateKey, 5 );
         System.out.println( "token = " + token );
     }
 
     @Test
     public void testParseToken() throws Exception {
-        String token = "eyJhbGciOiJSUzI1NiJ9.eyJpZCI6MjAsInVzZXJuYW1lIjoiQ29saW4iLCJleHAiOjE2MDM0NTQwNzh9.AXSQyZQS6XwPc06xvxv2LViliu538o8DX3sTNeNGzud_tV9FhVC7s1RDPLZEC4UYcrI_epQSSVbB3lxsZihSMErbPY82_VmWaKhXRZ3vLMuutPrqN_fm2YzHR8zkNxHXEv64ceTFFnmz6bkR409wgxc1jKF1Ultc7dO8-m2JHqE";
+        String token = "eyJhbGciOiJSUzI1NiJ9.eyJpZCI6MjAsInVzZXJuYW1lIjoiQ29saW4iLCJyZWFsTmFtZSI6IuW6hOeBv-aelyIsImF2YXRhciI6Imh0dHA6Ly93d3cucGF2YS5ydW4vZ3JvdXAxL00wMC8wMC8wMC9yQkFBQlY5b0Q3eUFadFhFQUFBbnZ5SlBxLTA3MTAuanBnIiwicmVtZW1iZXJNZSI6dHJ1ZSwiZXhwIjoxNjAzNjQxNTc4fQ.KOB3W1bevy6VKddBc2CNVlOoYqpNbKCN2KDqDzfFbDGYsdCgOgkJOAfEoa2T1P_KXS7EtVdrYYT9qWUwfLgUXMDTSQhRhj1jhYcSSDHehn447oYmtKvL8hIEyuRAX3zIjXzP_2jDoYMlvgmVqLEj0x-10kHTdbJ5PV5h1dkfVQU";
 
         // 解析token
-        UserInfo user = JwtUtils.getInfoFromToken( token, publicKey );
-        System.out.println( "id: " + user.getId() );
-        System.out.println( "userName: " + user.getUsername() );
+        System.out.println( JwtUtils.getInfoFromToken( token, publicKey ) );
+
     }
 }
