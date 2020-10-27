@@ -2,11 +2,13 @@ package com.yixuetang.api.user;
 
 import com.yixuetang.entity.request.user.EmailUser;
 import com.yixuetang.entity.request.user.RegisterUser;
+import com.yixuetang.entity.request.user.UpdateUser;
 import com.yixuetang.entity.response.CommonResponse;
 import com.yixuetang.entity.response.QueryResponse;
 import com.yixuetang.entity.user.User;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 
 /**
@@ -17,6 +19,9 @@ import io.swagger.annotations.ApiOperation;
  */
 @Api(value = "用户模块管理接口", description = "用户模块管理接口，提供用户的增、删、改、查")
 public interface UserControllerApi {
+
+    @ApiOperation("修改个人信息")
+    CommonResponse updateUser(UpdateUser updateUser);
 
     @ApiOperation("查询所有用户")
     QueryResponse findAll();
@@ -33,8 +38,6 @@ public interface UserControllerApi {
     CommonResponse sendCode(int codeType, EmailUser emailUser);
 
     @ApiOperation("用户注册")
-    @ApiImplicitParam(name = "registerUser", value = "注册用户实体类", required = true,
-            paramType = "path")
     CommonResponse register(RegisterUser registerUser);
 
 }

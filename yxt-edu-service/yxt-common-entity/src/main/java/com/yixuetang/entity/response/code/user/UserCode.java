@@ -20,7 +20,11 @@ public enum UserCode implements ResponseCode {
 
     REGISTER_FAIL_USERNAME_CONFLICT( false, 30004, "此用户名太受欢迎，请更换一个吧！" ),
 
-    REGISTER_FAIL_ROLE_NAME_NOT_FOUND( false, 30005, "角色名称不存在！" );
+    REGISTER_FAIL_ROLE_NAME_NOT_FOUND( false, 30005, "角色名称不存在！" ),
+
+    UPDATE_FAIL_ROLE_NAME_NOT_FOUND( false, 30006, "角色名称不存在！" ),
+
+    UPDATE_FAIL_TSNO_CONFLICT( false, 30007, "学/工号已存在！！" );
 
     private boolean success;
     private int code;

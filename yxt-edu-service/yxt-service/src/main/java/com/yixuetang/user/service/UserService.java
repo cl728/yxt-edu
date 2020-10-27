@@ -2,6 +2,7 @@ package com.yixuetang.user.service;
 
 
 import com.yixuetang.entity.request.user.RegisterUser;
+import com.yixuetang.entity.request.user.UpdateUser;
 import com.yixuetang.entity.response.CommonResponse;
 import com.yixuetang.entity.response.QueryResponse;
 
@@ -50,4 +51,11 @@ public interface UserService {
      * @return 响应结果实体类
      */
     CommonResponse register(RegisterUser registerUser);
+
+    /**
+     * 完成用户信息修改
+     * @param updateUser 修改用户实体类
+     * @return 响应结果实体类
+     */
+    CommonResponse updateUser(UpdateUser updateUser);
 }

@@ -3,6 +3,7 @@ package com.yixuetang.user.controller;
 import com.yixuetang.api.user.UserControllerApi;
 import com.yixuetang.entity.request.user.EmailUser;
 import com.yixuetang.entity.request.user.RegisterUser;
+import com.yixuetang.entity.request.user.UpdateUser;
 import com.yixuetang.entity.response.CommonResponse;
 import com.yixuetang.entity.response.QueryResponse;
 import com.yixuetang.entity.response.code.CommonCode;
@@ -29,6 +30,12 @@ public class UserController implements UserControllerApi {
 
     @Autowired
     private UserService userService;
+
+    @Override
+    @PutMapping
+    public CommonResponse updateUser(@RequestBody UpdateUser updateUser) {
+        return this.userService.updateUser(updateUser);
+    }
 
     @Override
     @GetMapping
