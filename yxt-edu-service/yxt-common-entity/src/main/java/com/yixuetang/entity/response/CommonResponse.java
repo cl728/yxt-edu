@@ -3,6 +3,7 @@ package com.yixuetang.entity.response;
 import com.yixuetang.entity.response.code.CommonCode;
 import com.yixuetang.entity.response.code.ResponseCode;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 /**
  * @author Colin
@@ -11,6 +12,7 @@ import lombok.Data;
  * @date 2020/10/23 15:27
  */
 @Data
+@NoArgsConstructor
 public class CommonResponse {
     private static final boolean SUCCESS = true;
     private static final int CODE = 20000;
