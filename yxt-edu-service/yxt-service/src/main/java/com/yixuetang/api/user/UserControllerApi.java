@@ -1,11 +1,12 @@
 package com.yixuetang.api.user;
 
 import com.yixuetang.entity.request.user.EmailUser;
+import com.yixuetang.entity.request.user.RegisterUser;
 import com.yixuetang.entity.response.CommonResponse;
 import com.yixuetang.entity.response.QueryResponse;
+import com.yixuetang.entity.user.User;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
-import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 
 /**
@@ -30,5 +31,10 @@ public interface UserControllerApi {
     @ApiImplicitParam(name = "codeType", value = "因何发送验证码 1登录 2注册 3修改密码", required = true,
             paramType = "path", dataType = "int")
     CommonResponse sendCode(int codeType, EmailUser emailUser);
+
+    @ApiOperation("用户注册")
+    @ApiImplicitParam(name = "registerUser", value = "注册用户实体类", required = true,
+            paramType = "path")
+    CommonResponse register(RegisterUser registerUser);
 
 }

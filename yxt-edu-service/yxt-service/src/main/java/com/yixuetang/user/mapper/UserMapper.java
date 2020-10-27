@@ -27,4 +27,7 @@ public interface UserMapper extends BaseMapper<User> {
     })
     @Select("select * from t_user")
     List<User> findAll();
+
+    @Update("update t_user set role_id = #{roleId} where username = #{username}")
+    void updateRoleId(@Param("username") String username, @Param("roleId") Long roleId);
 }

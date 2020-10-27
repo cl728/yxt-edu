@@ -12,7 +12,15 @@ public enum UserCode implements ResponseCode {
 
     USER_NOT_FOUND( false, 30000, "查询不到用户！" ),
 
-    USER_NOT_REGISTER( false, 30001, "该邮箱尚未注册，请先进行注册！" );
+    EMAIL_NOT_REGISTERED( false, 30001, "该邮箱尚未注册，请先进行注册！" ),
+
+    EMAIL_HAS_BEEN_REGISTERED( false, 30002, "该邮箱地址已被注册！" ),
+
+    REGISTER_FAIL_CODE_WRONG( false, 30003, "验证码错误！" ),
+
+    REGISTER_FAIL_USERNAME_CONFLICT( false, 30004, "此用户名太受欢迎，请更换一个吧！" ),
+
+    REGISTER_FAIL_ROLE_NAME_NOT_FOUND( false, 30005, "角色名称不存在！" );
 
     private boolean success;
     private int code;

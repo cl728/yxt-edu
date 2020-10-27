@@ -2,6 +2,7 @@ package com.yixuetang.user.controller;
 
 import com.yixuetang.api.user.UserControllerApi;
 import com.yixuetang.entity.request.user.EmailUser;
+import com.yixuetang.entity.request.user.RegisterUser;
 import com.yixuetang.entity.response.CommonResponse;
 import com.yixuetang.entity.response.QueryResponse;
 import com.yixuetang.entity.response.code.CommonCode;
@@ -51,5 +52,11 @@ public class UserController implements UserControllerApi {
     @PostMapping("code/{codeType}")
     public CommonResponse sendCode(@PathVariable int codeType, @RequestBody EmailUser emailUser) {
         return this.userService.sendCode( emailUser.getEmail(), codeType );
+    }
+
+    @Override
+    @PostMapping
+    public CommonResponse register(@RequestBody RegisterUser registerUser) {
+        return this.userService.register( registerUser );
     }
 }

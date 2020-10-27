@@ -1,9 +1,11 @@
 package com.yixuetang.user.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.yixuetang.entity.request.user.RegisterUser;
 import com.yixuetang.entity.response.CommonResponse;
 import com.yixuetang.entity.response.QueryResponse;
 import com.yixuetang.entity.response.code.CommonCode;
+import com.yixuetang.entity.response.code.auth.AuthCode;
 import com.yixuetang.entity.response.code.user.UserCode;
 import com.yixuetang.entity.response.result.QueryResult;
 import com.yixuetang.entity.user.Role;
@@ -22,9 +24,11 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
@@ -85,12 +89,16 @@ public class UserServiceImpl implements UserService {
             ExceptionThrowUtils.cast( CommonCode.INVALID_PARAM );
         }
 
+        User user = this.userMapper.selectOne( new QueryWrapper<User>().eq( "email", email ) );
+
         // 如果是因登录和修改密码要求发送验证码，先确认该账号已经注册过
-        if (codeType == 1 || codeType == 2) {
-            User user = this.userMapper.selectOne( new QueryWrapper<User>().eq( "email", email ) );
-            if (user == null) {
-                return new CommonResponse( UserCode.USER_NOT_REGISTER );
-            }
+        if ((codeType == 1 || codeType == 3) && user == null) {
+            return new CommonResponse( UserCode.EMAIL_NOT_REGISTERED );
+        }
+
+        // 如果是因注册要求发送验证码，先确认该账号尚未注册过
+        if (codeType == 2 && user != null) {
+            return new CommonResponse( UserCode.EMAIL_HAS_BEEN_REGISTERED );
         }
 
         // 生成六位数字验证码
@@ -116,6 +124,48 @@ public class UserServiceImpl implements UserService {
                 this.redisTemplate.opsForValue().set( MODIFY_KEY_PREFIX + email, code, 5, TimeUnit.MINUTES );
                 break;
         }
+        return new CommonResponse( CommonCode.SUCCESS );
+    }
+
+    @Override
+    @Transactional
+    public CommonResponse register(RegisterUser registerUser) {
+        if (registerUser == null) {
+            ExceptionThrowUtils.cast( CommonCode.INVALID_PARAM );
+        }
+
+        // 0. 邮箱校验
+        if (this.userMapper.selectOne( new QueryWrapper<User>().eq( "email", registerUser.getEmail() ) ) == null) {
+            return new CommonResponse( UserCode.EMAIL_HAS_BEEN_REGISTERED );
+        }
+        // 1. 验证码校验
+        if (!StringUtils.equals( registerUser.getCode(), this.redisTemplate.opsForValue().get( REGISTER_KEY_PREFIX + registerUser.getEmail() ) )) {
+            return new CommonResponse( UserCode.REGISTER_FAIL_CODE_WRONG );
+        }
+        // 2. 用户名唯一性校验
+        User foundUser = this.userMapper.selectOne( new QueryWrapper<User>().eq( "username", registerUser.getUsername() ) );
+        if (foundUser != null) {
+            return new CommonResponse( UserCode.REGISTER_FAIL_USERNAME_CONFLICT );
+        }
+        // 3. 角色名称校验
+        Role role = this.roleMapper.selectOne( new QueryWrapper<Role>().eq( "r_name", registerUser.getRoleName() ) );
+        if (role == null) {
+            return new CommonResponse( UserCode.REGISTER_FAIL_ROLE_NAME_NOT_FOUND );
+        }
+        // 4. 将用户存入数据库
+        User user = User.builder().id( null )
+                .username( registerUser.getUsername() )
+                .email( registerUser.getEmail() )
+                .password( registerUser.getPassword() )
+                .realName( registerUser.getRealName() )
+                .school( registerUser.getSchool() )
+                .createTime( new Date() )
+                .updateTime( new Date() )
+                .build();
+        this.userMapper.insert( user );
+        // 5. 更新用户的角色id信息
+        this.userMapper.updateRoleId( user.getUsername(), role.getId() );
+
         return new CommonResponse( CommonCode.SUCCESS );
     }
 }
