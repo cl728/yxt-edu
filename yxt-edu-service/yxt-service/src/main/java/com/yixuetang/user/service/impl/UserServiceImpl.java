@@ -135,7 +135,7 @@ public class UserServiceImpl implements UserService {
         }
 
         // 0. 邮箱校验
-        if (this.userMapper.selectOne( new QueryWrapper<User>().eq( "email", registerUser.getEmail() ) ) == null) {
+        if (this.userMapper.selectOne( new QueryWrapper<User>().eq( "email", registerUser.getEmail() ) ) != null) {
             return new CommonResponse( UserCode.EMAIL_HAS_BEEN_REGISTERED );
         }
         // 1. 验证码校验
