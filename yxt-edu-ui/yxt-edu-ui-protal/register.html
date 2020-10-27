@@ -198,7 +198,7 @@
                         let registerUser = {};
                         utils.assign(registerUser, this.user);
                         registerUser.password = hex_md5(this.user.password);
-                        yxt.http.post("users", this.registerUser).then(({ data }) => {
+                        yxt.http.post("users", registerUser).then(({ data }) => {
                             if (data.success) {
                                 this.$message.success(data.message)
                                 setTimeout(() => {
