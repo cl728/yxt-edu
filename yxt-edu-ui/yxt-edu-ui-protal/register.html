@@ -54,13 +54,13 @@
                 </el-form-item>
                 <el-form-item prop="email">
                     <el-input prefix-icon="el-icon-postcard" placeholder="请输入邮箱地址" v-model="user.email"
-                        autocomplete="off" clearable></el-input>
+                        :disabled="isSendingMail" autocomplete="off" clearable></el-input>
                 </el-form-item>
                 <el-form-item>
                     <el-row>
                         <el-col :span="12">
-                            <el-input prefix-icon="el-icon-document" placeholder="请输入验证码" v-model="code"
-                                autocomplete="off" clearable></el-input>
+                            <el-input prefix-icon="el-icon-document" placeholder="请输入验证码" v-model="user.code"
+                                :disbled="isClikedSendCodeBtn" autocomplete="off" clearable></el-input>
                         </el-col>
                         <el-col :span="12">
                             <el-button type="primary" style="float: right;" @click="sendCode()" :disabled="checkEmail()"
@@ -76,7 +76,7 @@
             </el-form>
             <div slot="footer" class="dialog-footer">
                 <el-row>
-                    <el-button type="primary" @click="register('registerForm')" style="padding: 12px 250px;">注 册
+                    <el-button type="primary" @click="register('registerForm')" style="display: block; width: 100%;">注 册
                     </el-button>
                 </el-row>
                 <el-row style="float: right;margin-top: 20px;">
@@ -91,6 +91,7 @@
 <script src="https://cdn.bootcss.com/axios/0.19.2/axios.min.js"></script>
 <script src="https://cdn.bootcss.com/element-ui/2.13.2/index.js"></script>
 <script src="./js/common.js"></script>
+<script src="./js/md5.js"></script>
 
 <script>
     new Vue({
@@ -99,13 +100,13 @@
             user: {
                 username: "",
                 password: "",
-                confirmPwd: "",
                 roleName: "老师/助教",
-                email: "",
                 realName: "",
                 school: "",
+                email: "",
+                code: "",
+                confirmPwd: "",
             },
-            code: "",
             isSendingMail: false,
             times: 60,
             registerRule: {
@@ -123,7 +124,8 @@
                 email: [{ required: true, message: '请输入邮箱地址', trigger: 'blur' },
                 { type: 'email', message: '请输入正确的邮箱地址', trigger: 'blur' }]
             },
-            schools: []
+            schools: [],
+            isClikedSendCodeBtn: false
         },
         mounted() {
             // 加载学校列表
@@ -141,6 +143,7 @@
             },
             sendCode() {
                 // 设置计时器，60s后用户可以重新点击发送验证码
+                this.isClikedSendCodeBtn = true;
                 this.isSendingMail = true;
                 this.times = 60;
                 let _this = this;
@@ -152,7 +155,14 @@
                     }
                 }, 1000);
                 // 调用后台接口发送验证码
-
+                yxt.http.post("/users/code/2", this.user).then(({ data }) => {
+                    if (data.success) {
+                        this.$message.success(data.message);
+                    } else {
+                        this.$message.error(data.message);
+                        this.isSendingMail = false;
+                    }
+                })
             },
             querySearch(queryString, cb) {
                 let schools = this.schools;
@@ -183,9 +193,23 @@
             register(registerForm) {
                 this.$refs[registerForm].validate((valid) => {
                     // 表单项校验 + 确认密码框校验 + 验证码校验
-                    if (valid && this.checkConfirmPwd() && /^\d{6}$/.test(this.code)) {
+                    if (valid && this.checkConfirmPwd() && /^\d{6}$/.test(this.user.code)) {
                         // 校验通过，调用后台接口完成注册逻辑
-                        this.$message.success("注册成功！")
+                        let registerUser = {};
+                        utils.assign(registerUser, this.user);
+                        registerUser.password = hex_md5(this.user.password);
+                        yxt.http.post("users", this.user).then(({ data }) => {
+                            if (data.success) {
+                                this.$message.success(data.message)
+                                setTimeout(() => {
+                                    location.href = "login.html"
+                                }, 1000)
+                            } else {
+                                this.$message.error(data.message)
+                            }
+                        }).catch(() => {
+                            this.$message.error("服务器繁忙，请稍候再试！")
+                        })
                     }
                 })
             }
