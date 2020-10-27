@@ -18,7 +18,12 @@
                 <el-row>
                     <!-- logo -->
                     <el-col :span="4">
-                        <el-image style="margin-top: 10px;" src="./images/logo_blue.png" fit="contain"></el-image>
+                        <!-- <el-image style="margin-top: 10px;" src="./images/logo_blue.png" fit="contain"></el-image> -->
+                        <el-image>
+                            <div slot="error" class="image-slot">
+                                <div class="header-logo">LOGO</div>
+                            </div>
+                        </el-image>
                     </el-col>
                     <!-- 菜单功能 -->
                     <el-col :span="16">
@@ -94,7 +99,7 @@
                 console.log(key, keyPath);
             },
             logout() {
-                yxt.http.delete("/auth/logout").then(({data}) => {
+                yxt.http.delete("/auth/logout").then(({ data }) => {
                     if (data.success) {
                         location.href = "login.html"
                     } else {

@@ -18,7 +18,12 @@
                 <el-row>
                     <!-- logo -->
                     <el-col :span="6">
-                        <img src="./images/logo_blue.png">
+                        <!-- <img src="./images/logo_blue.png"> -->
+                        <el-image>
+                            <div slot="error" class="image-slot">
+                                <div class="header-logo">LOGO</div>
+                            </div>
+                        </el-image>
                     </el-col>
                     <!-- 菜单功能 -->
                     <el-col :span="14">

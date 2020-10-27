@@ -103,3 +103,13 @@
 .dialog-footer {
     height: 150px;
 }
+
+.header-logo {
+    height: 40px;
+    width: 200px;
+    margin: 10px;
+    background-color: rgb(67, 180, 245);
+    line-height: 40px;
+    font-size: 50px;
+    text-align: center;
+}
