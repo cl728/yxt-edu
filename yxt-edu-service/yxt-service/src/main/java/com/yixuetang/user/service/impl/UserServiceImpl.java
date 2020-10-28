@@ -8,7 +8,6 @@ import com.yixuetang.entity.request.user.UpdateUser;
 import com.yixuetang.entity.response.CommonResponse;
 import com.yixuetang.entity.response.QueryResponse;
 import com.yixuetang.entity.response.code.CommonCode;
-import com.yixuetang.entity.response.code.auth.AuthCode;
 import com.yixuetang.entity.response.code.user.UserCode;
 import com.yixuetang.entity.response.result.QueryResult;
 import com.yixuetang.entity.user.Role;
@@ -56,7 +55,7 @@ public class UserServiceImpl implements UserService {
     @Autowired
     private StringRedisTemplate redisTemplate;
 
-    private final List<Integer> CODE_TYPE = new ArrayList<>(Arrays.asList(1, 2, 3));
+    private final List<Integer> CODE_TYPE = new ArrayList<>(Arrays.asList(1, 2, 3, 4));
 
     private static final Logger LOGGER = LoggerFactory.getLogger(UserServiceImpl.class);
 
