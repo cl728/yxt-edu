@@ -37,9 +37,9 @@ public class UserController implements UserControllerApi {
     }
 
     @Override
-    @GetMapping
-    public QueryResponse findAll() {
-        return this.userService.findAll();
+    @GetMapping("{currentPage}/{pageSize}")
+    public QueryResponse findByPage(@PathVariable long currentPage, @PathVariable long pageSize) {
+        return this.userService.findByPage( currentPage, pageSize );
     }
 
     @Override
@@ -52,6 +52,12 @@ public class UserController implements UserControllerApi {
     @GetMapping("schools")
     public QueryResponse findAllSchools() {
         return this.userService.findAllSchools();
+    }
+
+    @Override
+    @GetMapping("schools/{currentPage}/{pageSize}")
+    public QueryResponse findSchoolsByPage(@PathVariable long currentPage, @PathVariable long pageSize) {
+        return this.userService.findSchoolsByPage( currentPage, pageSize );
     }
 
     @Override

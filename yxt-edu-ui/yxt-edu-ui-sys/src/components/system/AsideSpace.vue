@@ -22,6 +22,18 @@
         <i class="el-icon-menu" :style="{ color: aside.aside_icon_color }"></i>
         <span slot="title">主页</span>
       </el-menu-item>
+      <el-submenu index="1">
+        <template slot="title">
+          <i
+            class="el-icon-user"
+            :style="{ color: aside.aside_icon_color }"
+          ></i>
+          <span>用户管理</span>
+        </template>
+        <el-menu-item index="/users">用户列表</el-menu-item>
+        <el-menu-item index="/users/roles">角色列表</el-menu-item>
+        <el-menu-item index="/users/schools">学校列表</el-menu-item>
+      </el-submenu>
       <el-submenu index="2">
         <template slot="title">
           <i

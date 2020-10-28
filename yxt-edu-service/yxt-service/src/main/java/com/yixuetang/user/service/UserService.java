@@ -16,11 +16,13 @@ import com.yixuetang.entity.response.QueryResponse;
 public interface UserService {
 
     /**
-     * 查询所有用户
+     * 分页查询用户
      *
-     * @return 包含用户列表数据，用户列表总数以及响应操作码的结果
+     * @param currentPage 当前页码数
+     * @param pageSize    每页显示条数
+     * @return 响应结果实体类
      */
-    QueryResponse findAll();
+    QueryResponse findByPage(long currentPage, long pageSize);
 
     /**
      * 查询所有角色
@@ -68,4 +70,12 @@ public interface UserService {
      * @return 响应结果实体类
      */
     CommonResponse updatePassword(long id, PasswordUser passwordUser);
+
+    /* 分页查询学校
+     *
+     * @param currentPage 当前页码数
+     * @param pageSize    每页显示条数
+     * @return 响应结果实体类
+     */
+    QueryResponse findSchoolsByPage(long currentPage, long pageSize);
 }

@@ -16,24 +16,16 @@ module.exports = {
         https: false,
         disableHostCheck: true, // 取消 Host 验证
         //以上的ip和端口是我们本机的;下面为需要跨域的
-        proxy: { // 配置跨域
-            '/ks': {
-                target: 'http://search.kuwo.cn',
+        /* proxy: { // 配置跨域
+            '/api': {
+                target: 'http://api.yixuetang.com',
                 ws: true,
                 changOrigin: true, // 允许跨域
                 pathRewrite: {
-                    '^/ks': '' // 请求的时候使用这个api就可以
-                }
-            },
-            '/kp': {
-                target: 'http://antiserver.kuwo.cn',
-                ws: true,
-                changOrigin: true, // 允许跨域
-                pathRewrite: {
-                    '^/kp': '' // 请求的时候使用这个api就可以
+                    '^/api': '' // 请求的时候使用这个api就可以
                 }
             }
-        }
+        } */
 
     },
     configureWebpack: { // 移除已从cdn引入的组件，不打包以下命名的内容
@@ -45,6 +37,7 @@ module.exports = {
             'VueCookies': 'VueCookies',
             'axios': 'axios',
         },
+        devtool: '#eval-source-map'
     },
     chainWebpack: config => {
         // 移除 prefetch 插件

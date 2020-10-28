@@ -32,7 +32,9 @@ public class JwtConfig {
 
     private PrivateKey privateKey; // 私钥
 
-    private String cookieName;  // cookie 名称
+    private String userCookieName;  // 普通用户鉴权的 cookie 名称
+
+    private String adminCookieName;  // 管理员鉴权的 cookie 名称
 
     private int cookieMaxAge; // cookie 最大存活时间
 

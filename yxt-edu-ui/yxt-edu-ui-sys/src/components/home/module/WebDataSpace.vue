@@ -33,7 +33,7 @@ export default {
       myChart.setOption({
         title: {
           text: "网站访问数据",
-          subtext: "Http://www.euiadmin.com",
+          subtext: "Http://www.yixuetang.com",
         },
         tooltip: {
           trigger: "axis",

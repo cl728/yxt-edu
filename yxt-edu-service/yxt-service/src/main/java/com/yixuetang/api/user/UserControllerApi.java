@@ -6,7 +6,6 @@ import com.yixuetang.entity.request.user.RegisterUser;
 import com.yixuetang.entity.request.user.UpdateUser;
 import com.yixuetang.entity.response.CommonResponse;
 import com.yixuetang.entity.response.QueryResponse;
-import com.yixuetang.entity.user.User;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
@@ -31,8 +30,14 @@ public interface UserControllerApi {
             paramType = "path", dataType = "long")
     CommonResponse updatePassword(long id, PasswordUser passwordUser);
 
-    @ApiOperation("查询所有用户")
-    QueryResponse findAll();
+    @ApiOperation("分页查询用户")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "currentPage", value = "当前页码数", required = true,
+                    paramType = "path", dataType = "long"),
+            @ApiImplicitParam(name = "pageSize", value = "每页显示条数", required = true,
+                    paramType = "path", dataType = "long")
+    })
+    QueryResponse findByPage(long currentPage, long pageSize);
 
     @ApiOperation("查询所有角色")
     QueryResponse findAllRoles();
@@ -40,8 +45,17 @@ public interface UserControllerApi {
     @ApiOperation("查询所有学校")
     QueryResponse findAllSchools();
 
+    @ApiOperation("分页查询学校")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "currentPage", value = "当前页码数", required = true,
+                    paramType = "path", dataType = "long"),
+            @ApiImplicitParam(name = "pageSize", value = "每页显示条数", required = true,
+                    paramType = "path", dataType = "long")
+    })
+    QueryResponse findSchoolsByPage(long currentPage, long pageSize);
+
     @ApiOperation("发送验证码")
-    @ApiImplicitParam(name = "codeType", value = "因何发送验证码 1登录 2注册 3修改密码", required = true,
+    @ApiImplicitParam(name = "codeType", value = "因何发送验证码 1登录 2注册 3修改密码 4换绑邮箱", required = true,
             paramType = "path", dataType = "int")
     CommonResponse sendCode(int codeType, EmailUser emailUser);
 

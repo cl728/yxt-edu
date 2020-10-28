@@ -111,7 +111,7 @@
             }
         },
         created() {
-            yxt.http.get("/auth/verify").then(({ data }) => {
+            yxt.http.get("/auth/verify/2").then(({ data }) => {
                 if (data.success) {
                     this.user = data.queryResult.data[0];
                 } else {

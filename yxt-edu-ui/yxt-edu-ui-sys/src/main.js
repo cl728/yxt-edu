@@ -9,7 +9,9 @@ import axios from 'axios'
 import qs from 'qs'
 
 Vue.prototype.$qs = qs
-axios.defaults.baseURL = "http://api.yixuetang.com";
+axios.defaults.baseURL = "http://api.yixuetang.com/api"
+axios.defaults.withCredentials = true
+
 Vue.prototype.$axios = axios
 Vue.prototype.$echarts = echarts
 Vue.use(VueCookies)
