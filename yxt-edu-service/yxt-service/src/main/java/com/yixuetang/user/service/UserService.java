@@ -1,6 +1,7 @@
 package com.yixuetang.user.service;
 
 
+import com.yixuetang.entity.request.user.PasswordUser;
 import com.yixuetang.entity.request.user.RegisterUser;
 import com.yixuetang.entity.request.user.UpdateUser;
 import com.yixuetang.entity.response.CommonResponse;
@@ -58,4 +59,12 @@ public interface UserService {
      * @return 响应结果实体类
      */
     CommonResponse updateUser(UpdateUser updateUser);
+
+    /**
+     * 完成用户密码修改
+     * @param id
+     * @param passwordUser
+     * @return
+     */
+    CommonResponse updatePassword(long id, PasswordUser passwordUser);
 }

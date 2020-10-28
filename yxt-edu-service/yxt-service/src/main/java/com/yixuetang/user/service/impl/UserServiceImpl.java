@@ -1,6 +1,7 @@
 package com.yixuetang.user.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.yixuetang.entity.request.user.PasswordUser;
 import com.yixuetang.entity.request.user.RegisterUser;
 import com.yixuetang.entity.request.user.UpdateUser;
 import com.yixuetang.entity.response.CommonResponse;
@@ -194,10 +195,42 @@ public class UserServiceImpl implements UserService {
             }
         }
 
-        updateUser.setUpdateTime(new Date()); //更新最后一次修改个人信息时间
-        this.userMapper.updateUser(updateUser); //更新用户信息
+        // 4. 更新最后一次修改个人信息时间
+        updateUser.setUpdateTime(new Date());
 
+        // 5. 更新用户信息
+        this.userMapper.updateUser(updateUser);
+
+        // 6. 更新用户的角色id信息
         this.userMapper.UpdateRoleIdById(Objects.requireNonNull(role).getId(),updateUser.getId());
+
+        return new CommonResponse(CommonCode.SUCCESS);
+    }
+
+    @Override
+    public CommonResponse updatePassword(long id, PasswordUser passwordUser) {
+
+        //1.参数验证
+        if (passwordUser == null) {
+            ExceptionThrowUtils.cast(CommonCode.INVALID_PARAM);
+        }
+
+        // 2. 根据id查询当前用户密码，进行旧密码检验
+        User oldUser = this.userMapper.selectOne(new QueryWrapper<User>().eq("id", id));
+        if ( !StringUtils.equals(oldUser.getPassword(),passwordUser.getOldPassword()) ){
+            return new CommonResponse(UserCode.PASSWORD_UPDATE_FAIL_OLD_PASSWORD_WRONG);
+        }
+
+        // 3. 验证码校验
+        if (!StringUtils.equals(passwordUser.getCode(), this.redisTemplate.opsForValue().get(MODIFY_KEY_PREFIX + passwordUser.getEmail()))) {
+            return new CommonResponse(UserCode.PASSWORD_UPDATE_FAIL_CODE_WRONG);
+        }
+
+        // 4. 更新最后一次修改个人信息时间
+        passwordUser.setUpdateTime(new Date());
+
+        // 5. 将新密码与更新时间信息更新至用户表中
+        this.userMapper.updatePassworById(id,passwordUser);
 
         return new CommonResponse(CommonCode.SUCCESS);
     }
