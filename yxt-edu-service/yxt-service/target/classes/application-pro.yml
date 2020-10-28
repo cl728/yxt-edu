@@ -1,8 +1,0 @@
-server:
-  port: 9999
-logging:
-  level:
-    root: warn
-    com.yixuetang: info
-  file:
-    name: log/yxt-pro.log

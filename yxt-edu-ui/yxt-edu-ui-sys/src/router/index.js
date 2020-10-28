@@ -336,29 +336,28 @@ const router = new VueRouter({
 })
 
 router.beforeEach((to, from, next) => {
-  let isAuthorized = false
-  // eslint-disable-next-line no-debugger
-  debugger
   axios.get("/auth/verify/1").then(({ data }) => {
-    isAuthorized = data.success
-  })
-  let needLogin = to.meta.loginState // 是否需要登录
-  if (!needLogin) {
-    next()
-    document.title = to.meta.title
-  } else if (needLogin && isAuthorized) {
-    next()
-    document.title = to.meta.title
-  } else {
-    Message.error("您尚未登录或未具备权限！")
-    if (to.path === '/login') { // 多一个判断避免 next() 死循环
+    let isAuthorized = data.success
+    let needLogin = to.meta.loginState // 是否需要登录
+    if (!needLogin) {
       next()
+      document.title = to.meta.title
+    } else if (needLogin && isAuthorized) {
+      next()
+      document.title = to.meta.title
     } else {
-      next({
-        path: '/login'
-      })
+      Message.error("您尚未登录或未具备权限！")
+      if (to.path === '/login') { // 多一个判断避免 next() 死循环
+        next()
+      } else {
+        next({
+          path: '/login'
+        })
+      }
     }
-  }
+    console.log(to.meta.isAuthorized)
+  })
+
 })
 
 export default router
