@@ -136,10 +136,11 @@ public class AuthController implements AuthControllerApi {
      * @return 响应结果实体类
      */
     @Override
-    @DeleteMapping("logout")
-    public CommonResponse logout(HttpServletRequest request, HttpServletResponse response) {
-        CookieUtils.setCookie( request, response, config.getUserCookieName(),
-                "VALID VALUE", 1, null, true );
+    @DeleteMapping("logout/{userType}")
+    public CommonResponse logout(@PathVariable int userType, HttpServletRequest request, HttpServletResponse response) {
+        String cookieName = userType == 1 ? config.getAdminCookieName() : config.getUserCookieName();
+        CookieUtils.setCookie( request, response, cookieName, "VALID VALUE",
+                1, null, true );
         return new CommonResponse( CommonCode.SUCCESS );
     }
 }

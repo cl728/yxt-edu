@@ -36,5 +36,7 @@ public interface AuthControllerApi {
     CommonResponse verify(int userType, HttpServletRequest request, HttpServletResponse response);
 
     @ApiOperation("用户退出登录")
-    CommonResponse logout(HttpServletRequest request, HttpServletResponse response);
+    @ApiImplicitParam(name = "userType", value = "用户类型 1管理员 2普通用户", required = true,
+            paramType = "path", dataType = "int")
+    CommonResponse logout(int userType, HttpServletRequest request, HttpServletResponse response);
 }
