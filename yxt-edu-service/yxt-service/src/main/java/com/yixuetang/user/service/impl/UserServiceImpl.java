@@ -228,7 +228,7 @@ public class UserServiceImpl implements UserService {
 
         // 3. 验证码校验
         if (!StringUtils.equals(passwordUser.getCode(), this.redisTemplate.opsForValue().get(MODIFY_KEY_PREFIX + passwordUser.getEmail()))) {
-            return new CommonResponse(UserCode.UPDATEPASSWORD_FAIL_CODE_WRONG);
+            return new CommonResponse(UserCode.UPDATE_PASSWORD_FAIL_CODE_WRONG);
         }
 
         // 4. 更新最后一次修改个人信息时间
