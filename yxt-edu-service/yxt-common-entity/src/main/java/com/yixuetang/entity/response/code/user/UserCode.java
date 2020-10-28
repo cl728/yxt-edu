@@ -26,9 +26,13 @@ public enum UserCode implements ResponseCode {
 
     UPDATE_FAIL_TSNO_CONFLICT( false, 30007, "学/工号已存在！！" ),
 
-    PASSWORD_UPDATE_FAIL_OLD_PASSWORD_WRONG( false, 30008, "旧密码错误！" ),
+    UPDATE_PASSWORD_FAIL_OLD_PASSWORD_WRONG( false, 30008, "旧密码错误！" ),
 
-    PASSWORD_UPDATE_FAIL_CODE_WRONG( false, 30009, "验证码错误！" );
+    UPDATEPASSWORD_FAIL_CODE_WRONG( false, 30009, "验证码错误！" ),
+
+    UPDATE_EMAIL_FAIL_EMAIL_ALREADY_EXISTS( false, 30010, "换绑邮箱失败，该邮箱已存在！" ),
+
+    UPDATE_EMAIL_FAIL_CODE_WRONG( false, 30009, "验证码错误！" );
 
     private boolean success;
     private int code;

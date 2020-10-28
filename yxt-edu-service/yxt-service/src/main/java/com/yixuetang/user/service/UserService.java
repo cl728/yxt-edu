@@ -1,6 +1,7 @@
 package com.yixuetang.user.service;
 
 
+import com.yixuetang.entity.request.user.EmailUser;
 import com.yixuetang.entity.request.user.PasswordUser;
 import com.yixuetang.entity.request.user.RegisterUser;
 import com.yixuetang.entity.request.user.UpdateUser;
@@ -64,7 +65,7 @@ public interface UserService {
     CommonResponse updateUser(long id, UpdateUser updateUser);
 
     /**
-     * 完成用户密码修改
+     * 修改用户密码
      * @param id 用户主键id
      * @param passwordUser 修改用户密码实体类
      * @return 响应结果实体类
@@ -78,4 +79,12 @@ public interface UserService {
      * @return 响应结果实体类
      */
     QueryResponse findSchoolsByPage(long currentPage, long pageSize);
+
+    /**
+     * 换绑用户邮箱
+     * @param id 用户主键id
+     * @param emailUser 换绑用户邮箱
+     * @return 响应结果实体类
+     */
+    CommonResponse updateEmail(long id, EmailUser emailUser);
 }

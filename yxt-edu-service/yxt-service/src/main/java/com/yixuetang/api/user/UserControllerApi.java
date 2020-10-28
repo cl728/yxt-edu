@@ -38,6 +38,10 @@ public interface UserControllerApi {
                     paramType = "path", dataType = "long")
     })
     QueryResponse findByPage(long currentPage, long pageSize);
+    @ApiOperation("换绑邮箱")
+    @ApiImplicitParam(name = "id", value = "用户主键id", required = true,
+            paramType = "path", dataType = "long")
+    CommonResponse updateEmail(long id, EmailUser emailUser);
 
     @ApiOperation("查询所有角色")
     QueryResponse findAllRoles();

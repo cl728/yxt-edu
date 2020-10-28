@@ -37,6 +37,12 @@ public class UserController implements UserControllerApi {
     }
 
     @Override
+    @PutMapping("email/{id}")
+    public CommonResponse updateEmail(long id, EmailUser emailUser) {
+        return this.userService.updateEmail(id,emailUser);
+    }
+
+    @Override
     @GetMapping("{currentPage}/{pageSize}")
     public QueryResponse findByPage(@PathVariable long currentPage, @PathVariable long pageSize) {
         return this.userService.findByPage( currentPage, pageSize );

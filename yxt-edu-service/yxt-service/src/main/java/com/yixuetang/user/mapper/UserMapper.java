@@ -1,6 +1,7 @@
 package com.yixuetang.user.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.yixuetang.entity.request.user.EmailUser;
 import com.yixuetang.entity.request.user.PasswordUser;
 import com.yixuetang.entity.request.user.UpdateUser;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
@@ -81,8 +82,16 @@ public interface UserMapper extends BaseMapper<User> {
     /**
      * 根据id修改密码与更新时间
      * @param id 用户主键id
-     * @param passwordUser 修改密码实体类
+     * @param passwordUser 用户密码实体类
      */
     @Update("update t_user set password = #{passwordUser.newPassword}, update_time = #{passwordUser.updateTime} where id = #{id}")
     void updatePassworById(@Param("id") long id, @Param("passwordUser") PasswordUser passwordUser);
+
+    /**
+     * 根据id换绑邮箱
+     * @param id 用户主键id
+     * @param emailUser 用户邮箱实体类
+     */
+    @Update("update t_user set email = #{emailUser.email} where id = #{id}")
+    void updateEmail(@Param("id") long id, @Param("emailUser") EmailUser emailUser);
 }
