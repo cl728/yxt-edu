@@ -1,16 +1,20 @@
 <template>
   <div>
-    <div style="float:left">
+    <div style="float: left">
       <i
         @click="change_aside_state"
-        :class="aside_state==true?'el-icon-s-fold':'el-icon-s-unfold'"
-        :style="{color:head.head_icon_color,padding:'20px',cursor: 'pointer'}"
+        :class="aside_state == true ? 'el-icon-s-fold' : 'el-icon-s-unfold'"
+        :style="{
+          color: head.head_icon_color,
+          padding: '20px',
+          cursor: 'pointer',
+        }"
       />
       <el-autocomplete
         v-model="search"
         placeholder="请输入内容"
         size="small"
-        ></el-autocomplete>
+      ></el-autocomplete>
     </div>
     <el-menu
       class="el-menu-demo"
@@ -18,28 +22,31 @@
       :background-color="head.head_background_color"
       :text-color="head.head_text_color"
       :active-text-color="head.head_active_text_color"
-      :style="{float:'right'}"
+      :style="{ float: 'right' }"
     >
       <el-menu-item index="3" @click="message()">
-        <i class="el-icon-bell" :style="{color:head.head_icon_color}" />
+        <i class="el-icon-bell" :style="{ color: head.head_icon_color }" />
         <el-badge is-dot class="item"></el-badge>
       </el-menu-item>
       <el-menu-item index="1">
         <ColorSettingSpace />
       </el-menu-item>
-       <el-menu-item index="2" @click="change_full_screen">
-          <template slot="title">
-            <i class="el-icon-full-screen" :style="{color:head.head_icon_color}"/>
-          </template>
-        </el-menu-item>
+      <el-menu-item index="2" @click="change_full_screen">
+        <template slot="title">
+          <i
+            class="el-icon-full-screen"
+            :style="{ color: head.head_icon_color }"
+          />
+        </template>
+      </el-menu-item>
       <el-submenu index="4">
         <template slot="title">
-          {{user.user_pet_name}}
+          {{ user.user_pet_name }}
           <el-avatar :src="user.user_avatar_url"></el-avatar>
         </template>
         <el-menu-item index="2-1">个人中心</el-menu-item>
         <el-menu-item index="2-2">修改密码</el-menu-item>
-        <el-menu-item index="2-3">退出</el-menu-item>
+        <el-menu-item index="2-3" @click="logout()">退出</el-menu-item>
       </el-submenu>
       <el-menu-item index="10">
         <HeadSettingSpace />
@@ -58,17 +65,19 @@ export default {
   },
   data() {
     return {
-      search:'',
+      search: "",
       user: {
         user_pet_name: "admin",
         user_avatar_url:
           "http://www.pava.run/group1/M00/00/00/rBAABV9oD7yAZtXEAAAnvyJPq-0710.jpg",
       },
       head: {
-        head_icon_color:this.$cookies.get('setting').head_icon_color,
-        head_background_color:this.$cookies.get('setting').head_background_color,
-        head_text_color: this.$cookies.get('setting').head_text_color,
-        head_active_text_color:this.$cookies.get('setting').head_active_text_color,
+        head_icon_color: this.$cookies.get("setting").head_icon_color,
+        head_background_color: this.$cookies.get("setting")
+          .head_background_color,
+        head_text_color: this.$cookies.get("setting").head_text_color,
+        head_active_text_color: this.$cookies.get("setting")
+          .head_active_text_color,
       },
       aside_state: false,
       fullscreen: false, //全屏专题
@@ -79,8 +88,8 @@ export default {
       this.aside_state = !this.aside_state;
       Pass.$emit("aside_state", this.aside_state);
     },
-    message(){
-      this.$router.push('/page/message/list')
+    message() {
+      this.$router.push("/page/message/list");
     },
     change_full_screen() {
       //全屏切换函数
@@ -108,6 +117,20 @@ export default {
         }
       }
       this.fullscreen = !this.fullscreen; //判断全屏状态
+    },
+    logout() {
+      this.$axios
+        .delete("auth/logout/1")
+        .then(({ data }) => {
+          if (data.success) {
+            this.$router.push("/login");
+          } else {
+            this.$message.error(data.message);
+          }
+        })
+        .catch(() => {
+          this.$message.error("服务器繁忙，请稍候再试！");
+        });
     },
   },
 };

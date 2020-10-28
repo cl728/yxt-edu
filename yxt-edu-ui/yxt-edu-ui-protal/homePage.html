@@ -99,7 +99,7 @@
                 console.log(key, keyPath);
             },
             logout() {
-                yxt.http.delete("/auth/logout").then(({ data }) => {
+                yxt.http.delete("/auth/logout/2").then(({ data }) => {
                     if (data.success) {
                         location.href = "login.html"
                     } else {

@@ -47,6 +47,7 @@
   </div>
 </template>
 <script>
+import { hexMd5 } from "./api/md5";
 export default {
   data() {
     return {
@@ -60,7 +61,12 @@ export default {
   },
   methods: {
     login() {
-      this.$axios.post("auth/login/1/1", this.user).then(() => {
+      let loginUser = {
+        username: this.user.username,
+        password: hexMd5(this.user.password),
+        rememberMe: this.rememberMe
+      };
+      this.$axios.post("auth/login/1/1", loginUser).then(() => {
         this.$router.push("/");
       });
     },
