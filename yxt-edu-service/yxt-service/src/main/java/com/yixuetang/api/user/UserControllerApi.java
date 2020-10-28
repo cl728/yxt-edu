@@ -46,7 +46,7 @@ public interface UserControllerApi {
     QueryResponse findAllSchools();
 
     @ApiOperation("发送验证码")
-    @ApiImplicitParam(name = "codeType", value = "因何发送验证码 1登录 2注册 3修改密码", required = true,
+    @ApiImplicitParam(name = "codeType", value = "因何发送验证码 1登录 2注册 3修改密码 4换绑邮箱", required = true,
             paramType = "path", dataType = "int")
     CommonResponse sendCode(int codeType, EmailUser emailUser);
 

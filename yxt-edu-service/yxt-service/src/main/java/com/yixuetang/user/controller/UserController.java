@@ -38,7 +38,7 @@ public class UserController implements UserControllerApi {
 
     @Override
     @PutMapping("email/{id}")
-    public CommonResponse updateEmail(long id, EmailUser emailUser) {
+    public CommonResponse updateEmail(@PathVariable long id, @RequestBody EmailUser emailUser) {
         return this.userService.updateEmail(id,emailUser);
     }
 
