@@ -14,9 +14,6 @@ import java.util.Date;
 @Data
 public class UpdateUser {
 
-    @ApiModelProperty(value = "主键自增id", required = true, dataType = "long")
-    private long id;
-
     @ApiModelProperty(value = "真实姓名", required = true, dataType = "String")
     private String realName;
 

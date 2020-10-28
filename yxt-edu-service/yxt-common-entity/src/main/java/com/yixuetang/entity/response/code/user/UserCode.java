@@ -24,7 +24,11 @@ public enum UserCode implements ResponseCode {
 
     UPDATE_FAIL_ROLE_NAME_NOT_FOUND( false, 30006, "角色名称不存在！" ),
 
-    UPDATE_FAIL_TSNO_CONFLICT( false, 30007, "学/工号已存在！！" );
+    UPDATE_FAIL_TSNO_CONFLICT( false, 30007, "学/工号已存在！！" ),
+
+    PASSWORD_UPDATE_FAIL_OLD_PASSWORD_WRONG( false, 30008, "旧密码错误！" ),
+
+    PASSWORD_UPDATE_FAIL_CODE_WRONG( false, 30009, "验证码错误！" );
 
     private boolean success;
     private int code;

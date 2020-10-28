@@ -1,6 +1,7 @@
 package com.yixuetang.api.user;
 
 import com.yixuetang.entity.request.user.EmailUser;
+import com.yixuetang.entity.request.user.PasswordUser;
 import com.yixuetang.entity.request.user.RegisterUser;
 import com.yixuetang.entity.request.user.UpdateUser;
 import com.yixuetang.entity.response.CommonResponse;
@@ -21,7 +22,14 @@ import io.swagger.annotations.ApiOperation;
 public interface UserControllerApi {
 
     @ApiOperation("修改个人信息")
-    CommonResponse updateUser(UpdateUser updateUser);
+    @ApiImplicitParam(name = "id", value = "用户主键id", required = true,
+            paramType = "path", dataType = "long")
+    CommonResponse updateUser(long id, UpdateUser updateUser);
+
+    @ApiOperation("修改密码")
+    @ApiImplicitParam(name = "id", value = "用户主键id", required = true,
+            paramType = "path", dataType = "long")
+    CommonResponse updatePassword(long id, PasswordUser passwordUser);
 
     @ApiOperation("查询所有用户")
     QueryResponse findAll();

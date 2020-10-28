@@ -4,19 +4,12 @@ import com.yixuetang.api.user.UserControllerApi;
 import com.yixuetang.entity.request.user.EmailUser;
 import com.yixuetang.entity.request.user.RegisterUser;
 import com.yixuetang.entity.request.user.UpdateUser;
+import com.yixuetang.entity.request.user.PasswordUser;
 import com.yixuetang.entity.response.CommonResponse;
 import com.yixuetang.entity.response.QueryResponse;
-import com.yixuetang.entity.response.code.CommonCode;
-import com.yixuetang.entity.user.User;
 import com.yixuetang.user.service.UserService;
-import com.yixuetang.utils.exception.ExceptionThrowUtils;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 
 /**
  * @author Colin
@@ -32,9 +25,15 @@ public class UserController implements UserControllerApi {
     private UserService userService;
 
     @Override
-    @PutMapping
-    public CommonResponse updateUser(@RequestBody UpdateUser updateUser) {
-        return this.userService.updateUser(updateUser);
+    @PutMapping("{id}")
+    public CommonResponse updateUser(@PathVariable long id,@RequestBody UpdateUser updateUser) {
+        return this.userService.updateUser(id,updateUser);
+    }
+
+    @Override
+    @PutMapping("password/{id}")
+    public CommonResponse updatePassword(@PathVariable long id, @RequestBody PasswordUser passwordUser) {
+        return this.userService.updatePassword(id,passwordUser);
     }
 
     @Override
