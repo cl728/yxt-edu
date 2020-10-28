@@ -1,6 +1,7 @@
 package com.yixuetang.user.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.yixuetang.entity.request.user.EmailUser;
 import com.yixuetang.entity.request.user.PasswordUser;
 import com.yixuetang.entity.request.user.RegisterUser;
 import com.yixuetang.entity.request.user.UpdateUser;
@@ -62,6 +63,7 @@ public class UserServiceImpl implements UserService {
     private static final String LOGIN_KEY_PREFIX = "user:code:login:";
     private static final String REGISTER_KEY_PREFIX = "user:code:register:";
     private static final String MODIFY_KEY_PREFIX = "user:code:modify:";
+    private static final String CHANGE_KEY_PREFIX = "user:code:change:";
 
     @Override
     public QueryResponse findAll() {
@@ -96,7 +98,7 @@ public class UserServiceImpl implements UserService {
         }
 
         // 如果是因注册要求发送验证码，先确认该账号尚未注册过
-        if (codeType == 2 && user != null) {
+        if ((codeType == 2 || codeType == 4) && user != null) {
             return new CommonResponse(UserCode.EMAIL_HAS_BEEN_REGISTERED);
         }
 
@@ -121,6 +123,9 @@ public class UserServiceImpl implements UserService {
                 break;
             case 3: // 修改密码验证码
                 this.redisTemplate.opsForValue().set(MODIFY_KEY_PREFIX + email, code, 5, TimeUnit.MINUTES);
+                break;
+            case 4: // 换绑邮箱验证码
+                this.redisTemplate.opsForValue().set(CHANGE_KEY_PREFIX + email, code, 5, TimeUnit.MINUTES);
                 break;
         }
         return new CommonResponse(CommonCode.SUCCESS);
@@ -179,15 +184,15 @@ public class UserServiceImpl implements UserService {
 
         // 2. 角色名称校验
         Role role = null;
-        if (StringUtils.isNoneBlank(updateUser.getRoleName())){
-            role =  this.roleMapper.selectOne(new QueryWrapper<Role>().eq("r_name", updateUser.getRoleName()));
+        if (StringUtils.isNoneBlank(updateUser.getRoleName())) {
+            role = this.roleMapper.selectOne(new QueryWrapper<Role>().eq("r_name", updateUser.getRoleName()));
             if (role == null) {
                 return new CommonResponse(UserCode.UPDATE_FAIL_ROLE_NAME_NOT_FOUND);
             }
         }
 
         // 3. 学/工号唯一性检验
-        if (updateUser.getTsNo() != null && !"".equals(updateUser.getTsNo())) {
+        if (StringUtils.isNoneBlank(updateUser.getTsNo())) {
             User oldUser = this.userMapper.selectOne(new QueryWrapper<User>().eq("id", id));
             User foundUser = this.userMapper.selectOne(new QueryWrapper<User>().eq("ts_no", updateUser.getTsNo()));
             if ((foundUser != null) && (!StringUtils.equals(foundUser.getTsNo(), oldUser.getTsNo()))) { //若存在该学工号，判断是否是未修改前当前用户的学工号
@@ -199,10 +204,10 @@ public class UserServiceImpl implements UserService {
         updateUser.setUpdateTime(new Date());
 
         // 5. 更新用户信息
-        this.userMapper.updateUser(id,updateUser);
+        this.userMapper.updateUser(id, updateUser);
 
         // 6. 更新用户的角色id信息
-        this.userMapper.UpdateRoleIdById(Objects.requireNonNull(role).getId(),id);
+        this.userMapper.UpdateRoleIdById(Objects.requireNonNull(role).getId(), id);
 
         return new CommonResponse(CommonCode.SUCCESS);
     }
@@ -210,27 +215,54 @@ public class UserServiceImpl implements UserService {
     @Override
     public CommonResponse updatePassword(long id, PasswordUser passwordUser) {
 
-        //1.参数验证
+        // 1. 参数验证
         if (passwordUser == null) {
             ExceptionThrowUtils.cast(CommonCode.INVALID_PARAM);
         }
 
         // 2. 根据id查询当前用户密码，进行旧密码检验
         User oldUser = this.userMapper.selectOne(new QueryWrapper<User>().eq("id", id));
-        if ( !StringUtils.equals(oldUser.getPassword(),passwordUser.getOldPassword()) ){
-            return new CommonResponse(UserCode.PASSWORD_UPDATE_FAIL_OLD_PASSWORD_WRONG);
+        if (!StringUtils.equals(oldUser.getPassword(), passwordUser.getOldPassword())) {
+            return new CommonResponse(UserCode.UPDATE_PASSWORD_FAIL_OLD_PASSWORD_WRONG);
         }
 
         // 3. 验证码校验
         if (!StringUtils.equals(passwordUser.getCode(), this.redisTemplate.opsForValue().get(MODIFY_KEY_PREFIX + passwordUser.getEmail()))) {
-            return new CommonResponse(UserCode.PASSWORD_UPDATE_FAIL_CODE_WRONG);
+            return new CommonResponse(UserCode.UPDATEPASSWORD_FAIL_CODE_WRONG);
         }
 
         // 4. 更新最后一次修改个人信息时间
         passwordUser.setUpdateTime(new Date());
 
         // 5. 将新密码与更新时间信息更新至用户表中
-        this.userMapper.updatePassworById(id,passwordUser);
+        this.userMapper.updatePassworById(id, passwordUser);
+
+        return new CommonResponse(CommonCode.SUCCESS);
+    }
+
+    @Override
+    public CommonResponse updateEmail(long id, EmailUser emailUser) {
+
+        // 1. 参数验证
+        if (emailUser == null) {
+            ExceptionThrowUtils.cast(CommonCode.INVALID_PARAM);
+        }
+
+        // 2. 新邮箱校验
+        if (this.userMapper.selectOne(new QueryWrapper<User>().eq("email", emailUser.getEmail())) != null) {
+            return new CommonResponse(UserCode.UPDATE_EMAIL_FAIL_EMAIL_ALREADY_EXISTS);
+        }
+
+        // 3. 验证码检验
+        if (!StringUtils.equals(emailUser.getCode(), this.redisTemplate.opsForValue().get(CHANGE_KEY_PREFIX + emailUser.getEmail()))) {
+            return new CommonResponse(UserCode.UPDATE_EMAIL_FAIL_CODE_WRONG);
+        }
+
+        // 0. 更新最后一次修改个人信息的时间
+        emailUser.setUpdateTime(new Date());
+
+        // 0. 更新邮箱信息
+        this.userMapper.updateEmail(id, emailUser);
 
         return new CommonResponse(CommonCode.SUCCESS);
     }
