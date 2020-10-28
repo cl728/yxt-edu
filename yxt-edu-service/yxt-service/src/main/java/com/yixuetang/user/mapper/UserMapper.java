@@ -42,8 +42,8 @@ public interface UserMapper extends BaseMapper<User> {
      * 更新用户信息
      * @param updateUser 更新用户实体类
      */
-    @Update("update t_user set real_name = #{realName}, gender = #{gender}, age = #{age}, phone = #{phone}, school = #{school}, ts_no = #{tsNo}, update_time = #{updateTime} where id = #{id}")
-    void updateUser(UpdateUser updateUser);
+    @Update("update t_user set real_name = #{updateUser.realName}, gender = #{updateUser.gender}, age = #{updateUser.age}, phone = #{updateUser.phone}, school = #{updateUser.school}, ts_no = #{updateUser.tsNo}, update_time = #{updateUser.updateTime} where id = #{id}")
+    void updateUser(@Param("id")Long id, @Param("updateUser") UpdateUser updateUser);
 
     /**
      * 根据id修改roleId

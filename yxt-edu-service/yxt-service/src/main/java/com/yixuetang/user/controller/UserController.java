@@ -25,9 +25,9 @@ public class UserController implements UserControllerApi {
     private UserService userService;
 
     @Override
-    @PutMapping
-    public CommonResponse updateUser(@RequestBody UpdateUser updateUser) {
-        return this.userService.updateUser(updateUser);
+    @PutMapping("{id}")
+    public CommonResponse updateUser(@PathVariable long id,@RequestBody UpdateUser updateUser) {
+        return this.userService.updateUser(id,updateUser);
     }
 
     @Override

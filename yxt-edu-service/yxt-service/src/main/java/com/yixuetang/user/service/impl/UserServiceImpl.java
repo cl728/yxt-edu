@@ -170,7 +170,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Transactional
-    public CommonResponse updateUser(UpdateUser updateUser) {
+    public CommonResponse updateUser(long id, UpdateUser updateUser) {
 
         //1.参数验证
         if (updateUser == null) {
@@ -188,7 +188,7 @@ public class UserServiceImpl implements UserService {
 
         // 3. 学/工号唯一性检验
         if (updateUser.getTsNo() != null && !"".equals(updateUser.getTsNo())) {
-            User oldUser = this.userMapper.selectOne(new QueryWrapper<User>().eq("id", updateUser.getId()));
+            User oldUser = this.userMapper.selectOne(new QueryWrapper<User>().eq("id", id));
             User foundUser = this.userMapper.selectOne(new QueryWrapper<User>().eq("ts_no", updateUser.getTsNo()));
             if ((foundUser != null) && (!StringUtils.equals(foundUser.getTsNo(), oldUser.getTsNo()))) { //若存在该学工号，判断是否是未修改前当前用户的学工号
                 return new CommonResponse(UserCode.UPDATE_FAIL_TSNO_CONFLICT);
@@ -199,10 +199,10 @@ public class UserServiceImpl implements UserService {
         updateUser.setUpdateTime(new Date());
 
         // 5. 更新用户信息
-        this.userMapper.updateUser(updateUser);
+        this.userMapper.updateUser(id,updateUser);
 
         // 6. 更新用户的角色id信息
-        this.userMapper.UpdateRoleIdById(Objects.requireNonNull(role).getId(),updateUser.getId());
+        this.userMapper.UpdateRoleIdById(Objects.requireNonNull(role).getId(),id);
 
         return new CommonResponse(CommonCode.SUCCESS);
     }
