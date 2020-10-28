@@ -1,6 +1,7 @@
 package com.yixuetang.user.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.yixuetang.entity.request.user.EmailUser;
 import com.yixuetang.entity.request.user.PasswordUser;
 import com.yixuetang.entity.request.user.RegisterUser;
@@ -57,7 +58,7 @@ public class UserServiceImpl implements UserService {
 
     private final List<Integer> CODE_TYPE = new ArrayList<>(Arrays.asList(1, 2, 3, 4));
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(UserServiceImpl.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger( UserServiceImpl.class );
 
     private static final String LOGIN_KEY_PREFIX = "user:code:login:";
     private static final String REGISTER_KEY_PREFIX = "user:code:register:";
@@ -65,111 +66,117 @@ public class UserServiceImpl implements UserService {
     private static final String CHANGE_KEY_PREFIX = "user:code:change:";
 
     @Override
-    public QueryResponse findAll() {
-        List<User> users = this.userMapper.findAll();
-        return new QueryResponse(CommonCode.SUCCESS, new QueryResult<>(users, users.size()));
+    public QueryResponse findByPage(long currentPage, long pageSize) {
+        List<User> users = this.userMapper.findByPage( new Page<>( currentPage, pageSize ) );
+        return new QueryResponse( CommonCode.SUCCESS, new QueryResult<>( users, users.size() ) );
     }
 
     @Override
     public QueryResponse findAllRoles() {
-        List<Role> roles = this.roleMapper.selectList(null);
-        return new QueryResponse(CommonCode.SUCCESS, new QueryResult<>(roles, roles.size()));
+        List<Role> roles = this.roleMapper.selectList( null );
+        return new QueryResponse( CommonCode.SUCCESS, new QueryResult<>( roles, roles.size() ) );
     }
 
     @Override
     public QueryResponse findAllSchools() {
-        List<School> schools = this.schoolMapper.selectList(null);
-        return new QueryResponse(CommonCode.SUCCESS, new QueryResult<>(schools, schools.size()));
+        List<School> schools = this.schoolMapper.selectList( null );
+        return new QueryResponse( CommonCode.SUCCESS, new QueryResult<>( schools, schools.size() ) );
+    }
+
+    @Override
+    public QueryResponse findSchoolsByPage(long currentPage, long pageSize) {
+        Page<School> page = this.schoolMapper.selectPage( new Page<>( currentPage, pageSize ), null );
+        return new QueryResponse( CommonCode.SUCCESS, new QueryResult<>( page.getRecords(), (int) page.getTotal() ) );
     }
 
     @Override
     public CommonResponse sendCode(String email, int codeType) {
         // 邮箱地址或者 type 为非法参数
-        if (StringUtils.isBlank(email) || !CODE_TYPE.contains(codeType)) {
-            ExceptionThrowUtils.cast(CommonCode.INVALID_PARAM);
+        if (StringUtils.isBlank( email ) || !CODE_TYPE.contains( codeType )) {
+            ExceptionThrowUtils.cast( CommonCode.INVALID_PARAM );
         }
 
-        User user = this.userMapper.selectOne(new QueryWrapper<User>().eq("email", email));
+        User user = this.userMapper.selectOne( new QueryWrapper<User>().eq( "email", email ) );
 
         // 如果是因登录和修改密码要求发送验证码，先确认该账号已经注册过
         if ((codeType == 1 || codeType == 3) && user == null) {
-            return new CommonResponse(UserCode.EMAIL_NOT_REGISTERED);
+            return new CommonResponse( UserCode.EMAIL_NOT_REGISTERED );
         }
 
-        // 如果是因注册要求发送验证码，先确认该账号尚未注册过
+        // 如果是因注册和换绑邮箱要求发送验证码，先确认该账号尚未注册过
         if ((codeType == 2 || codeType == 4) && user != null) {
-            return new CommonResponse(UserCode.EMAIL_HAS_BEEN_REGISTERED);
+            return new CommonResponse( UserCode.EMAIL_HAS_BEEN_REGISTERED );
         }
 
         // 生成六位数字验证码
-        String code = NumberUtils.generateCode(6);
+        String code = NumberUtils.generateCode( 6 );
         try {
             // 发送验证码
-            mailUtils.sendMail(email, "【益学堂】验证码",
-                    "【益学堂】您的验证码是" + code + "，用于验证身份、修改密码等，该验证码5分钟内有效，请勿向他人泄露。");
+            mailUtils.sendMail( email, "【益学堂】验证码",
+                    "【益学堂】您的验证码是" + code + "，用于验证身份、修改密码等，该验证码5分钟内有效，请勿向他人泄露。" );
         } catch (Exception e) {
-            LOGGER.error("发送验证码异常！异常原因：{}", e);
-            ExceptionThrowUtils.cast(CommonCode.SERVER_ERROR);
+            LOGGER.error( "发送验证码异常！异常原因：{}", e );
+            ExceptionThrowUtils.cast( CommonCode.SERVER_ERROR );
         }
 
         // 将验证码存入 redis ，并设置过期时间为 5 分钟
         switch (codeType) {
             case 1: // 登录验证码
-                this.redisTemplate.opsForValue().set(LOGIN_KEY_PREFIX + email, code, 5, TimeUnit.MINUTES);
+                this.redisTemplate.opsForValue().set( LOGIN_KEY_PREFIX + email, code, 5, TimeUnit.MINUTES );
                 break;
             case 2: // 注册验证码
-                this.redisTemplate.opsForValue().set(REGISTER_KEY_PREFIX + email, code, 5, TimeUnit.MINUTES);
+                this.redisTemplate.opsForValue().set( REGISTER_KEY_PREFIX + email, code, 5, TimeUnit.MINUTES );
                 break;
             case 3: // 修改密码验证码
-                this.redisTemplate.opsForValue().set(MODIFY_KEY_PREFIX + email, code, 5, TimeUnit.MINUTES);
+                this.redisTemplate.opsForValue().set( MODIFY_KEY_PREFIX + email, code, 5, TimeUnit.MINUTES );
                 break;
             case 4: // 换绑邮箱验证码
-                this.redisTemplate.opsForValue().set(CHANGE_KEY_PREFIX + email, code, 5, TimeUnit.MINUTES);
+                this.redisTemplate.opsForValue().set( CHANGE_KEY_PREFIX + email, code, 5, TimeUnit.MINUTES );
                 break;
         }
-        return new CommonResponse(CommonCode.SUCCESS);
+        return new CommonResponse( CommonCode.SUCCESS );
     }
 
     @Override
     @Transactional
     public CommonResponse register(RegisterUser registerUser) {
         if (registerUser == null) {
-            ExceptionThrowUtils.cast(CommonCode.INVALID_PARAM);
+            ExceptionThrowUtils.cast( CommonCode.INVALID_PARAM );
         }
 
         // 0. 邮箱校验
-        if (this.userMapper.selectOne(new QueryWrapper<User>().eq("email", registerUser.getEmail())) != null) {
-            return new CommonResponse(UserCode.EMAIL_HAS_BEEN_REGISTERED);
+        if (this.userMapper.selectOne( new QueryWrapper<User>().eq( "email", registerUser.getEmail() ) ) != null) {
+            return new CommonResponse( UserCode.EMAIL_HAS_BEEN_REGISTERED );
         }
         // 1. 验证码校验
-        if (!StringUtils.equals(registerUser.getCode(), this.redisTemplate.opsForValue().get(REGISTER_KEY_PREFIX + registerUser.getEmail()))) {
-            return new CommonResponse(UserCode.REGISTER_FAIL_CODE_WRONG);
+        if (!StringUtils.equals( registerUser.getCode(), this.redisTemplate.opsForValue().get( REGISTER_KEY_PREFIX + registerUser.getEmail() ) )) {
+            return new CommonResponse( UserCode.REGISTER_FAIL_CODE_WRONG );
         }
         // 2. 用户名唯一性校验
-        User foundUser = this.userMapper.selectOne(new QueryWrapper<User>().eq("username", registerUser.getUsername()));
+        User foundUser = this.userMapper.selectOne( new QueryWrapper<User>().eq( "username", registerUser.getUsername() ) );
         if (foundUser != null) {
-            return new CommonResponse(UserCode.REGISTER_FAIL_USERNAME_CONFLICT);
+            return new CommonResponse( UserCode.REGISTER_FAIL_USERNAME_CONFLICT );
         }
         // 3. 角色名称校验
-        Role role = this.roleMapper.selectOne(new QueryWrapper<Role>().eq("r_name", registerUser.getRoleName()));
+        Role role = this.roleMapper.selectOne( new QueryWrapper<Role>().eq( "r_name", registerUser.getRoleName() ) );
         if (role == null) {
-            return new CommonResponse(UserCode.REGISTER_FAIL_ROLE_NAME_NOT_FOUND);
+            return new CommonResponse( UserCode.REGISTER_FAIL_ROLE_NAME_NOT_FOUND );
         }
         // 4. 将用户存入数据库
-        User user = User.builder().id(null)
-                .username(registerUser.getUsername())
-                .email(registerUser.getEmail())
-                .password(registerUser.getPassword())
-                .realName(registerUser.getRealName())
-                .school(registerUser.getSchool())
-                .createTime(new Date())
-                .updateTime(new Date())
+        User user = User.builder().id( null )
+                .username( registerUser.getUsername() )
+                .email( registerUser.getEmail() )
+                .password( registerUser.getPassword() )
+                .realName( registerUser.getRealName() )
+                .school( registerUser.getSchool() )
+                .createTime( new Date() )
+                .updateTime( new Date() )
                 .build();
-        this.userMapper.insert(user);
+        this.userMapper.insert( user );
         // 5. 更新用户的角色id信息
-        this.userMapper.updateRoleIdByUsername(user.getUsername(), role.getId());
+        this.userMapper.updateRoleIdByUsername( user.getUsername(), role.getId() );
 
-        return new CommonResponse(CommonCode.SUCCESS);
+        return new CommonResponse( CommonCode.SUCCESS );
     }
 
     @Override
@@ -178,15 +185,15 @@ public class UserServiceImpl implements UserService {
 
         //1.参数验证
         if (updateUser == null) {
-            ExceptionThrowUtils.cast(CommonCode.INVALID_PARAM);
+            ExceptionThrowUtils.cast( CommonCode.INVALID_PARAM );
         }
 
         // 2. 角色名称校验
         Role role = null;
-        if (StringUtils.isNoneBlank(updateUser.getRoleName())) {
-            role = this.roleMapper.selectOne(new QueryWrapper<Role>().eq("r_name", updateUser.getRoleName()));
+        if (StringUtils.isNoneBlank( updateUser.getRoleName() )) {
+            role = this.roleMapper.selectOne( new QueryWrapper<Role>().eq( "r_name", updateUser.getRoleName() ) );
             if (role == null) {
-                return new CommonResponse(UserCode.UPDATE_FAIL_ROLE_NAME_NOT_FOUND);
+                return new CommonResponse( UserCode.UPDATE_FAIL_ROLE_NAME_NOT_FOUND );
             }
         }
 
@@ -200,29 +207,29 @@ public class UserServiceImpl implements UserService {
         }
 
         // 4. 更新最后一次修改个人信息时间
-        updateUser.setUpdateTime(new Date());
+        updateUser.setUpdateTime( new Date() );
 
         // 5. 更新用户信息
-        this.userMapper.updateUser(id, updateUser);
+        this.userMapper.updateUser( id, updateUser );
 
         // 6. 更新用户的角色id信息
-        this.userMapper.UpdateRoleIdById(Objects.requireNonNull(role).getId(), id);
+        this.userMapper.UpdateRoleIdById( Objects.requireNonNull( role ).getId(), id );
 
-        return new CommonResponse(CommonCode.SUCCESS);
+        return new CommonResponse( CommonCode.SUCCESS );
     }
 
     @Override
     public CommonResponse updatePassword(long id, PasswordUser passwordUser) {
 
-        // 1. 参数验证
+        // 1.参数验证
         if (passwordUser == null) {
-            ExceptionThrowUtils.cast(CommonCode.INVALID_PARAM);
+            ExceptionThrowUtils.cast( CommonCode.INVALID_PARAM );
         }
 
         // 2. 根据id查询当前用户密码，进行旧密码检验
-        User oldUser = this.userMapper.selectOne(new QueryWrapper<User>().eq("id", id));
-        if (!StringUtils.equals(oldUser.getPassword(), passwordUser.getOldPassword())) {
-            return new CommonResponse(UserCode.UPDATE_PASSWORD_FAIL_OLD_PASSWORD_WRONG);
+        User oldUser = this.userMapper.selectOne( new QueryWrapper<User>().eq( "id", id ) );
+        if (!StringUtils.equals( oldUser.getPassword(), passwordUser.getOldPassword() )) {
+            return new CommonResponse( UserCode.UPDATE_PASSWORD_FAIL_OLD_PASSWORD_WRONG );
         }
 
         // 3. 验证码校验
@@ -231,12 +238,12 @@ public class UserServiceImpl implements UserService {
         }
 
         // 4. 更新最后一次修改个人信息时间
-        passwordUser.setUpdateTime(new Date());
+        passwordUser.setUpdateTime( new Date() );
 
         // 5. 将新密码与更新时间信息更新至用户表中
-        this.userMapper.updatePassworById(id, passwordUser);
+        this.userMapper.updatePassworById( id, passwordUser );
 
-        return new CommonResponse(CommonCode.SUCCESS);
+        return new CommonResponse( CommonCode.SUCCESS );
     }
 
     @Override
