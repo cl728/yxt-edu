@@ -55,6 +55,18 @@ public class AuthServiceImpl implements AuthService {
         return getToken( user, rememberMe, userType );
     }
 
+    @Override
+    public String authByPhone(String phone, String code, boolean rememberMe, int userType) {
+        // 验证码校验
+        if (!StringUtils.equals( code, this.redisTemplate.opsForValue().get( LOGIN_KEY_PREFIX + phone ) )) {
+            return null;
+        }
+
+        User user = this.userMapper.findByPhone( phone );
+
+        return getToken( user, rememberMe, userType );
+    }
+
     private String getToken(User user, boolean rememberMe, int userType) {
         if (user == null) {
             return null;

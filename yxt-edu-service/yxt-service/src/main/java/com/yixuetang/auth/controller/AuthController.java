@@ -46,13 +46,15 @@ public class AuthController implements AuthControllerApi {
 
     private static final Logger LOGGER = LoggerFactory.getLogger( AuthController.class );
 
-    private final List<Integer> typeList = Arrays.asList( 1, 2 );
+    private final List<Integer> userTypeList = Arrays.asList( 1, 2 );
+
+    private final List<Integer> loginTypeList = Arrays.asList( 1, 2, 3 );
 
     /**
      * 处理用户登录逻辑
      *
      * @param userType  用户类型 1管理员 2普通用户
-     * @param loginType 登录方式，1 账号登录 2 邮箱登录
+     * @param loginType 登录方式 1账号登录 2邮箱登录 3手机号登录
      * @param loginUser 登录用户实体类
      * @param request   request
      * @param response  response
@@ -65,7 +67,7 @@ public class AuthController implements AuthControllerApi {
                                 @RequestBody LoginUser loginUser,
                                 HttpServletRequest request, HttpServletResponse response) {
         // loginType userType loginUser 非法
-        if (!typeList.contains( userType ) || !typeList.contains( loginType ) || loginUser == null) {
+        if (!userTypeList.contains( userType ) || !loginTypeList.contains( loginType ) || loginUser == null) {
             ExceptionThrowUtils.cast( CommonCode.INVALID_PARAM );
         }
         String token = null;
@@ -84,6 +86,12 @@ public class AuthController implements AuthControllerApi {
                     return new CommonResponse( AuthCode.LOGIN_FAIL_BY_EMAIL );
                 }
                 break;
+            case 3: // 手机号登录
+                // 登录校验
+                token = this.authService.authByPhone( loginUser.getPhone(), loginUser.getCode(), loginUser.isRememberMe(), userType );
+                if (StringUtils.isBlank( token )) {
+                    return new CommonResponse( AuthCode.LOGIN_FAIL_BY_PHONE );
+                }
         }
         // 将 token 写入 cookie ,并指定 httpOnly 为 true ，防止通过 JS 获取和修改
         String cookieName = userType == 1 ? config.getAdminCookieName() : config.getUserCookieName();
@@ -105,7 +113,7 @@ public class AuthController implements AuthControllerApi {
     @Override
     @GetMapping("verify/{userType}")
     public CommonResponse verify(@PathVariable int userType, HttpServletRequest request, HttpServletResponse response) {
-        if (!typeList.contains( userType )) {
+        if (!userTypeList.contains( userType )) {
             return new CommonResponse( CommonCode.INVALID_PARAM );
         }
         String cookieName = userType == 1 ? config.getAdminCookieName() : config.getUserCookieName();

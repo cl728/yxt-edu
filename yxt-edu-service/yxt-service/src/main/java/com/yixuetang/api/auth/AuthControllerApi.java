@@ -23,7 +23,7 @@ public interface AuthControllerApi {
     @ApiImplicitParams({
             @ApiImplicitParam(name = "userType", value = "用户类型 1管理员 2普通用户", required = true,
                     paramType = "path", dataType = "int"),
-            @ApiImplicitParam(name = "loginType", value = "登录方式 1账号登录 2邮箱登录", required = true,
+            @ApiImplicitParam(name = "loginType", value = "登录方式 1账号登录 2邮箱登录 3手机号码登录", required = true,
                     paramType = "path", dataType = "int")
     })
     CommonResponse login(int userType, int loginType, LoginUser loginUser,
