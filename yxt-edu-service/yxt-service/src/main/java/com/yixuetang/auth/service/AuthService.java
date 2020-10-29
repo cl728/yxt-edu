@@ -14,7 +14,7 @@ public interface AuthService {
      * @param username   用户名
      * @param password   密码
      * @param rememberMe 下次是否自动登录 true是 false不是
-     * @param userType
+     * @param userType   用户类型 1管理员 2普通用户
      * @return 生成的 token 信息
      */
     String authByPwd(String username, String password, boolean rememberMe, int userType);
@@ -25,7 +25,7 @@ public interface AuthService {
      * @param email      邮箱地址
      * @param code       验证码
      * @param rememberMe 下次是否自动登录 true是 false不是
-     * @param userType
+     * @param userType   用户类型 1管理员 2普通用户
      * @return 生成的 token 信息
      */
     String authByEmail(String email, String code, boolean rememberMe, int userType);
