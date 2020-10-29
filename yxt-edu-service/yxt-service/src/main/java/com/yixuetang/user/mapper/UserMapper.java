@@ -29,7 +29,7 @@ public interface UserMapper extends BaseMapper<User> {
             @Result(column = "role_id", property = "role",
                     one = @One(select = "com.yixuetang.user.mapper.RoleMapper.findById", fetchType = FetchType.EAGER))
     })
-    @Select("select * from t_user")
+    @Select("select id, username, email, phone, age, gender, role_id from t_user order by role_id")
     List<User> findByPage(Page<User> page);
 
     /**
@@ -68,7 +68,7 @@ public interface UserMapper extends BaseMapper<User> {
      * @param updateUser 更新用户实体类
      */
     @Update("update t_user set real_name = #{updateUser.realName}, gender = #{updateUser.gender}, age = #{updateUser.age}, phone = #{updateUser.phone}, school = #{updateUser.school}, ts_no = #{updateUser.tsNo}, update_time = #{updateUser.updateTime} where id = #{id}")
-    void updateUser(@Param("id")Long id, @Param("updateUser") UpdateUser updateUser);
+    void updateUser(@Param("id") Long id, @Param("updateUser") UpdateUser updateUser);
 
     /**
      * 根据id修改roleId
@@ -81,7 +81,8 @@ public interface UserMapper extends BaseMapper<User> {
 
     /**
      * 根据id修改密码与更新时间
-     * @param id 用户主键id
+     *
+     * @param id           用户主键id
      * @param passwordUser 用户密码实体类
      */
     @Update("update t_user set password = #{passwordUser.newPassword}, update_time = #{passwordUser.updateTime} where id = #{id}")
@@ -89,7 +90,8 @@ public interface UserMapper extends BaseMapper<User> {
 
     /**
      * 根据id换绑邮箱
-     * @param id 用户主键id
+     *
+     * @param id        用户主键id
      * @param emailUser 用户邮箱实体类
      */
     @Update("update t_user set email = #{emailUser.email} where id = #{id}")
