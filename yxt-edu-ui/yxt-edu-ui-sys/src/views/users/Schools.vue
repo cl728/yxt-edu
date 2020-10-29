@@ -14,7 +14,7 @@
 <script>
 export default {
   components: {
-    SchoolTableSpace:resolve=>{require(['@/components/module/table/SchoolTableSpace'],resolve)},
+    SchoolTableSpace:resolve=>{require(['./table/SchoolTableSpace'],resolve)},
   },
   data() {
     return {

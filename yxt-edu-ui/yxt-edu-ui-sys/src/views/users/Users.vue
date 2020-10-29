@@ -14,7 +14,7 @@
 <script>
 export default {
   components: {
-    UserTableSpace:resolve=>{require(['@/components/module/table/UserTableSpace'],resolve)},
+    UserTableSpace:resolve=>{require(['./table/UserTableSpace'],resolve)},
   },
   data() {
     return {

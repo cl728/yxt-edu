@@ -14,7 +14,7 @@
 <script>
 export default {
   components: {
-    UserTableSpace:resolve=>{require(['@/components/module/table/RoleTableSpace'],resolve)},
+    UserTableSpace:resolve=>{require(['./table/RoleTableSpace'],resolve)},
   },
   data() {
     return {
