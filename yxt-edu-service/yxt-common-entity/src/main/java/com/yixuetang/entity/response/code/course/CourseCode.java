@@ -10,7 +10,9 @@ import com.yixuetang.entity.response.code.ResponseCode;
  */
 public enum CourseCode implements ResponseCode {
 
-    COURSE_NOT_FOUND(false, 30000, "查询不到课程！");
+    COURSE_NOT_FOUND(false, 30000, "查询不到课程！"),
+
+    DELETE_COURSE_FAIL(false, 30001, "删除课程失败！");
 
     private boolean success;
     private int code;

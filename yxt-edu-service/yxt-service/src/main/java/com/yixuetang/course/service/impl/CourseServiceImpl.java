@@ -3,8 +3,10 @@ package com.yixuetang.course.service.impl;
 import com.yixuetang.course.mapper.CourseMapper;
 import com.yixuetang.course.service.CourseService;
 import com.yixuetang.entity.course.Course;
+import com.yixuetang.entity.response.CommonResponse;
 import com.yixuetang.entity.response.QueryResponse;
 import com.yixuetang.entity.response.code.CommonCode;
+import com.yixuetang.entity.response.code.course.CourseCode;
 import com.yixuetang.entity.response.result.QueryResult;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -28,4 +30,15 @@ public class CourseServiceImpl implements CourseService {
         List<Course> courses = this.courseMapper.selectList(null);
         return new QueryResponse(CommonCode.SUCCESS, new QueryResult(courses, courses.size()));
     }
+
+    @Override
+    public CommonResponse deleteCourse(Long id) {
+        int i = this.courseMapper.deleteById(id);
+        if (i < 1){
+            return new CommonResponse( CourseCode.DELETE_COURSE_FAIL );
+        }
+        return new CommonResponse( CommonCode.SUCCESS );
+    }
+
+
 }

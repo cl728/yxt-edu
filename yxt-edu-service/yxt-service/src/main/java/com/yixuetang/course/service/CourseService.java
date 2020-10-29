@@ -1,5 +1,6 @@
 package com.yixuetang.course.service;
 
+import com.yixuetang.entity.response.CommonResponse;
 import com.yixuetang.entity.response.QueryResponse;
 
 /**
@@ -13,7 +14,14 @@ public interface CourseService {
     /**
      * 查询所有学校
      *
-     * @return 响应结果实体类
+     * @return 查询结果实体类
      */
     QueryResponse findAllCourses();
+
+    /**
+     * 删除一门课程
+     *
+     * @return 响应结果实体类
+     */
+    CommonResponse deleteCourse(Long id);
 }

@@ -1,7 +1,9 @@
 package com.yixuetang.api.course;
 
+import com.yixuetang.entity.response.CommonResponse;
 import com.yixuetang.entity.response.QueryResponse;
 import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiOperation;
 
 /**
@@ -15,4 +17,9 @@ public interface CourseControllerApi {
 
     @ApiOperation("查询所有课程")
     QueryResponse findAllCourses();
+
+    @ApiOperation("删除一门课程")
+    @ApiImplicitParam(name = "id", value = "课程主键id", required = true,
+            paramType = "path", dataType = "long")
+    CommonResponse deleteCourse(Long id);
 }

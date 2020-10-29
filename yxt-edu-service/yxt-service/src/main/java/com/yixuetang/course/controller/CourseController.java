@@ -2,11 +2,10 @@ package com.yixuetang.course.controller;
 
 import com.yixuetang.api.course.CourseControllerApi;
 import com.yixuetang.course.service.CourseService;
+import com.yixuetang.entity.response.CommonResponse;
 import com.yixuetang.entity.response.QueryResponse;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 /**
  * @author Curtis
@@ -25,6 +24,12 @@ public class CourseController implements CourseControllerApi {
     @GetMapping
     public QueryResponse findAllCourses() {
         return this.courseService.findAllCourses();
+    }
+
+    @Override
+    @DeleteMapping("/{id}")
+    public CommonResponse deleteCourse(@PathVariable Long id) {
+        return this.courseService.deleteCourse(id);
     }
 
 }
