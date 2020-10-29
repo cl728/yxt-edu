@@ -22,7 +22,7 @@
             <!-- 头部 -->
             <div slot="title" class="dialog-title">
                 <h2 v-if="isLoginByPwd">账号登录</h2>
-                <h2 v-else>邮箱登录</h2>
+                <h2 v-else>手机号登录</h2>
             </div>
             <!-- 中间 -->
             <!-- 账号登录表单 -->
@@ -38,11 +38,13 @@
                 <el-checkbox label="记住我" style="float: left;" v-model="user.rememberMe"></el-checkbox>
                 <el-link type="primary" style="float: right;" :underline="false">忘记密码？</el-link>
             </el-form>
-            <!-- 邮箱登录表单 -->
+            <!-- 手机号登录表单 -->
             <el-form :model="user" :rules="loginRule" ref="loginForm" v-else>
-                <el-form-item prop="email">
-                    <el-input prefix-icon="el-icon-postcard" placeholder="请输入邮箱" v-model="user.email" autocomplete="off"
-                        clearable></el-input>
+                <el-form-item prop="phone">
+                    <el-input prefix-icon="el-icon-postcard" placeholder="请输入手机号" v-model="user.phone"
+                        autocomplete="off" clearable>
+                        <template slot="prepend">+86</template>
+                    </el-input>
                 </el-form-item>
                 <el-form-item>
                     <el-row>
@@ -51,8 +53,8 @@
                                 autocomplete="off" clearable></el-input>
                         </el-col>
                         <el-col :span="12">
-                            <el-button type="primary" style="float: right;" @click="sendCode()" :disabled="checkEmail()"
-                                v-if="!isSendingMail">
+                            <el-button type="primary" style="float: right;" @click="sendCode()" :disabled="checkPhone()"
+                                v-if="!isSendingMessage">
                                 发送验证码
                             </el-button>
                             <el-button disabled style="float: right;" v-else>
@@ -74,7 +76,7 @@
                 <el-row>
                     <el-col :span="12" style="float: left;">
                         <el-link type="primary" :underline="false" @click="isLoginByPwd = false" v-if="isLoginByPwd">
-                            邮箱登录</el-link>
+                            手机号登录</el-link>
                         <el-link type="primary" :underline="false" @click="isLoginByPwd = true" v-else>账号登录
                         </el-link>
                     </el-col>
@@ -101,46 +103,45 @@
             user: {
                 username: "",
                 password: "",
-                email: "",
+                phone: "",
                 rememberMe: true
             },
             code: "",
-            isSendingMail: false,
+            isSendingMessage: false,
             times: 60,
             loginRule: {
                 username: [{ required: true, message: '请输入用户名', trigger: 'blur' }],
                 password: [{ required: true, message: '请输入密码', trigger: 'blur' }],
-                email: [{ required: true, message: '请输入邮箱地址', trigger: 'blur' },
-                { type: 'email', message: '请输入正确的邮箱地址', trigger: 'blur' }]
+                phone: [{ required: true, message: '请输入手机号码', trigger: 'blur' }]
             },
         },
         methods: {
             handleSelect(key, keyPath) {
                 console.log(key, keyPath);
             },
-            checkEmail() {
-                let reg_email = /^[a-zA-Z0-9_-]+@[a-zA-Z0-9_-]+(\.[a-zA-Z0-9_-]+)+$/;
-                return !reg_email.test(this.user.email);
+            checkPhone() {
+                let regPhone = /^1[3|4|5|7|8][0-9]{9}$/;
+                return !regPhone.test(this.user.phone);
             },
             sendCode() {
                 // 设置计时器，60s后用户可以重新点击发送验证码
-                this.isSendingMail = true;
+                this.isSendingMessage = true;
                 this.times = 60;
                 var _this = this;
                 this.timer = setInterval(function () {
                     _this.times--;
                     if (_this.times === 0) {
-                        _this.isSendingMail = false;
+                        _this.isSendingMessage = false;
                         clearInterval(_this.timer)
                     }
                 }, 1000);
                 // 调用后台接口发送验证码
-                yxt.http.post("/users/code/1", { email: this.user.email }).then(({ data }) => {
+                yxt.http.post("/users/code/1", { phone: this.user.phone }).then(({ data }) => {
                     if (data.success) {
                         this.$message.success(data.message);
                     } else {
                         this.$message.error(data.message);
-                        this.isSendingMail = false;
+                        this.isSendingMessage = false;
                     }
                 })
             },
@@ -166,13 +167,13 @@
                                 this.$message.error("服务器繁忙，请稍候再试！");
                             })
                         } else {
-                            // 邮箱登录
+                            // 手机号登录
                             if (!/^\d{6}$/.test(this.code)) { // 验证码为6位数字
                                 this.$message.error("请输入正确的验证码！");
                             } else {
                                 // 调用后台接口完成登录逻辑校验
                                 let loginUser = {
-                                    email: this.user.email,
+                                    phone: this.user.phone,
                                     code: this.code,
                                     rememberMe: this.user.rememberMe
                                 }
