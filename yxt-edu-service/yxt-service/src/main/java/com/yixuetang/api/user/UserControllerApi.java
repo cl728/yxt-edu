@@ -66,10 +66,14 @@ public interface UserControllerApi {
     })
     QueryResponse findSchoolsByPage(long currentPage, long pageSize);
 
-    @ApiOperation("发送验证码到邮箱")
-    @ApiImplicitParam(name = "codeType", value = "因何发送验证码 1登录 2注册 3修改密码 4换绑手机", required = true,
-            paramType = "path", dataType = "int")
-    CommonResponse sendCode(int codeType, LoginUser loginUser);
+    @ApiOperation("发送验证码")
+    @ApiImplicitParams( {
+            @ApiImplicitParam(name = "sendType", value = "发送验证码到何处 1手机 2邮箱", required = true,
+                    paramType = "path", dataType = "int"),
+            @ApiImplicitParam(name = "codeType", value = "因何发送验证码 1登录 2注册 3修改密码 4换绑手机/邮箱", required = true,
+                    paramType = "path", dataType = "int")
+    } )
+    CommonResponse sendCode(int sendType, int codeType, LoginUser loginUser);
 
     @ApiOperation("用户注册")
     CommonResponse register(RegisterUser registerUser);

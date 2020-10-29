@@ -29,7 +29,7 @@ public class AuthConfig implements WebMvcConfigurer {
                 .excludePathPatterns( "/auth/login/**" ) // 排除登录授权接口
                 .excludePathPatterns( "/auth/verify/**" ) // 排除鉴权接口
                 .excludePathPatterns( "/users/register" ) // 排除用户注册接口
-                .excludePathPatterns( "/users/code/*" ); // 排除发送验证码接口
+                .excludePathPatterns( "/users/code/**" ); // 排除发送验证码接口
     }
 
 }

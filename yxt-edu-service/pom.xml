@@ -35,6 +35,8 @@
         <jsonwebtoken.version>0.9.0</jsonwebtoken.version>
         <jackson-annotations.version>2.10.3</jackson-annotations.version>
         <jasypt.version>2.1.0</jasypt.version>
+        <aliyun-java-sdk-core.version>3.3.1</aliyun-java-sdk-core.version>
+        <aliyun-java-sdk-dysmsapi.version>1.0.0</aliyun-java-sdk-dysmsapi.version>
     </properties>
 
     <dependencyManagement>
@@ -112,6 +114,18 @@
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-starter-data-redis</artifactId>
                 <version>${spring-boot.version}</version>
+            </dependency>
+
+            <!-- aliyun-sms -->
+            <dependency>
+                <groupId>com.aliyun</groupId>
+                <artifactId>aliyun-java-sdk-core</artifactId>
+                <version>${aliyun-java-sdk-core.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.aliyun</groupId>
+                <artifactId>aliyun-java-sdk-dysmsapi</artifactId>
+                <version>${aliyun-java-sdk-dysmsapi.version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>
