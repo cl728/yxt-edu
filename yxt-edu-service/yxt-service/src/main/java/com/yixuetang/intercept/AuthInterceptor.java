@@ -26,7 +26,8 @@ public class AuthInterceptor implements HandlerInterceptor {
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
         String token;
         String requestURI = request.getRequestURI();
-        if (StringUtils.contains( requestURI, "admin" )) {
+        if (StringUtils.contains( requestURI, "admin" ) ||
+                StringUtils.contains( requestURI, "swagger" )) {
             // 如果请求路径包含 admin , 对管理员身份进行鉴权
             token = CookieUtils.getCookieValue( request, jwtConfig.getAdminCookieName() );
         } else {
