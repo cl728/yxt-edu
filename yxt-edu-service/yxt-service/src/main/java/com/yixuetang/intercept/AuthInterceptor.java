@@ -27,8 +27,9 @@ public class AuthInterceptor implements HandlerInterceptor {
         String token;
         String requestURI = request.getRequestURI();
         if (StringUtils.contains( requestURI, "admin" ) ||
-                StringUtils.contains( requestURI, "swagger" )) {
-            // 如果请求路径包含 admin 和 swagger 测试, 对管理员身份进行鉴权
+                StringUtils.contains( requestURI, "swagger" ) ||
+                StringUtils.contains( requestURI, "/auth/logout/1" )) {
+            // 如果请求路径包含 admin 和 swagger 测试以及管理员退出登录, 对管理员身份进行鉴权
             token = CookieUtils.getCookieValue( request, jwtConfig.getAdminCookieName() );
         } else {
             // 否则对普通用户身份进行鉴权
