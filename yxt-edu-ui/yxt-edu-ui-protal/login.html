@@ -18,7 +18,7 @@
     <div id="app">
         <!-- 登录表单 -->
         <el-dialog visible="true" width="30%" center close-on-click-modal="false" close-on-press-escape="false"
-            show-close="false">
+            show-close="false" @close="history.back(-1)">
             <!-- 头部 -->
             <div slot="title" class="dialog-title">
                 <h2 v-if="isLoginByPwd">账号登录</h2>
