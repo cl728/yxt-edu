@@ -17,8 +17,9 @@ import lombok.Data;
 public class Role {
 
     @TableId(type = IdType.AUTO)
-    private Long id;
+    private Long id; // 角色主键自增id
+
     @TableField("r_name")
-    private String rName;
+    private String rName; // 角色名称
 
 }

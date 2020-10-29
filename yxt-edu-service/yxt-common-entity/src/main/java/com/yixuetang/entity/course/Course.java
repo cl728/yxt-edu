@@ -19,32 +19,32 @@ import java.util.Date;
 public class Course {
 
     @TableId(type = IdType.AUTO)
-    private long id;
+    private long id; // 课程主键自增id
 
     @TableField("teacher_id")
-    private long teacherId;
+    private long teacherId; // 授课教师主键id
 
     @TableField("c_name")
-    private String cName;
+    private String cName; // 课程名称
 
     @TableField("c_pic")
-    private String cPic;
+    private String cPic; // 课程图片
 
     @TableField("c_code")
-    private String cCode;
+    private String cCode; // 6位课程码（由英文字母组成）
 
     @TableField("s_count")
-    private String sCount;
+    private String sCount; // 已加课学生人数
 
     @TableField("create_time")
-    private Date createTime;
+    private Date createTime; // 开课时间
 
     @TableField("update_time")
-    private Date updateTime;
+    private Date updateTime; // 最后一次更新课程时间
 
     @TableField("school_year")
-    private String schoolYear;
+    private String schoolYear; // 学年
 
-    private String semester;
+    private String semester; // 学期
 
 }

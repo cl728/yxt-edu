@@ -2,7 +2,6 @@ package com.yixuetang.api.auth;
 
 import com.yixuetang.entity.request.auth.LoginUser;
 import com.yixuetang.entity.response.CommonResponse;
-import com.yixuetang.entity.response.QueryResponse;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;

@@ -4,9 +4,7 @@ import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
-import com.baomidou.mybatisplus.extension.handlers.JacksonTypeHandler;
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import io.swagger.annotations.ApiModelProperty;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -28,37 +26,37 @@ import java.util.Date;
 public class User {
 
     @TableId(type = IdType.AUTO)
-    private Long id;
+    private Long id; //用户主键自增id
 
-    private String username;
+    private String username; //用户名
 
     @JsonIgnore
-    private String password;
+    private String password; //密码
 
     @TableField("real_name")
-    private String realName;
+    private String realName; // 真实姓名
 
-    private String gender;
+    private String gender; // 性别
 
-    private Integer age;
+    private Integer age; // 年龄
 
-    private String email;
+    private String email; // 电子邮箱地址
 
-    private String avatar;
+    private String avatar; // 头像
 
-    private String phone;
+    private String phone; // 联系电话
 
-    private String school;
+    private String school; // 学校
 
     @TableField("ts_no")
-    private String tsNo;
+    private String tsNo; // 学/工号
 
     @TableField("create_time")
-    private Date createTime;
+    private Date createTime; // 注册时间
 
     @TableField("update_time")
-    private Date updateTime;
+    private Date updateTime; // 最后一次更新个人信息时间
 
     @TableField(exist = false)
-    private Role role;
+    private Role role; // 角色
 }
