@@ -69,7 +69,7 @@ public class UserController implements UserControllerApi {
     @Override
     @PostMapping("code/{codeType}")
     public CommonResponse sendCode(@PathVariable int codeType, @RequestBody EmailUser emailUser) {
-        return this.userService.sendCode( emailUser.getEmail(), codeType );
+        return this.userService.sendCode( emailUser.getPhone(), codeType );
     }
 
     @Override
