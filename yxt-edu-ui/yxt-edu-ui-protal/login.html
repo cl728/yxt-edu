@@ -176,7 +176,7 @@
                                     code: this.code,
                                     rememberMe: this.user.rememberMe
                                 }
-                                yxt.http.post("/auth/login/2", loginUser).then(({ data }) => {
+                                yxt.http.post("/auth/login/2/2", loginUser).then(({ data }) => {
                                     if (data.success) {
                                         location.href = "homePage.html"
                                     } else {
