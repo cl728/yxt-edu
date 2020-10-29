@@ -9,3 +9,30 @@ spring:
   datasource:
     hikari:
       max-lifetime: 30000
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: ENC(XU3IJ2x4kfUAKvBBI3hElSp+6MSdm7vJb9xKS+DeDsM3NHx815S8ahybOiX2OfluM4GBF9eDRIT8VZRMd+x4FyDXKkZMb24S9o91tAClsUCS/KYAF0gfb1ICPjUkK2nvtdgywOBR6dg=)
+    username: ENC(aaq+Wjg1D1Z2cQGTwZeidA==)
+    password: ENC(ggQPxMX7xD7eV2gA+GiPTm9Mm9+W6vso)
+  mail:
+    host: ENC(WaLpFXYKnKRNAsG1/p6McGLJrmMYyYN9)
+    username: ENC(FRmnejafWbckb2gjtRaFBjY7S0CIkaK2L5v16Ggurl4=)
+    password: ENC(d92dIj8dWEA9GQdto86LcTs4ZtmUqvTum4J4SccS8vQ=)
+    port: 465
+    properties:
+      mail:
+        smtp:
+          ssl:
+            enable: true
+  redis:
+    host: ENC(xGJHqtnNQ7QY0/Zmn7J3JVevS8FrsCLX)
+    password: ENC(UBm3TeLHwCHy3FZXXk4ffZtulNrEz5zT)
+yxt:
+  filter:
+    allowPaths:
+      - /auth/login/**    # 授权登录接口
+      - /auth/verify/*    # 鉴权接口
+      - /users            # 用户注册接口
+      - /users/code/**    # 发送验证码接口
+      - /users/page/**    # 分页查询用户列表接口
+      - /users/schools/** # 查询所有学校列表接口和分页查询学校列表接口
+      - /users/roles/**   # 分页查询角色列表接口

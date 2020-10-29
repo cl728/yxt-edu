@@ -1,24 +1,5 @@
 server:
   port: 8888
-spring:
-  datasource:
-    driver-class-name: com.mysql.cj.jdbc.Driver
-    url: ENC(XU3IJ2x4kfUAKvBBI3hElSp+6MSdm7vJb9xKS+DeDsM3NHx815S8ahybOiX2OfluM4GBF9eDRIT8VZRMd+x4FyDXKkZMb24S9o91tAClsUCS/KYAF0gfb1ICPjUkK2nvtdgywOBR6dg=)
-    username: ENC(aaq+Wjg1D1Z2cQGTwZeidA==)
-    password: ENC(ggQPxMX7xD7eV2gA+GiPTm9Mm9+W6vso)
-  mail:
-    host: ENC(WaLpFXYKnKRNAsG1/p6McGLJrmMYyYN9)
-    username: ENC(FRmnejafWbckb2gjtRaFBjY7S0CIkaK2L5v16Ggurl4=)
-    password: ENC(d92dIj8dWEA9GQdto86LcTs4ZtmUqvTum4J4SccS8vQ=)
-    port: 465
-    properties:
-      mail:
-        smtp:
-          ssl:
-            enable: true
-  redis:
-    host: ENC(xGJHqtnNQ7QY0/Zmn7J3JVevS8FrsCLX)
-    password: ENC(UBm3TeLHwCHy3FZXXk4ffZtulNrEz5zT)
 yxt:
   jwt:
     secret: ENC(YKsuzaRh9wxvSPUYoxdZbNI7UWvy7WBgn8Ki2BF03iw=) # 登录校验的密钥

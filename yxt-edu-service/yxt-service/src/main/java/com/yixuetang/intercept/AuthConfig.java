@@ -1,5 +1,7 @@
 package com.yixuetang.intercept;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
@@ -12,7 +14,11 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
  * @date 2020/10/27 22:05
  */
 @Configuration
+@EnableConfigurationProperties(FilterProperties.class)
 public class AuthConfig implements WebMvcConfigurer {
+
+    @Autowired
+    private FilterProperties filterProperties;
 
     /**
      * 解决拦截器无法注入bean的问题
@@ -24,13 +30,9 @@ public class AuthConfig implements WebMvcConfigurer {
 
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
-//        registry.addInterceptor( authInterceptor() )
-//                .addPathPatterns( "/**" )
-//                .excludePathPatterns( "/auth/login/**" ) // 排除登录授权接口
-//                .excludePathPatterns( "/auth/verify/**" ) // 排除鉴权接口
-//                .excludePathPatterns( "/users/register" ) // 排除用户注册接口
-//                .excludePathPatterns( "/users/schools" ) // 排除查询学校列表接口
-//                .excludePathPatterns( "/users/code/*" ); // 排除发送验证码接口
+        registry.addInterceptor( authInterceptor() )
+                .addPathPatterns( "/**" )
+                .excludePathPatterns( this.filterProperties.getAllowPaths() ); // 排除拦截白名单中的api
     }
 
 }

@@ -24,18 +24,38 @@ public class AuthInterceptor implements HandlerInterceptor {
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
-        String token;
+        String token = null;
         String requestURI = request.getRequestURI();
+        /*
+          需要鉴权为管理员才能执行的接口：
+          - 包含 admin 的接口
+          - 与 swagger 测试页面相关的请求和接口
+          - 管理员退出登录接口
+          - 查询所有课程接口
+         */
         if (StringUtils.contains( requestURI, "admin" ) ||
                 StringUtils.contains( requestURI, "swagger" ) ||
-                StringUtils.contains( requestURI, "/auth/logout/1" )) {
-            // 如果请求路径包含 admin 和 swagger 测试以及管理员退出登录, 对管理员身份进行鉴权
+                StringUtils.contains( requestURI, "/auth/logout/1" ) ||
+                StringUtils.contains( requestURI, "/courses" )) {
             token = CookieUtils.getCookieValue( request, jwtConfig.getAdminCookieName() );
-        } else {
-            // 否则对普通用户身份进行鉴权
+        }
+        /*
+          需要鉴权为普通用户才能执行的接口
+          - 普通用户退出登录接口
+          - 普通用户修改个人信息接口
+          - 普通用户修改密码接口
+          - 普通用户换绑邮箱接口
+          - 普通用户换绑手机号码接口
+         */
+        if (StringUtils.contains( requestURI, "/auth/logout/2" ) ||
+                StringUtils.contains( requestURI, "/users/password" ) ||
+                StringUtils.contains( requestURI, "/users/email" ) ||
+                StringUtils.contains( requestURI, "/users/info" ) ||
+                StringUtils.contains( requestURI, "/users/phone" )) {
             token = CookieUtils.getCookieValue( request, jwtConfig.getUserCookieName() );
         }
 
+        // 进行鉴权，如果解析成功则放行
         try {
             JwtUtils.getInfoFromToken( token, jwtConfig.getPublicKey() );
             return true;

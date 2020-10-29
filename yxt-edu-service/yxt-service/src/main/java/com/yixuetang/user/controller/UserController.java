@@ -25,31 +25,31 @@ public class UserController implements UserControllerApi {
     private UserService userService;
 
     @Override
-    @PutMapping("{id}")
+    @PutMapping("info/id/{id}")
     public CommonResponse updateUser(@PathVariable long id, @RequestBody UpdateUser updateUser) {
         return this.userService.updateUser( id, updateUser );
     }
 
     @Override
-    @PutMapping("password/{id}")
+    @PutMapping("password/id/{id}")
     public CommonResponse updatePassword(@PathVariable long id, @RequestBody PasswordUser passwordUser) {
         return this.userService.updatePassword( id, passwordUser );
     }
 
     @Override
-    @PutMapping("email/{id}")
+    @PutMapping("email/id/{id}")
     public CommonResponse updateEmail(@PathVariable long id, @RequestBody EmailUser emailUser) {
         return this.userService.updateEmail( id, emailUser );
     }
 
     @Override
-    @GetMapping("{currentPage}/{pageSize}")
+    @GetMapping("page/{currentPage}/{pageSize}")
     public QueryResponse findByPage(@PathVariable long currentPage, @PathVariable long pageSize) {
         return this.userService.findByPage( currentPage, pageSize );
     }
 
     @Override
-    @GetMapping("roles/{currentPage}/{pageSize}")
+    @GetMapping("roles/page/{currentPage}/{pageSize}")
     public QueryResponse findRolesByPage(@PathVariable long currentPage, @PathVariable long pageSize) {
         return this.userService.findRolesByPage( currentPage, pageSize );
     }
@@ -61,7 +61,7 @@ public class UserController implements UserControllerApi {
     }
 
     @Override
-    @GetMapping("schools/{currentPage}/{pageSize}")
+    @GetMapping("schools/page/{currentPage}/{pageSize}")
     public QueryResponse findSchoolsByPage(@PathVariable long currentPage, @PathVariable long pageSize) {
         return this.userService.findSchoolsByPage( currentPage, pageSize );
     }
