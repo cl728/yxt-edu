@@ -75,7 +75,10 @@ export default {
     getSchoolData() {
       this.$axios
         .get(
-          "users/schools/" + this.pageData.currentPage + "/" + this.pageData.pageSize
+          "users/schools/" +
+            this.pageData.currentPage +
+            "/" +
+            this.pageData.pageSize
         )
         .then(({ data }) => {
           this.schoolData = data.queryResult.data;
