@@ -26,11 +26,13 @@ public interface UserService {
     QueryResponse findByPage(long currentPage, long pageSize);
 
     /**
-     * 查询所有角色
+     * 分页查询角色
      *
+     * @param currentPage 当前页码数
+     * @param pageSize    每页显示条数
      * @return 响应结果实体类
      */
-    QueryResponse findAllRoles();
+    QueryResponse findRolesByPage(long currentPage, long pageSize);
 
     /**
      * 查询所有学校
@@ -58,7 +60,8 @@ public interface UserService {
 
     /**
      * 完成用户信息修改
-     * @param id 用户主键id
+     *
+     * @param id         用户主键id
      * @param updateUser 修改用户实体类
      * @return 响应结果实体类
      */
@@ -66,7 +69,8 @@ public interface UserService {
 
     /**
      * 修改用户密码
-     * @param id 用户主键id
+     *
+     * @param id           用户主键id
      * @param passwordUser 修改用户密码实体类
      * @return 响应结果实体类
      */
@@ -82,7 +86,8 @@ public interface UserService {
 
     /**
      * 换绑用户邮箱
-     * @param id 用户主键id
+     *
+     * @param id        用户主键id
      * @param emailUser 换绑用户邮箱
      * @return 响应结果实体类
      */

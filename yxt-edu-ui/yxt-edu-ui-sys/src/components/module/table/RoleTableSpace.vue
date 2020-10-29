@@ -189,9 +189,17 @@ export default {
       this.getRoleData();
     },
     getRoleData() {
-      this.$axios.get("users/roles").then(({ data }) => {
-        this.roleData = data.queryResult.data;
-      });
+      this.$axios
+        .get(
+          "users/roles/" +
+            this.pageData.currentPage +
+            "/" +
+            this.pageData.pageSize
+        )
+        .then(({ data }) => {
+          this.roleData = data.queryResult.data;
+          this.pageData.pageTotal = data.queryResult.total;
+        });
     },
   },
   mounted() {

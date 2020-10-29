@@ -43,8 +43,14 @@ public interface UserControllerApi {
             paramType = "path", dataType = "long")
     CommonResponse updateEmail(long id, EmailUser emailUser);
 
-    @ApiOperation("查询所有角色")
-    QueryResponse findAllRoles();
+    @ApiOperation("分页查询角色")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "currentPage", value = "当前页码数", required = true,
+                    paramType = "path", dataType = "long"),
+            @ApiImplicitParam(name = "pageSize", value = "每页显示条数", required = true,
+                    paramType = "path", dataType = "long")
+    })
+    QueryResponse findRolesByPage(long currentPage, long pageSize);
 
     @ApiOperation("查询所有学校")
     QueryResponse findAllSchools();

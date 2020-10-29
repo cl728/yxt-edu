@@ -56,7 +56,7 @@ public class UserServiceImpl implements UserService {
     @Autowired
     private StringRedisTemplate redisTemplate;
 
-    private final List<Integer> CODE_TYPE = new ArrayList<>(Arrays.asList(1, 2, 3, 4));
+    private final List<Integer> CODE_TYPE = new ArrayList<>( Arrays.asList( 1, 2, 3, 4 ) );
 
     private static final Logger LOGGER = LoggerFactory.getLogger( UserServiceImpl.class );
 
@@ -72,9 +72,9 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public QueryResponse findAllRoles() {
-        List<Role> roles = this.roleMapper.selectList( null );
-        return new QueryResponse( CommonCode.SUCCESS, new QueryResult<>( roles, roles.size() ) );
+    public QueryResponse findRolesByPage(long currentPage, long pageSize) {
+        Page<Role> page = this.roleMapper.selectPage( new Page<>( currentPage, pageSize ), null );
+        return new QueryResponse( CommonCode.SUCCESS, new QueryResult<>( page.getRecords(), (int) page.getTotal() ) );
     }
 
     @Override
@@ -183,7 +183,7 @@ public class UserServiceImpl implements UserService {
     @Transactional
     public CommonResponse updateUser(long id, UpdateUser updateUser) {
 
-        //1.参数验证
+        // 1.参数验证
         if (updateUser == null) {
             ExceptionThrowUtils.cast( CommonCode.INVALID_PARAM );
         }
@@ -198,11 +198,11 @@ public class UserServiceImpl implements UserService {
         }
 
         // 3. 学/工号唯一性检验
-        if (StringUtils.isNoneBlank(updateUser.getTsNo())) {
-            User oldUser = this.userMapper.selectOne(new QueryWrapper<User>().eq("id", id));
-            User foundUser = this.userMapper.selectOne(new QueryWrapper<User>().eq("ts_no", updateUser.getTsNo()));
-            if ((foundUser != null) && (!StringUtils.equals(foundUser.getTsNo(), oldUser.getTsNo()))) { //若存在该学工号，判断是否是未修改前当前用户的学工号
-                return new CommonResponse(UserCode.UPDATE_FAIL_TSNO_CONFLICT);
+        if (StringUtils.isNoneBlank( updateUser.getTsNo() )) {
+            User oldUser = this.userMapper.selectOne( new QueryWrapper<User>().eq( "id", id ) );
+            User foundUser = this.userMapper.selectOne( new QueryWrapper<User>().eq( "ts_no", updateUser.getTsNo() ) );
+            if ((foundUser != null) && (!StringUtils.equals( foundUser.getTsNo(), oldUser.getTsNo() ))) { //若存在该学工号，判断是否是未修改前当前用户的学工号
+                return new CommonResponse( UserCode.UPDATE_FAIL_TSNO_CONFLICT );
             }
         }
 
@@ -233,15 +233,15 @@ public class UserServiceImpl implements UserService {
         }
 
         // 3. 验证码校验
-        if (!StringUtils.equals(passwordUser.getCode(), this.redisTemplate.opsForValue().get(MODIFY_KEY_PREFIX + passwordUser.getEmail()))) {
-            return new CommonResponse(UserCode.UPDATE_PASSWORD_FAIL_CODE_WRONG);
+        if (!StringUtils.equals( passwordUser.getCode(), this.redisTemplate.opsForValue().get( MODIFY_KEY_PREFIX + passwordUser.getEmail() ) )) {
+            return new CommonResponse( UserCode.UPDATE_PASSWORD_FAIL_CODE_WRONG );
         }
 
         // 4. 更新最后一次修改个人信息时间
         passwordUser.setUpdateTime( new Date() );
 
         // 5. 将新密码与更新时间信息更新至用户表中
-        this.userMapper.updatePassworById( id, passwordUser );
+        this.userMapper.updatePasswordById( id, passwordUser );
 
         return new CommonResponse( CommonCode.SUCCESS );
     }
@@ -251,25 +251,25 @@ public class UserServiceImpl implements UserService {
 
         // 1. 参数验证
         if (emailUser == null) {
-            ExceptionThrowUtils.cast(CommonCode.INVALID_PARAM);
+            ExceptionThrowUtils.cast( CommonCode.INVALID_PARAM );
         }
 
         // 2. 新邮箱校验
-        if (this.userMapper.selectOne(new QueryWrapper<User>().eq("email", emailUser.getEmail())) != null) {
-            return new CommonResponse(UserCode.UPDATE_EMAIL_FAIL_EMAIL_ALREADY_EXISTS);
+        if (this.userMapper.selectOne( new QueryWrapper<User>().eq( "email", emailUser.getEmail() ) ) != null) {
+            return new CommonResponse( UserCode.UPDATE_EMAIL_FAIL_EMAIL_ALREADY_EXISTS );
         }
 
         // 3. 验证码检验
-        if (!StringUtils.equals(emailUser.getCode(), this.redisTemplate.opsForValue().get(CHANGE_KEY_PREFIX + emailUser.getEmail()))) {
-            return new CommonResponse(UserCode.UPDATE_EMAIL_FAIL_CODE_WRONG);
+        if (!StringUtils.equals( emailUser.getCode(), this.redisTemplate.opsForValue().get( CHANGE_KEY_PREFIX + emailUser.getEmail() ) )) {
+            return new CommonResponse( UserCode.UPDATE_EMAIL_FAIL_CODE_WRONG );
         }
 
         // 0. 更新最后一次修改个人信息的时间
-        emailUser.setUpdateTime(new Date());
+        emailUser.setUpdateTime( new Date() );
 
         // 0. 更新邮箱信息
-        this.userMapper.updateEmail(id, emailUser);
+        this.userMapper.updateEmail( id, emailUser );
 
-        return new CommonResponse(CommonCode.SUCCESS);
+        return new CommonResponse( CommonCode.SUCCESS );
     }
 }

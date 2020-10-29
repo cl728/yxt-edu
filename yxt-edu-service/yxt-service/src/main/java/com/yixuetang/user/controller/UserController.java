@@ -26,20 +26,20 @@ public class UserController implements UserControllerApi {
 
     @Override
     @PutMapping("{id}")
-    public CommonResponse updateUser(@PathVariable long id,@RequestBody UpdateUser updateUser) {
-        return this.userService.updateUser(id,updateUser);
+    public CommonResponse updateUser(@PathVariable long id, @RequestBody UpdateUser updateUser) {
+        return this.userService.updateUser( id, updateUser );
     }
 
     @Override
     @PutMapping("password/{id}")
     public CommonResponse updatePassword(@PathVariable long id, @RequestBody PasswordUser passwordUser) {
-        return this.userService.updatePassword(id,passwordUser);
+        return this.userService.updatePassword( id, passwordUser );
     }
 
     @Override
     @PutMapping("email/{id}")
     public CommonResponse updateEmail(@PathVariable long id, @RequestBody EmailUser emailUser) {
-        return this.userService.updateEmail(id,emailUser);
+        return this.userService.updateEmail( id, emailUser );
     }
 
     @Override
@@ -49,9 +49,9 @@ public class UserController implements UserControllerApi {
     }
 
     @Override
-    @GetMapping("roles")
-    public QueryResponse findAllRoles() {
-        return this.userService.findAllRoles();
+    @GetMapping("roles/{currentPage}/{pageSize}")
+    public QueryResponse findRolesByPage(@PathVariable long currentPage, @PathVariable long pageSize) {
+        return this.userService.findRolesByPage( currentPage, pageSize );
     }
 
     @Override
