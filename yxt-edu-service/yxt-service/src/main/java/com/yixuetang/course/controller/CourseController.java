@@ -22,7 +22,7 @@ public class CourseController implements CourseControllerApi {
     private CourseService courseService;
 
     @Override
-    @GetMapping("courses")
+    @GetMapping
     public QueryResponse findAllCourses() {
         return this.courseService.findAllCourses();
     }
