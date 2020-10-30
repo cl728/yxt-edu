@@ -2,10 +2,7 @@ package com.yixuetang.user.service;
 
 
 import com.yixuetang.entity.request.auth.LoginUser;
-import com.yixuetang.entity.request.user.EmailUser;
-import com.yixuetang.entity.request.user.PasswordUser;
-import com.yixuetang.entity.request.user.RegisterUser;
-import com.yixuetang.entity.request.user.UpdateUser;
+import com.yixuetang.entity.request.user.*;
 import com.yixuetang.entity.response.CommonResponse;
 import com.yixuetang.entity.response.QueryResponse;
 
@@ -28,11 +25,12 @@ public interface UserService {
     /**
      * 分页查询用户
      *
-     * @param currentPage 当前页码数
-     * @param pageSize    每页显示条数
+     * @param currentPage      当前页码数
+     * @param pageSize         每页显示条数
+     * @param queryPageRequest 分页查询条件实体类
      * @return 响应结果实体类
      */
-    QueryResponse findByPage(long currentPage, long pageSize);
+    QueryResponse findByPage(long currentPage, long pageSize, QueryPageRequest queryPageRequest);
 
     /**
      * 分页查询角色
