@@ -1,5 +1,6 @@
 package com.yixuetang.course.service;
 
+import com.yixuetang.entity.course.Course;
 import com.yixuetang.entity.response.CommonResponse;
 import com.yixuetang.entity.response.QueryResponse;
 
@@ -33,4 +34,21 @@ public interface CourseService {
      * @return  响应结果实体类
      */
     CommonResponse joinCourse(Long studentId, Long courseId);
+
+    /**
+     * 添加课程
+     *
+     * @param course 添加课程实体类
+     * @return 响应结果实体类
+     */
+    CommonResponse saveCourse(Course course);
+
+    /**
+     * 分页查询课程
+     *
+     * @param currentPage 当前页
+     * @param pageSize  每页数量
+     * @return
+     */
+    public QueryResponse findByPage(long currentPage, long pageSize);
 }

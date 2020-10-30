@@ -1,5 +1,6 @@
 package com.yixuetang.api.course;
 
+import com.yixuetang.entity.course.Course;
 import com.yixuetang.entity.response.CommonResponse;
 import com.yixuetang.entity.response.QueryResponse;
 import io.swagger.annotations.Api;
@@ -32,4 +33,16 @@ public interface CourseControllerApi {
                     paramType = "path", dataType = "long")
     })
     CommonResponse joinCourse(Long studentId, Long courseId);
+
+    @ApiOperation("添加课程")
+    CommonResponse saveCourse(Course course);
+
+    @ApiOperation("分页查询课程")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "currentPage", value = "当前页码数", required = true,
+                    paramType = "path", dataType = "long"),
+            @ApiImplicitParam(name = "pageSize", value = "每页显示条数", required = true,
+                    paramType = "path", dataType = "long")
+    })
+    QueryResponse findByPage(long currentPage, long pageSize);
 }

@@ -13,7 +13,9 @@ public enum CourseCode implements ResponseCode {
 
     DELETE_COURSE_FAIL(false, 50001, "删除课程失败！"),
 
-    JOIN_COURSE_FAIL(false, 50002, "加课失败，请勿重复加课");
+    JOIN_COURSE_FAIL(false, 50002, "加课失败，请勿重复加课"),
+
+    INSERT_COURSE_FAIL(false, 50003, "非教师操作！"),;
 
     private boolean success;
     private int code;

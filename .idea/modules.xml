@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/yxt-edu-service/yxt-common-entity/yxt-common-entity.iml" filepath="$PROJECT_DIR$/yxt-edu-service/yxt-common-entity/yxt-common-entity.iml" />
+      <module fileurl="file://$PROJECT_DIR$/yxt-edu-service/yxt-common-utils/yxt-common-utils.iml" filepath="$PROJECT_DIR$/yxt-edu-service/yxt-common-utils/yxt-common-utils.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/yxt-edu.iml" filepath="$PROJECT_DIR$/.idea/yxt-edu.iml" />
+      <module fileurl="file://$PROJECT_DIR$/yxt-edu-service/yxt-edu-service.iml" filepath="$PROJECT_DIR$/yxt-edu-service/yxt-edu-service.iml" />
+      <module fileurl="file://$PROJECT_DIR$/yxt-edu-service/yxt-service/yxt-service.iml" filepath="$PROJECT_DIR$/yxt-edu-service/yxt-service/yxt-service.iml" />
+    </modules>
+  </component>
+</project>

@@ -2,6 +2,7 @@ package com.yixuetang.course.controller;
 
 import com.yixuetang.api.course.CourseControllerApi;
 import com.yixuetang.course.service.CourseService;
+import com.yixuetang.entity.course.Course;
 import com.yixuetang.entity.response.CommonResponse;
 import com.yixuetang.entity.response.QueryResponse;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,6 +37,18 @@ public class CourseController implements CourseControllerApi {
     @PostMapping({"{studentId}/{courseId}"})
     public CommonResponse joinCourse(@PathVariable Long studentId, @PathVariable Long courseId) {
         return this.courseService.joinCourse(studentId, courseId);
+    }
+
+    @Override
+    @PostMapping
+    public CommonResponse saveCourse(@RequestBody Course course) {
+        return this.courseService.saveCourse( course );
+    }
+
+    @Override
+    @GetMapping("page/{currentPage}/{pageSize}")
+    public QueryResponse findByPage(@PathVariable long currentPage, @PathVariable long pageSize) {
+        return this.courseService.findByPage( currentPage, pageSize );
     }
 
 }

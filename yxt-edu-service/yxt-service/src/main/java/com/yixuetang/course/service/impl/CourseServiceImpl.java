@@ -1,18 +1,26 @@
 package com.yixuetang.course.service.impl;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.yixuetang.course.mapper.CourseMapper;
 import com.yixuetang.course.mapper.ScMapper;
 import com.yixuetang.course.service.CourseService;
 import com.yixuetang.entity.course.Course;
-import com.yixuetang.entity.course.StudentCourse;
 import com.yixuetang.entity.response.CommonResponse;
 import com.yixuetang.entity.response.QueryResponse;
 import com.yixuetang.entity.response.code.CommonCode;
 import com.yixuetang.entity.response.code.course.CourseCode;
 import com.yixuetang.entity.response.result.QueryResult;
+import com.yixuetang.entity.user.Role;
+import com.yixuetang.entity.user.User;
+import com.yixuetang.user.mapper.RoleMapper;
+import com.yixuetang.user.mapper.UserMapper;
+import com.yixuetang.utils.exception.ExceptionThrowUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -29,6 +37,12 @@ public class CourseServiceImpl implements CourseService {
 
     @Autowired
     private ScMapper scMapper;
+
+    @Autowired
+    private UserMapper userMapper;
+
+    @Autowired
+    private RoleMapper roleMapper;
 
     @Override
     public QueryResponse findAllCourses() {
@@ -63,5 +77,32 @@ public class CourseServiceImpl implements CourseService {
         }
     }
 
+    @Override
+    @Transactional
+    public CommonResponse saveCourse(Course course) {
+        if (course == null) {
+            ExceptionThrowUtils.cast(CommonCode.INVALID_PARAM);
+        }
+        // 校验teacherId是否合法
+        User findUser = userMapper.selectOne(new QueryWrapper<User>().eq("id",course.getTeacherId()));
+        Role findRole = roleMapper.selectOne(new QueryWrapper<Role>().eq("id",findUser.getRoleId()));
+        if(findRole == null || !findRole.getRName().equals("老师/助教")){
+            ExceptionThrowUtils.cast(CourseCode.INSERT_COURSE_FAIL);
+        }
+        // set createTime updateTime
+        Date date = new Date();
+        course.setCreateTime(date);
+        course.setUpdateTime(date);
+
+        this.courseMapper.insert(course);
+//        this.courseMapper.saveCourse(course);
+        return new CommonResponse(CommonCode.SUCCESS);
+    }
+
+    @Override
+    public QueryResponse findByPage(long currentPage, long pageSize) {
+        Page<Course> page = this.courseMapper.selectPage( new Page<>( currentPage, pageSize ), null );
+        return new QueryResponse( CommonCode.SUCCESS, new QueryResult<>( page.getRecords(), (int) page.getTotal() ) );
+    }
 
 }
