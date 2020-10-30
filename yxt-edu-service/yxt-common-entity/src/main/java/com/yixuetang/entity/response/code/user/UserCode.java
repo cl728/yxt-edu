@@ -61,4 +61,5 @@ public enum UserCode implements ResponseCode {
     @Override
     public String message() {
         return this.message;
-    }}
+    }
+}

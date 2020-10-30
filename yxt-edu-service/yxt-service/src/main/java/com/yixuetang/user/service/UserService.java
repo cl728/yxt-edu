@@ -18,6 +18,14 @@ import com.yixuetang.entity.response.QueryResponse;
 public interface UserService {
 
     /**
+     * 查询一个用户个人信息
+     *
+     * @param id 用户主键id
+     * @return 响应结果实体类
+     */
+    QueryResponse findOneUser(long id);
+
+    /**
      * 分页查询用户
      *
      * @param currentPage 当前页码数
