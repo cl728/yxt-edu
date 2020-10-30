@@ -33,9 +33,9 @@ public class CourseController implements CourseControllerApi {
     }
 
     @Override
-    @PostMapping({"{studentId}/{courseId}"})
-    public CommonResponse joinCourse(@PathVariable Long studentId, @PathVariable Long courseId) {
-        return this.courseService.joinCourse(studentId, courseId);
+    @PostMapping({"{studentId}/{code}"})
+    public CommonResponse joinCourse(@PathVariable Long studentId, @PathVariable String code) {
+        return this.courseService.joinCourse(studentId, code);
     }
 
 }
