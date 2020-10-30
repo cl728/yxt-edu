@@ -50,6 +50,14 @@
     margin-top: 20px;
 }
 
+.login-type-margin-left {
+    margin-left: 20px;
+}
+
+.login-type-margin-right {
+    margin-right: 20px;
+}
+
 .show-text {
     font-size: larger; 
     line-height: 30px; 

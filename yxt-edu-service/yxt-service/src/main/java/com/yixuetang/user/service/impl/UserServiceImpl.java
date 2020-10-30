@@ -1,7 +1,9 @@
 package com.yixuetang.user.service.impl;
 
+import com.aliyuncs.exceptions.ClientException;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.yixuetang.entity.request.auth.LoginUser;
 import com.yixuetang.entity.request.user.EmailUser;
 import com.yixuetang.entity.request.user.PasswordUser;
 import com.yixuetang.entity.request.user.RegisterUser;
@@ -19,8 +21,7 @@ import com.yixuetang.user.mapper.SchoolMapper;
 import com.yixuetang.user.mapper.UserMapper;
 import com.yixuetang.user.service.UserService;
 import com.yixuetang.utils.exception.ExceptionThrowUtils;
-import com.yixuetang.utils.user.MailUtils;
-import com.yixuetang.utils.user.NumberUtils;
+import com.yixuetang.utils.user.*;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -54,7 +55,15 @@ public class UserServiceImpl implements UserService {
     private MailUtils mailUtils;
 
     @Autowired
+    private SmsUtils smsUtils;
+
+    @Autowired
+    private SmsConfig smsConfig;
+
+    @Autowired
     private StringRedisTemplate redisTemplate;
+
+    private final List<Integer> SEND_TYPE = new ArrayList<>( Arrays.asList( 1, 2 ) );
 
     private final List<Integer> CODE_TYPE = new ArrayList<>( Arrays.asList( 1, 2, 3, 4 ) );
 
@@ -90,48 +99,83 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public CommonResponse sendCode(String email, int codeType) {
-        // 邮箱地址或者 type 为非法参数
-        if (StringUtils.isBlank( email ) || !CODE_TYPE.contains( codeType )) {
+    public CommonResponse sendCode(LoginUser loginUser, int sendType, int codeType) {
+        // 登录实体类或者 sendType 、codeType 为非法参数
+        if (loginUser == null || !SEND_TYPE.contains( sendType ) || !CODE_TYPE.contains( codeType )) {
             ExceptionThrowUtils.cast( CommonCode.INVALID_PARAM );
         }
 
-        User user = this.userMapper.selectOne( new QueryWrapper<User>().eq( "email", email ) );
-
-        // 如果是因登录和修改密码要求发送验证码，先确认该账号已经注册过
-        if ((codeType == 1 || codeType == 3) && user == null) {
-            return new CommonResponse( UserCode.EMAIL_NOT_REGISTERED );
-        }
-
-        // 如果是因注册和换绑邮箱要求发送验证码，先确认该账号尚未注册过
-        if ((codeType == 2 || codeType == 4) && user != null) {
-            return new CommonResponse( UserCode.EMAIL_HAS_BEEN_REGISTERED );
-        }
+        User user;
 
         // 生成六位数字验证码
         String code = NumberUtils.generateCode( 6 );
-        try {
-            // 发送验证码
-            mailUtils.sendMail( email, "【益学堂】验证码",
-                    "【益学堂】您的验证码是" + code + "，用于验证身份、修改密码等，该验证码5分钟内有效，请勿向他人泄露。" );
-        } catch (Exception e) {
-            LOGGER.error( "发送验证码异常！异常原因：{}", e );
-            ExceptionThrowUtils.cast( CommonCode.SERVER_ERROR );
+
+        switch (sendType) {
+            case 1: // 发送到手机
+                // phone 为非法参数
+                if (!ParamCheckUtils.checkPhone( loginUser.getPhone() )) {
+                    return new CommonResponse( CommonCode.INVALID_PARAM );
+                }
+                user = this.userMapper.selectOne( new QueryWrapper<User>().eq( "phone", loginUser.getPhone() ) );
+
+                // 如果是因登录和修改密码要求发送验证码到手机，先确认该账号已经注册过
+                if ((codeType == 1 || codeType == 3) && user == null) {
+                    return new CommonResponse( UserCode.PHONE_NOT_REGISTERED );
+                }
+
+                // 如果是因注册和换绑邮箱要求发送验证码到手机，先确认该账号尚未注册过
+                if ((codeType == 2 || codeType == 4) && user != null) {
+                    return new CommonResponse( UserCode.PHONE_HAS_BEEN_REGISTERED );
+                }
+                // 调用工具类发送验证码到手机
+                try {
+                    smsUtils.sendSms( loginUser.getPhone(), code, smsConfig.getSignName(), smsConfig.getVerifyCodeTemplate() );
+                } catch (ClientException e) {
+                    LOGGER.error( "发送验证码到用户手机异常！异常原因：{}", e );
+                    ExceptionThrowUtils.cast( CommonCode.SERVER_ERROR );
+                }
+                break;
+            case 2: // 发送到邮箱
+                // email 为非法参数
+                if (!ParamCheckUtils.checkEmail( loginUser.getEmail() )) {
+                    return new CommonResponse( CommonCode.INVALID_PARAM );
+                }
+                user = this.userMapper.selectOne( new QueryWrapper<User>().eq( "email", loginUser.getEmail() ) );
+
+                // 如果是因登录和修改密码要求发送验证码到邮箱，先确认该账号已经注册过
+                if ((codeType == 1 || codeType == 3) && user == null) {
+                    return new CommonResponse( UserCode.EMAIL_NOT_REGISTERED );
+                }
+
+                // 如果是因注册和换绑邮箱要求发送验证码到邮箱，先确认该账号尚未注册过
+                if ((codeType == 2 || codeType == 4) && user != null) {
+                    return new CommonResponse( UserCode.EMAIL_HAS_BEEN_REGISTERED );
+                }
+
+                try {
+                    // 发送验证码
+                    mailUtils.sendMail( loginUser.getEmail(), "【益学堂】验证码",
+                            "【益学堂】您的验证码是" + code + "，用于验证身份、修改密码等，该验证码5分钟内有效，请勿向他人泄露。" );
+                } catch (Exception e) {
+                    LOGGER.error( "发送验证码到用户邮箱地址异常！异常原因：{}", e );
+                    ExceptionThrowUtils.cast( CommonCode.SERVER_ERROR );
+                }
         }
 
         // 将验证码存入 redis ，并设置过期时间为 5 分钟
+        String key = sendType == 1 ? loginUser.getPhone() : loginUser.getEmail();
         switch (codeType) {
             case 1: // 登录验证码
-                this.redisTemplate.opsForValue().set( LOGIN_KEY_PREFIX + email, code, 5, TimeUnit.MINUTES );
+                this.redisTemplate.opsForValue().set( LOGIN_KEY_PREFIX + key, code, 5, TimeUnit.MINUTES );
                 break;
             case 2: // 注册验证码
-                this.redisTemplate.opsForValue().set( REGISTER_KEY_PREFIX + email, code, 5, TimeUnit.MINUTES );
+                this.redisTemplate.opsForValue().set( REGISTER_KEY_PREFIX + key, code, 5, TimeUnit.MINUTES );
                 break;
             case 3: // 修改密码验证码
-                this.redisTemplate.opsForValue().set( MODIFY_KEY_PREFIX + email, code, 5, TimeUnit.MINUTES );
+                this.redisTemplate.opsForValue().set( MODIFY_KEY_PREFIX + key, code, 5, TimeUnit.MINUTES );
                 break;
             case 4: // 换绑邮箱验证码
-                this.redisTemplate.opsForValue().set( CHANGE_KEY_PREFIX + email, code, 5, TimeUnit.MINUTES );
+                this.redisTemplate.opsForValue().set( CHANGE_KEY_PREFIX + key, code, 5, TimeUnit.MINUTES );
                 break;
         }
         return new CommonResponse( CommonCode.SUCCESS );

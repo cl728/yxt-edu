@@ -1,5 +1,6 @@
 package com.yixuetang.api.user;
 
+import com.yixuetang.entity.request.auth.LoginUser;
 import com.yixuetang.entity.request.user.EmailUser;
 import com.yixuetang.entity.request.user.PasswordUser;
 import com.yixuetang.entity.request.user.RegisterUser;
@@ -38,6 +39,7 @@ public interface UserControllerApi {
                     paramType = "path", dataType = "long")
     })
     QueryResponse findByPage(long currentPage, long pageSize);
+
     @ApiOperation("换绑邮箱")
     @ApiImplicitParam(name = "id", value = "用户主键id", required = true,
             paramType = "path", dataType = "long")
@@ -65,9 +67,13 @@ public interface UserControllerApi {
     QueryResponse findSchoolsByPage(long currentPage, long pageSize);
 
     @ApiOperation("发送验证码")
-    @ApiImplicitParam(name = "codeType", value = "因何发送验证码 1登录 2注册 3修改密码 4换绑邮箱", required = true,
-            paramType = "path", dataType = "int")
-    CommonResponse sendCode(int codeType, EmailUser emailUser);
+    @ApiImplicitParams( {
+            @ApiImplicitParam(name = "sendType", value = "发送验证码到何处 1手机 2邮箱", required = true,
+                    paramType = "path", dataType = "int"),
+            @ApiImplicitParam(name = "codeType", value = "因何发送验证码 1登录 2注册 3修改密码 4换绑手机/邮箱", required = true,
+                    paramType = "path", dataType = "int")
+    } )
+    CommonResponse sendCode(int sendType, int codeType, LoginUser loginUser);
 
     @ApiOperation("用户注册")
     CommonResponse register(RegisterUser registerUser);

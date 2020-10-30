@@ -17,8 +17,7 @@
 <body>
     <div id="app">
         <!-- 注册表单 -->
-        <el-dialog visible="true" width="30%" center close-on-click-modal="false" close-on-press-escape="false"
-            show-close="false" top="8vh" @close="history.back(-1)">
+        <el-dialog visible="true" width="30%" center @close="history.back(-1)" top="8vh">
             <div slot="title" class="dialog-title">
                 <h2>账号注册</h2>
             </div>

@@ -1,13 +1,16 @@
 package com.yixuetang.user.controller;
 
 import com.yixuetang.api.user.UserControllerApi;
+import com.yixuetang.entity.request.auth.LoginUser;
 import com.yixuetang.entity.request.user.EmailUser;
 import com.yixuetang.entity.request.user.RegisterUser;
 import com.yixuetang.entity.request.user.UpdateUser;
 import com.yixuetang.entity.request.user.PasswordUser;
 import com.yixuetang.entity.response.CommonResponse;
 import com.yixuetang.entity.response.QueryResponse;
+import com.yixuetang.entity.response.code.CommonCode;
 import com.yixuetang.user.service.UserService;
+import com.yixuetang.utils.exception.ExceptionThrowUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -67,9 +70,12 @@ public class UserController implements UserControllerApi {
     }
 
     @Override
-    @PostMapping("code/{codeType}")
-    public CommonResponse sendCode(@PathVariable int codeType, @RequestBody EmailUser emailUser) {
-        return this.userService.sendCode( emailUser.getEmail(), codeType );
+    @PostMapping("code/{sendType}/{codeType}")
+    public CommonResponse sendCode(@PathVariable int sendType, @PathVariable int codeType, @RequestBody LoginUser loginUser) {
+        if (sendType != 1 && sendType != 2) {
+            ExceptionThrowUtils.cast( CommonCode.INVALID_PARAM );
+        }
+        return this.userService.sendCode( loginUser, sendType, codeType );
     }
 
     @Override

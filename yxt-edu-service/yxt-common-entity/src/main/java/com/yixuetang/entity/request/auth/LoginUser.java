@@ -21,6 +21,9 @@ public class LoginUser {
     @ApiModelProperty("邮箱地址")
     private String email;
 
+    @ApiModelProperty("手机号码")
+    private String phone;
+
     @ApiModelProperty("验证码")
     private String code;
 

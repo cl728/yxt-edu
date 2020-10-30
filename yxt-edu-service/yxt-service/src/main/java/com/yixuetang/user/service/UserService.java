@@ -1,6 +1,7 @@
 package com.yixuetang.user.service;
 
 
+import com.yixuetang.entity.request.auth.LoginUser;
 import com.yixuetang.entity.request.user.EmailUser;
 import com.yixuetang.entity.request.user.PasswordUser;
 import com.yixuetang.entity.request.user.RegisterUser;
@@ -44,11 +45,12 @@ public interface UserService {
     /**
      * 发送验证码到用户邮箱并根据 type 以不同的 key 存储到 redis 上
      *
-     * @param email    用户邮箱地址
-     * @param codeType 因何发送验证码 1登录 2注册 3修改密码
+     * @param loginUser 登录用户实体类
+     * @param sendType  发送验证码到何处 1手机 2邮箱
+     * @param codeType  因何发送验证码 1登录 2注册 3修改密码 4换绑手机/邮箱
      * @return 响应结果实体类
      */
-    CommonResponse sendCode(String email, int codeType);
+    CommonResponse sendCode(LoginUser loginUser, int sendType, int codeType);
 
     /**
      * 完成用户注册逻辑

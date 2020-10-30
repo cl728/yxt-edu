@@ -96,4 +96,14 @@ public interface UserMapper extends BaseMapper<User> {
      */
     @Update("update t_user set email = #{emailUser.email} where id = #{id}")
     void updateEmail(@Param("id") long id, @Param("emailUser") EmailUser emailUser);
+
+    /**
+     * 根据手机号码查询用户
+     *
+     * @param phone 手机号码
+     * @return 用户实体类
+     */
+    @ResultMap("userMap")
+    @Select("select id, username, real_name, avatar, role_id from t_user where phone = #{phone}")
+    User findByPhone(String phone);
 }

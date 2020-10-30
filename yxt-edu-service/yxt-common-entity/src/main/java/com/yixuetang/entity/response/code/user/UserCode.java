@@ -32,7 +32,11 @@ public enum UserCode implements ResponseCode {
 
     UPDATE_EMAIL_FAIL_EMAIL_ALREADY_EXISTS( false, 30010, "换绑邮箱失败，该邮箱已存在！" ),
 
-    UPDATE_EMAIL_FAIL_CODE_WRONG( false, 30011, "验证码错误！" );
+    UPDATE_EMAIL_FAIL_CODE_WRONG( false, 30011, "验证码错误！" ),
+
+    PHONE_NOT_REGISTERED( false, 30012, "该手机号码尚未注册，请先进行注册！" ),
+
+    PHONE_HAS_BEEN_REGISTERED( false, 30013, "该手机号码已被注册！" );
 
     private boolean success;
     private int code;
