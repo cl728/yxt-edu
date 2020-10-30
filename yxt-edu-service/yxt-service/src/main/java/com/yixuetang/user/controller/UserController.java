@@ -109,14 +109,13 @@ public class UserController implements UserControllerApi {
 
     private boolean checkIdIfValid(@PathVariable long id, HttpServletRequest request) {
         String token = CookieUtils.getCookieValue( request, id == 3 ? config.getAdminCookieName() : config.getUserCookieName() );
-        UserInfo userInfo = null;
+        UserInfo userInfo;
         try {
             userInfo = JwtUtils.getInfoFromToken( token, config.getPublicKey() );
         } catch (Exception e) {
             LOGGER.error( "解析 token 信息异常！异常原因：{}", e );
-            return true;
+            return false;
         }
-        Long userId = userInfo.getId();
-        return id == userId;
+        return id == userInfo.getId();
     }
 }
