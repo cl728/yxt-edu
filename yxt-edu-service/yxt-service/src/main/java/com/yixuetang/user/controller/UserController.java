@@ -3,10 +3,7 @@ package com.yixuetang.user.controller;
 import com.yixuetang.api.user.UserControllerApi;
 import com.yixuetang.entity.auth.UserInfo;
 import com.yixuetang.entity.request.auth.LoginUser;
-import com.yixuetang.entity.request.user.EmailUser;
-import com.yixuetang.entity.request.user.PasswordUser;
-import com.yixuetang.entity.request.user.RegisterUser;
-import com.yixuetang.entity.request.user.UpdateUser;
+import com.yixuetang.entity.request.user.*;
 import com.yixuetang.entity.response.CommonResponse;
 import com.yixuetang.entity.response.QueryResponse;
 import com.yixuetang.entity.response.code.CommonCode;
@@ -70,8 +67,8 @@ public class UserController implements UserControllerApi {
 
     @Override
     @GetMapping("page/{currentPage}/{pageSize}")
-    public QueryResponse findByPage(@PathVariable long currentPage, @PathVariable long pageSize) {
-        return this.userService.findByPage( currentPage, pageSize );
+    public QueryResponse findByPage(@PathVariable long currentPage, @PathVariable long pageSize, QueryPageRequest queryPageRequest) {
+        return this.userService.findByPage( currentPage, pageSize, queryPageRequest );
     }
 
     @Override

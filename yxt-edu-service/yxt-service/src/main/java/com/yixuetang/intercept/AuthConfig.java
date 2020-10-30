@@ -30,9 +30,9 @@ public class AuthConfig implements WebMvcConfigurer {
 
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
-        registry.addInterceptor( authInterceptor() )
-                .addPathPatterns( "/**" )
-                .excludePathPatterns( this.filterProperties.getAllowPaths() ); // 排除拦截白名单中的api
+//        registry.addInterceptor( authInterceptor() )
+//                .addPathPatterns( "/**" )
+//                .excludePathPatterns( this.filterProperties.getAllowPaths() ); // 排除拦截白名单中的api
     }
 
 }

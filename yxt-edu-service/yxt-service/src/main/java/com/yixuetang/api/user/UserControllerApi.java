@@ -1,10 +1,7 @@
 package com.yixuetang.api.user;
 
 import com.yixuetang.entity.request.auth.LoginUser;
-import com.yixuetang.entity.request.user.EmailUser;
-import com.yixuetang.entity.request.user.PasswordUser;
-import com.yixuetang.entity.request.user.RegisterUser;
-import com.yixuetang.entity.request.user.UpdateUser;
+import com.yixuetang.entity.request.user.*;
 import com.yixuetang.entity.response.CommonResponse;
 import com.yixuetang.entity.response.QueryResponse;
 import io.swagger.annotations.Api;
@@ -45,7 +42,7 @@ public interface UserControllerApi {
             @ApiImplicitParam(name = "pageSize", value = "每页显示条数", required = true,
                     paramType = "path", dataType = "long")
     })
-    QueryResponse findByPage(long currentPage, long pageSize);
+    QueryResponse findByPage(long currentPage, long pageSize, QueryPageRequest queryPageRequest);
 
     @ApiOperation("换绑邮箱")
     @ApiImplicitParam(name = "id", value = "用户主键id", required = true,

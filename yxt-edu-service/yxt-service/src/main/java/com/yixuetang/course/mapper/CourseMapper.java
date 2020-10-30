@@ -3,6 +3,7 @@ package com.yixuetang.course.mapper;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.yixuetang.entity.course.Course;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.ResultMap;
 import org.apache.ibatis.annotations.Select;
 
 /**
@@ -14,4 +15,6 @@ import org.apache.ibatis.annotations.Select;
 @Mapper
 public interface CourseMapper extends BaseMapper<Course> {
 
+    @Select("select * from t_course where c_code = #{code}")
+    Course findByCode(String code);
 }

@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.yixuetang.entity.request.user.EmailUser;
 import com.yixuetang.entity.request.user.PasswordUser;
+import com.yixuetang.entity.request.user.QueryPageRequest;
 import com.yixuetang.entity.request.user.UpdateUser;
 import com.yixuetang.entity.user.User;
 import org.apache.ibatis.annotations.*;
@@ -38,8 +39,19 @@ public interface UserMapper extends BaseMapper<User> {
             @Result(column = "role_id", property = "role",
                     one = @One(select = "com.yixuetang.user.mapper.RoleMapper.findById", fetchType = FetchType.EAGER))
     })
-    @Select("select id, username, email, phone, age, gender, role_id from t_user order by role_id")
-    List<User> findByPage(Page<User> page);
+    @Select("<script>" +
+            "select id, username, email, phone, age, gender, role_id " +
+            " from t_user <where>" +
+            "<if test='request.gender != null and request.gender.length() == 1'> and gender = #{request.gender}</if>" +
+            "<if test='request.roleId != null'> and role_id = #{request.roleId}</if>" +
+            "<if test='request.username != null and request.username.length() > 0'> and username like #{request.username}</if>" +
+            "<if test='request.realName != null and request.realName.length() > 0'> and real_name like #{request.realName}</if>" +
+            "<if test='request.email != null and request.email.length() > 0'> and email like #{request.email}</if>" +
+            "<if test='request.phone != null and request.phone.length() > 0'> and phone like #{request.phone}</if>" +
+            "</where>" +
+            " order by role_id" +
+            "</script>")
+    List<User> findByPage(@Param("page") Page<User> page, @Param("request") QueryPageRequest request);
 
     /**
      * 根据用户名和密码查询用户

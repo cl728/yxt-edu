@@ -1,6 +1,6 @@
 <template>
   <div>
-    <el-card shadow="never" class="card">
+    <el-card shadow="never" class="card" body-style="{height: '400px'}">
       <div slot="header" class="clearfix">
         <span>用户信息</span>
         <el-button
@@ -13,14 +13,71 @@
         >
       </div>
       <div id="charts_one" style="width: 100%; min-height: 300px">
-        <el-button
-          type="danger"
-          size="small"
-          icon="el-icon-finished"
-          :disabled="selectionButtonState"
-          @click="showSelection"
-          >{{ selectionButtonTitle }}</el-button
+        <el-form
+          :inline="true"
+          :model="pageData.queryPageRequest"
+          class="demo-form-inline"
         >
+          <el-form-item>
+            <el-button
+              type="danger"
+              size="small"
+              icon="el-icon-finished"
+              :disabled="selectionButtonState"
+              @click="showSelection"
+              >{{ selectionButtonTitle }}</el-button
+            >
+          </el-form-item>
+          <el-form-item>
+            <el-select
+              v-model="pageData.queryPageRequest.roleName"
+              placeholder="用户角色"
+            >
+              <el-option
+                v-for="(role, index) in roleList"
+                :key="index"
+                :label="role.roleName"
+                :value="role.roleName"
+              ></el-option>
+            </el-select>
+          </el-form-item>
+          <el-form-item>
+            <el-select
+              v-model="pageData.queryPageRequest.gender"
+              placeholder="用户性别"
+            >
+              <el-option label="男" value="男"></el-option>
+              <el-option label="女" value="女"></el-option>
+            </el-select>
+          </el-form-item>
+          <el-form-item>
+            <el-input
+              v-model="pageData.queryPageRequest.username"
+              placeholder="用户名"
+            ></el-input>
+          </el-form-item>
+          <el-form-item>
+            <el-input
+              v-model="pageData.queryPageRequest.realName"
+              placeholder="用户姓名"
+            ></el-input>
+          </el-form-item>
+          <el-form-item>
+            <el-input
+              v-model="pageData.queryPageRequest.email"
+              placeholder="用户邮箱"
+            ></el-input>
+          </el-form-item>
+          <el-form-item>
+            <el-input
+              v-model="pageData.queryPageRequest.phone"
+              placeholder="用户电话"
+            ></el-input>
+          </el-form-item>
+          <el-form-item>
+            <el-button type="primary" @click="getUserData()">查询</el-button>
+          </el-form-item>
+        </el-form>
         <el-table
           :data="userData"
           max-height="350"
@@ -186,7 +243,15 @@ export default {
         pageSize: 10,
         currentPage: 1,
         pageTotal: 200,
+        queryPageRequest: {
+          username: "",
+        },
       },
+      roleList: [
+        { roleId: 1, roleName: "管理员" },
+        { roleId: 2, roleName: "老师/助教" },
+        { roleId: 3, roleName: "学生" },
+      ],
     };
   },
   methods: {
@@ -263,7 +328,12 @@ export default {
     getUserData() {
       this.$axios
         .get(
-          "users/page/" + this.pageData.currentPage + "/" + this.pageData.pageSize
+          "users/page/" +
+            this.pageData.currentPage +
+            "/" +
+            this.pageData.pageSize +
+            "?" +
+            this.$qs.stringify(this.pageData.queryPageRequest)
         )
         .then(({ data }) => {
           this.userData = data.queryResult.data;
