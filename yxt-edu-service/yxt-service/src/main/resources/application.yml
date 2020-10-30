@@ -35,4 +35,3 @@ yxt:
       - /users/code/**    # 发送验证码接口
       - /users/schools/** # 查询所有学校列表接口和分页查询学校列表接口
       - /users/roles/**   # 分页查询角色列表接口
-      - /users/info/id/*  # 查询一个用户信息的接口

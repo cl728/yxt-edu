@@ -32,7 +32,7 @@ import javax.servlet.http.HttpServletRequest;
 @RequestMapping("users")
 public class UserController implements UserControllerApi {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(UserController.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger( UserController.class );
 
     @Autowired
     private UserService userService;
@@ -43,41 +43,41 @@ public class UserController implements UserControllerApi {
     @Override
     @GetMapping("info/id/{id}")
     public QueryResponse findOneUser(@PathVariable long id, HttpServletRequest request) {
-        if (checkIdWithToken(id, request)) return new QueryResponse(CommonCode.INVALID_PARAM, null);
-        return this.userService.findOneUser(id);
+        if (!checkIdIfValid( id, request )) return new QueryResponse( CommonCode.INVALID_PARAM, null );
+        return this.userService.findOneUser( id );
     }
 
     @Override
     @PutMapping("info/id/{id}")
     public CommonResponse updateUser(@PathVariable long id, @RequestBody UpdateUser updateUser, HttpServletRequest request) {
-        if (checkIdWithToken(id, request)) return new CommonResponse(CommonCode.INVALID_PARAM);
-        return this.userService.updateUser(id, updateUser);
+        if (!checkIdIfValid( id, request )) return new CommonResponse( CommonCode.INVALID_PARAM );
+        return this.userService.updateUser( id, updateUser );
     }
 
     @Override
     @PutMapping("password/id/{id}")
     public CommonResponse updatePassword(@PathVariable long id, @RequestBody PasswordUser passwordUser, HttpServletRequest request) {
-        if (checkIdWithToken(id, request)) return new CommonResponse(CommonCode.INVALID_PARAM);
-        return this.userService.updatePassword(id, passwordUser);
+        if (!checkIdIfValid( id, request )) return new CommonResponse( CommonCode.INVALID_PARAM );
+        return this.userService.updatePassword( id, passwordUser );
     }
 
     @Override
     @PutMapping("email/id/{id}")
     public CommonResponse updateEmail(@PathVariable long id, @RequestBody EmailUser emailUser, HttpServletRequest request) {
-        if (checkIdWithToken(id, request)) return new CommonResponse(CommonCode.INVALID_PARAM);
-        return this.userService.updateEmail(id, emailUser);
+        if (!checkIdIfValid( id, request )) return new CommonResponse( CommonCode.INVALID_PARAM );
+        return this.userService.updateEmail( id, emailUser );
     }
 
     @Override
     @GetMapping("page/{currentPage}/{pageSize}")
     public QueryResponse findByPage(@PathVariable long currentPage, @PathVariable long pageSize) {
-        return this.userService.findByPage(currentPage, pageSize);
+        return this.userService.findByPage( currentPage, pageSize );
     }
 
     @Override
     @GetMapping("roles/page/{currentPage}/{pageSize}")
     public QueryResponse findRolesByPage(@PathVariable long currentPage, @PathVariable long pageSize) {
-        return this.userService.findRolesByPage(currentPage, pageSize);
+        return this.userService.findRolesByPage( currentPage, pageSize );
     }
 
     @Override
@@ -89,37 +89,34 @@ public class UserController implements UserControllerApi {
     @Override
     @GetMapping("schools/page/{currentPage}/{pageSize}")
     public QueryResponse findSchoolsByPage(@PathVariable long currentPage, @PathVariable long pageSize) {
-        return this.userService.findSchoolsByPage(currentPage, pageSize);
+        return this.userService.findSchoolsByPage( currentPage, pageSize );
     }
 
     @Override
     @PostMapping("code/{sendType}/{codeType}")
     public CommonResponse sendCode(@PathVariable int sendType, @PathVariable int codeType, @RequestBody LoginUser loginUser) {
         if (sendType != 1 && sendType != 2) {
-            ExceptionThrowUtils.cast(CommonCode.INVALID_PARAM);
+            ExceptionThrowUtils.cast( CommonCode.INVALID_PARAM );
         }
-        return this.userService.sendCode(loginUser, sendType, codeType);
+        return this.userService.sendCode( loginUser, sendType, codeType );
     }
 
     @Override
     @PostMapping
     public CommonResponse register(@RequestBody RegisterUser registerUser) {
-        return this.userService.register(registerUser);
+        return this.userService.register( registerUser );
     }
 
-    private boolean checkIdWithToken(@PathVariable long id, HttpServletRequest request) {
-        String token = CookieUtils.getCookieValue(request, config.getUserCookieName());
+    private boolean checkIdIfValid(@PathVariable long id, HttpServletRequest request) {
+        String token = CookieUtils.getCookieValue( request, id == 3 ? config.getAdminCookieName() : config.getUserCookieName() );
         UserInfo userInfo = null;
         try {
-            userInfo = JwtUtils.getInfoFromToken(token, config.getPublicKey());
+            userInfo = JwtUtils.getInfoFromToken( token, config.getPublicKey() );
         } catch (Exception e) {
-            LOGGER.error("解析 token 信息异常！异常原因：{}");
+            LOGGER.error( "解析 token 信息异常！异常原因：{}", e );
             return true;
         }
         Long userId = userInfo.getId();
-        if (id != userId) {
-            return true;
-        }
-        return false;
+        return id == userId;
     }
 }

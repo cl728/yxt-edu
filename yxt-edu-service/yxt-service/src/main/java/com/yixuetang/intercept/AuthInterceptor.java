@@ -38,7 +38,8 @@ public class AuthInterceptor implements HandlerInterceptor {
                 StringUtils.contains( requestURI, "swagger" ) ||
                 StringUtils.contains( requestURI, "/auth/logout/1" ) ||
                 StringUtils.contains( requestURI, "/courses/page" ) ||
-                StringUtils.contains( requestURI, "/users/page" )) {
+                StringUtils.contains( requestURI, "/users/page" ) ||
+                StringUtils.contains( requestURI, "/users/info/id/3" )) {
             token = CookieUtils.getCookieValue( request, jwtConfig.getAdminCookieName() );
 
         /*
