@@ -43,28 +43,28 @@ public class UserController implements UserControllerApi {
     @Override
     @GetMapping("info/id/{id}")
     public QueryResponse findOneUser(@PathVariable long id, HttpServletRequest request) {
-        if (!checkIdIfValid( id, request )) return new QueryResponse( CommonCode.INVALID_PARAM, null );
+        if (checkIdIfInvalid( id, request )) return new QueryResponse( CommonCode.INVALID_PARAM, null );
         return this.userService.findOneUser( id );
     }
 
     @Override
     @PutMapping("info/id/{id}")
     public CommonResponse updateUser(@PathVariable long id, @RequestBody UpdateUser updateUser, HttpServletRequest request) {
-        if (!checkIdIfValid( id, request )) return new CommonResponse( CommonCode.INVALID_PARAM );
+        if (checkIdIfInvalid( id, request )) return new CommonResponse( CommonCode.INVALID_PARAM );
         return this.userService.updateUser( id, updateUser );
     }
 
     @Override
     @PutMapping("password/id/{id}")
     public CommonResponse updatePassword(@PathVariable long id, @RequestBody PasswordUser passwordUser, HttpServletRequest request) {
-        if (!checkIdIfValid( id, request )) return new CommonResponse( CommonCode.INVALID_PARAM );
+        if (checkIdIfInvalid( id, request )) return new CommonResponse( CommonCode.INVALID_PARAM );
         return this.userService.updatePassword( id, passwordUser );
     }
 
     @Override
     @PutMapping("email/id/{id}")
     public CommonResponse updateEmail(@PathVariable long id, @RequestBody EmailUser emailUser, HttpServletRequest request) {
-        if (!checkIdIfValid( id, request )) return new CommonResponse( CommonCode.INVALID_PARAM );
+        if (checkIdIfInvalid( id, request )) return new CommonResponse( CommonCode.INVALID_PARAM );
         return this.userService.updateEmail( id, emailUser );
     }
 
@@ -107,15 +107,15 @@ public class UserController implements UserControllerApi {
         return this.userService.register( registerUser );
     }
 
-    private boolean checkIdIfValid(@PathVariable long id, HttpServletRequest request) {
+    private boolean checkIdIfInvalid(@PathVariable long id, HttpServletRequest request) {
         String token = CookieUtils.getCookieValue( request, id == 3 ? config.getAdminCookieName() : config.getUserCookieName() );
         UserInfo userInfo;
         try {
             userInfo = JwtUtils.getInfoFromToken( token, config.getPublicKey() );
         } catch (Exception e) {
             LOGGER.error( "解析 token 信息异常！异常原因：{}", e );
-            return false;
+            return true;
         }
-        return id == userInfo.getId();
+        return id != userInfo.getId();
     }
 }
