@@ -4,6 +4,7 @@ import com.yixuetang.entity.response.CommonResponse;
 import com.yixuetang.entity.response.QueryResponse;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 
 /**
@@ -22,4 +23,13 @@ public interface CourseControllerApi {
     @ApiImplicitParam(name = "id", value = "课程主键id", required = true,
             paramType = "path", dataType = "long")
     CommonResponse deleteCourse(Long id);
+
+    @ApiOperation("加入课程")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "studentId", value = "学生id", required = true,
+                    paramType = "path", dataType = "long"),
+            @ApiImplicitParam(name = "courseId", value = "课程id", required = true,
+                    paramType = "path", dataType = "long")
+    })
+    CommonResponse joinCourse(Long studentId, Long courseId);
 }

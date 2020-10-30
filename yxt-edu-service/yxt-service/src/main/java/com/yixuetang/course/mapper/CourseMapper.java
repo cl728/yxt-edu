@@ -3,6 +3,7 @@ package com.yixuetang.course.mapper;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.yixuetang.entity.course.Course;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Select;
 
 /**
  * @author Curtis

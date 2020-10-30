@@ -1,5 +1,4 @@
 package com.yixuetang.entity.response.code.course;
-
 import com.yixuetang.entity.response.code.ResponseCode;
 
 /**
@@ -10,9 +9,11 @@ import com.yixuetang.entity.response.code.ResponseCode;
  */
 public enum CourseCode implements ResponseCode {
 
-    COURSE_NOT_FOUND(false, 30000, "查询不到课程！"),
+    COURSE_NOT_FOUND(false, 50000, "查询不到课程！"),
 
-    DELETE_COURSE_FAIL(false, 30001, "删除课程失败！");
+    DELETE_COURSE_FAIL(false, 50001, "删除课程失败！"),
+
+    JOIN_COURSE_FAIL(false, 50002, "加课失败，请勿重复加课");
 
     private boolean success;
     private int code;

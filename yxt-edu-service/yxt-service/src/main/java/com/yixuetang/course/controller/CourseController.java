@@ -32,4 +32,10 @@ public class CourseController implements CourseControllerApi {
         return this.courseService.deleteCourse(id);
     }
 
+    @Override
+    @PostMapping({"{studentId}/{courseId}"})
+    public CommonResponse joinCourse(@PathVariable Long studentId, @PathVariable Long courseId) {
+        return this.courseService.joinCourse(studentId, courseId);
+    }
+
 }

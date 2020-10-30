@@ -24,4 +24,13 @@ public interface CourseService {
      * @return 响应结果实体类
      */
     CommonResponse deleteCourse(Long id);
+
+    /**
+     * 加入课程
+     *
+     * @param studentId 学生id
+     * @param courseId  课程id
+     * @return  响应结果实体类
+     */
+    CommonResponse joinCourse(Long studentId, Long courseId);
 }
