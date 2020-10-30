@@ -18,7 +18,7 @@
       :active-text-color="aside.aside_active_text_color"
       :collapse="aside.aside_state"
     >
-      <el-menu-item index="/home">
+      <el-menu-item index="/">
         <i class="el-icon-menu" :style="{ color: aside.aside_icon_color }"></i>
         <span slot="title">主页</span>
       </el-menu-item>

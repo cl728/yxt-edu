@@ -31,14 +31,16 @@ public class AuthInterceptor implements HandlerInterceptor {
           - 包含 admin 的接口
           - 与 swagger 测试页面相关的请求和接口
           - 管理员退出登录接口
-          - 查询所有课程接口
+          - 分页查询课程接口
+          - 分页查询用户列表接口
          */
         if (StringUtils.contains( requestURI, "admin" ) ||
                 StringUtils.contains( requestURI, "swagger" ) ||
                 StringUtils.contains( requestURI, "/auth/logout/1" ) ||
-                StringUtils.contains( requestURI, "/courses" )) {
+                StringUtils.contains( requestURI, "/courses/page" ) ||
+                StringUtils.contains( requestURI, "/users/page" )) {
             token = CookieUtils.getCookieValue( request, jwtConfig.getAdminCookieName() );
-        }
+
         /*
           需要鉴权为普通用户才能执行的接口
           - 普通用户退出登录接口
@@ -47,14 +49,12 @@ public class AuthInterceptor implements HandlerInterceptor {
           - 普通用户换绑邮箱接口
           - 普通用户换绑手机号码接口
          */
-        if (StringUtils.contains( requestURI, "/auth/logout/2" ) ||
+        } else if (StringUtils.contains( requestURI, "/auth/logout/2" ) ||
                 StringUtils.contains( requestURI, "/users/password" ) ||
                 StringUtils.contains( requestURI, "/users/email" ) ||
                 StringUtils.contains( requestURI, "/users/info" ) ||
-                StringUtils.contains( requestURI, "/users/phone" )) {
+                StringUtils.contains( requestURI, "/users/phone" ))
             token = CookieUtils.getCookieValue( request, jwtConfig.getUserCookieName() );
-        }
-
         // 进行鉴权，如果解析成功则放行
         try {
             JwtUtils.getInfoFromToken( token, jwtConfig.getPublicKey() );

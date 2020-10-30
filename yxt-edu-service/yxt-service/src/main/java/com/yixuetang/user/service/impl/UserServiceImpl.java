@@ -123,7 +123,7 @@ public class UserServiceImpl implements UserService {
                     return new CommonResponse( UserCode.PHONE_NOT_REGISTERED );
                 }
 
-                // 如果是因注册和换绑邮箱要求发送验证码到手机，先确认该账号尚未注册过
+                // 如果是因注册和换绑手机要求发送验证码到手机，先确认该账号尚未注册过
                 if ((codeType == 2 || codeType == 4) && user != null) {
                     return new CommonResponse( UserCode.PHONE_HAS_BEEN_REGISTERED );
                 }
@@ -174,7 +174,7 @@ public class UserServiceImpl implements UserService {
             case 3: // 修改密码验证码
                 this.redisTemplate.opsForValue().set( MODIFY_KEY_PREFIX + key, code, 5, TimeUnit.MINUTES );
                 break;
-            case 4: // 换绑邮箱验证码
+            case 4: // 换绑邮箱/手机验证码
                 this.redisTemplate.opsForValue().set( CHANGE_KEY_PREFIX + key, code, 5, TimeUnit.MINUTES );
                 break;
         }

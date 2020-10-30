@@ -33,6 +33,5 @@ yxt:
       - /auth/verify/*    # 鉴权接口
       - /users            # 用户注册接口
       - /users/code/**    # 发送验证码接口
-      - /users/page/**    # 分页查询用户列表接口
       - /users/schools/** # 查询所有学校列表接口和分页查询学校列表接口
       - /users/roles/**   # 分页查询角色列表接口
