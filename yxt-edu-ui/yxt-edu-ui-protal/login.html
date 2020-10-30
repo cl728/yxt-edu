@@ -104,12 +104,13 @@
                 <el-row>
                     <el-col :span="12" style="float: left;">
                         <el-link type="primary" :underline="false" @click="loginType = 1" v-show="loginType != 1"
-                            class="login-type-margin-right">账号登录
+                            class="login-type-margin-lr">账号登录
                         </el-link>
-                        <el-link type="primary" :underline="false" @click="loginType = 2" v-show="loginType != 2">邮箱登录
+                        <el-link type="primary" :underline="false" @click="loginType = 2" v-show="loginType != 2"
+                            class="login-type-margin-lr">邮箱登录
                         </el-link>
                         <el-link type="primary" :underline="false" @click="loginType = 3" v-show="loginType != 3"
-                            class="login-type-margin-left">
+                            class="login-type-margin-lr">
                             手机号登录</el-link>
                     </el-col>
                     <el-col :span="12" style="float: right;"><span style="font-size: small;">还没有账号？</span>
