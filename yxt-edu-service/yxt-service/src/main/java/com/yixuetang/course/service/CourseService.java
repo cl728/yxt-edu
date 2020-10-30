@@ -33,7 +33,7 @@ public interface CourseService {
      * @param courseId  课程id
      * @return  响应结果实体类
      */
-    CommonResponse joinCourse(Long studentId, Long courseId);
+    CommonResponse joinCourse(Long studentId, String code);
 
     /**
      * 添加课程

@@ -36,13 +36,13 @@ public class CourseServiceImpl implements CourseService {
     private CourseMapper courseMapper;
 
     @Autowired
-    private ScMapper scMapper;
-
-    @Autowired
     private UserMapper userMapper;
 
     @Autowired
     private RoleMapper roleMapper;
+
+    @Autowired
+    private ScMapper scMapper;
 
     @Override
     public QueryResponse findAllCourses() {
@@ -60,16 +60,16 @@ public class CourseServiceImpl implements CourseService {
     }
 
     @Override
-    public CommonResponse joinCourse(Long studentId, Long courseId) {
-        // 判断课程是否存在
-        Course course = this.courseMapper.selectById(courseId);
+    public CommonResponse joinCourse(Long studentId, String code) {
+        // 通过加课码查询课程
+        final Course course = this.courseMapper.selectOne(new QueryWrapper<Course>().eq("c_code",code));
         if (course == null){
             return new CommonResponse(CourseCode.COURSE_NOT_FOUND);
         }else {
             // 判断是否重复加课
-            int i = this.scMapper.selectByStudentIdAndCourseId(studentId, courseId);
+            int i = this.scMapper.selectByStudentIdAndCourseId(studentId, course.getId());
             if (i < 1) {
-                this.scMapper.joinCourse(studentId, courseId);
+                this.scMapper.joinCourse(studentId, course.getId());
                 return new CommonResponse(CommonCode.SUCCESS);
             } else {
                 return new CommonResponse(CourseCode.JOIN_COURSE_FAIL);
@@ -104,5 +104,6 @@ public class CourseServiceImpl implements CourseService {
         Page<Course> page = this.courseMapper.selectPage( new Page<>( currentPage, pageSize ), null );
         return new QueryResponse( CommonCode.SUCCESS, new QueryResult<>( page.getRecords(), (int) page.getTotal() ) );
     }
+
 
 }
