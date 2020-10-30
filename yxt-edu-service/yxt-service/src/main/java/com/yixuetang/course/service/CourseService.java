@@ -30,7 +30,7 @@ public interface CourseService {
      * 加入课程
      *
      * @param studentId 学生id
-     * @param courseId  课程id
+     * @param code  加课码
      * @return  响应结果实体类
      */
     CommonResponse joinCourse(Long studentId, String code);
