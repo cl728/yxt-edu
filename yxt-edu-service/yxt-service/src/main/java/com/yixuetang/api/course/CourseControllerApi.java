@@ -21,18 +21,22 @@ public interface CourseControllerApi {
     QueryResponse findAllCourses();
 
     @ApiOperation("删除一门课程")
-    @ApiImplicitParam(name = "id", value = "课程主键id", required = true,
-            paramType = "path", dataType = "long")
-    CommonResponse deleteCourse(Long id);
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "teacherId", value = "教师id", required = true,
+                    paramType = "path", dataType = "long"),
+            @ApiImplicitParam(name = "courseId", value = "课程主键id", required = true,
+                    paramType = "path", dataType = "long")
+    })
+    CommonResponse deleteCourse(Long teacherId, Long courseId);
 
     @ApiOperation("加入课程")
     @ApiImplicitParams({
-            @ApiImplicitParam(name = "studentId", value = "学生id", required = true,
+            @ApiImplicitParam(name = "id", value = "用户id", required = true,
                     paramType = "path", dataType = "long"),
             @ApiImplicitParam(name = "code", value = "加课码", required = true,
                     paramType = "path", dataType = "String")
     })
-    CommonResponse joinCourse(Long studentId, String code);
+    CommonResponse joinCourse(Long id, String code);
 
     @ApiOperation("添加课程")
     @ApiImplicitParam(name = "teacherId", value = "教师id", required = true,

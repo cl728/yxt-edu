@@ -6,6 +6,7 @@ import com.yixuetang.course.mapper.CourseMapper;
 import com.yixuetang.course.mapper.ScMapper;
 import com.yixuetang.course.service.CourseService;
 import com.yixuetang.entity.course.Course;
+import com.yixuetang.entity.course.StudentCourse;
 import com.yixuetang.entity.request.course.InsertCourse;
 import com.yixuetang.entity.response.CommonResponse;
 import com.yixuetang.entity.response.QueryResponse;
@@ -18,6 +19,8 @@ import com.yixuetang.user.mapper.RoleMapper;
 import com.yixuetang.user.mapper.UserMapper;
 import com.yixuetang.utils.course.GenCodeUtils;
 import com.yixuetang.utils.exception.ExceptionThrowUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -46,6 +49,8 @@ public class CourseServiceImpl implements CourseService {
     @Autowired
     private ScMapper scMapper;
 
+    private static final Logger LOGGER = LoggerFactory.getLogger( CourseServiceImpl.class );
+
     @Override
     public QueryResponse findAllCourses() {
         List<Course> courses = this.courseMapper.selectList( null );
@@ -53,15 +58,31 @@ public class CourseServiceImpl implements CourseService {
     }
 
     @Override
-    public CommonResponse deleteCourse(Long id) {
-        int i = this.courseMapper.deleteById( id );
-        if (i < 1) {
+    @Transactional
+    public CommonResponse deleteCourse(Long teacherId, Long courseId) {
+        // 确认该课程为该名老师所有
+        Course course = this.courseMapper.selectOne( new QueryWrapper<Course>().eq( "id", courseId )
+                .eq( "teacher_id", teacherId ).select( "id" ) );
+        if (course == null) {
+            return new CommonResponse( CommonCode.INVALID_PARAM );
+        }
+
+        try {
+            // 将选课表里关于该课程的记录删除
+            this.scMapper.delete( new QueryWrapper<StudentCourse>().eq( "course_id", courseId ) );
+
+            // 将该课程删除
+            this.courseMapper.deleteById( courseId );
+        } catch (Exception e) {
+            LOGGER.error( "删除课程发生异常！异常原因：{}", e );
             return new CommonResponse( CourseCode.DELETE_COURSE_FAIL );
         }
+
         return new CommonResponse( CommonCode.SUCCESS );
     }
 
     @Override
+    @Transactional
     public CommonResponse joinCourse(Long studentId, String code) {
         // 通过加课码查询课程
         final Course course = this.courseMapper.selectOne( new QueryWrapper<Course>().eq( "c_code", code ) );

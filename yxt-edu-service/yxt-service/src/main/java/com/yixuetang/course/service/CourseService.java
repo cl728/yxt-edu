@@ -22,9 +22,11 @@ public interface CourseService {
     /**
      * 删除一门课程
      *
+     * @param teacherId 教师id
+     * @param courseId  课程id
      * @return 响应结果实体类
      */
-    CommonResponse deleteCourse(Long id);
+    CommonResponse deleteCourse(Long teacherId, Long courseId);
 
     /**
      * 加入课程

@@ -28,9 +28,9 @@ public class CourseController implements CourseControllerApi {
     }
 
     @Override
-    @DeleteMapping("id/{id}")
-    public CommonResponse deleteCourse(@PathVariable Long id) {
-        return this.courseService.deleteCourse( id );
+    @DeleteMapping("id/{teacherId}/{courseId}")
+    public CommonResponse deleteCourse(@PathVariable Long teacherId, @PathVariable Long courseId) {
+        return this.courseService.deleteCourse( teacherId, courseId );
     }
 
     @Override

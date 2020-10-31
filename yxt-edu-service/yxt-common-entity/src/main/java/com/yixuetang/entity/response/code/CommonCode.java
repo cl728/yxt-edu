@@ -15,7 +15,7 @@ public enum CommonCode implements ResponseCode {
 
     FAIL( false, 20001, "操作失败！" ),
 
-    INVALID_PARAM( false, 20002, "非法参数！" ),
+    INVALID_PARAM( false, 20002, "非法请求！" ),
 
     UNAUTHORIZED( false, 20003, "用户未经认证！" ),
 
