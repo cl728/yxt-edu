@@ -31,12 +31,12 @@ public interface CourseControllerApi {
 
     @ApiOperation("加入课程")
     @ApiImplicitParams({
-            @ApiImplicitParam(name = "id", value = "用户id", required = true,
+            @ApiImplicitParam(name = "userId", value = "用户id", required = true,
                     paramType = "path", dataType = "long"),
             @ApiImplicitParam(name = "code", value = "加课码", required = true,
                     paramType = "path", dataType = "String")
     })
-    CommonResponse joinCourse(Long id, String code);
+    CommonResponse joinCourse(Long userId, String code);
 
     @ApiOperation("添加课程")
     @ApiImplicitParam(name = "teacherId", value = "教师id", required = true,

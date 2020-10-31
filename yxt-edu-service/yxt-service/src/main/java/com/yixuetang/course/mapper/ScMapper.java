@@ -31,9 +31,9 @@ public interface ScMapper extends BaseMapper<StudentCourse> {
     /**
      * 根据学生id和课程id在SC表查找记录
      *
-     * @param studentId
-     * @param courseId
-     * @return
+     * @param studentId 学生主键id
+     * @param courseId  课程主键id
+     * @return 操作影响行数
      */
     @Select("select count(*) from t_sc where student_id = #{studentId} and course_id = #{courseId}")
     int selectByStudentIdAndCourseId(@Param("studentId") Long studentId, @Param("courseId") Long courseId);

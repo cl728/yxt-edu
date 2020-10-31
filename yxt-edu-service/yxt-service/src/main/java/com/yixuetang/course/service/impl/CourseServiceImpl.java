@@ -83,21 +83,26 @@ public class CourseServiceImpl implements CourseService {
 
     @Override
     @Transactional
-    public CommonResponse joinCourse(Long studentId, String code) {
+    public CommonResponse joinCourse(Long userId, String code) {
         // 通过加课码查询课程
         final Course course = this.courseMapper.selectOne( new QueryWrapper<Course>().eq( "c_code", code ) );
         if (course == null) {
             return new CommonResponse( CourseCode.COURSE_NOT_FOUND );
-        } else {
-            // 判断是否重复加课
-            int i = this.scMapper.selectByStudentIdAndCourseId( studentId, course.getId() );
-            if (i < 1) {
-                this.scMapper.joinCourse( studentId, course.getId() );
-                return new CommonResponse( CommonCode.SUCCESS );
-            } else {
-                return new CommonResponse( CourseCode.JOIN_COURSE_FAIL );
-            }
         }
+
+        // 判断是否重复加课
+        int i = this.scMapper.selectByStudentIdAndCourseId( userId, course.getId() );
+        if (i >= 1) {
+            return new CommonResponse( CourseCode.JOIN_COURSE_FAIL );
+        }
+
+        // 判断是否为老师加入自己创建的课程
+        if (course.getTeacherId() == userId) {
+            return new CommonResponse( CommonCode.FAIL );
+        }
+
+        this.scMapper.joinCourse( userId, course.getId() );
+        return new CommonResponse( CommonCode.SUCCESS );
     }
 
     @Override
@@ -119,6 +124,7 @@ public class CourseServiceImpl implements CourseService {
         course.setCName( insertCourse.getCName() );
         course.setSchoolYear( insertCourse.getSchoolYear() );
         course.setSemester( insertCourse.getSemester() );
+        course.setClazz( insertCourse.getClazz() );
 
         // 生成加课码
         course.setCCode( GenCodeUtils.genRandomCode() );
