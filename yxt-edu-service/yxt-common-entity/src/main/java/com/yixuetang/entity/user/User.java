@@ -60,5 +60,4 @@ public class User {
     @TableField(exist = false)
     private Role role; // 角色
 
-    private Long roleId;
 }

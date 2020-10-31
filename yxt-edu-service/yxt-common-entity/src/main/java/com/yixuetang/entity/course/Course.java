@@ -34,7 +34,7 @@ public class Course {
     private String cCode; // 6位课程码（由英文字母组成）
 
     @TableField("s_count")
-    private String sCount; // 已加课学生人数
+    private Integer sCount; // 已加课学生人数
 
     @TableField("create_time")
     private Date createTime; // 开课时间

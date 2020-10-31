@@ -2,7 +2,7 @@ package com.yixuetang.course.controller;
 
 import com.yixuetang.api.course.CourseControllerApi;
 import com.yixuetang.course.service.CourseService;
-import com.yixuetang.entity.course.Course;
+import com.yixuetang.entity.request.course.InsertCourse;
 import com.yixuetang.entity.response.CommonResponse;
 import com.yixuetang.entity.response.QueryResponse;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,21 +28,21 @@ public class CourseController implements CourseControllerApi {
     }
 
     @Override
-    @DeleteMapping("/{id}")
+    @DeleteMapping("id/{id}")
     public CommonResponse deleteCourse(@PathVariable Long id) {
-        return this.courseService.deleteCourse(id);
+        return this.courseService.deleteCourse( id );
     }
 
     @Override
-    @PostMapping({"{studentId}/{code}"})
-    public CommonResponse joinCourse(@PathVariable Long studentId, @PathVariable String code) {
-        return this.courseService.joinCourse(studentId, code);
+    @PostMapping("id/{id}/{code}")
+    public CommonResponse joinCourse(@PathVariable Long id, @PathVariable String code) {
+        return this.courseService.joinCourse( id, code );
     }
 
     @Override
-    @PostMapping
-    public CommonResponse saveCourse(@RequestBody Course course) {
-        return this.courseService.saveCourse( course );
+    @PostMapping("id/{teacherId}")
+    public CommonResponse saveCourse(@PathVariable Long teacherId, @RequestBody InsertCourse course) {
+        return this.courseService.saveCourse( teacherId, course );
     }
 
     @Override

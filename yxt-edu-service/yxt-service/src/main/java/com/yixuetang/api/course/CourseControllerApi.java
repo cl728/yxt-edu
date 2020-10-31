@@ -1,6 +1,6 @@
 package com.yixuetang.api.course;
 
-import com.yixuetang.entity.course.Course;
+import com.yixuetang.entity.request.course.InsertCourse;
 import com.yixuetang.entity.response.CommonResponse;
 import com.yixuetang.entity.response.QueryResponse;
 import io.swagger.annotations.Api;
@@ -35,7 +35,9 @@ public interface CourseControllerApi {
     CommonResponse joinCourse(Long studentId, String code);
 
     @ApiOperation("添加课程")
-    CommonResponse saveCourse(Course course);
+    @ApiImplicitParam(name = "teacherId", value = "教师id", required = true,
+            paramType = "path", dataType = "long")
+    CommonResponse saveCourse(Long teacherId, InsertCourse course);
 
     @ApiOperation("分页查询课程")
     @ApiImplicitParams({

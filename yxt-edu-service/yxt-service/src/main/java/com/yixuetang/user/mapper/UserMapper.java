@@ -127,4 +127,14 @@ public interface UserMapper extends BaseMapper<User> {
     @ResultMap("userMap")
     @Select("select id, username, real_name, avatar, role_id from t_user where phone = #{phone}")
     User findByPhone(String phone);
+
+    /**
+     * 根据用户id查询用户
+     *
+     * @param userId 用户id
+     * @return 用户实体类
+     */
+    @ResultMap("userMap")
+    @Select("select id, role_id from t_user where id = #{userId}")
+    User findById(long userId);
 }
