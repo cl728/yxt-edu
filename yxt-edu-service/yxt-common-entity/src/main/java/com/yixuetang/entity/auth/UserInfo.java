@@ -17,7 +17,7 @@ public class UserInfo {
 
     private Long id;
     private String username;
-    private String realName;
+    private Boolean isTeacher;
     private String avatar;
     private Boolean rememberMe;
 

@@ -79,7 +79,7 @@ public class AuthServiceImpl implements AuthService {
         // 如果有查询结果，则生成token
         try {
             token = JwtUtils.generateToken( new UserInfo( user.getId(), user.getUsername(),
-                            user.getRealName(), user.getAvatar(), rememberMe ),
+                            user.getRole().getId() == 2, user.getAvatar(), rememberMe ),
                     config.getPrivateKey(), config.getExpire() );
         } catch (Exception e) {
             LOGGER.error( "生成 token 发生异常！异常原因：{}", e.getMessage() );
