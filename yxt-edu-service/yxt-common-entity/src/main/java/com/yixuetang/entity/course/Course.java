@@ -47,4 +47,7 @@ public class Course {
 
     private String semester; // 学期
 
+    @TableField("class")
+    private String clazz; // 班级
+
 }

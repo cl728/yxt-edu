@@ -21,4 +21,7 @@ public class InsertCourse {
     @ApiModelProperty(value = "学期", required = true, dataType = "String")
     private String semester;
 
+    @ApiModelProperty(value = "班级", required = true, dataType = "String")
+    private String clazz;
+
 }
