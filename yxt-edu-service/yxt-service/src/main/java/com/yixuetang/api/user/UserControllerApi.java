@@ -49,6 +49,11 @@ public interface UserControllerApi {
             paramType = "path", dataType = "long")
     CommonResponse updateEmail(long id, EmailUser emailUser, HttpServletRequest request);
 
+    @ApiOperation("换绑手机号码")
+    @ApiImplicitParam(name = "id", value = "用户主键id", required = true,
+            paramType = "path", dataType = "long")
+    CommonResponse updatePhone(long id, PhoneUser phoneUser, HttpServletRequest request);
+
     @ApiOperation("分页查询角色")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "currentPage", value = "当前页码数", required = true,

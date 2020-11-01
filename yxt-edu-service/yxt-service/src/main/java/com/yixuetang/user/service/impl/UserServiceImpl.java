@@ -317,7 +317,7 @@ public class UserServiceImpl implements UserService {
 
         // 3. 验证码检验
         if (!StringUtils.equals( emailUser.getCode(), this.redisTemplate.opsForValue().get( CHANGE_KEY_PREFIX + emailUser.getEmail() ) )) {
-            return new CommonResponse( UserCode.UPDATE_EMAIL_FAIL_CODE_WRONG );
+            return new CommonResponse( UserCode.UPDATE_FAIL_CODE_WRONG );
         }
 
         // 0. 更新最后一次修改个人信息的时间
@@ -325,6 +325,33 @@ public class UserServiceImpl implements UserService {
 
         // 0. 更新邮箱信息
         this.userMapper.updateEmail( id, emailUser );
+
+        return new CommonResponse( CommonCode.SUCCESS );
+    }
+
+    @Override
+    @Transactional
+    public CommonResponse updatePhone(long id, PhoneUser phoneUser) {
+        // 1. 参数验证
+        if (phoneUser == null) {
+            ExceptionThrowUtils.cast( CommonCode.INVALID_PARAM );
+        }
+
+        // 2. 新手机号码校验
+        if (this.userMapper.selectOne( new QueryWrapper<User>().eq( "phone", phoneUser.getPhone() ) ) != null) {
+            return new CommonResponse( UserCode.PHONE_HAS_BEEN_REGISTERED );
+        }
+
+        // 3. 验证码检验
+        if (!StringUtils.equals( phoneUser.getCode(), this.redisTemplate.opsForValue().get( CHANGE_KEY_PREFIX + phoneUser.getPhone() ) )) {
+            return new CommonResponse( UserCode.UPDATE_FAIL_CODE_WRONG );
+        }
+
+        // 4. 更新用户信息
+        User user = this.userMapper.selectById( id );
+        user.setPhone( phoneUser.getPhone() );
+        user.setUpdateTime( new Date() );
+        this.userMapper.updateById( user );
 
         return new CommonResponse( CommonCode.SUCCESS );
     }

@@ -100,4 +100,13 @@ public interface UserService {
      * @return 响应结果实体类
      */
     CommonResponse updateEmail(long id, EmailUser emailUser);
+
+    /**
+     * 换绑手机号码
+     *
+     * @param id        用户主键id
+     * @param phoneUser 换绑手机号码
+     * @return 响应结果实体类
+     */
+    CommonResponse updatePhone(long id, PhoneUser phoneUser);
 }

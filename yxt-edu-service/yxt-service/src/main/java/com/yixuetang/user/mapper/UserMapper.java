@@ -2,10 +2,7 @@ package com.yixuetang.user.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.yixuetang.entity.request.user.EmailUser;
-import com.yixuetang.entity.request.user.PasswordUser;
-import com.yixuetang.entity.request.user.QueryPageRequest;
-import com.yixuetang.entity.request.user.UpdateUser;
+import com.yixuetang.entity.request.user.*;
 import com.yixuetang.entity.user.User;
 import org.apache.ibatis.annotations.*;
 import org.apache.ibatis.mapping.FetchType;

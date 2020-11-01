@@ -66,6 +66,13 @@ public class UserController implements UserControllerApi {
     }
 
     @Override
+    @PutMapping("phone/id/{id}")
+    public CommonResponse updatePhone(@PathVariable long id, @RequestBody PhoneUser phoneUser, HttpServletRequest request) {
+        if (checkIdIfInvalid( id, request )) return new CommonResponse( CommonCode.INVALID_PARAM );
+        return this.userService.updatePhone( id, phoneUser );
+    }
+
+    @Override
     @GetMapping("page/{currentPage}/{pageSize}")
     public QueryResponse findByPage(@PathVariable long currentPage, @PathVariable long pageSize, QueryPageRequest queryPageRequest) {
         return this.userService.findByPage( currentPage, pageSize, queryPageRequest );
