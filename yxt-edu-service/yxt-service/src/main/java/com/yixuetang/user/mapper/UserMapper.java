@@ -106,14 +106,6 @@ public interface UserMapper extends BaseMapper<User> {
     @Update("update t_user set password = #{passwordUser.newPassword}, update_time = #{passwordUser.updateTime} where id = #{id}")
     void updatePasswordById(@Param("id") long id, @Param("passwordUser") PasswordUser passwordUser);
 
-    /**
-     * 根据id换绑邮箱
-     *
-     * @param id        用户主键id
-     * @param emailUser 用户邮箱实体类
-     */
-    @Update("update t_user set email = #{emailUser.email} where id = #{id}")
-    void updateEmail(@Param("id") long id, @Param("emailUser") EmailUser emailUser);
 
     /**
      * 根据手机号码查询用户

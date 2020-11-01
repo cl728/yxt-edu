@@ -20,7 +20,4 @@ public class EmailUser {
     @ApiModelProperty(value = "验证码", required = true, dataType = "String")
     private String code;
 
-    @ApiModelProperty(value = "最后一次更新个人信息时间", dataType = "date")
-    private Date updateTime;
-
 }

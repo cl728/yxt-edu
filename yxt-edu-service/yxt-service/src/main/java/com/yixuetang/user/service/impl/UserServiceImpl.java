@@ -320,11 +320,12 @@ public class UserServiceImpl implements UserService {
             return new CommonResponse( UserCode.UPDATE_FAIL_CODE_WRONG );
         }
 
-        // 0. 更新最后一次修改个人信息的时间
-        emailUser.setUpdateTime( new Date() );
+        // 4. 更新个人信息
+        User user = this.userMapper.findById( id );
+        user.setEmail( emailUser.getEmail() );
+        user.setUpdateTime( new Date() );
 
-        // 0. 更新邮箱信息
-        this.userMapper.updateEmail( id, emailUser );
+        this.userMapper.updateById( user );
 
         return new CommonResponse( CommonCode.SUCCESS );
     }
