@@ -15,7 +15,7 @@
         >
         <el-table
           :data="schoolData"
-          max-height="350"
+          max-height="528"
           @selection-change="selection"
           style="width: 100%"
         >
