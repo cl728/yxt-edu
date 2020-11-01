@@ -19,10 +19,10 @@ import java.util.Date;
 public class Course {
 
     @TableId(type = IdType.AUTO)
-    private long id; // 课程主键自增id
+    private Long id; // 课程主键自增id
 
     @TableField("teacher_id")
-    private long teacherId; // 授课教师主键id
+    private Long teacherId; // 授课教师主键id
 
     @TableField("c_name")
     private String cName; // 课程名称

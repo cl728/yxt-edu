@@ -27,6 +27,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * @author Curtis
@@ -97,7 +98,7 @@ public class CourseServiceImpl implements CourseService {
         }
 
         // 判断是否为老师加入自己创建的课程
-        if (course.getTeacherId() == userId) {
+        if (Objects.equals( course.getTeacherId(), userId )) {
             return new CommonResponse( CommonCode.FAIL );
         }
 
@@ -139,6 +140,7 @@ public class CourseServiceImpl implements CourseService {
         Date date = new Date();
         course.setCreateTime( date );
         course.setUpdateTime( date );
+        course.setId( null );
 
         this.courseMapper.insert( course );
         return new CommonResponse( CommonCode.SUCCESS );

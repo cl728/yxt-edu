@@ -14,7 +14,4 @@ import org.apache.ibatis.annotations.Select;
  */
 @Mapper
 public interface CourseMapper extends BaseMapper<Course> {
-
-    @Select("select * from t_course where c_code = #{code}")
-    Course findByCode(String code);
 }

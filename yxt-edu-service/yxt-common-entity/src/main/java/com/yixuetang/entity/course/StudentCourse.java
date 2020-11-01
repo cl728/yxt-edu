@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
+import io.swagger.models.auth.In;
 import lombok.Data;
 
 /**
@@ -18,17 +19,17 @@ import lombok.Data;
 public class StudentCourse {
 
     @TableId(type = IdType.AUTO)
-    private long id; // SC主键自增id
+    private Long id; // SC主键自增id
 
     @TableField("student_id")
     private long studentId; // 学生主键id
 
     @TableField("course_id")
-    private long courseId; // 课程主键id
+    private Long courseId; // 课程主键id
 
     @TableField("final_grade")
     private String finalGrade;  // 最终成绩
 
     @TableField("top_num")
-    private int topNum; // 置顶字段
+    private Integer topNum; // 置顶字段
 }
