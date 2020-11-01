@@ -28,4 +28,7 @@ public class StudentCourse {
 
     @TableField("final_grade")
     private String finalGrade;  // 最终成绩
+
+    @TableField("top_num")
+    private int topNum; // 置顶字段
 }
