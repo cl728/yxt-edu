@@ -33,6 +33,7 @@
               v-model="pageData.queryPageRequest.roleName"
               placeholder="用户角色"
             >
+              <el-option label="全部" value="all"></el-option>
               <el-option
                 v-for="(role, index) in roleList"
                 :key="index"
@@ -46,41 +47,39 @@
               v-model="pageData.queryPageRequest.gender"
               placeholder="用户性别"
             >
+              <el-option label="全部" value="all"></el-option>
               <el-option label="男" value="男"></el-option>
               <el-option label="女" value="女"></el-option>
             </el-select>
           </el-form-item>
           <el-form-item>
             <el-input
-              v-model="pageData.queryPageRequest.username"
+              v-model.lazy="pageData.queryPageRequest.username"
               placeholder="用户名"
             ></el-input>
           </el-form-item>
           <el-form-item>
             <el-input
-              v-model="pageData.queryPageRequest.realName"
+              v-model.lazy="pageData.queryPageRequest.realName"
               placeholder="用户姓名"
             ></el-input>
           </el-form-item>
           <el-form-item>
             <el-input
-              v-model="pageData.queryPageRequest.email"
+              v-model.lazy="pageData.queryPageRequest.email"
               placeholder="用户邮箱"
             ></el-input>
           </el-form-item>
           <el-form-item>
             <el-input
-              v-model="pageData.queryPageRequest.phone"
+              v-model.lazy="pageData.queryPageRequest.phone"
               placeholder="用户电话"
             ></el-input>
-          </el-form-item>
-          <el-form-item>
-            <el-button type="primary" @click="getUserData()">查询</el-button>
           </el-form-item>
         </el-form>
         <el-table
           :data="userData"
-          max-height="350"
+          max-height="528"
           @selection-change="selection"
           style="width: 100%"
         >
@@ -319,11 +318,9 @@ export default {
     },
     pageSizeChange(pageSize) {
       this.pageData.pageSize = pageSize;
-      this.getUserData();
     },
     currentChange(clickPage) {
       this.pageData.currentPage = clickPage;
-      this.getUserData();
     },
     getUserData() {
       this.$axios
@@ -343,6 +340,14 @@ export default {
   },
   mounted() {
     this.getUserData();
+  },
+  watch: {
+    pageData: {
+      deep: true,
+      handler() {
+        this.getUserData();
+      },
+    },
   },
 };
 </script>
