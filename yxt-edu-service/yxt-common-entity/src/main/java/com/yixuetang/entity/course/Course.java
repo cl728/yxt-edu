@@ -50,4 +50,7 @@ public class Course {
     @TableField("class")
     private String clazz; // 班级
 
+    @TableField("top_num")
+    private Integer topNum; // 置顶字段，0代表不置顶
+
 }

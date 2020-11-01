@@ -85,7 +85,7 @@ public class CourseServiceImpl implements CourseService {
     @Transactional
     public CommonResponse joinCourse(Long userId, String code) {
         // 通过加课码查询课程
-        final Course course = this.courseMapper.selectOne( new QueryWrapper<Course>().eq( "c_code", code ) );
+        Course course = this.courseMapper.selectOne( new QueryWrapper<Course>().eq( "c_code", code ) );
         if (course == null) {
             return new CommonResponse( CourseCode.COURSE_NOT_FOUND );
         }
@@ -101,7 +101,13 @@ public class CourseServiceImpl implements CourseService {
             return new CommonResponse( CommonCode.FAIL );
         }
 
+        // 向选课表添加数据
         this.scMapper.joinCourse( userId, course.getId() );
+
+        // 更新课程表的加课人数
+        course.setSCount( course.getSCount() + 1 );
+        this.courseMapper.updateById( course );
+
         return new CommonResponse( CommonCode.SUCCESS );
     }
 
