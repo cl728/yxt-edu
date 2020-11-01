@@ -14,9 +14,6 @@ import java.util.Date;
 @Data
 public class PasswordUser {
 
-    @ApiModelProperty(value = "旧密码", required = true, dataType = "String")
-    private String oldPassword;
-
     @ApiModelProperty(value = "新密码", required = true, dataType = "String")
     private String newPassword;
 
@@ -26,6 +23,4 @@ public class PasswordUser {
     @ApiModelProperty(value = "验证码", required = true, dataType = "String")
     private String code;
 
-    @ApiModelProperty(value = "最后一次更新个人信息时间", dataType = "date")
-    private Date updateTime;
 }

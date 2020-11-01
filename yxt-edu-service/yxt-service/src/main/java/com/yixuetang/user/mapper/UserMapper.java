@@ -98,16 +98,6 @@ public interface UserMapper extends BaseMapper<User> {
     void UpdateRoleIdById(@Param("roleId") Long roleId, @Param("id") Long id);
 
     /**
-     * 根据id修改密码与更新时间
-     *
-     * @param id           用户主键id
-     * @param passwordUser 用户密码实体类
-     */
-    @Update("update t_user set password = #{passwordUser.newPassword}, update_time = #{passwordUser.updateTime} where id = #{id}")
-    void updatePasswordById(@Param("id") long id, @Param("passwordUser") PasswordUser passwordUser);
-
-
-    /**
      * 根据手机号码查询用户
      *
      * @param phone 手机号码
