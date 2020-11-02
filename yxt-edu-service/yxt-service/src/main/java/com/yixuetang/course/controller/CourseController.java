@@ -51,4 +51,28 @@ public class CourseController implements CourseControllerApi {
         return this.courseService.findByPage( currentPage, pageSize );
     }
 
+    @Override
+    @GetMapping("listAllUserCourse/{userId}")
+    public QueryResponse findByUserId(@PathVariable long userId) {
+        return this.courseService.findByUserId(userId);
+    }
+
+    @Override
+    @GetMapping("listAllTeacherCourse/{teacherId}")
+    public QueryResponse findByTeacherId(@PathVariable long teacherId) {
+        return this.courseService.findByTeacherId(teacherId);
+    }
+
+    @Override
+    @GetMapping("updateTopSCourse/{courseId}/{userId}/{isTop}")
+    public CommonResponse updateTopSCourse(@PathVariable long courseId,@PathVariable long userId,@PathVariable boolean isTop) {
+        return courseService.updateTopSCourse(courseId,userId,isTop);
+    }
+
+    @Override
+    @GetMapping("updateTopTCourse/{courseId}/{teacherId}/{isTop}")
+    public CommonResponse updateTopTCourse(@PathVariable long courseId,@PathVariable long teacherId,@PathVariable boolean isTop) {
+        return courseService.updateTopTCourse(courseId,teacherId,isTop);
+    }
+
 }

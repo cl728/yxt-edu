@@ -12,6 +12,7 @@ import com.yixuetang.entity.response.CommonResponse;
 import com.yixuetang.entity.response.QueryResponse;
 import com.yixuetang.entity.response.code.CommonCode;
 import com.yixuetang.entity.response.code.course.CourseCode;
+import com.yixuetang.entity.response.code.user.UserCode;
 import com.yixuetang.entity.response.result.QueryResult;
 import com.yixuetang.entity.user.Role;
 import com.yixuetang.entity.user.User;
@@ -171,6 +172,105 @@ public class CourseServiceImpl implements CourseService {
     public QueryResponse findByPage(long currentPage, long pageSize) {
         Page<Course> page = this.courseMapper.selectPage(new Page<>(currentPage, pageSize), null);
         return new QueryResponse(CommonCode.SUCCESS, new QueryResult<>(page.getRecords(), (int) page.getTotal()));
+    }
+
+    @Override
+    public QueryResponse findByUserId(long userId) {
+        //判断用户是否存在
+        User findUser = userMapper.findById( userId );
+        if(findUser == null){
+            ExceptionThrowUtils.cast(UserCode.USER_NOT_FOUND);
+        }
+
+        List<StudentCourse> sc = scMapper.selectCourseByUserId(userId);
+        return new QueryResponse(CommonCode.SUCCESS,new QueryResult<>(sc,sc.size()));
+
+    }
+
+    @Override
+    public QueryResponse findByTeacherId(long teacherId) {
+        // 校验teacherId是否合法
+        User findUser = userMapper.findById( teacherId );
+        Role findRole = roleMapper.selectOne( new QueryWrapper<Role>().eq( "id", findUser.getRole().getId() ) );
+        if (findRole == null || findRole.getId() != 2) {
+            ExceptionThrowUtils.cast( CourseCode.INSERT_COURSE_FAIL );
+        }
+
+        List<Course> courses = this.courseMapper.selectList(new QueryWrapper<Course>().orderByDesc("top_num")
+                    .eq("teacher_id",teacherId));
+        return new QueryResponse(CommonCode.SUCCESS,new QueryResult<>(courses,courses.size()));
+    }
+
+    @Override
+    public CommonResponse updateTopSCourse(long courseId, long userId,boolean isTop) {
+        //判断课程是否存在
+        Course course = courseMapper.selectById(courseId);
+        if(course == null){
+            ExceptionThrowUtils.cast(CourseCode.COURSE_NOT_FOUND);
+        }
+
+        //判断用户是否存在
+        User findUser = userMapper.findById( userId );
+        if(findUser == null){
+            ExceptionThrowUtils.cast(UserCode.USER_NOT_FOUND);
+        }
+
+        //置顶
+        if(isTop){
+            //判断是否已经置顶
+            StudentCourse sc = scMapper.selectOne(new QueryWrapper<StudentCourse>().eq("student_id",userId)
+                    .eq("course_id",courseId));
+            if(sc.getTopNum()>0){
+                ExceptionThrowUtils.cast(CourseCode.SET_TOP_FAIL);
+            }
+            //先查询当前选课置顶课程最大topNum，然后加一设置为新置顶课程的topNum字段
+            int currentMaxTop = scMapper.selectMaxTopByStudentId(userId);
+            scMapper.updateTopNumByStudentIdAndCourseId(currentMaxTop+1,userId,courseId);
+        } else{
+            //取消置顶，设置为0
+            scMapper.updateTopNumByStudentIdAndCourseId(0,userId,courseId);
+        }
+
+        return new CommonResponse(CommonCode.SUCCESS);
+    }
+
+    @Override
+    public CommonResponse updateTopTCourse(long courseId, long teacherId,boolean isTop) {
+        //判断课程是否存在
+        Course course = courseMapper.selectById(courseId);
+        if(course == null){
+            ExceptionThrowUtils.cast(CourseCode.COURSE_NOT_FOUND);
+        }
+
+        // 校验teacherId是否合法
+        User findUser = userMapper.findById( teacherId );
+        Role findRole = roleMapper.selectOne( new QueryWrapper<Role>().eq( "id", findUser.getRole().getId() ) );
+        if (findRole == null || findRole.getId() != 2) {
+            ExceptionThrowUtils.cast( CourseCode.INSERT_COURSE_FAIL );
+        }
+
+        //置顶
+        if (isTop){
+            //先查询当前课程topNum，然后加一设置为新置顶课程的topNum字段
+            Course findCourse = courseMapper.selectOne(new QueryWrapper<Course>().eq("id",courseId)
+                    .eq("teacher_id",teacherId));
+            //判断是否已经置顶
+            if(findCourse.getTopNum()>0){
+                ExceptionThrowUtils.cast(CourseCode.SET_TOP_FAIL);
+            }
+
+            findCourse.setTopNum(findCourse.getTopNum()+1);
+            courseMapper.updateById(findCourse);
+
+        } else{
+            //取消置顶，设置为0
+            Course findCourse = courseMapper.selectOne(new QueryWrapper<Course>().eq("id",courseId)
+                    .eq("teacher_id",teacherId));
+            findCourse.setTopNum(0);
+            courseMapper.updateById(findCourse);
+        }
+
+        return new CommonResponse(CommonCode.SUCCESS);
     }
 
 

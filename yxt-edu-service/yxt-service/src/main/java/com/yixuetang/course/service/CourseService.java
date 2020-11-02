@@ -54,4 +54,36 @@ public interface CourseService {
      * @return 相应结果实体类
      */
     QueryResponse findByPage(long currentPage, long pageSize);
+
+    /**
+     * 用户查询加入的课程列表
+     * @param userId 用户id
+     * @return
+     */
+    QueryResponse findByUserId(long userId);
+
+    /**
+     * 教师查询创建的课程
+     * @param teacherId 教师id
+     * @return
+     */
+    QueryResponse findByTeacherId(long teacherId);
+
+    /**
+     * 用户修改加入课程置顶/取消置顶
+     * @param courseId
+     * @param userId
+     * @param isTop  是否置顶，true置顶，false取消置顶
+     * @return
+     */
+    CommonResponse updateTopSCourse(long courseId,long userId,boolean isTop);
+
+    /**
+     * 教师修改创建课程置顶/取消置顶
+     * @param courseId
+     * @param teacherId
+     * @param isTop   是否置顶，true置顶，false取消置顶
+     * @return
+     */
+    CommonResponse updateTopTCourse(long courseId,long teacherId,boolean isTop);
 }

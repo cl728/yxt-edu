@@ -15,6 +15,8 @@ public enum CourseCode implements ResponseCode {
 
     JOIN_COURSE_FAIL(false, 50002, "加课失败，请勿重复加课"),
 
+    SET_TOP_FAIL(false, 50002, "课程置顶失败，课程已经置顶"),
+
     INSERT_COURSE_FAIL(false, 50003, "非教师操作！");
 
     private boolean success;
