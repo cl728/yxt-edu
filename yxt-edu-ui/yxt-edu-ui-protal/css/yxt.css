@@ -34,6 +34,21 @@
     margin-left: 20px;
 }
 
+.course-card {
+    height: 285px;
+    width: 289px;
+    margin-left: 20px;
+}
+
+.invite-code {
+    font-size: 12px;
+    font-family: PingFang-SC-Medium;
+    font-weight: 500;
+    color: rgba(255,255,255,1);
+    line-height: 8px;
+    text-align: center;
+}
+
 .banner-margin-bottom {
     margin-bottom: 20px;
 }
@@ -117,4 +132,23 @@
     line-height: 40px;
     font-size: 50px;
     text-align: center;
+}
+
+.bottom {
+    line-height: 22px;
+}
+
+.text {
+    font-size: 14px;
+}
+
+.item {
+    margin-bottom: 18px;
+}
+
+.el-divider--horizontal {
+    display: block;
+    height: 1px;
+    width: 100%;
+    margin: 35px 0 10px 0;
 }

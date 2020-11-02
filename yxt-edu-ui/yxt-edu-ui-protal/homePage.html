@@ -5,7 +5,23 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="https://cdn.bootcss.com/element-ui/2.13.2/theme-chalk/index.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css">
     <link rel="stylesheet" href="css/yxt.css">
+    <style>
+        .el-main {
+            padding: 20px;
+        }
+
+        .el-card__header {
+            padding: 0;
+            border-bottom: 1px solid #EBEEF5;
+            box-sizing: border-box;
+        }
+
+        .el-card__body {
+            padding: 0;
+        }
+    </style>
     <title>HomePage</title>
 </head>
 
@@ -43,21 +59,260 @@
                             </el-menu-item>
                             <el-submenu>
                                 <template slot="title">
-                                    <span v-text="user.username"
-                                    style="color: black; margin: 20px, 10px;">用户名</span>
+                                    <span v-text="user.username" style="color: black; margin: 20px, 10px;">用户名</span>
                                     <el-avatar size="large" :src="user.avatar">
                                     </el-avatar>
                                 </template>
                                 <el-menu-item><i class="el-icon-setting"></i> 个人设置</el-menu-item>
-                                <el-menu-item @click="logout()"><i class="el-icon-s-unfold"></i> 退出账户</el-menu-item>
+                                <el-menu-item @click="logout()"><i class="fa fa-sign-out"
+                                        style="margin-left: 6px; margin-right: 8px;"></i> <span>退出账户</span>
+                                </el-menu-item>
                             </el-submenu>
                         </el-menu>
                     </el-col>
                 </el-row>
             </el-header>
             <!-- 中间 -->
-            <el-main>
-                <div style="line-height: 960px;">MAIN</div>
+            <el-main style="margin-top: 40px;">
+                <!-- 置顶课程 -->
+                <el-row>
+                    <el-col :span="2" style="float: left;">
+                        <el-button type="text">
+                            <span style="font-size: medium; color: rgb(0, 0, 0);">置顶课程</span>
+                        </el-button>
+                    </el-col>
+                    </el-col>
+                    <el-col :span="4" style="float: right;">
+                        <i class="el-icon-files"></i>
+                        <el-button type="text" @click="filedCourseListVisable = true">
+                            <span style="font-size: medium;color: rgb(134, 133, 133);">归档管理</span>
+                        </el-button>
+                        <el-button type="primary" v-if="user.isTeacher">创建/加入课程</el-button>
+                        <el-button type="primary" v-else @click="joinCourse">加入课程</el-button>
+                    </el-col>
+                </el-row>
+                <!-- 分割线 -->
+                <el-divider><i class="el-icon-house"></i></el-divider>
+                <!-- 课程列表 -->
+                <el-row type="flex" justify="start" :gutter="20" style="margin: 40px;"
+                    v-for="(row, index) of topCourseListRows" :key="index">
+                    <el-col :span="5" v-for="(topCourse, innerindex) of row" :key="topCourse.id">
+                        <el-card class="course-card">
+                            <div slot="header" :style="{backgroundImage:'url(' + topCourse.cPic + ')'}">
+                                <strong>
+                                    <el-row>
+                                        <el-tag effect="plain" type="info" style="float: right;">
+                                            <span v-text="user.isTeacher ? '教' : '学'">学</span>
+                                        </el-tag>
+                                    </el-row>
+                                    <el-row>
+                                        <el-link :underline="false" type="info"
+                                            style="float: left; font-size: larger; padding: 0px 0px 5px 15px; color: rgb(252, 249, 249);">
+                                            <span v-text="topCourse.cName">Web编程与设计</span></el-link>
+                                    </el-row>
+                                    <el-row><span v-text="topCourse.clazz"
+                                            style="float: left; font-size: large; padding: 0 15px; color: rgb(252, 249, 249);">17网工5班</span>
+                                    </el-row>
+                                    <el-row>
+                                        <el-col :span="12" style="float: left;" class="invite-code">
+                                            <p style="background: rgba(255,255,255,.2); line-height: 10px"><i
+                                                    class="el-icon-document"></i>加课码：<span
+                                                    v-text="topCourse.cCode">aWlHpr</span></p>
+                                        </el-col>
+                                        <el-col :span="8" style="float: right; color: grey; font-size: 8px;">
+                                            <span v-text="topCourse.schoolYear">2020-2021</span> <br />
+                                            <span v-text="topCourse.semester">第一学期</span>
+                                        </el-col>
+                                    </el-row>
+                                </strong>
+                            </div>
+                            <div style="margin: 10px; font-size: 14px; color: black;"> 近期作业 </div>
+                            <el-link type="info" style="float: left; margin-left: 15px;"> 第一次实验报告 </el-link> <br>
+                            <el-link type="info" style="float: left; margin: 15px;"> 第二次实验报告 </el-link> <br>
+                            <el-divider></el-divider>
+                            <div class="bottom">
+                                <el-row>
+                                    <el-col :span="8" style="float: left; width: 30%;">
+                                        <el-row v-if="user.isTeacher">
+                                            <span style="font-size: smaller;">成员<span v-text="topCourse.sCount"></span>人
+                                        </el-row>
+                                        <el-row v-else>
+                                            <el-col :span="12">
+                                                <el-avatar :src="topCourse.user.avatar" size="small">
+                                                </el-avatar>
+                                            </el-col>
+                                            <el-col :span="12">
+                                                <el-link :underline="false" type="primary"><span
+                                                        v-text="topCourse.user.realName"></span></el-link>
+                                            </el-col>
+                                        </el-row>
+                                    </el-col>
+                                    <el-col :span="12" style="float: right; width: 40%;">
+                                        <el-link :underline="false" type="info">取消置顶</el-link>
+                                        <el-popover placement="bottom" width="150" trigger="click">
+                                            <div style="margin: 5px; text-align: center;">
+                                                <el-link :underline="false" type="info" style="font-size: medium;">
+                                                    <i class="el-icon-files"></i> 归档
+                                                </el-link>
+                                            </div>
+                                            <div style="margin: 5px; text-align: center;">
+                                                <el-link :underline="false" type="info" style="font-size: medium;">
+                                                    <i class="el-icon-delete"></i> 退课
+                                                </el-link>
+                                            </div>
+                                            <el-link :underline="false" type="primary" slot="reference">更多 <i
+                                                    class="fa fa-info"></i>
+                                            </el-link>
+                                        </el-popover>
+                                    </el-col>
+                                </el-row>
+                            </div>
+                        </el-card>
+                    </el-col>
+                </el-row>
+                <!-- 其他课程 -->
+                <el-row>
+                    <el-col :span="2" style="float: left;"><strong>其他课程</strong></el-col>
+                </el-row>
+                <!-- 分割线 -->
+                <el-divider><i class="el-icon-notebook-2"></i></el-divider>
+                <!-- 课程列表 -->
+                <el-row type="flex" justify="space-start" :gutter="20" style="margin: 40px;"
+                    v-for="(row, index) of otherCourseListRows" :key="index">
+                    <el-col :span="5" v-for="(otherCourse, innerindex) in row" :key="otherCourse.id">
+                        <el-card class="course-card">
+                            <div slot="header" :style="{backgroundImage:'url(' + otherCourse.cPic + ')'}">
+                                <strong>
+                                    <el-row>
+                                        <el-tag effect="plain" type="info" style="float: right;">
+                                            <span v-text="user.isTeacher ? '教' : '学'">学</span>
+                                        </el-tag>
+                                    </el-row>
+                                    <el-row>
+                                        <el-link :underline="false" type="info"
+                                            style="float: left; font-size: larger; padding: 0px 0px 5px 15px; color: rgb(252, 249, 249);">
+                                            <span v-text="otherCourse.cName">Web编程与设计</span></el-link>
+                                    </el-row>
+                                    <el-row><span v-text="otherCourse.clazz"
+                                            style="float: left; font-size: large; padding: 0 15px; color: rgb(252, 249, 249);">17网工5班</span>
+                                    </el-row>
+                                    <el-row>
+                                        <el-col :span="12" style="float: left;" class="invite-code">
+                                            <p style="background: rgba(255,255,255,.2); line-height: 10px"><i
+                                                    class="el-icon-document"></i>加课码：<span
+                                                    v-text="otherCourse.cCode">aWlHpr</span></p>
+                                        </el-col>
+                                        <el-col :span="8" style="float: right; color: grey; font-size: 8px;">
+                                            <span v-text="otherCourse.schoolYear">2020-2021</span> <br />
+                                            <span v-text="otherCourse.semester">第一学期</span>
+                                        </el-col>
+                                    </el-row>
+                                </strong>
+                            </div>
+                            <div style="margin: 10px; font-size: 14px; color: black;"> 近期作业 </div>
+                            <el-link type="info" style="float: left; margin-left: 15px;"> 第一次实验报告 </el-link> <br>
+                            <el-link type="info" style="float: left; margin: 15px;"> 第二次实验报告 </el-link> <br>
+                            <el-divider></el-divider>
+                            <div class="bottom">
+                                <el-row>
+                                    <el-col :span="8" style="float: left; width: 35%;">
+                                        <el-row v-if="user.isTeacher">
+                                            <span style="font-size: smaller;">成员<span v-text="otherCourse.sCount"></span>人
+                                        </el-row>
+                                        <el-row v-else>
+                                            <el-col :span="12">
+                                                <el-avatar :src="otherCourse.user.avatar" size="small">
+                                                </el-avatar>
+                                            </el-col>
+                                            <el-col :span="12">
+                                                <el-link :underline="false" type="primary"><span
+                                                        v-text="otherCourse.user.realName"></span></el-link>
+                                            </el-col>
+                                        </el-row>
+                                    </el-col>
+                                    <el-col :span="12" style="float: right; width: 30%;">
+                                        <el-link :underline="false" type="info">置顶</el-link>
+                                        <el-popover placement="bottom" width="150" trigger="click">
+                                            <div style="margin: 5px; text-align: center;">
+                                                <el-link :underline="false" type="info" style="font-size: medium;">
+                                                    <i class="el-icon-files"></i> 归档
+                                                </el-link>
+                                            </div>
+                                            <div style="margin: 5px; text-align: center;">
+                                                <el-link :underline="false" type="info" style="font-size: medium;">
+                                                    <i class="el-icon-delete"></i> 退课
+                                                </el-link>
+                                            </div>
+                                            <el-link :underline="false" type="primary" slot="reference">更多 <i
+                                                    class="fa fa-info"></i>
+                                            </el-link>
+                                        </el-popover>
+                                    </el-col>
+                                </el-row>
+                            </div>
+                        </el-card>
+                    </el-col>
+                </el-row>
+                <!-- 归档管理 -->
+                <el-dialog title="归档管理" :visible.sync="filedCourseListVisable" center>
+                    <el-row type="flex" justify="space-start" :gutter="20" style="margin: 40px;"
+                        v-for="(row, index) of filedCourseListRows" :key="index">
+                        <el-col :span="12" v-for="(filedCourse, innerindex) in row" :key="filedCourse.id">
+                            <el-card style="height: 120px; width: 288px;">
+                                <div slot="header" :style="{backgroundImage:'url(' + filedCourse.cPic + ')'}">
+                                    <strong>
+                                        <el-row>
+                                            <el-tag effect="plain" type="info" style="float: right;">
+                                                <span v-text="user.isTeacher ? '教' : '学'">学</span>
+                                            </el-tag>
+                                        </el-row>
+                                        <el-row>
+                                            <el-link :underline="false" type="info"
+                                                style="float: left; font-size: larger; padding: 0px 0px 5px 10px; color: rgb(252, 249, 249); margin: 5px;">
+                                                <span v-text="filedCourse.cName">Web编程与设计</span></el-link>
+                                        </el-row>
+                                        <el-row>
+                                            <el-col :span="12" style="float: left; margin: 5px;">
+                                                <span style="font-size: small; color: #EBEEF5; margin-left: 10px;"
+                                                    v-if="user.isTeacher">
+                                                    成员：<span v-text="filedCourse.sCount">0</span>人
+                                                </span>
+                                                <span style="font-size: small; color: #EBEEF5; margin-left: 10px;"
+                                                    v-else>
+                                                    老师：<span v-text="filedCourse.user.realName">Colin</span>
+                                                </span>
+                                            </el-col>
+                                            <el-col :span="6" style="float: right; color: grey; font-size: 8px;">
+                                                <span v-text="filedCourse.schoolYear">2020-2021</span> <br />
+                                                <span v-text="filedCourse.semester">第一学期</span>
+                                            </el-col>
+                                        </el-row>
+                                        <el-row>
+                                            <el-popover placement="bottom" width="150" trigger="click">
+                                                <div style="margin: 5px; text-align: center;">
+                                                    <el-link :underline="false" type="info" style="font-size: medium;">
+                                                        <i class="el-icon-files" style="margin-right: 5px;"></i> 恢复
+                                                    </el-link>
+                                                </div>
+                                                <div style="margin: 5px; text-align: center;">
+                                                    <el-link :underline="false" type="info" style="font-size: medium;">
+                                                        <i class="el-icon-delete"></i>
+                                                        <span v-if="user.isTeacher">删除</span>
+                                                        <span v-else>退课</span>
+                                                    </el-link>
+                                                </div>
+                                                <el-link :underline="false"
+                                                    style="color: #fff; float: right; margin-right: 10px;"
+                                                    slot="reference"><i class="fa fa-info"></i>
+                                                </el-link>
+                                            </el-popover>
+                                        </el-row>
+                                    </strong>
+                                </div>
+                            </el-card>
+                        </el-col>
+                    </el-row>
+                </el-dialog>
             </el-main>
             <!-- 底部 -->
             <el-footer>
@@ -89,12 +344,11 @@
         el: '#app',
         data: {
             activeIndex: '1',
-            indexBannerPics: [
-                "https://prepc.ketangpai.com/img/banner-home01.9994acf5.jpg",
-                "https://prepc.ketangpai.com/img/banner-home02.ebb3d690.png",
-                "https://prepc.ketangpai.com/img/banner-home03.6c319494.png"
-            ],
             user: {},
+            topCourseList: [],
+            otherCourseList: [],
+            filedCourseList: [],
+            filedCourseListVisable: false,
         },
         methods: {
             handleSelect(key, keyPath) {
@@ -110,6 +364,216 @@
                 }).catch(() => {
                     this.$message.error("服务器繁忙，请稍候再试！");
                 })
+            },
+            getCourseData() {
+                this.topCourseList =
+                    [
+                        {
+                            id: 1,
+                            cName: "面向对象程序设计Java",
+                            clazz: "17网工5班",
+                            cCode: "skjdhf",
+                            schoolYear: "2019-2020",
+                            semester: "第一学期",
+                            cPic: "https://assets.ketangpai.com/theme/student/min/01.png",
+                            topNum: 10,
+                            sCount: 0,
+                            isFiled: false,
+                            user: {
+                                avatar: "http://www.pava.run/group1/M00/00/00/rBAABV9oZxSAUzj-AAH5qlIuLtE482.jpg",
+                                realName: "郑咏昌"
+                            }
+                        },
+                        {
+                            id: 1,
+                            cName: "面向对象程序设计Java",
+                            clazz: "17网工5班",
+                            cCode: "skjdhf",
+                            schoolYear: "2019-2020",
+                            semester: "第一学期",
+                            cPic: "https://assets.ketangpai.com/theme/student/min/01.png",
+                            topNum: 10,
+                            sCount: 0,
+                            isFiled: false,
+                            user: {
+                                avatar: "http://www.pava.run/group1/M00/00/00/rBAABV9oZxSAUzj-AAH5qlIuLtE482.jpg",
+                                realName: "郑咏昌"
+                            }
+                        },
+                        {
+                            id: 1,
+                            cName: "面向对象程序设计Java",
+                            clazz: "17网工5班",
+                            cCode: "skjdhf",
+                            schoolYear: "2019-2020",
+                            semester: "第一学期",
+                            cPic: "https://assets.ketangpai.com/theme/student/min/01.png",
+                            topNum: 10,
+                            sCount: 0,
+                            isFiled: false,
+                            user: {
+                                avatar: "http://www.pava.run/group1/M00/00/00/rBAABV9oZxSAUzj-AAH5qlIuLtE482.jpg",
+                                realName: "郑咏昌"
+                            }
+                        },
+                        {
+                            id: 1,
+                            cName: "面向对象程序设计Java",
+                            clazz: "17网工5班",
+                            cCode: "skjdhf",
+                            schoolYear: "2019-2020",
+                            semester: "第一学期",
+                            cPic: "https://assets.ketangpai.com/theme/student/min/01.png",
+                            topNum: 10,
+                            sCount: 0,
+                            isFiled: false,
+                            user: {
+                                avatar: "http://www.pava.run/group1/M00/00/00/rBAABV9oZxSAUzj-AAH5qlIuLtE482.jpg",
+                                realName: "郑咏昌"
+                            }
+                        },
+                        {
+                            id: 1,
+                            cName: "面向对象程序设计Java",
+                            clazz: "17网工5班",
+                            cCode: "skjdhf",
+                            schoolYear: "2019-2020",
+                            semester: "第一学期",
+                            cPic: "https://assets.ketangpai.com/theme/student/min/01.png",
+                            topNum: 10,
+                            sCount: 0,
+                            isFiled: false,
+                            user: {
+                                avatar: "http://www.pava.run/group1/M00/00/00/rBAABV9oZxSAUzj-AAH5qlIuLtE482.jpg",
+                                realName: "郑咏昌"
+                            }
+                        },
+                        {
+                            id: 1,
+                            cName: "面向对象程序设计Java",
+                            clazz: "17网工5班",
+                            cCode: "skjdhf",
+                            schoolYear: "2019-2020",
+                            semester: "第一学期",
+                            cPic: "https://assets.ketangpai.com/theme/student/min/01.png",
+                            topNum: 10,
+                            sCount: 0,
+                            isFiled: false,
+                            user: {
+                                avatar: "http://www.pava.run/group1/M00/00/00/rBAABV9oZxSAUzj-AAH5qlIuLtE482.jpg",
+                                realName: "郑咏昌"
+                            }
+                        },
+                    ]
+                this.otherCourseList =
+                    [
+                        {
+                            id: 1,
+                            cName: "面向对象程序设计Java",
+                            clazz: "17网工5班",
+                            cCode: "skjdhf",
+                            schoolYear: "2019-2020",
+                            semester: "第一学期",
+                            cPic: "https://assets.ketangpai.com/theme/student/min/01.png",
+                            topNum: 10,
+                            sCount: 0,
+                            isFiled: false,
+                            user: {
+                                avatar: "http://www.pava.run/group1/M00/00/00/rBAABV9oZxSAUzj-AAH5qlIuLtE482.jpg",
+                                realName: "郑咏昌"
+                            }
+                        },
+                        {
+                            id: 1,
+                            cName: "面向对象程序设计Java",
+                            clazz: "17网工5班",
+                            cCode: "skjdhf",
+                            schoolYear: "2019-2020",
+                            semester: "第一学期",
+                            cPic: "https://assets.ketangpai.com/theme/student/min/01.png",
+                            topNum: 10,
+                            sCount: 0,
+                            isFiled: false,
+                            user: {
+                                avatar: "http://www.pava.run/group1/M00/00/00/rBAABV9oZxSAUzj-AAH5qlIuLtE482.jpg",
+                                realName: "郑咏昌"
+                            }
+                        },
+                        {
+                            id: 1,
+                            cName: "面向对象程序设计Java",
+                            clazz: "17网工5班",
+                            cCode: "skjdhf",
+                            schoolYear: "2019-2020",
+                            semester: "第一学期",
+                            cPic: "https://assets.ketangpai.com/theme/student/min/01.png",
+                            topNum: 10,
+                            sCount: 0,
+                            isFiled: false,
+                            user: {
+                                avatar: "http://www.pava.run/group1/M00/00/00/rBAABV9oZxSAUzj-AAH5qlIuLtE482.jpg",
+                                realName: "郑咏昌"
+                            }
+                        },
+                    ]
+                this.filedCourseList =
+                    [
+                        {
+                            id: 1,
+                            cName: "面向对象程序设计Java",
+                            clazz: "17网工5班",
+                            cCode: "skjdhf",
+                            schoolYear: "2019-2020",
+                            semester: "第一学期",
+                            cPic: "https://assets.ketangpai.com/theme/student/min/01.png",
+                            topNum: 10,
+                            sCount: 0,
+                            isFiled: false,
+                            user: {
+                                avatar: "http://www.pava.run/group1/M00/00/00/rBAABV9oZxSAUzj-AAH5qlIuLtE482.jpg",
+                                realName: "郑咏昌"
+                            }
+                        },
+                        {
+                            id: 1,
+                            cName: "面向对象程序设计Java",
+                            clazz: "17网工5班",
+                            cCode: "skjdhf",
+                            schoolYear: "2019-2020",
+                            semester: "第一学期",
+                            cPic: "https://assets.ketangpai.com/theme/student/min/01.png",
+                            topNum: 10,
+                            sCount: 0,
+                            isFiled: false,
+                            user: {
+                                avatar: "http://www.pava.run/group1/M00/00/00/rBAABV9oZxSAUzj-AAH5qlIuLtE482.jpg",
+                                realName: "郑咏昌"
+                            }
+                        },
+                    ]
+            },
+            joinCourse() {
+                this.$prompt('请输入加课码', '加入课程', {
+                    confirmButtonText: '确定',
+                    cancelButtonText: '取消',
+                    inputPattern: /^[a-zA-Z]{6}$/,
+                    inputErrorMessage: '加课码格式不正确'
+                }).then(({ value }) => {
+                    yxt.http.post("/courses/id/" + this.user.id + "/" + value).then(({ data }) => {
+                        if (data.success) {
+                            this.$message.success(data.message);
+                        } else {
+                            this.$message.error(data.message);
+                        }
+                    }).catch(() => {
+                        this.$message.error("服务器繁忙，请稍候再试！")
+                    })
+                }).catch(() => {
+                    this.$message({
+                        type: 'info',
+                        message: '取消加入课程'
+                    });
+                });
             }
         },
         created() {
@@ -119,7 +583,45 @@
                 } else {
                     location.href = "index.html"
                 }
-            })
+            }).catch(() => {
+                location.href = "index.html"
+            });
+            this.getCourseData();
+        },
+        computed: {
+            topCourseListRows() {
+                const topCourseListRows = [];
+                this.topCourseList.forEach((topCourse, index) => {
+                    const row = Math.floor(index / 5);
+                    if (!topCourseListRows[row]) {
+                        topCourseListRows[row] = [];
+                    }
+                    topCourseListRows[row].push(topCourse);
+                })
+                return topCourseListRows;
+            },
+            otherCourseListRows() {
+                const otherCourseListRows = [];
+                this.otherCourseList.forEach((otherCourse, index) => {
+                    const row = Math.floor(index / 5);
+                    if (!otherCourseListRows[row]) {
+                        otherCourseListRows[row] = [];
+                    }
+                    otherCourseListRows[row].push(otherCourse);
+                })
+                return otherCourseListRows;
+            },
+            filedCourseListRows() {
+                const filedCourseListRows = [];
+                this.filedCourseList.forEach((filedCourse, index) => {
+                    const row = Math.floor(index / 2);
+                    if (!filedCourseListRows[row]) {
+                        filedCourseListRows[row] = [];
+                    }
+                    filedCourseListRows[row].push(filedCourse);
+                })
+                return filedCourseListRows;
+            }
         },
     })
 </script>
