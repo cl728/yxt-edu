@@ -32,4 +32,7 @@ public class StudentCourse {
 
     @TableField("top_num")
     private Integer topNum; // 置顶字段
+
+    @TableField("is_filed")
+    private Boolean isFiled; // 是否被归档，true 是 false 不是
 }
