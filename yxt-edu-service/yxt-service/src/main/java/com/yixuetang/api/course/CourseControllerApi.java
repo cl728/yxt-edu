@@ -20,14 +20,14 @@ public interface CourseControllerApi {
     @ApiOperation("查询所有课程")
     QueryResponse findAllCourses();
 
-    @ApiOperation("删除一门课程")
+    @ApiOperation("教师删除课程/学生退课")
     @ApiImplicitParams({
-            @ApiImplicitParam(name = "teacherId", value = "教师id", required = true,
+            @ApiImplicitParam(name = "userId", value = "用户id", required = true,
                     paramType = "path", dataType = "long"),
             @ApiImplicitParam(name = "courseId", value = "课程主键id", required = true,
                     paramType = "path", dataType = "long")
     })
-    CommonResponse deleteCourse(Long teacherId, Long courseId);
+    CommonResponse deleteCourse(Long userId, Long courseId);
 
     @ApiOperation("加入课程")
     @ApiImplicitParams({
