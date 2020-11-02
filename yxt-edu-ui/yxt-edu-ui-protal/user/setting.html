@@ -131,40 +131,45 @@
                                         <el-button type="primary" @click="updateUsers('settingForm')" style="width: 150px">确认修改</el-button>
                                     </el-form-item>
                                 </el-form>
+
                                 <!-- 账号设置表单 -->
-                                <el-form :model="userInfo" ref="accountForm" :rules="updateRule" label-width="80px" v-else>
+                                <el-form :model="userInfo" ref="accountForm" label-width="80px" v-else>
                                     <el-form-item label="密码" prop="password">
                                         <el-row>
                                             <el-col :span="21" style="border: thin solid #DCDFE6;">
                                                 <span>***********</span>
                                             </el-col>
                                             <el-col :span="3">
-                                                <el-button type="primary" @click="updatePassword = true">修改密码</el-button>
+                                                <el-button type="primary" @click="updatePasswordFun()">修改密码</el-button>
                                             </el-col>
                                             <el-dialog title="修改密码" :visible.sync="updatePassword" style="width: 1600px;margin:auto">
-                                                <el-form :model="updatePasswordForm">
-                                                    <el-form-item label="新密码" :label-width="formLabelWidth" style="width: 700px;margin-top: 10px">
-                                                        <el-input type="password" placeholder="请输入新密码" clearable v-model="updatePasswordForm.password" autocomplete="off"></el-input>
+                                                <el-form :model="updatePasswordForm" ref="updatePasswordForm" :rules="updateRule" label-width="80px">
+                                                    <el-form-item prop="newPassword" label="新密码" :label-width="formLabelWidth" style="width: 700px;margin-top: 10px">
+                                                        <el-input type="password" placeholder="请输入新密码" clearable v-model="updatePasswordForm.newPassword" autocomplete="off"></el-input>
                                                     </el-form-item>
-                                                    <el-form-item label="电子邮箱" :label-width="formLabelWidth" style="width: 700px;margin-top: 10px">
+                                                    <el-form-item prop="email" label="电子邮箱" :label-width="formLabelWidth" style="width: 700px;margin-top: 30px">
                                                         <el-input clearable placeholder="请输入电子邮箱" v-model="updatePasswordForm.email" autocomplete="off"></el-input>
                                                     </el-form-item>
-                                                    <el-form-item label="验证码" :label-width="formLabelWidth" style="width: 700px;margin-top: 10px">
+                                                    <el-form-item prop="code" label="验证码" :label-width="formLabelWidth" style="width: 700px;margin-top: 30px">
                                                         <el-row>
                                                             <el-col :span="16">
                                                                 <el-input prefix-icon="el-icon-document" placeholder="请输入验证码"
                                                                           v-model="updatePasswordForm.code" autocomplete="off" clearable></el-input>
                                                             </el-col>
                                                             <el-col :span="8">
-                                                                <el-button type="primary" style="float: right;" @click="sendCode()" :disabled="true">
+                                                                <el-button type="primary" style="float: right;" @click="sendCode()" :disabled="checkEmail()"
+                                                                           v-if="!isSendingCode">
                                                                     发送验证码
+                                                                </el-button>
+                                                                <el-button disabled style="float: right;" v-else>
+                                                                    <span v-text="times + 's后重新发送'"></span>
                                                                 </el-button>
                                                             </el-col>
                                                         </el-row>
                                                     </el-form-item>
                                                 </el-form>
                                                 <div slot="footer" class="dialog-footer" style="width: 700px">
-                                                    <el-button type="primary" @click="updatePassword = false" style="width: 580px;margin: auto;right: 0">确 定</el-button>
+                                                    <el-button type="primary" @click="changePassword('updatePasswordForm')" style="width: 580px;margin: auto;right: 0">确 定</el-button>
                                                 </div>
                                             </el-dialog>
                                         </el-row>
@@ -175,10 +180,10 @@
                                                 <span v-text="userInfo.email">email</span>
                                             </el-col>
                                             <el-col :span="3">
-                                                <el-button type="primary" @click="updateEmail = true">换绑邮箱</el-button>
+                                                <el-button type="primary" @click="updateEmailFun()">换绑邮箱</el-button>
                                             </el-col>
                                             <el-dialog title="换绑邮箱" :visible.sync="updateEmail" style="width: 1600px;margin:auto">
-                                                <el-form :model="updateEmailForm">
+                                                <el-form :model="updateEmailForm" ref="updateEmailForm" :rules="updateRule" label-width="80px">
                                                     <el-form-item label="电子邮箱" :label-width="formLabelWidth" style="width: 700px;margin-top: 10px">
                                                         <el-input clearable placeholder="请输入要换绑的电子邮箱" v-model="updateEmailForm.email" autocomplete="off"></el-input>
                                                     </el-form-item>
@@ -189,8 +194,12 @@
                                                                           v-model="updateEmailForm.code" autocomplete="off" clearable></el-input>
                                                             </el-col>
                                                             <el-col :span="8">
-                                                                <el-button type="primary" style="float: right;" @click="sendCode()" :disabled="true">
+                                                                <el-button type="primary" style="float: right;" @click="sendCode()" :disabled="checkEmail()"
+                                                                           v-if="!isSendingCode">
                                                                     发送验证码
+                                                                </el-button>
+                                                                <el-button disabled style="float: right;" v-else>
+                                                                    <span v-text="times + 's后重新发送'"></span>
                                                                 </el-button>
                                                             </el-col>
                                                         </el-row>
@@ -208,10 +217,10 @@
                                                <span v-text="userInfo.phone">phone</span>
                                             </el-col>
                                             <el-col :span="3">
-                                                <el-button type="primary" @click="updatePhone = true">修改手机</el-button>
+                                                <el-button type="primary" @click="updatePhoneFun()">修改手机</el-button>
                                             </el-col>
                                             <el-dialog title="修改密码" :visible.sync="updatePhone" style="width: 1600px;margin:auto">
-                                                <el-form :model="updatePhoneForm">
+                                                <el-form :model="updatePhoneForm" ref="updatePhoneForm" :rules="updateRule" label-width="80px">
                                                     <el-form-item label="手机号码" :label-width="formLabelWidth" style="width: 700px;margin-top: 10px">
                                                         <el-input placeholder="请输入要修改的手机号码" clearable v-model="updatePhoneForm.phone" autocomplete="off"></el-input>
                                                     </el-form-item>
@@ -222,8 +231,12 @@
                                                                           v-model="updatePhoneForm.code" autocomplete="off" clearable></el-input>
                                                             </el-col>
                                                             <el-col :span="8">
-                                                                <el-button type="primary" style="float: right;" @click="sendCode()" :disabled="true">
+                                                                <el-button type="primary" style="float: right;" @click="sendCode()" :disabled="checkPhone()"
+                                                                           v-if="!isSendingCode">
                                                                     发送验证码
+                                                                </el-button>
+                                                                <el-button disabled style="float: right;" v-else>
+                                                                    <span v-text="times + 's后重新发送'"></span>
                                                                 </el-button>
                                                             </el-col>
                                                         </el-row>
@@ -273,6 +286,7 @@
 <script src="https://cdn.bootcss.com/vue/2.6.11/vue.min.js"></script>
 <script src="https://cdn.bootcss.com/axios/0.19.2/axios.min.js"></script>
 <script src="https://cdn.bootcss.com/element-ui/2.13.2/index.js"></script>
+<script src="../js/md5.js"></script>
 <script src="../js/common.js"></script>
 
 <script>
@@ -315,21 +329,32 @@
                 school: [{ required: true, message: '请输入学校', trigger: 'blur' }],
                 tsNo: [{ required: true, message: '请输入学/工号', trigger: 'blur' }],
                 age: [{ required: true, message: '请输入年龄', trigger: 'blur' }],
-                password: [{ required: false, message: '请输入密码', trigger: 'blur' }],
-                email: [{ required: false, message: '请输入邮箱地址', trigger: 'blur' },
+                email: [{ required: true, message: '请输入邮箱地址', trigger: 'blur' },
                     { type: 'email', message: '请输入正确的邮箱地址', trigger: 'blur' }],
                 phone: [{ required: false, message: '请输入手机号码', trigger: 'blur' }],
+                code: [{ required: true, message: '请输入验证码', trigger: 'blur' }],
+                newPassword: [{ required: true, message: '请输入验密码', trigger: 'blur' }],
             },
             schools: [],
             updatePassword: false,
             updateEmail: false,
             updatePhone: false,
             formLabelWidth: '120px',
-            updatePasswordForm: {},
+            updatePasswordForm: {
+                newPassword: "",
+                email: "",
+                code: "",
+            },
             updateEmailForm: {},
             updatePhoneForm: {},
             updateUser: {},
             realName: "",
+            code: "",
+            isSendingCode: false,
+            times: 60,
+            codeType: 3,
+            sendType: 2,
+            codeUser: {},
         },
         mounted() {
             // 加载学校列表
@@ -375,6 +400,70 @@
             },
             handleSelect(key, keyPath) {
                 console.log(key, keyPath);
+            },
+            updatePasswordFun(){
+                this.updatePassword = true;
+                this.codeType = 3;
+                this.sendType = 2;
+            },
+            updateEmailFun(){
+                this.updateEmail = true;
+                this.codeType = 4;
+                this.sendType = 2;
+            },
+            updatePhoneFun(){
+                this.updatePhone = true;
+                this.codeType = 4;
+                this.sendType = 1;
+            },
+            checkEmail() {
+                let regEmail = /^[a-zA-Z0-9_-]+@[a-zA-Z0-9_-]+(\.[a-zA-Z0-9_-]+)+$/;
+                return !regEmail.test(this.updatePasswordForm.email);
+            },
+            checkPhone() {
+                let regPhone = /^1[3|4|5|7|8][0-9]{9}$/;
+                return !regPhone.test(this.updatePasswordForm.phone);
+            },
+            changePassword(formName){
+                updatePassword = false;
+                this.$refs[formName].validate((valid) => {
+                    this.updatePasswordForm.newPassword = hex_md5(this.updatePasswordForm.newPassword);
+                    if (valid){
+                        yxt.http.put("/users/password/id/" + this.user.id, this.updatePasswordForm).then(({data}) => {
+                            if (data.success){
+                                this.$message.success(data.message);
+                            }else{
+                                this.$message.error(data.message);
+                            }
+                            this.updatePassword = false;
+                        }).catch(() => {
+                            this.$message.error("服务器繁忙，请稍后再试！");
+                            this.updatePassword = false;
+                        });
+                    }
+                });
+            },
+            sendCode() {
+                // 设置计时器，60s后用户可以重新点击发送验证码
+                this.isSendingCode = true;
+                this.times = 60;
+                var _this = this;
+                this.timer = setInterval(function () {
+                    _this.times--;
+                    if (_this.times === 0) {
+                        _this.isSendingCode = false;
+                        clearInterval(_this.timer)
+                    }
+                }, 1000);
+                // 调用后台接口发送验证码
+                yxt.http.post("/users/code/" + this.sendType + "/" + this.codeType, this.updatePasswordForm).then(({ data }) => {
+                    if (data.success) {
+                        this.$message.success(data.message);
+                    } else {
+                        this.$message.error(data.message);
+                        this.isSendingCode = false;
+                    }
+                })
             },
             updateUsers(formName){
                 this.$refs[formName].validate((valid) => {
