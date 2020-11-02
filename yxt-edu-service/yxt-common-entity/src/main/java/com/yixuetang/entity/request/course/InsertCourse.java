@@ -13,7 +13,7 @@ import lombok.Data;
 public class InsertCourse {
 
     @ApiModelProperty(value = "课程名称", required = true, dataType = "String")
-    private String cName;
+    private String name;
 
     @ApiModelProperty(value = "学年", required = true, dataType = "String")
     private String schoolYear;

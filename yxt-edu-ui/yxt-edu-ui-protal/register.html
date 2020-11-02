@@ -21,7 +21,7 @@
             <div slot="title" class="dialog-title">
                 <h2>账号注册</h2>
             </div>
-            <el-form :model="user" :rules="registerRule" ref="registerForm">
+            <el-form :model="user" :rules="registerRule" ref="registerForm" status-icon="true">
                 <el-form-item prop="username">
                     <el-input prefix-icon="el-icon-user" placeholder="请输入用户名" v-model="user.username" autocomplete="off"
                         clearable></el-input>

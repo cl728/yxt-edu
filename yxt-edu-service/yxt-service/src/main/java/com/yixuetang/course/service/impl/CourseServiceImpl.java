@@ -28,6 +28,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.Date;
 import java.util.List;
 import java.util.Objects;
+import java.util.Random;
 
 /**
  * @author Curtis
@@ -128,10 +129,17 @@ public class CourseServiceImpl implements CourseService {
         Course course = new Course();
 
         course.setTeacherId( teacherId );
-        course.setCName( insertCourse.getCName() );
+        course.setCName( insertCourse.getName() );
         course.setSchoolYear( insertCourse.getSchoolYear() );
         course.setSemester( insertCourse.getSemester() );
         course.setClazz( insertCourse.getClazz() );
+
+        // 设置课程图片
+        String numStr = String.valueOf( (int) Math.ceil( Math.random() * 45 ) );
+        if (numStr.length() == 1) {
+            numStr = "0" + numStr;
+        }
+        course.setCPic( "https://assets.ketangpai.com/theme/student/min/" + numStr + ".png" );
 
         // 生成加课码
         course.setCCode( GenCodeUtils.genRandomCode() );

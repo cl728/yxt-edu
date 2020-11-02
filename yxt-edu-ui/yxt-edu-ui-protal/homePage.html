@@ -87,8 +87,9 @@
                         <el-button type="text" @click="filedCourseListVisable = true">
                             <span style="font-size: medium;color: rgb(134, 133, 133);">归档管理</span>
                         </el-button>
-                        <el-button type="primary" v-if="user.isTeacher">创建/加入课程</el-button>
-                        <el-button type="primary" v-else @click="joinCourse">加入课程</el-button>
+                        <el-button type="primary" v-if="user.isTeacher" @click="addCourseFormVisable = true">创建课程
+                        </el-button>
+                        <el-button type="primary" v-else @click="joinCourse()">加入课程</el-button>
                     </el-col>
                 </el-row>
                 <!-- 分割线 -->
@@ -217,7 +218,8 @@
                                 <el-row>
                                     <el-col :span="8" style="float: left; width: 35%;">
                                         <el-row v-if="user.isTeacher">
-                                            <span style="font-size: smaller;">成员<span v-text="otherCourse.sCount"></span>人
+                                            <span style="font-size: smaller;">成员<span
+                                                    v-text="otherCourse.sCount"></span>人
                                         </el-row>
                                         <el-row v-else>
                                             <el-col :span="12">
@@ -313,6 +315,38 @@
                         </el-col>
                     </el-row>
                 </el-dialog>
+                <!-- 创建课程 -->
+                <el-dialog title="创建课程" :visible.sync="addCourseFormVisable" center width="30%">
+                    <el-form :model="course" :rules="addCourseRule" ref="addCourseForm" hide-required-asterisk="true">
+                        <el-form-item prop="name">
+                            <el-input prefix-icon="el-icon-user" placeholder="请输入课程名称" v-model="course.name"
+                                autocomplete="off" clearable></el-input>
+                        </el-form-item>
+                        <el-form-item prop="clazz">
+                            <el-input prefix-icon="el-icon-user" placeholder="请输入班级名称" v-model="course.clazz"
+                                autocomplete="off" clearable></el-input>
+                        </el-form-item>
+                        <el-form-item label="选择学年" prop="schoolYear">
+                            <el-select v-model="course.schoolYear" placeholder="请选择学年">
+                                <el-option v-for="(schoolYear, index) in schoolYears" :key="index" :label="schoolYear"
+                                    :value="schoolYear"></el-option>
+                            </el-select>
+                        </el-form-item>
+                        <el-form-item label="选择学期" prop="semester">
+                            <el-select v-model="course.semester" placeholder="请选择学期">
+                                <el-option label="第一学期" value="第一学期"></el-option>
+                                <el-option label="第二学期" value="第二学期"></el-option>
+                            </el-select>
+                        </el-form-item>
+                    </el-form>
+                    <div slot="footer">
+                        <el-row>
+                            <el-button type="primary" @click="addCourse('addCourseForm')"
+                                style="display: block; width: 100%;">创 建
+                            </el-button>
+                        </el-row>
+                    </div>
+                </el-dialog>
             </el-main>
             <!-- 底部 -->
             <el-footer>
@@ -345,10 +379,33 @@
         data: {
             activeIndex: '1',
             user: {},
+            course: {},
             topCourseList: [],
             otherCourseList: [],
             filedCourseList: [],
             filedCourseListVisable: false,
+            addCourseFormVisable: false,
+            schoolYears: [
+                "2017-2018",
+                "2018-2019",
+                "2019-2020",
+                "2020-2021",
+                "2021-2022"
+            ],
+            addCourseRule: {
+                name: [
+                    { required: true, message: '请输入课程名称', trigger: 'blur' }
+                ],
+                clazz: [
+                    { required: true, message: '请输入班级名称', trigger: 'blur' }
+                ],
+                schoolYear: [
+                    { required: true, message: '请选择学年', trigger: 'blur' }
+                ],
+                semester: [
+                    { required: true, message: '请选择学期', trigger: 'blur' }
+                ]
+            },
         },
         methods: {
             handleSelect(key, keyPath) {
@@ -573,6 +630,22 @@
                         type: 'info',
                         message: '取消加入课程'
                     });
+                });
+            },
+            addCourse(formName) {
+                this.$refs[formName].validate((valid) => {
+                    if (valid) {
+                        yxt.http.post("/courses/id/" + this.user.id, this.course).then(({ data }) => {
+                            if (data.success) {
+                                this.$message.success(data.message);
+                                this.addCourseFormVisable = false;
+                            } else {
+                                this.$message.error(data.message)
+                            }
+                        }).catch(() => {
+                            this.$message.error("服务器繁忙，请稍候再试！")
+                        });
+                    }
                 });
             }
         },
