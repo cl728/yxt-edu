@@ -2,7 +2,7 @@ package com.yixuetang.user.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.yixuetang.entity.request.user.*;
+import com.yixuetang.entity.request.user.QueryPageRequest;
 import com.yixuetang.entity.user.User;
 import org.apache.ibatis.annotations.*;
 import org.apache.ibatis.mapping.FetchType;
@@ -19,13 +19,14 @@ import java.util.List;
 public interface UserMapper extends BaseMapper<User> {
 
     /**
-     * 查询一条用户信息
+     * 根据用户id查询一条用户信息
      *
-     * @return 一条用户信息
+     * @param id 用户id
+     * @return 一条用户信息的用户实体类
      */
     @ResultMap("userMap")
     @Select("select * from t_user where id = #{id}")
-    User findOneUser(long id);
+    User findById(long id);
 
     /**
      * 查询所有用户
@@ -81,14 +82,6 @@ public interface UserMapper extends BaseMapper<User> {
     void updateRoleIdByUsername(@Param("username") String username, @Param("roleId") Long roleId);
 
     /**
-     * 更新用户信息
-     *
-     * @param updateUser 更新用户实体类
-     */
-    @Update("update t_user set real_name = #{updateUser.realName}, gender = #{updateUser.gender}, age = #{updateUser.age}, phone = #{updateUser.phone}, school = #{updateUser.school}, ts_no = #{updateUser.tsNo}, update_time = #{updateUser.updateTime} where id = #{id}")
-    void updateUser(@Param("id") Long id, @Param("updateUser") UpdateUser updateUser);
-
-    /**
      * 根据id修改roleId
      *
      * @param roleId 角色id
@@ -106,14 +99,4 @@ public interface UserMapper extends BaseMapper<User> {
     @ResultMap("userMap")
     @Select("select id, username, real_name, avatar, role_id from t_user where phone = #{phone}")
     User findByPhone(String phone);
-
-    /**
-     * 根据用户id查询用户
-     *
-     * @param userId 用户id
-     * @return 用户实体类
-     */
-    @ResultMap("userMap")
-    @Select("select id, role_id from t_user where id = #{userId}")
-    User findById(long userId);
 }

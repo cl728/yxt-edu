@@ -3,8 +3,6 @@ package com.yixuetang.entity.request.user;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
-import java.util.Date;
-
 /**
  * @author Curtis
  * @version 1.0.0
@@ -23,9 +21,6 @@ public class UpdateUser {
     @ApiModelProperty(value = "年龄", required = true, dataType = "int")
     private int age;
 
-    @ApiModelProperty(value = "手机号码", required = true, dataType = "String")
-    private String phone;
-
     @ApiModelProperty(value = "学校", required = true, dataType = "String")
     private String school;
 
@@ -34,8 +29,5 @@ public class UpdateUser {
 
     @ApiModelProperty(value = "学/工号", required = true, dataType = "String")
     private String tsNo;
-
-    @ApiModelProperty(value = "最后一次更新个人信息时间", dataType = "date")
-    private Date updateTime;
 
 }
