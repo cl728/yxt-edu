@@ -65,7 +65,7 @@ public class CourseServiceImpl implements CourseService {
         User user = this.userMapper.findById(userId);
 
         // roleId异常
-        if (user.getRole().getId() <= 1 || user.getRole().getId() > 3){
+        if (user.getRole().getId() <= 1 || user.getRole().getId() > 3) {
             return new CommonResponse(CommonCode.INVALID_PARAM);
         }
         // 判断为教师用户
@@ -149,7 +149,7 @@ public class CourseServiceImpl implements CourseService {
         Course course = new Course();
 
         course.setTeacherId(teacherId);
-        course.setCName(insertCourse.getCName());
+        course.setCName(insertCourse.getName());
         course.setSchoolYear(insertCourse.getSchoolYear());
         course.setSemester(insertCourse.getSemester());
         course.setClazz(insertCourse.getClazz());
