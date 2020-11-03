@@ -149,7 +149,7 @@ public class CourseServiceImpl implements CourseService {
         User findUser = userMapper.findById(teacherId);
         Role findRole = roleMapper.selectOne(new QueryWrapper<Role>().eq("id", findUser.getRole().getId()));
         if (findRole == null || findRole.getId() != 2) {
-            ExceptionThrowUtils.cast(CourseCode.INSERT_COURSE_FAIL);
+            return new CommonResponse(CourseCode.INSERT_COURSE_FAIL);
         }
 
         Course course = new Course();
@@ -246,7 +246,7 @@ public class CourseServiceImpl implements CourseService {
         //判断用户是否存在
         User findUser = userMapper.findById(userId);
         if (findUser == null) {
-            ExceptionThrowUtils.cast(UserCode.USER_NOT_FOUND);
+            return new QueryResponse(UserCode.USER_NOT_FOUND, null);
         } else if (findUser.getRole().getId() == 2) {
             //查询教师课程列表
             List<Course> courses = this.courseMapper.selectList(new QueryWrapper<Course>().orderByDesc("top_num")
@@ -275,9 +275,8 @@ public class CourseServiceImpl implements CourseService {
             });
             return new QueryResponse(CommonCode.SUCCESS, new QueryResult<>(listCourses, listCourses.size()));
         } else {
-            ExceptionThrowUtils.cast(CourseCode.COURSE_NOT_FOUND);
+            return new QueryResponse(CommonCode.FAIL,null);
         }
-        return null;
     }
 
 
@@ -286,12 +285,12 @@ public class CourseServiceImpl implements CourseService {
         //判断课程是否存在
         Course course = courseMapper.selectById(courseId);
         if(course == null){
-            ExceptionThrowUtils.cast(CourseCode.COURSE_NOT_FOUND);
+            return new CommonResponse(CourseCode.COURSE_NOT_FOUND);
         }
         //判断用户是否存在
         User findUser = userMapper.findById( userId );
         if(findUser == null){
-            ExceptionThrowUtils.cast(UserCode.USER_NOT_FOUND);
+            return new CommonResponse(UserCode.USER_NOT_FOUND);
         } else if (findUser.getRole().getId() == 2){
             //置顶教师课程
             //先查询当前课程topNum，然后加一设置为新置顶课程的topNum字段
@@ -322,9 +321,8 @@ public class CourseServiceImpl implements CourseService {
                 sc.setTopNum(10);
                 scMapper.updateById(sc);
             }
-
         }else{
-            ExceptionThrowUtils.cast(CommonCode.FAIL);
+            return new CommonResponse(CommonCode.FAIL);
         }
 
         return new CommonResponse(CommonCode.SUCCESS);

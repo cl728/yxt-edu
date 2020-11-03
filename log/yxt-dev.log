@@ -1176,3 +1176,42 @@ com.yixuetang.entity.exception.CustomException: 错误代码：50000, 错误信�
 2020-11-03 11:58:21.247 DEBUG 10148 --- [http-nio-8888-exec-5] c.y.course.mapper.CourseMapper.findById  : ====> Parameters: 1(Long)
 2020-11-03 11:58:21.249 DEBUG 10148 --- [http-nio-8888-exec-5] c.y.course.mapper.CourseMapper.findById  : <====      Total: 1
 2020-11-03 11:58:21.249 DEBUG 10148 --- [http-nio-8888-exec-5] c.y.course.mapper.ScMapper.findByUserId  : <==      Total: 2
+2020-11-03 12:01:30.215 DEBUG 10148 --- [http-nio-8888-exec-1] c.y.user.mapper.UserMapper.findById      : ==>  Preparing: select * from t_user where id = ? 
+2020-11-03 12:01:30.215 DEBUG 10148 --- [http-nio-8888-exec-1] c.y.user.mapper.UserMapper.findById      : ==> Parameters: 4(Long)
+2020-11-03 12:01:30.231 DEBUG 10148 --- [http-nio-8888-exec-1] c.y.user.mapper.RoleMapper.findById      : ====>  Preparing: select * from t_role where id = ? 
+2020-11-03 12:01:30.232 DEBUG 10148 --- [http-nio-8888-exec-1] c.y.user.mapper.RoleMapper.findById      : ====> Parameters: 3(Long)
+2020-11-03 12:01:30.232 DEBUG 10148 --- [http-nio-8888-exec-1] c.y.user.mapper.RoleMapper.findById      : <====      Total: 1
+2020-11-03 12:01:30.232 DEBUG 10148 --- [http-nio-8888-exec-1] c.y.user.mapper.UserMapper.findById      : <==      Total: 1
+2020-11-03 12:01:30.232 DEBUG 10148 --- [http-nio-8888-exec-1] c.y.course.mapper.ScMapper.findByUserId  : ==>  Preparing: select * from t_sc where student_id=? order by top_num desc 
+2020-11-03 12:01:30.232 DEBUG 10148 --- [http-nio-8888-exec-1] c.y.course.mapper.ScMapper.findByUserId  : ==> Parameters: 4(Long)
+2020-11-03 12:01:30.247 DEBUG 10148 --- [http-nio-8888-exec-1] c.y.course.mapper.CourseMapper.findById  : ====>  Preparing: select * from t_course where id = ? 
+2020-11-03 12:01:30.248 DEBUG 10148 --- [http-nio-8888-exec-1] c.y.course.mapper.CourseMapper.findById  : ====> Parameters: 14(Long)
+2020-11-03 12:01:30.257 DEBUG 10148 --- [http-nio-8888-exec-1] c.y.course.mapper.CourseMapper.findById  : <====      Total: 1
+2020-11-03 12:01:30.258 DEBUG 10148 --- [http-nio-8888-exec-1] c.y.user.mapper.UserMapper.findById      : ====>  Preparing: select * from t_user where id = ? 
+2020-11-03 12:01:30.258 DEBUG 10148 --- [http-nio-8888-exec-1] c.y.user.mapper.UserMapper.findById      : ====> Parameters: 4(Long)
+2020-11-03 12:01:30.266 DEBUG 10148 --- [http-nio-8888-exec-1] c.y.user.mapper.RoleMapper.findById      : ======>  Preparing: select * from t_role where id = ? 
+2020-11-03 12:01:30.266 DEBUG 10148 --- [http-nio-8888-exec-1] c.y.user.mapper.RoleMapper.findById      : ======> Parameters: 3(Long)
+2020-11-03 12:01:30.267 DEBUG 10148 --- [http-nio-8888-exec-1] c.y.user.mapper.RoleMapper.findById      : <======      Total: 1
+2020-11-03 12:01:30.267 DEBUG 10148 --- [http-nio-8888-exec-1] c.y.user.mapper.UserMapper.findById      : <====      Total: 1
+2020-11-03 12:01:30.267 DEBUG 10148 --- [http-nio-8888-exec-1] c.y.course.mapper.CourseMapper.findById  : ====>  Preparing: select * from t_course where id = ? 
+2020-11-03 12:01:30.267 DEBUG 10148 --- [http-nio-8888-exec-1] c.y.course.mapper.CourseMapper.findById  : ====> Parameters: 4(Long)
+2020-11-03 12:01:30.283 DEBUG 10148 --- [http-nio-8888-exec-1] c.y.course.mapper.CourseMapper.findById  : <====      Total: 1
+2020-11-03 12:01:30.284 DEBUG 10148 --- [http-nio-8888-exec-1] c.y.course.mapper.CourseMapper.findById  : ====>  Preparing: select * from t_course where id = ? 
+2020-11-03 12:01:30.284 DEBUG 10148 --- [http-nio-8888-exec-1] c.y.course.mapper.CourseMapper.findById  : ====> Parameters: 1(Long)
+2020-11-03 12:01:30.284 DEBUG 10148 --- [http-nio-8888-exec-1] c.y.course.mapper.CourseMapper.findById  : <====      Total: 1
+2020-11-03 12:01:30.284 DEBUG 10148 --- [http-nio-8888-exec-1] c.y.course.mapper.ScMapper.findByUserId  : <==      Total: 3
+2020-11-03 12:04:03.824 DEBUG 10148 --- [http-nio-8888-exec-10] c.y.c.mapper.CourseMapper.selectById     : ==>  Preparing: SELECT id,teacher_id,c_name,c_pic,c_code,s_count,create_time,update_time,school_year,semester,class AS clazz,top_num,is_filed FROM t_course WHERE id=? 
+2020-11-03 12:04:03.824 DEBUG 10148 --- [http-nio-8888-exec-10] c.y.c.mapper.CourseMapper.selectById     : ==> Parameters: 20(Long)
+2020-11-03 12:04:03.840 DEBUG 10148 --- [http-nio-8888-exec-10] c.y.c.mapper.CourseMapper.selectById     : <==      Total: 1
+2020-11-03 12:04:03.840 DEBUG 10148 --- [http-nio-8888-exec-10] c.y.user.mapper.UserMapper.selectById    : ==>  Preparing: SELECT id,username,password,real_name,gender,age,email,avatar,phone,school,ts_no,create_time,update_time FROM t_user WHERE id=? 
+2020-11-03 12:04:03.840 DEBUG 10148 --- [http-nio-8888-exec-10] c.y.user.mapper.UserMapper.selectById    : ==> Parameters: 2(Long)
+2020-11-03 12:04:03.840 DEBUG 10148 --- [http-nio-8888-exec-10] c.y.user.mapper.UserMapper.selectById    : <==      Total: 1
+2020-11-03 12:04:12.239 DEBUG 10148 --- [http-nio-8888-exec-6] c.y.c.mapper.CourseMapper.selectById     : ==>  Preparing: SELECT id,teacher_id,c_name,c_pic,c_code,s_count,create_time,update_time,school_year,semester,class AS clazz,top_num,is_filed FROM t_course WHERE id=? 
+2020-11-03 12:04:12.239 DEBUG 10148 --- [http-nio-8888-exec-6] c.y.c.mapper.CourseMapper.selectById     : ==> Parameters: 20(Long)
+2020-11-03 12:04:12.256 DEBUG 10148 --- [http-nio-8888-exec-6] c.y.c.mapper.CourseMapper.selectById     : <==      Total: 1
+2020-11-03 12:04:12.256 DEBUG 10148 --- [http-nio-8888-exec-6] c.y.user.mapper.UserMapper.selectById    : ==>  Preparing: SELECT id,username,password,real_name,gender,age,email,avatar,phone,school,ts_no,create_time,update_time FROM t_user WHERE id=? 
+2020-11-03 12:04:12.256 DEBUG 10148 --- [http-nio-8888-exec-6] c.y.user.mapper.UserMapper.selectById    : ==> Parameters: 1(Long)
+2020-11-03 12:04:12.256 DEBUG 10148 --- [http-nio-8888-exec-6] c.y.user.mapper.UserMapper.selectById    : <==      Total: 1
+2020-11-03 12:04:12.556 DEBUG 10148 --- [http-nio-8888-exec-6] c.y.user.mapper.UserMapper.selectOne     : ==>  Preparing: SELECT id,username,password,real_name,gender,age,email,avatar,phone,school,ts_no,create_time,update_time FROM t_user WHERE (email = ?) 
+2020-11-03 12:04:12.556 DEBUG 10148 --- [http-nio-8888-exec-6] c.y.user.mapper.UserMapper.selectOne     : ==> Parameters: colinchong@163.com(String)
+2020-11-03 12:04:12.570 DEBUG 10148 --- [http-nio-8888-exec-6] c.y.user.mapper.UserMapper.selectOne     : <==      Total: 1
