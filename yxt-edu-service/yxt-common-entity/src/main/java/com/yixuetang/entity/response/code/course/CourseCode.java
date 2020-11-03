@@ -1,4 +1,5 @@
 package com.yixuetang.entity.response.code.course;
+
 import com.yixuetang.entity.response.code.ResponseCode;
 
 /**
@@ -17,7 +18,19 @@ public enum CourseCode implements ResponseCode {
 
     SET_TOP_FAIL(false, 50002, "课程置顶失败，课程已经置顶"),
 
-    INSERT_COURSE_FAIL(false, 50003, "非教师操作！");
+    INSERT_COURSE_FAIL(false, 50003, "非教师操作！"),
+
+    TRANSFER_COURSE_FAIL(false, 50004, "教师转让课程失败！"),
+
+    TRANSFER_COURSE_FAIL_COURSE_NOT_FOUND(false, 50005, "教师转让课程失败，未找到该课程！"),
+
+    TRANSFER_COURSE_FAIL_PASSWORD_WRONG(false, 50006, "教师转让课程失败，请求转入教师的密码错误！"),
+
+    TRANSFER_COURSE_FAIL_EMAIL_NOT_EFFECTIVE(false, 50007, "教师转让课程失败，接受转入课程的教师邮箱无效！"),
+
+    TRANSFER_COURSE_FAIL_COURSE_NOT_BELONGS_TO_THIS_TEACHER(false, 50008, "教师转让课程失败，该教师不是此课程原授课教师！"),
+
+    TRANSFER_COURSE_FAIL_SAME_TEACHER(false, 50009, "教师转让课程失败，原授课教师不能转让给自己！");
 
     private boolean success;
     private int code;
