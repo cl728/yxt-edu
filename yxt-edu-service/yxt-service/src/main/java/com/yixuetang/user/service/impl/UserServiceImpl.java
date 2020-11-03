@@ -3,6 +3,11 @@ package com.yixuetang.user.service.impl;
 import com.aliyuncs.exceptions.ClientException;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.yixuetang.course.mapper.CourseMapper;
+import com.yixuetang.course.mapper.ScMapper;
+import com.yixuetang.course.service.CourseService;
+import com.yixuetang.entity.course.Course;
+import com.yixuetang.entity.course.StudentCourse;
 import com.yixuetang.entity.request.auth.LoginUser;
 import com.yixuetang.entity.request.user.*;
 import com.yixuetang.entity.response.CommonResponse;
@@ -29,6 +34,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.*;
 import java.util.concurrent.TimeUnit;
+import java.util.stream.Collectors;
 
 /**
  * @author Colin
@@ -45,6 +51,7 @@ public class UserServiceImpl implements UserService {
     private static final String MODIFY_KEY_PREFIX = "user:code:modify:";
     private static final String CHANGE_KEY_PREFIX = "user:code:change:";
     private final List<Integer> SEND_TYPE = new ArrayList<>(Arrays.asList(1, 2));
+    private final List<Long> ROLE_ID_LIST = new ArrayList<>(Arrays.asList(1L, 2L, 3L));
     private final List<Integer> CODE_TYPE = new ArrayList<>(Arrays.asList(1, 2, 3, 4));
     @Autowired
     private UserMapper userMapper;
@@ -60,6 +67,10 @@ public class UserServiceImpl implements UserService {
     private SmsConfig smsConfig;
     @Autowired
     private StringRedisTemplate redisTemplate;
+    @Autowired
+    private ScMapper scMapper;
+    @Autowired
+    private CourseMapper courseMapper;
 
     @Override
     public QueryResponse findOneUser(long id) {
@@ -387,6 +398,27 @@ public class UserServiceImpl implements UserService {
     @Override
     @Transactional
     public CommonResponse delById(long userId) {
+        User user = this.userMapper.findById( userId );
+        long roleId = user.getRole().getId();
+        if (!ROLE_ID_LIST.contains( roleId )) {
+            ExceptionThrowUtils.cast( CommonCode.INVALID_PARAM );
+        }
+        if (roleId == 1) { // 管理员不允许被调用接口注销
+            return CommonResponse.FAIL();
+        } else if (roleId == 2) { // 如果注销的是教师用户，需先把其创建的课程删除
+            List<Long> courseIds = this.courseMapper
+                    .selectList( new QueryWrapper<Course>().eq( "teacher_id", userId )
+                    .select( "id" ) ).stream().map( Course::getId ).collect( Collectors.toList() );
+            courseIds.forEach( courseId -> {
+                // 将选课表里关于该课程的记录删除
+                this.scMapper.delete(new QueryWrapper<StudentCourse>().eq("course_id", courseId));
+
+                // 将该课程删除
+                this.courseMapper.deleteById(courseId);
+            } );
+        } else { // 如果注销的是学生用户，需先将其选课记录删除
+            this.scMapper.delete( new QueryWrapper<StudentCourse>().eq( "student_id", userId ) );
+        }
         this.userMapper.deleteById( userId );
         return CommonResponse.SUCCESS();
     }
