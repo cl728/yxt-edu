@@ -194,9 +194,8 @@ public class CourseServiceImpl implements CourseService {
     @Override
     public QueryResponse findByPage(long currentPage, long pageSize) {
         List<Course> courses = this.courseMapper.findByPage(new Page<>(currentPage, pageSize));
-        return new QueryResponse(CommonCode.SUCCESS, new QueryResult<>(courses, courses.size()));
+        return new QueryResponse(CommonCode.SUCCESS, new QueryResult<>(courses, this.courseMapper.selectCount( null )));
     }
-
 
     @Transactional
     @Override

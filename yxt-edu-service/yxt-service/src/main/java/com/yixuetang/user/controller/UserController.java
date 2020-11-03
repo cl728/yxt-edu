@@ -111,6 +111,12 @@ public class UserController implements UserControllerApi {
         return this.userService.register( registerUser );
     }
 
+    @Override
+    @DeleteMapping("admin/id/{userId}")
+    public CommonResponse delById(@PathVariable long userId) {
+        return this.userService.delById( userId );
+    }
+
     private boolean checkIdIfInvalid(@PathVariable long id, HttpServletRequest request) {
         String token = CookieUtils.getCookieValue( request, id == 3 ? config.getAdminCookieName() : config.getUserCookieName() );
         UserInfo userInfo;

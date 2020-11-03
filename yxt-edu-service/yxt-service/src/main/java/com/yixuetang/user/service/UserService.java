@@ -109,4 +109,12 @@ public interface UserService {
      * @return 响应结果实体类
      */
     CommonResponse updatePhone(long id, PhoneUser phoneUser);
+
+    /**
+     * 管理员删除用户
+     *
+     * @param userId 用户主键id
+     * @return 响应结果实体类
+     */
+    CommonResponse delById(long userId);
 }

@@ -89,7 +89,7 @@ public class UserServiceImpl implements UserService {
             queryPageRequest.setPhone("%" + queryPageRequest.getPhone() + "%");
         }
         List<User> users = this.userMapper.findByPage(new Page<>(currentPage, pageSize), queryPageRequest);
-        return new QueryResponse(CommonCode.SUCCESS, new QueryResult<>(users, users.size()));
+        return new QueryResponse(CommonCode.SUCCESS, new QueryResult<>(users, this.userMapper.selectCount( null )));
     }
 
     @Override
@@ -372,5 +372,12 @@ public class UserServiceImpl implements UserService {
         this.userMapper.updateById(user);
 
         return new CommonResponse(CommonCode.SUCCESS);
+    }
+
+    @Override
+    @Transactional
+    public CommonResponse delById(long userId) {
+        this.userMapper.deleteById( userId );
+        return CommonResponse.SUCCESS();
     }
 }

@@ -87,4 +87,7 @@ public interface UserControllerApi {
     @ApiOperation("用户注册")
     CommonResponse register(RegisterUser registerUser);
 
+    @ApiOperation("管理员删除用户")
+    @ApiImplicitParam(name = "userId", value = "用户id", required = true, paramType = "path", dataType = "long")
+    CommonResponse delById(long userId);
 }
