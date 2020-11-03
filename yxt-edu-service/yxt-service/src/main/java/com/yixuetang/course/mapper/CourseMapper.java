@@ -16,12 +16,23 @@ import java.util.List;
  */
 @Mapper
 public interface CourseMapper extends BaseMapper<Course> {
-    @Result(column = "class",property = "clazz")
+    @ResultMap("courseMap")
     @Select("select * from t_course where id = #{id}")
     Course findById(Long id);
 
     @Results(id = "courseMap", value = {
+            @Result(column = "id", property = "id"),
+            @Result(column = "c_name", property = "cName"),
+            @Result(column = "c_pic", property = "cPic"),
+            @Result(column = "c_code", property = "cCode"),
+            @Result(column = "s_count", property = "sCount"),
+            @Result(column = "create_time", property = "createTime"),
+            @Result(column = "update_time", property = "updateTime"),
+            @Result(column = "school_year", property = "schoolYear"),
+            @Result(column = "semester", property = "semester"),
             @Result(column = "class", property = "clazz"),
+            @Result(column = "top_num", property = "topNum"),
+            @Result(column = "is_filed", property = "isFiled"),
             @Result(column = "teacher_id", property = "teacher",
                     one = @One(select = "com.yixuetang.user.mapper.UserMapper.findById", fetchType = FetchType.EAGER))
     })
@@ -34,4 +45,7 @@ public interface CourseMapper extends BaseMapper<Course> {
 
     @Update("update t_course set teacher_id = #{teacherId} where c_code = #{cCode}")
     void updateTeacherIdByCCode(@Param("teacherId") Long teacherId, @Param("cCode") String cCode);
+
+    @Update("update t_course set teacher_id = #{teacherId}, update_time = #{course.updateTime} where id = #{course.id}")
+    void updateTeacherIdById(@Param("course") Course course, @Param("teacherId") Long teacherId);
 }
