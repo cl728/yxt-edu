@@ -63,7 +63,8 @@
                                     <el-avatar size="large" :src="user.avatar">
                                     </el-avatar>
                                 </template>
-                                <el-menu-item><i class="el-icon-setting"></i> 个人设置</el-menu-item>
+                                <el-menu-item @click="location.href = 'user/setting.html' "><i
+                                        class="el-icon-setting"></i> 个人设置</el-menu-item>
                                 <el-menu-item @click="logout()"><i class="fa fa-sign-out"
                                         style="margin-left: 6px; margin-right: 8px;"></i> <span>退出账户</span>
                                 </el-menu-item>
