@@ -78,4 +78,11 @@ public class CourseController implements CourseControllerApi {
         return courseService.updateTopCourse(courseId, userId);
     }
 
+    @Override
+    @PutMapping("isFiled/id/{courseId}/{userId}")
+    public CommonResponse file(@PathVariable long courseId, @PathVariable long userId) {
+        return this.courseService.file(courseId, userId);
+    }
+
+
 }

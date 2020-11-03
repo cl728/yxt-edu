@@ -24,9 +24,6 @@ public class UpdateUser {
     @ApiModelProperty(value = "学校", required = true, dataType = "String")
     private String school;
 
-    @ApiModelProperty(value = "角色名称 老师/助教 学生", required = true, dataType = "String")
-    private String roleName;
-
     @ApiModelProperty(value = "学/工号", required = true, dataType = "String")
     private String tsNo;
 

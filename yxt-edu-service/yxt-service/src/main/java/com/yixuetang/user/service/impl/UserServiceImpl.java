@@ -5,7 +5,6 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.yixuetang.course.mapper.CourseMapper;
 import com.yixuetang.course.mapper.ScMapper;
-import com.yixuetang.course.service.CourseService;
 import com.yixuetang.entity.course.Course;
 import com.yixuetang.entity.course.StudentCourse;
 import com.yixuetang.entity.request.auth.LoginUser;
@@ -86,31 +85,31 @@ public class UserServiceImpl implements UserService {
             Role role = this.roleMapper.selectOne(new QueryWrapper<Role>().eq("r_name", queryPageRequest.getRoleName()));
             if (role != null) {
                 queryPageRequest.setRoleId(role.getId());
-                queryWrapper.eq( "role_id", role.getId() );
+                queryWrapper.eq("role_id", role.getId());
             }
         }
-        if (StringUtils.equals( "男", queryPageRequest.getGender() ) ||
-            StringUtils.equals( "女", queryPageRequest.getGender() )) {
-            queryWrapper.eq( "gender", queryPageRequest.getGender() );
+        if (StringUtils.equals("男", queryPageRequest.getGender()) ||
+                StringUtils.equals("女", queryPageRequest.getGender())) {
+            queryWrapper.eq("gender", queryPageRequest.getGender());
         }
         if (StringUtils.isNoneBlank(queryPageRequest.getUsername())) {
             queryPageRequest.setUsername("%" + queryPageRequest.getUsername() + "%");
-            queryWrapper.like( "username", queryPageRequest.getUsername() );
+            queryWrapper.like("username", queryPageRequest.getUsername());
         }
         if (StringUtils.isNoneBlank(queryPageRequest.getRealName())) {
             queryPageRequest.setRealName("%" + queryPageRequest.getRealName() + "%");
-            queryWrapper.like( "real_name", queryPageRequest.getRealName() );
+            queryWrapper.like("real_name", queryPageRequest.getRealName());
         }
         if (StringUtils.isNoneBlank(queryPageRequest.getEmail())) {
             queryPageRequest.setEmail("%" + queryPageRequest.getEmail() + "%");
-            queryWrapper.like( "email", queryPageRequest.getEmail() );
+            queryWrapper.like("email", queryPageRequest.getEmail());
         }
         if (StringUtils.isNoneBlank(queryPageRequest.getPhone())) {
             queryPageRequest.setPhone("%" + queryPageRequest.getPhone() + "%");
-            queryWrapper.like( "phone", queryPageRequest.getPhone() );
+            queryWrapper.like("phone", queryPageRequest.getPhone());
         }
         List<User> users = this.userMapper.findByPage(new Page<>(currentPage, pageSize), queryPageRequest);
-        return new QueryResponse(CommonCode.SUCCESS, new QueryResult<>(users, this.userMapper.selectCount( queryWrapper )));
+        return new QueryResponse(CommonCode.SUCCESS, new QueryResult<>(users, this.userMapper.selectCount(queryWrapper)));
     }
 
     @Override
@@ -265,16 +264,7 @@ public class UserServiceImpl implements UserService {
             ExceptionThrowUtils.cast(CommonCode.INVALID_PARAM);
         }
 
-        // 2. 角色名称校验
-        Role role = null;
-        if (StringUtils.isNoneBlank(updateUser.getRoleName())) {
-            role = this.roleMapper.selectOne(new QueryWrapper<Role>().eq("r_name", updateUser.getRoleName()));
-            if (role == null) {
-                return new CommonResponse(UserCode.UPDATE_FAIL_ROLE_NAME_NOT_FOUND);
-            }
-        }
-
-        // 3. 学/工号唯一性检验
+        // 2. 学/工号唯一性检验
         if (StringUtils.isNoneBlank(updateUser.getTsNo())) {
             User oldUser = this.userMapper.selectOne(new QueryWrapper<User>().eq("id", id));
             User foundUser = this.userMapper.selectOne(new QueryWrapper<User>().eq("ts_no", updateUser.getTsNo()));
@@ -283,7 +273,7 @@ public class UserServiceImpl implements UserService {
             }
         }
 
-        // 4. 根据id获取修改前的用户信息，根据传入参数修改用户信息
+        // 3. 根据id获取修改前的用户信息，根据传入参数修改用户信息
         User user = this.userMapper.findById(id);
         if (StringUtils.isNoneBlank(updateUser.getRealName())) {
             user.setRealName(updateUser.getRealName());
@@ -297,21 +287,15 @@ public class UserServiceImpl implements UserService {
         if (StringUtils.isNoneBlank(updateUser.getSchool())) {
             user.setSchool(updateUser.getSchool());
         }
-        if (StringUtils.isNoneBlank(updateUser.getRoleName())) {
-            user.setRole(this.roleMapper.selectOne(new QueryWrapper<Role>().eq("r_name", updateUser.getRoleName())));
-        }
         if (StringUtils.isNoneBlank(updateUser.getTsNo())) {
             user.setTsNo(updateUser.getTsNo());
         }
 
-        // 5. 更新最后一次修改个人信息时间
+        // 4. 更新最后一次修改个人信息时间
         user.setUpdateTime(new Date());
 
-        // 6. 更新用户信息
+        // 5. 更新用户信息
         this.userMapper.updateById(user);
-
-        // 7. 更新用户的角色id信息
-        this.userMapper.UpdateRoleIdById(Objects.requireNonNull(user.getRole().getId()), id);
 
         return new CommonResponse(CommonCode.SUCCESS);
     }
@@ -398,28 +382,28 @@ public class UserServiceImpl implements UserService {
     @Override
     @Transactional
     public CommonResponse delById(long userId) {
-        User user = this.userMapper.findById( userId );
+        User user = this.userMapper.findById(userId);
         long roleId = user.getRole().getId();
-        if (!ROLE_ID_LIST.contains( roleId )) {
-            ExceptionThrowUtils.cast( CommonCode.INVALID_PARAM );
+        if (!ROLE_ID_LIST.contains(roleId)) {
+            ExceptionThrowUtils.cast(CommonCode.INVALID_PARAM);
         }
         if (roleId == 1) { // 管理员不允许被调用接口注销
             return CommonResponse.FAIL();
         } else if (roleId == 2) { // 如果注销的是教师用户，需先把其创建的课程删除
             List<Long> courseIds = this.courseMapper
-                    .selectList( new QueryWrapper<Course>().eq( "teacher_id", userId )
-                    .select( "id" ) ).stream().map( Course::getId ).collect( Collectors.toList() );
-            courseIds.forEach( courseId -> {
+                    .selectList(new QueryWrapper<Course>().eq("teacher_id", userId)
+                            .select("id")).stream().map(Course::getId).collect(Collectors.toList());
+            courseIds.forEach(courseId -> {
                 // 将选课表里关于该课程的记录删除
                 this.scMapper.delete(new QueryWrapper<StudentCourse>().eq("course_id", courseId));
 
                 // 将该课程删除
                 this.courseMapper.deleteById(courseId);
-            } );
+            });
         } else { // 如果注销的是学生用户，需先将其选课记录删除
-            this.scMapper.delete( new QueryWrapper<StudentCourse>().eq( "student_id", userId ) );
+            this.scMapper.delete(new QueryWrapper<StudentCourse>().eq("student_id", userId));
         }
-        this.userMapper.deleteById( userId );
+        this.userMapper.deleteById(userId);
         return CommonResponse.SUCCESS();
     }
 }

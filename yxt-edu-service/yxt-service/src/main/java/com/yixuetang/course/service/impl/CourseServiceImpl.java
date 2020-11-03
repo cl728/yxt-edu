@@ -290,6 +290,40 @@ public class CourseServiceImpl implements CourseService {
     }
 
     @Override
+    public CommonResponse file(long courseId, long userId) {
+        final User user = this.userMapper.findById(userId);
+        Long roleId = user.getRole().getId();
+        // roleId非2,3则异常
+        if (roleId < 2 || roleId > 3){
+            return new CommonResponse(CommonCode.INVALID_PARAM);
+        }
+
+        // 判断为教师用户
+        if (roleId == 2){
+            // 修改isFiled为true
+            Course course = this.courseMapper.findById(courseId);
+            course.setIsFiled(true);
+            int i = this.courseMapper.updateById(course);
+            if (i != 1){
+                return new CommonResponse(CommonCode.FAIL);
+            }
+        }
+
+        // 判断为学生用户
+        if (roleId == 3){
+            // isFiled设为true
+            StudentCourse studentCourse = this.scMapper.selectOne(new QueryWrapper<StudentCourse>()
+                    .eq("course_id", courseId).eq("student_id", userId).select("id"));
+            studentCourse.setIsFiled(true);
+            int i = this.scMapper.updateById(studentCourse);
+            if (i != 1){
+                return new CommonResponse(CommonCode.FAIL);
+            }
+        }
+        return new CommonResponse(CommonCode.SUCCESS);
+    }
+
+    @Override
     public QueryResponse findCoursesByUserId(long userId) {
         //判断用户是否存在
         User findUser = userMapper.findById(userId);
@@ -375,5 +409,6 @@ public class CourseServiceImpl implements CourseService {
 
         return new CommonResponse(CommonCode.SUCCESS);
     }
+
 
 }

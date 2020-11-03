@@ -92,4 +92,13 @@ public interface CourseService {
      * @return 响应结果实体类
      */
     CommonResponse updateCourses(Long courseId, Long teacherId, UpdateCourse updateCourse);
+
+    /**
+     * 归档
+     *
+     * @param courseId
+     * @param userId
+     * @return 响应结果实体类
+     */
+    CommonResponse file(long courseId, long userId);
 }
