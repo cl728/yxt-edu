@@ -70,26 +70,36 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public QueryResponse findByPage(long currentPage, long pageSize, QueryPageRequest queryPageRequest) {
+        QueryWrapper<User> queryWrapper = new QueryWrapper<>();
         if (StringUtils.isNoneBlank(queryPageRequest.getRoleName())) {
             Role role = this.roleMapper.selectOne(new QueryWrapper<Role>().eq("r_name", queryPageRequest.getRoleName()));
             if (role != null) {
                 queryPageRequest.setRoleId(role.getId());
+                queryWrapper.eq( "role_id", role.getId() );
             }
+        }
+        if (StringUtils.equals( "男", queryPageRequest.getGender() ) ||
+            StringUtils.equals( "女", queryPageRequest.getGender() )) {
+            queryWrapper.eq( "gender", queryPageRequest.getGender() );
         }
         if (StringUtils.isNoneBlank(queryPageRequest.getUsername())) {
             queryPageRequest.setUsername("%" + queryPageRequest.getUsername() + "%");
+            queryWrapper.like( "username", queryPageRequest.getUsername() );
         }
         if (StringUtils.isNoneBlank(queryPageRequest.getRealName())) {
             queryPageRequest.setRealName("%" + queryPageRequest.getRealName() + "%");
+            queryWrapper.like( "real_name", queryPageRequest.getRealName() );
         }
         if (StringUtils.isNoneBlank(queryPageRequest.getEmail())) {
             queryPageRequest.setEmail("%" + queryPageRequest.getEmail() + "%");
+            queryWrapper.like( "email", queryPageRequest.getEmail() );
         }
         if (StringUtils.isNoneBlank(queryPageRequest.getPhone())) {
             queryPageRequest.setPhone("%" + queryPageRequest.getPhone() + "%");
+            queryWrapper.like( "phone", queryPageRequest.getPhone() );
         }
         List<User> users = this.userMapper.findByPage(new Page<>(currentPage, pageSize), queryPageRequest);
-        return new QueryResponse(CommonCode.SUCCESS, new QueryResult<>(users, this.userMapper.selectCount( null )));
+        return new QueryResponse(CommonCode.SUCCESS, new QueryResult<>(users, this.userMapper.selectCount( queryWrapper )));
     }
 
     @Override
