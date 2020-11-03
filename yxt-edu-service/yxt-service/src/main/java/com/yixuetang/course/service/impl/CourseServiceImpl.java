@@ -317,8 +317,8 @@ public class CourseServiceImpl implements CourseService {
         // 判断为学生用户
         if (roleId == 3) {
             // isFiled设为true
-            StudentCourse studentCourse = this.scMapper.selectOne(new QueryWrapper<StudentCourse>()
-                    .eq("course_id", courseId).eq("student_id", userId));
+            StudentCourse studentCourse = this.scMapper.selectOne(new QueryWrapper<StudentCourse>().eq("course_id", courseId)
+                    .eq("student_id", userId));
             //  若学生没有加入该课程,非法请求
             if (studentCourse == null){
                 return new CommonResponse(CommonCode.INVALID_PARAM);
