@@ -22,7 +22,7 @@
             padding: 0;
         }
     </style>
-    <title>HomePage</title>
+    <title>益学堂-简单好用的互动课堂管理工具</title>
 </head>
 
 <body>
@@ -48,7 +48,7 @@
                             <el-menu-item index="1" class="header-text">课堂</el-menu-item>
                             <el-menu-item index="2" class="header-text">精品课程</el-menu-item>
                             <el-menu-item index="3" class="header-text">本校课程</el-menu-item>
-                            <el-menu-item index="3" class="header-text">我的精品</el-menu-item>
+                            <el-menu-item index="4" class="header-text">我的精品</el-menu-item>
                         </el-menu>
                     </el-col>
                     <!-- 头像下拉菜单 -->
@@ -60,7 +60,7 @@
                             </el-menu-item>
                             <el-submenu>
                                 <template slot="title">
-                                    <span v-text="user.username" style="color: black; margin: 20px, 10px;">用户名</span>
+                                    <span v-text="user.username" style="color: black; margin: 20px 10px;">用户名</span>
                                     <el-avatar size="large" :src="user.avatar">
                                     </el-avatar>
                                 </template>
