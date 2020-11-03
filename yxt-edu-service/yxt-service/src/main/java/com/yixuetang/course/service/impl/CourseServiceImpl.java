@@ -108,7 +108,7 @@ public class CourseServiceImpl implements CourseService {
     @Transactional
     public CommonResponse joinCourse(Long userId, String code) {
         // 通过加课码查询课程
-        Course course = this.courseMapper.selectOne(new QueryWrapper<Course>().eq("c_code", code));
+        Course course = this.courseMapper.findByCCode( code );
         if (course == null) {
             return new CommonResponse(CourseCode.COURSE_NOT_FOUND);
         }
@@ -120,7 +120,7 @@ public class CourseServiceImpl implements CourseService {
         }
 
         // 判断是否为老师加入自己创建的课程
-        if (Objects.equals(course.getTeacherId(), userId)) {
+        if (Objects.equals(course.getTeacher().getId(), userId)) {
             return new CommonResponse(CommonCode.FAIL);
         }
 
@@ -149,14 +149,14 @@ public class CourseServiceImpl implements CourseService {
 
         Course course = new Course();
 
-        course.setTeacherId(teacherId);
         course.setCName(insertCourse.getName());
         course.setSchoolYear(insertCourse.getSchoolYear());
         course.setSemester(insertCourse.getSemester());
         course.setClazz(insertCourse.getClazz());
 
         // 生成加课码
-        course.setCCode(GenCodeUtils.genRandomCode());
+        String cCode = GenCodeUtils.genRandomCode();
+        course.setCCode( cCode );
 
         // 设置随机课程图片
         String num = String.valueOf( (int) ( Math.ceil( Math.random() ) * 45 ) );
@@ -171,14 +171,24 @@ public class CourseServiceImpl implements CourseService {
         course.setUpdateTime(date);
         course.setId(null);
 
-        this.courseMapper.insert(course);
+        try {
+            this.courseMapper.insert(course);
+
+            // 更新课程表的教师id信息
+            this.courseMapper.updateTeacherIdByCCode( teacherId, cCode );
+        } catch (Exception e) {
+            // 加课码设置了唯一索引，如果生成的加课码恰巧一致，则新增课程失败
+            LOGGER.error( "创建课程发生异常！异常原因：{}", e );
+            return new CommonResponse( CommonCode.SERVER_ERROR );
+        }
+
         return new CommonResponse(CommonCode.SUCCESS);
     }
 
     @Override
     public QueryResponse findByPage(long currentPage, long pageSize) {
-        Page<Course> page = this.courseMapper.selectPage(new Page<>(currentPage, pageSize), null);
-        return new QueryResponse(CommonCode.SUCCESS, new QueryResult<>(page.getRecords(), (int) page.getTotal()));
+        List<Course> courses = this.courseMapper.findByPage(new Page<>(currentPage, pageSize));
+        return new QueryResponse(CommonCode.SUCCESS, new QueryResult<>(courses, courses.size()));
     }
 
     @Override
