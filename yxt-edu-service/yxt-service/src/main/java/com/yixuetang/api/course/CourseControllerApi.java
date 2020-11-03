@@ -89,5 +89,12 @@ public interface CourseControllerApi {
     })
     CommonResponse updateTopCourse(long courseId, long userId);
 
-
+    @ApiOperation("归档")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "courseId", value = "课程id", required = true,
+                    paramType = "path", dataType = "long"),
+            @ApiImplicitParam(name = "userId", value = "用户id", required = true,
+                    paramType = "path", dataType = "long")
+    })
+    CommonResponse file(long courseId, long userId);
 }
