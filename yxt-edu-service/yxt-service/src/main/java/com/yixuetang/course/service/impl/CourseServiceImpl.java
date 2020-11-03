@@ -166,7 +166,7 @@ public class CourseServiceImpl implements CourseService {
         course.setCCode(cCode);
 
         // 设置随机课程图片
-        String num = String.valueOf((int) (Math.ceil(Math.random()) * 45));
+        String num = String.valueOf((int) (Math.ceil(Math.random() * 44 )));
         if (num.length() == 1) {
             num = "0" + num;
         }
