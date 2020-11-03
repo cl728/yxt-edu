@@ -361,8 +361,10 @@ public class CourseServiceImpl implements CourseService {
                 listCourse.setSemester(item.getCourse().getSemester());
                 listCourse.setTopNum(item.getTopNum());
                 listCourse.setAvatarUser(new AvatarUser());
-                listCourse.getAvatarUser().setAvatar(item.getUser().getAvatar());
-                listCourse.getAvatarUser().setRealName(item.getUser().getRealName());
+                // avatarUser 修改为教师的头像和真实姓名
+                User user = this.userMapper.findByCourseId( item.getCourse().getId() );
+                listCourse.getAvatarUser().setAvatar(user.getAvatar());
+                listCourse.getAvatarUser().setRealName(user.getRealName());
                 listCourses.add(listCourse);
             });
             return new QueryResponse(CommonCode.SUCCESS, new QueryResult<>(listCourses, listCourses.size()));

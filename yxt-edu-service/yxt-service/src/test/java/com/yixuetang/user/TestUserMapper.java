@@ -34,4 +34,9 @@ public class TestUserMapper {
         System.out.println( user );
     }
 
+    @Test
+    public void testFindByCourseId() {
+        System.out.println( this.userMapper.findByCourseId( 4L ) );
+    }
+
 }

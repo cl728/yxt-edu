@@ -90,4 +90,7 @@ public interface UserMapper extends BaseMapper<User> {
     @ResultMap("userMap")
     @Select("select id, username, real_name, avatar, role_id from t_user where phone = #{phone}")
     User findByPhone(String phone);
+
+    @Select("select u.avatar, u.real_name from t_user u, t_course c where c.id = #{courseId} and u.id = c.teacher_id")
+    User findByCourseId(long courseId);
 }
