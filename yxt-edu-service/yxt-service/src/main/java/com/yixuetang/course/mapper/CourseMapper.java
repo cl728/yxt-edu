@@ -3,6 +3,7 @@ package com.yixuetang.course.mapper;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.yixuetang.entity.course.Course;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Result;
 import org.apache.ibatis.annotations.Select;
 
 /**
@@ -13,6 +14,7 @@ import org.apache.ibatis.annotations.Select;
  */
 @Mapper
 public interface CourseMapper extends BaseMapper<Course> {
+    @Result(column = "class",property = "clazz")
     @Select("select * from t_course where id = #{id}")
     Course findById(Long id);
 }

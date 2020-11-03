@@ -37,49 +37,38 @@ public class CourseController implements CourseControllerApi {
     @Override
     @DeleteMapping("id/{userId}/{courseId}")
     public CommonResponse deleteCourse(@PathVariable Long userId, @PathVariable Long courseId) {
-        return this.courseService.deleteCourse(userId, courseId);
+        return this.courseService.deleteCourse( userId, courseId );
     }
 
     @Override
     @PostMapping("id/{userId}/{code}")
     public CommonResponse joinCourse(@PathVariable Long userId, @PathVariable String code) {
-        return this.courseService.joinCourse(userId, code);
+        return this.courseService.joinCourse( userId, code );
     }
 
     @Override
     @PostMapping("id/{teacherId}")
     public CommonResponse saveCourse(@PathVariable Long teacherId, @RequestBody InsertCourse course) {
-        return this.courseService.saveCourse(teacherId, course);
+        return this.courseService.saveCourse( teacherId, course );
     }
 
     @Override
     @GetMapping("page/{currentPage}/{pageSize}")
     public QueryResponse findByPage(@PathVariable long currentPage, @PathVariable long pageSize) {
-        return this.courseService.findByPage(currentPage, pageSize);
+        return this.courseService.findByPage( currentPage, pageSize );
     }
 
     @Override
-    @GetMapping("listAllUserCourse/{userId}")
-    public QueryResponse findByUserId(@PathVariable long userId) {
-        return this.courseService.findByUserId(userId);
+    @GetMapping("userId/{userId}")
+    public QueryResponse findCoursesByUserId(@PathVariable long userId) {
+        return this.courseService.findCoursesByUserId(userId);
     }
 
-    @Override
-    @GetMapping("listAllTeacherCourse/{teacherId}")
-    public QueryResponse findByTeacherId(@PathVariable long teacherId) {
-        return this.courseService.findByTeacherId(teacherId);
-    }
 
     @Override
-    @GetMapping("updateTopSCourse/{courseId}/{userId}/{isTop}")
-    public CommonResponse updateTopSCourse(@PathVariable long courseId, @PathVariable long userId, @PathVariable boolean isTop) {
-        return courseService.updateTopSCourse(courseId, userId, isTop);
-    }
-
-    @Override
-    @GetMapping("updateTopTCourse/{courseId}/{teacherId}/{isTop}")
-    public CommonResponse updateTopTCourse(@PathVariable long courseId, @PathVariable long teacherId, @PathVariable boolean isTop) {
-        return courseService.updateTopTCourse(courseId, teacherId, isTop);
+    @PutMapping("topNum/id/{courseId}/{userId}")
+    public CommonResponse updateTopCourse(@PathVariable long courseId,@PathVariable long userId) {
+        return courseService.updateTopCourse(courseId,userId);
     }
 
 }
