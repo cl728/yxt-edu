@@ -10,6 +10,7 @@ import com.yixuetang.entity.course.StudentCourse;
 import com.yixuetang.entity.request.course.InsertCourse;
 import com.yixuetang.entity.request.course.ListCourse;
 import com.yixuetang.entity.request.course.TransferCourse;
+import com.yixuetang.entity.request.course.UpdateCourse;
 import com.yixuetang.entity.request.user.AvatarUser;
 import com.yixuetang.entity.response.CommonResponse;
 import com.yixuetang.entity.response.QueryResponse;
@@ -201,43 +202,89 @@ public class CourseServiceImpl implements CourseService {
     @Override
     public CommonResponse transferCourses(Long courseId, Long teacherId, TransferCourse transferCourse) {
 
+        // 1.参数验证
+        if (transferCourse == null) {
+            ExceptionThrowUtils.cast(CommonCode.INVALID_PARAM);
+        }
 
-        // 1. 根据课程id查询出已有课程信息
+        // 2. 根据课程id查询出已有课程信息
         Course course = this.courseMapper.findById(courseId);
         if (course == null) {
             //找不到此课程
             return new CommonResponse(CourseCode.TRANSFER_COURSE_FAIL_COURSE_NOT_FOUND);
         }
 
-        // 2. 根据旧教师id查询教师信息，判断该教师是否为课程授课老师
+        // 3. 根据旧教师id查询教师信息，判断该教师是否为课程授课老师
         User oldTeacher = this.userMapper.findById(teacherId);
         if (ObjectUtils.notEqual(oldTeacher.getId(), course.getTeacher().getId())) {
             //若该教师不是该课程授课老师，则不允许转让
             return new CommonResponse(CourseCode.TRANSFER_COURSE_FAIL_COURSE_NOT_BELONGS_TO_THIS_TEACHER);
         }
 
-        // 3. 比较transferCourse里的旧教师密码,判断是否允许转让
+        // 4. 比较transferCourse里的旧教师密码,判断是否允许转让
         if (!StringUtils.equals(transferCourse.getPassword(), oldTeacher.getPassword())) {
             //请求转让课程的教师密码错误
             return new CommonResponse(CourseCode.TRANSFER_COURSE_FAIL_PASSWORD_WRONG);
         }
 
-        // 4. 判断新教师的邮箱是否有效
+        // 5. 判断新教师的邮箱是否有效
         User newTeacher = this.userMapper.findByEmail(transferCourse.getEmail());
         if (ObjectUtils.isEmpty(newTeacher)) {
             //新教师邮箱无效
             return new CommonResponse(CourseCode.TRANSFER_COURSE_FAIL_EMAIL_NOT_EFFECTIVE);
         }
 
-        // 5. 判断接受转让课程的教师是否与请求转让课程的教师为同一人，是则不允许转让课程
+        // 6. 判断接受转让课程的教师是否与请求转让课程的教师为同一人，是则不允许转让课程
         if (ObjectUtils.equals(newTeacher.getId(), oldTeacher.getId())) {
             return new CommonResponse(CourseCode.TRANSFER_COURSE_FAIL_SAME_TEACHER);
         }
 
-        // 6. 将课程信息中教师id修改为新教师id
+        // 7. 将课程信息中教师id修改为新教师id
         course.setTeacher(newTeacher);
         course.setUpdateTime(new Date()); //更新时间
         this.courseMapper.updateTeacherIdById(course, newTeacher.getId()); //修改授课教师id
+
+        return new CommonResponse(CommonCode.SUCCESS);
+    }
+
+    @Transactional
+    @Override
+    public CommonResponse updateCourses(Long courseId, Long teacherId, UpdateCourse updateCourse) {
+
+        // 1.参数验证
+        if (updateCourse == null) {
+            ExceptionThrowUtils.cast(CommonCode.INVALID_PARAM);
+        }
+
+        // 2. 根据课程id查询出已有课程信息
+        Course course = this.courseMapper.findById(courseId);
+        if (course == null) {
+            //找不到此课程
+            return new CommonResponse(CourseCode.UPDATE_COURSE_FAIL_COURSE_NOT_FOUND);
+        }
+
+        // 3. 根据旧教师id查询教师信息，判断该教师是否为课程授课老师
+        User oldTeacher = this.userMapper.findById(teacherId);
+        if (ObjectUtils.notEqual(oldTeacher.getId(), course.getTeacher().getId())) {
+            //若该教师不是该课程授课老师，则不允许更信息信息
+            return new CommonResponse(CourseCode.UPDATE_COURSE_FAIL_COURSE_NOT_BELONGS_TO_THIS_TEACHER);
+        }
+
+        // 4. 更新课程信息
+        if (StringUtils.isNoneBlank(updateCourse.getCName())) {
+            course.setCName(updateCourse.getCName());
+        }
+        if (StringUtils.isNoneBlank(updateCourse.getClazz())) {
+            course.setClazz(updateCourse.getClazz());
+        }
+        if (StringUtils.isNoneBlank(updateCourse.getSchoolYear())) {
+            course.setSchoolYear(updateCourse.getSchoolYear());
+        }
+        if (StringUtils.isNoneBlank(updateCourse.getSemester())) {
+            course.setSemester(updateCourse.getSemester());
+        }
+        course.setUpdateTime(new Date()); //更新时间
+        this.courseMapper.updateById(course);
 
         return new CommonResponse(CommonCode.SUCCESS);
     }

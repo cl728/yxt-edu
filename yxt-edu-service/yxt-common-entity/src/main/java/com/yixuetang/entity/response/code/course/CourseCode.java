@@ -28,7 +28,11 @@ public enum CourseCode implements ResponseCode {
 
     TRANSFER_COURSE_FAIL_COURSE_NOT_BELONGS_TO_THIS_TEACHER(false, 50007, "教师转让课程失败，该教师不是此课程原授课教师！"),
 
-    TRANSFER_COURSE_FAIL_SAME_TEACHER(false, 50008, "教师转让课程失败，原授课教师不能转让给自己！");
+    TRANSFER_COURSE_FAIL_SAME_TEACHER(false, 50008, "教师转让课程失败，原授课教师不能转让给自己！"),
+
+    UPDATE_COURSE_FAIL_COURSE_NOT_FOUND(false, 50009, "更新课程信息失败，未找到该课程！"),
+
+    UPDATE_COURSE_FAIL_COURSE_NOT_BELONGS_TO_THIS_TEACHER(false, 50010, "更新课程信息失败，该教师不是此课程原授课教师！");
 
     private boolean success;
     private int code;

@@ -2,6 +2,7 @@ package com.yixuetang.api.course;
 
 import com.yixuetang.entity.request.course.InsertCourse;
 import com.yixuetang.entity.request.course.TransferCourse;
+import com.yixuetang.entity.request.course.UpdateCourse;
 import com.yixuetang.entity.response.CommonResponse;
 import com.yixuetang.entity.response.QueryResponse;
 import io.swagger.annotations.Api;
@@ -17,6 +18,16 @@ import io.swagger.annotations.ApiOperation;
  */
 @Api(value = "课程模块管理接口", description = "课程模块管理接口，提供课程的增、删、改、查")
 public interface CourseControllerApi {
+
+    @ApiOperation("教师修改课程信息")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "courseId", value = "课程id", required = true,
+                    paramType = "path", dataType = "long"),
+            @ApiImplicitParam(name = "teacherId", value = "教师id", required = true,
+                    paramType = "path", dataType = "long")
+    })
+    CommonResponse updateCourses(Long courseId, Long teacherId, UpdateCourse updateCourse);
+
 
     @ApiOperation("教师转让课程")
     @ApiImplicitParams({
@@ -76,9 +87,7 @@ public interface CourseControllerApi {
             @ApiImplicitParam(name = "userId", value = "用户id", required = true,
                     paramType = "path", dataType = "long")
     })
-    CommonResponse updateTopCourse(long courseId,long userId);
-
-
+    CommonResponse updateTopCourse(long courseId, long userId);
 
 
 }
