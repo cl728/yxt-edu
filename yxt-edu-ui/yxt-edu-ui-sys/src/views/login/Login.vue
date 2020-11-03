@@ -67,7 +67,7 @@ export default {
         rememberMe: this.rememberMe
       };
       this.$axios.post("auth/login/1/1", loginUser).then(() => {
-        this.$router.push("/");
+        this.$router.push("/home");
       });
     },
     to(link) {

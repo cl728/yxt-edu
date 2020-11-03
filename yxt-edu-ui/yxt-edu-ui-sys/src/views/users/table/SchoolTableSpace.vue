@@ -5,21 +5,11 @@
         <span>学校信息</span>
       </div>
       <div id="charts_one" style="width: 100%; min-height: 300px">
-        <el-button
-          type="danger"
-          size="small"
-          icon="el-icon-finished"
-          :disabled="selectionButtonState"
-          @click="showSelection"
-          >{{ selectionButtonTitle }}</el-button
-        >
         <el-table
           :data="schoolData"
           max-height="528"
-          @selection-change="selection"
           style="width: 100%"
         >
-          <el-table-column type="selection" width="55"></el-table-column>
           <el-table-column
             type="index"
             label="序号"
@@ -60,10 +50,6 @@ export default {
     };
   },
   methods: {
-    showSelection() {
-      this.$message.success("已打印选择数据成功，请打开检查查看");
-      console.log(this.selectionData);
-    },
     pageSizeChange(pageSize) {
       this.pageData.pageSize = pageSize;
       this.getSchoolData();

@@ -37,6 +37,16 @@
       <el-submenu index="2">
         <template slot="title">
           <i
+            class="el-icon-notebook-2"
+            :style="{ color: aside.aside_icon_color }"
+          ></i>
+          <span>课程管理</span>
+        </template>
+        <el-menu-item index="/courses">课程列表</el-menu-item>
+      </el-submenu>
+      <el-submenu index="3">
+        <template slot="title">
+          <i
             class="el-icon-suitcase"
             :style="{ color: aside.aside_icon_color }"
           ></i>
@@ -48,7 +58,7 @@
         <el-menu-item index="/module/upload/file">文件上传</el-menu-item>
         <el-menu-item index="/module/animate">动画</el-menu-item>
       </el-submenu>
-      <el-submenu index="3">
+      <el-submenu index="4">
         <template slot="title">
           <i
             class="el-icon-tickets"
@@ -59,7 +69,7 @@
         <el-menu-item index="/module/table">用户表格</el-menu-item>
         <el-menu-item index="/module/table/excel">支持Excel表格</el-menu-item>
       </el-submenu>
-      <el-submenu index="4">
+      <el-submenu index="5">
         <template slot="title">
           <i
             class="el-icon-pie-chart"
@@ -71,7 +81,7 @@
         <el-menu-item index="/echarts/line">折线图</el-menu-item>
         <el-menu-item index="/echarts/map">地图</el-menu-item>
       </el-submenu>
-      <el-submenu index="5">
+      <el-submenu index="6">
         <template slot="title">
           <i
             class="el-icon-monitor"
@@ -86,7 +96,7 @@
         <el-menu-item index="/page/not/found">404页面不存在</el-menu-item>
         <el-menu-item index="/page/warning">500错误页</el-menu-item>
       </el-submenu>
-      <el-submenu index="6">
+      <el-submenu index="7">
         <template slot="title">
           <i
             class="el-icon-goods"
@@ -94,7 +104,7 @@
           ></i>
           <span>应用</span>
         </template>
-        <el-submenu index="6-1">
+        <el-submenu index="7-1">
           <template slot="title">
             <i
               class="el-icon-tickets"
@@ -105,7 +115,7 @@
           <el-menu-item index="/apply/article">文章撰写</el-menu-item>
           <el-menu-item index="/apply/article/label">文章类别管理</el-menu-item>
         </el-submenu>
-        <el-submenu index="6-2">
+        <el-submenu index="7-2">
           <template slot="title">
             <i
               class="el-icon-goods"
@@ -116,7 +126,7 @@
           <el-menu-item index="/apply/goods">商品列表</el-menu-item>
           <el-menu-item index="/apply/goods/release">发布商品</el-menu-item>
         </el-submenu>
-        <el-submenu index="6-3">
+        <el-submenu index="7-3">
           <template slot="title">
             <i
               class="el-icon-link"
@@ -142,7 +152,7 @@
           >音乐播放器</el-menu-item
         >
       </el-submenu>
-      <el-submenu index="7">
+      <el-submenu index="8">
         <template slot="title">
           <i
             class="el-icon-setting"

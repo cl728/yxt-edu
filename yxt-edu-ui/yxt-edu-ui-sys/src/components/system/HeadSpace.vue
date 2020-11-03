@@ -10,11 +10,6 @@
           cursor: 'pointer',
         }"
       />
-      <el-autocomplete
-        v-model="search"
-        placeholder="请输入内容"
-        size="small"
-      ></el-autocomplete>
     </div>
     <el-menu
       class="el-menu-demo"

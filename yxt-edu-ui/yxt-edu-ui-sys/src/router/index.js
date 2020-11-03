@@ -34,6 +34,15 @@ const routes = [{
   },
 },
 {
+  path: '/home',
+  name: 'home',
+  component: resolve => require(['@/views/home/Home.vue'], resolve),
+  meta: {
+    title: '主页',
+    loginState: true,
+  },
+},
+{
   path: '/',
   name: 'home',
   component: resolve => require(['@/views/home/Home.vue'], resolve),
@@ -66,6 +75,15 @@ const routes = [{
   component: resolve => require(['@/views/users/Schools.vue'], resolve),
   meta: {
     title: '学校管理',
+    loginState: true,
+  },
+},
+{
+  path: '/courses',
+  name: 'courses',
+  component: resolve => require(['@/views/courses/Courses.vue'], resolve),
+  meta: {
+    title: '课程管理',
     loginState: true,
   },
 },

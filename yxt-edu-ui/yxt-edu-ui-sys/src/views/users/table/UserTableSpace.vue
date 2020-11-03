@@ -3,14 +3,6 @@
     <el-card shadow="never" class="card" body-style="{height: '400px'}">
       <div slot="header" class="clearfix">
         <span>用户信息</span>
-        <el-button
-          type="success"
-          size="small"
-          icon="el-icon-plus"
-          style="float: right"
-          @click="add('dialog')"
-          >新增</el-button
-        >
       </div>
       <div id="charts_one" style="width: 100%; min-height: 300px">
         <el-form
@@ -18,16 +10,6 @@
           :model="pageData.queryPageRequest"
           class="demo-form-inline"
         >
-          <el-form-item>
-            <el-button
-              type="danger"
-              size="small"
-              icon="el-icon-finished"
-              :disabled="selectionButtonState"
-              @click="showSelection"
-              >{{ selectionButtonTitle }}</el-button
-            >
-          </el-form-item>
           <el-form-item>
             <el-select
               v-model="pageData.queryPageRequest.roleName"
@@ -54,19 +36,19 @@
           </el-form-item>
           <el-form-item>
             <el-input
-              v-model.lazy="pageData.queryPageRequest.username"
+              v-model="pageData.queryPageRequest.username"
               placeholder="用户名"
             ></el-input>
           </el-form-item>
           <el-form-item>
             <el-input
-              v-model.lazy="pageData.queryPageRequest.realName"
+              v-model="pageData.queryPageRequest.realName"
               placeholder="用户姓名"
             ></el-input>
           </el-form-item>
           <el-form-item>
             <el-input
-              v-model.lazy="pageData.queryPageRequest.email"
+              v-model="pageData.queryPageRequest.email"
               placeholder="用户邮箱"
             ></el-input>
           </el-form-item>
@@ -77,13 +59,7 @@
             ></el-input>
           </el-form-item>
         </el-form>
-        <el-table
-          :data="userData"
-          max-height="528"
-          @selection-change="selection"
-          style="width: 100%"
-        >
-          <el-table-column type="selection" width="55"></el-table-column>
+        <el-table :data="userData" max-height="528" style="width: 100%">
           <el-table-column
             type="index"
             label="序号"
@@ -97,7 +73,7 @@
             <template slot-scope="scope">
               <el-tag
                 size="medium"
-                :type="scope.row.gender === '男' ? 'danger' : 'success'"
+                :type="scope.row.gender === '女' ? 'danger' : 'success'"
                 >{{ scope.row.gender }}</el-tag
               >
             </template>
@@ -114,22 +90,15 @@
           </el-table-column>
           <el-table-column label="操作" width="120">
             <template slot-scope="scope">
-              <el-button
-                size="mini"
-                type="success"
-                @click="editorUser(scope.$index, scope.row)"
-              >
-                <i class="el-icon-edit-outline" />
-              </el-button>
               <el-popconfirm
                 confirmButtonText="确认"
                 cancelButtonText="取消"
                 confirmButtonType="danger"
                 cancelButtonType="success"
-                @onConfirm="deleteUser(scope.$index, scope.row)"
+                @confirm="deleteUser(scope.row.id)"
                 title="确认要注销此用户吗？"
               >
-                <el-button size="mini" slot="reference" type="danger">
+                <el-button size="mini" slot="reference" type="danger" :disabled="scope.row.role.id === 1">
                   <i class="el-icon-delete" />
                 </el-button>
               </el-popconfirm>
@@ -148,84 +117,12 @@
         ></el-pagination>
       </div>
     </el-card>
-    <el-dialog :title="dialogTitle" :visible.sync="dialogVisideState">
-      <el-form ref="form" :model="userForm" label-width="80px">
-        <el-form-item label="用户名">
-          <el-input
-            v-model="userForm.username"
-            placeholder="请输入用户名"
-          ></el-input>
-        </el-form-item>
-        <el-form-item label="用户密码" v-show="passwordInputState">
-          <el-input
-            v-model="userForm.password"
-            show-password
-            placeholder="请输入用户密码"
-          ></el-input>
-        </el-form-item>
-        <el-form-item label="用户邮箱">
-          <el-input
-            v-model="userForm.email"
-            placeholder="请输入用户邮箱"
-          ></el-input>
-        </el-form-item>
-        <el-form-item label="用户电话">
-          <el-input
-            v-model="userForm.phone"
-            placeholder="请输入用户电话"
-          ></el-input>
-        </el-form-item>
-        <el-form-item label="用户年龄">
-          <el-input-number
-            v-model="userForm.age"
-            :min="1"
-            :max="200"
-            label="描述文字"
-          ></el-input-number>
-        </el-form-item>
-        <el-form-item label="用户性别">
-          <el-radio-group v-model="userForm.gender">
-            <el-radio label="男">男</el-radio>
-            <el-radio label="女">女</el-radio>
-          </el-radio-group>
-        </el-form-item>
-        <el-form-item label="用户角色">
-          <el-radio-group v-model="userForm.role.rname">
-            <el-radio label="管理员">管理员</el-radio>
-            <el-radio label="老师/助教">老师/助教</el-radio>
-            <el-radio label="学生">学生</el-radio>
-          </el-radio-group>
-        </el-form-item>
-        <div align="center">
-          <el-button
-            type="danger"
-            size="small"
-            @click="editor"
-            v-show="!passwordInputState"
-            >确认修改</el-button
-          >
-          <el-button
-            type="success"
-            size="small"
-            @click="add('add')"
-            v-show="passwordInputState"
-            >确认新增</el-button
-          >
-        </div>
-      </el-form>
-    </el-dialog>
   </div>
 </template>
 <script>
 export default {
   data() {
     return {
-      dialogVisideState: false,
-      passwordInputState: false,
-      selectionButtonTitle: "未选择数据",
-      selectionButtonState: true,
-      selectionData: [],
-      dialogTitle: "",
       userForm: {
         username: "",
         password: "",
@@ -254,67 +151,22 @@ export default {
     };
   },
   methods: {
-    add(key) {
-      switch (key) {
-        case "dialog":
-          this.userForm = {
-            username: "",
-            password: "",
-            email: "",
-            phone: "",
-            age: "",
-            gender: "",
-            role: {
-              rname: "",
-            },
-          };
-          this.dialogVisideState = true;
-          this.passwordInputState = true;
-          this.dialogTitle = "新增用户";
-          break;
-        case "add":
-          this.$message.success("新增成功");
-          setTimeout(() => {
-            this.dialogVisideState = false;
-            this.passwordInputState = false;
-          }, 1500);
-          break;
-      }
-    },
-    editorUser(index) {
-      this.userForm = this.userData[index];
-      this.dialogTitle = "修改（" + this.userData[index].username + "）";
-      this.dialogVisideState = true;
-      this.passwordInputState = false;
-    },
-    editor() {
-      this.$message.success("修改成功");
-      setTimeout(() => {
-        this.dialogVisideState = false;
-      }, 1000);
-    },
-    selection(selectData) {
-      if (selectData.length > 0 && this.userData.length != selectData.length) {
-        this.selectionButtonTitle = "已选择" + selectData.length;
-        this.selectionButtonState = false;
-        this.selectionData = selectData;
-      } else if (this.userData.length == selectData.length) {
-        this.selectionButtonTitle = "已全选";
-        this.selectionButtonState = false;
-        this.selectionData = selectData;
-      } else {
-        this.selectionButtonTitle = "未选择数据";
-        this.selectionButtonState = true;
-      }
-    },
-    deleteUser(index) {
-      this.$message.warning("删除" + this.userData[index].username + "成功");
-      setTimeout(() => {
-        this.userData.splice(index, 1);
-      }, 1500);
-    },
-    showSelection() {
-      console.log(this.selectionData);
+    deleteUser(userId) {
+      // eslint-disable-next-line no-debugger
+      debugger;
+      this.$axios
+        .delete("/users/admin/id/" + userId)
+        .then(({ data }) => {
+          if (data.success) {
+            this.$message.success(data.message);
+            this.getUserData();
+          } else {
+            this.$message.error(data.message);
+          }
+        })
+        .catch(() => {
+          this.$message.error("服务器繁忙，请稍候再试一次！");
+        });
     },
     pageSizeChange(pageSize) {
       this.pageData.pageSize = pageSize;
