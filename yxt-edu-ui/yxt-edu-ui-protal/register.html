@@ -154,7 +154,7 @@
                     }
                 }, 1000);
                 // 调用后台接口发送验证码
-                yxt.http.post("/users/code/2", this.user).then(({ data }) => {
+                yxt.http.post("/users/code/2/2", this.user).then(({ data }) => {
                     if (data.success) {
                         this.$message.success(data.message);
                     } else {
