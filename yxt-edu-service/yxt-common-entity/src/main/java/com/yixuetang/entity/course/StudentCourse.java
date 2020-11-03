@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
+import com.yixuetang.entity.user.User;
 import lombok.Data;
 
 /**
@@ -36,6 +37,9 @@ public class StudentCourse {
     private Boolean isFiled; // 是否被归档，true 是 false 不是
 
     @TableField(exist = false)
-    private Course course;  //课程
+    private Course course;
+
+    @TableField(exist = false)
+    private User user;
 
 }

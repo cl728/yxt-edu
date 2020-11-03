@@ -16,6 +16,7 @@ import java.util.List;
  */
 @Mapper
 public interface CourseMapper extends BaseMapper<Course> {
+    @Result(column = "class",property = "clazz")
     @Select("select * from t_course where id = #{id}")
     Course findById(Long id);
 

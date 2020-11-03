@@ -3,6 +3,7 @@ package com.yixuetang.course.controller;
 import com.yixuetang.api.course.CourseControllerApi;
 import com.yixuetang.course.service.CourseService;
 import com.yixuetang.entity.request.course.InsertCourse;
+import com.yixuetang.entity.request.course.TransferCourse;
 import com.yixuetang.entity.response.CommonResponse;
 import com.yixuetang.entity.response.QueryResponse;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,6 +21,12 @@ public class CourseController implements CourseControllerApi {
 
     @Autowired
     private CourseService courseService;
+
+    @Override
+    @PutMapping("teacherId/id/{courseId}/{teacherId}")
+    public CommonResponse transferCourses(@PathVariable Long courseId, @PathVariable Long teacherId, @RequestBody TransferCourse transferCourse) {
+        return this.courseService.transferCourses(courseId, teacherId, transferCourse);
+    }
 
     @Override
     @GetMapping
@@ -52,27 +59,16 @@ public class CourseController implements CourseControllerApi {
     }
 
     @Override
-    @GetMapping("listAllUserCourse/{userId}")
-    public QueryResponse findByUserId(@PathVariable long userId) {
-        return this.courseService.findByUserId(userId);
+    @GetMapping("userId/{userId}")
+    public QueryResponse findCoursesByUserId(@PathVariable long userId) {
+        return this.courseService.findCoursesByUserId(userId);
     }
 
-    @Override
-    @GetMapping("listAllTeacherCourse/{teacherId}")
-    public QueryResponse findByTeacherId(@PathVariable long teacherId) {
-        return this.courseService.findByTeacherId(teacherId);
-    }
 
     @Override
-    @GetMapping("updateTopSCourse/{courseId}/{userId}/{isTop}")
-    public CommonResponse updateTopSCourse(@PathVariable long courseId,@PathVariable long userId,@PathVariable boolean isTop) {
-        return courseService.updateTopSCourse(courseId,userId,isTop);
-    }
-
-    @Override
-    @GetMapping("updateTopTCourse/{courseId}/{teacherId}/{isTop}")
-    public CommonResponse updateTopTCourse(@PathVariable long courseId,@PathVariable long teacherId,@PathVariable boolean isTop) {
-        return courseService.updateTopTCourse(courseId,teacherId,isTop);
+    @PutMapping("topNum/id/{courseId}/{userId}")
+    public CommonResponse updateTopCourse(@PathVariable long courseId,@PathVariable long userId) {
+        return courseService.updateTopCourse(courseId,userId);
     }
 
 }

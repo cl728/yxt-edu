@@ -8,6 +8,9 @@ import com.yixuetang.course.service.CourseService;
 import com.yixuetang.entity.course.Course;
 import com.yixuetang.entity.course.StudentCourse;
 import com.yixuetang.entity.request.course.InsertCourse;
+import com.yixuetang.entity.request.course.ListCourse;
+import com.yixuetang.entity.request.course.TransferCourse;
+import com.yixuetang.entity.request.user.AvatarUser;
 import com.yixuetang.entity.response.CommonResponse;
 import com.yixuetang.entity.response.QueryResponse;
 import com.yixuetang.entity.response.code.CommonCode;
@@ -20,12 +23,14 @@ import com.yixuetang.user.mapper.RoleMapper;
 import com.yixuetang.user.mapper.UserMapper;
 import com.yixuetang.utils.course.GenCodeUtils;
 import com.yixuetang.utils.exception.ExceptionThrowUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Objects;
@@ -144,7 +149,7 @@ public class CourseServiceImpl implements CourseService {
         User findUser = userMapper.findById(teacherId);
         Role findRole = roleMapper.selectOne(new QueryWrapper<Role>().eq("id", findUser.getRole().getId()));
         if (findRole == null || findRole.getId() != 2) {
-            ExceptionThrowUtils.cast(CourseCode.INSERT_COURSE_FAIL);
+            return new CommonResponse(CourseCode.INSERT_COURSE_FAIL);
         }
 
         Course course = new Course();
@@ -191,104 +196,146 @@ public class CourseServiceImpl implements CourseService {
         return new QueryResponse(CommonCode.SUCCESS, new QueryResult<>(courses, courses.size()));
     }
 
+
+
+
+    @Transactional
     @Override
-    public QueryResponse findByUserId(long userId) {
-        //判断用户是否存在
-        User findUser = userMapper.findById( userId );
-        if(findUser == null){
-            ExceptionThrowUtils.cast(UserCode.USER_NOT_FOUND);
+    public CommonResponse transferCourses(Long courseId, Long teacherId, TransferCourse transferCourse) {
+
+
+        // 1. 根据课程id查询出已有课程信息
+        Course course = this.courseMapper.selectById(courseId);
+        if (course == null) {
+            //找不到此课程
+            return new CommonResponse(CourseCode.TRANSFER_COURSE_FAIL_COURSE_NOT_FOUND);
         }
 
-        List<StudentCourse> sc = scMapper.selectCourseByUserId(userId);
-        return new QueryResponse(CommonCode.SUCCESS,new QueryResult<>(sc,sc.size()));
-
-    }
-
-    @Override
-    public QueryResponse findByTeacherId(long teacherId) {
-        // 校验teacherId是否合法
-        User findUser = userMapper.findById( teacherId );
-        Role findRole = roleMapper.selectOne( new QueryWrapper<Role>().eq( "id", findUser.getRole().getId() ) );
-        if (findRole == null || findRole.getId() != 2) {
-            ExceptionThrowUtils.cast( CourseCode.INSERT_COURSE_FAIL );
+        // 2. 根据旧教师id查询教师信息，判断该教师是否为课程授课老师
+        User oldTeacher = this.userMapper.selectById(teacherId);
+        if (oldTeacher.getId() == course.getTeacherId()) {
+        } else {
+            //若该教师不是该课程授课老师，则不允许转让
+            return new CommonResponse(CourseCode.TRANSFER_COURSE_FAIL_COURSE_NOT_BELONGS_TO_THIS_TEACHER);
         }
 
-        List<Course> courses = this.courseMapper.selectList(new QueryWrapper<Course>().orderByDesc("top_num")
-                    .eq("teacher_id",teacherId));
-        return new QueryResponse(CommonCode.SUCCESS,new QueryResult<>(courses,courses.size()));
-    }
-
-    @Override
-    public CommonResponse updateTopSCourse(long courseId, long userId,boolean isTop) {
-        //判断课程是否存在
-        Course course = courseMapper.selectById(courseId);
-        if(course == null){
-            ExceptionThrowUtils.cast(CourseCode.COURSE_NOT_FOUND);
+        // 3. 比较transferCourse里的旧教师密码,判断是否允许转让
+        if (StringUtils.equals(transferCourse.getPassword(), oldTeacher.getPassword())) {
+        } else {
+            //请求转让课程的教师密码错误
+            return new CommonResponse(CourseCode.TRANSFER_COURSE_FAIL_PASSWORD_WRONG);
         }
 
-        //判断用户是否存在
-        User findUser = userMapper.findById( userId );
-        if(findUser == null){
-            ExceptionThrowUtils.cast(UserCode.USER_NOT_FOUND);
+        // 4. 判断新教师的邮箱是否有效
+        User newTeacher = this.userMapper.selectOne(new QueryWrapper<User>().eq("email", transferCourse.getEmail()));
+        if (newTeacher == null) {
+            //新教师邮箱无效
+            return new CommonResponse(CourseCode.TRANSFER_COURSE_FAIL_EMAIL_NOT_EFFECTIVE);
         }
 
-        //置顶
-        if(isTop){
-            //判断是否已经置顶
-            StudentCourse sc = scMapper.selectOne(new QueryWrapper<StudentCourse>().eq("student_id",userId)
-                    .eq("course_id",courseId));
-            if(sc.getTopNum()>0){
-                ExceptionThrowUtils.cast(CourseCode.SET_TOP_FAIL);
-            }
-            //先查询当前选课置顶课程最大topNum，然后加一设置为新置顶课程的topNum字段
-            int currentMaxTop = scMapper.selectMaxTopByStudentId(userId);
-            scMapper.updateTopNumByStudentIdAndCourseId(currentMaxTop+1,userId,courseId);
-        } else{
-            //取消置顶，设置为0
-            scMapper.updateTopNumByStudentIdAndCourseId(0,userId,courseId);
+        // 5. 判断接受转让课程的教师是否与请求转让课程的教师为同一人，是则不允许转让课程
+        if (newTeacher.getId() != oldTeacher.getId()) {
+        } else {
+            return new CommonResponse(CourseCode.TRANSFER_COURSE_FAIL_SAME_TEACHER);
+        }
+
+        // 6. 将课程信息中教师id修改为新教师id
+        course.setTeacherId(newTeacher.getId()); //修改授课教师id
+        course.setUpdateTime(new Date()); //更新时间
+        int affectedRows = this.courseMapper.updateById(course);
+        if (affectedRows < 1) {
+            //转入课程失败
+            return new CommonResponse(CourseCode.TRANSFER_COURSE_FAIL);
         }
 
         return new CommonResponse(CommonCode.SUCCESS);
     }
 
     @Override
-    public CommonResponse updateTopTCourse(long courseId, long teacherId,boolean isTop) {
+    public QueryResponse findCoursesByUserId ( long userId){
+        //判断用户是否存在
+        User findUser = userMapper.findById(userId);
+        if (findUser == null) {
+            return new QueryResponse(UserCode.USER_NOT_FOUND, null);
+        } else if (findUser.getRole().getId() == 2) {
+            //查询教师课程列表
+            List<Course> courses = this.courseMapper.selectList(new QueryWrapper<Course>().orderByDesc("top_num")
+                    .eq("teacher_id", userId));
+            return new QueryResponse(CommonCode.SUCCESS, new QueryResult<>(courses, courses.size()));
+
+        } else if (findUser.getRole().getId() == 3) {
+            //查询学生加入课程列表
+            List<StudentCourse> studentCourseList = scMapper.findByUserId(userId);
+            List<ListCourse> listCourses = new ArrayList<>();
+            studentCourseList.forEach(item -> {
+                ListCourse listCourse = new ListCourse();
+                listCourse.setId(item.getCourse().getId());
+                listCourse.setCCode(item.getCourse().getCCode());
+                listCourse.setClazz(item.getCourse().getClazz());
+                listCourse.setCName(item.getCourse().getCName());
+                listCourse.setCPic(item.getCourse().getCPic());
+                listCourse.setIsFiled(item.getIsFiled());
+                listCourse.setSchoolYear(item.getCourse().getSchoolYear());
+                listCourse.setSemester(item.getCourse().getSemester());
+                listCourse.setTopNum(item.getTopNum());
+                listCourse.setAvatarUser(new AvatarUser());
+                listCourse.getAvatarUser().setAvatar(item.getUser().getAvatar());
+                listCourse.getAvatarUser().setRealName(item.getUser().getRealName());
+                listCourses.add(listCourse);
+            });
+            return new QueryResponse(CommonCode.SUCCESS, new QueryResult<>(listCourses, listCourses.size()));
+        } else {
+            return new QueryResponse(CommonCode.FAIL,null);
+        }
+    }
+
+
+    @Override
+    public CommonResponse updateTopCourse(long courseId, long userId) {
         //判断课程是否存在
         Course course = courseMapper.selectById(courseId);
         if(course == null){
-            ExceptionThrowUtils.cast(CourseCode.COURSE_NOT_FOUND);
+            return new CommonResponse(CourseCode.COURSE_NOT_FOUND);
         }
-
-        // 校验teacherId是否合法
-        User findUser = userMapper.findById( teacherId );
-        Role findRole = roleMapper.selectOne( new QueryWrapper<Role>().eq( "id", findUser.getRole().getId() ) );
-        if (findRole == null || findRole.getId() != 2) {
-            ExceptionThrowUtils.cast( CourseCode.INSERT_COURSE_FAIL );
-        }
-
-        //置顶
-        if (isTop){
+        //判断用户是否存在
+        User findUser = userMapper.findById( userId );
+        if(findUser == null){
+            return new CommonResponse(UserCode.USER_NOT_FOUND);
+        } else if (findUser.getRole().getId() == 2){
+            //置顶教师课程
             //先查询当前课程topNum，然后加一设置为新置顶课程的topNum字段
             Course findCourse = courseMapper.selectOne(new QueryWrapper<Course>().eq("id",courseId)
-                    .eq("teacher_id",teacherId));
+                    .eq("teacher_id",userId));
             //判断是否已经置顶
             if(findCourse.getTopNum()>0){
-                ExceptionThrowUtils.cast(CourseCode.SET_TOP_FAIL);
+                //已经置顶则取消置顶
+                findCourse.setTopNum(0);
+                courseMapper.updateById(findCourse);
+            } else {
+                //置顶
+                findCourse.setTopNum(10);
+                courseMapper.updateById(findCourse);
             }
 
-            findCourse.setTopNum(findCourse.getTopNum()+1);
-            courseMapper.updateById(findCourse);
-
-        } else{
-            //取消置顶，设置为0
-            Course findCourse = courseMapper.selectOne(new QueryWrapper<Course>().eq("id",courseId)
-                    .eq("teacher_id",teacherId));
-            findCourse.setTopNum(0);
-            courseMapper.updateById(findCourse);
+        } else if (findUser.getRole().getId() == 3){
+            //置顶学生课程
+            StudentCourse sc = scMapper.selectOne(new QueryWrapper<StudentCourse>().eq("course_id",courseId)
+                    .eq("student_id",userId));
+            //判断是否已经置顶
+            if(sc.getTopNum()>0){
+                //已经置顶则取消置顶
+                sc.setTopNum(0);
+                scMapper.updateById(sc);
+            } else {
+                //置顶
+                sc.setTopNum(10);
+                scMapper.updateById(sc);
+            }
+        }else{
+            return new CommonResponse(CommonCode.FAIL);
         }
 
         return new CommonResponse(CommonCode.SUCCESS);
     }
-
 
 }

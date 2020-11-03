@@ -35,17 +35,6 @@ public interface ScMapper extends BaseMapper<StudentCourse> {
     @Select("select count(*) from t_sc where student_id = #{studentId} and course_id = #{courseId}")
     int selectByStudentIdAndCourseId(@Param("studentId") Long studentId, @Param("courseId") Long courseId);
 
-    /**
-     * 按置顶字段排序查找用户课程信息
-     * @param userId
-     * @return
-     */
-    @Results(id = "scMap", value = {
-            @Result(column = "course_id", property = "course",
-                    one = @One(select = "com.yixuetang.course.mapper.CourseMapper.findById", fetchType = FetchType.EAGER))
-    })
-    @Select("SELECT * FROM t_sc where student_id=#{userId} ORDER BY top_num DESC")
-    List<StudentCourse> selectCourseByUserId(@Param("userId") Long userId);
 
     /**
      * 修改置顶字段
@@ -60,5 +49,14 @@ public interface ScMapper extends BaseMapper<StudentCourse> {
     @Select("SELECT MAX(top_num) FROM t_sc WHERE student_id=#{studentId}")
     int selectMaxTopByStudentId(@Param("studentId") Long studentId);
 
+
+    @Results(id = "scMap", value = {
+            @Result(column = "course_id", property = "course",
+                    one = @One(select = "com.yixuetang.course.mapper.CourseMapper.findById", fetchType = FetchType.EAGER)),
+            @Result(column = "student_id", property = "user",
+                    one = @One(select = "com.yixuetang.user.mapper.UserMapper.findById", fetchType = FetchType.EAGER))
+    })
+    @Select("select * from t_sc where student_id=#{userId} order by top_num desc")
+    List<StudentCourse> findByUserId(long userId);
 
 }

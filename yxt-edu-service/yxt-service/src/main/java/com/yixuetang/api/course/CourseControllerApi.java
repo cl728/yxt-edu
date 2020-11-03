@@ -1,6 +1,7 @@
 package com.yixuetang.api.course;
 
 import com.yixuetang.entity.request.course.InsertCourse;
+import com.yixuetang.entity.request.course.TransferCourse;
 import com.yixuetang.entity.response.CommonResponse;
 import com.yixuetang.entity.response.QueryResponse;
 import io.swagger.annotations.Api;
@@ -16,6 +17,16 @@ import io.swagger.annotations.ApiOperation;
  */
 @Api(value = "课程模块管理接口", description = "课程模块管理接口，提供课程的增、删、改、查")
 public interface CourseControllerApi {
+
+    @ApiOperation("教师转让课程")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "courseId", value = "课程id", required = true,
+                    paramType = "path", dataType = "long"),
+            @ApiImplicitParam(name = "teacherId", value = "教师id", required = true,
+                    paramType = "path", dataType = "long")
+    })
+    CommonResponse transferCourses(Long courseId, Long teacherId, TransferCourse transferCourse);
+
 
     @ApiOperation("查询所有课程")
     QueryResponse findAllCourses();
@@ -52,36 +63,22 @@ public interface CourseControllerApi {
     })
     QueryResponse findByPage(long currentPage, long pageSize);
 
-    @ApiOperation("用户查询加入的课程列表")
+    @ApiOperation("查询用户课程列表")
     @ApiImplicitParam(name = "userId", value = "用户id", required = true,
             paramType = "path", dataType = "long")
-    QueryResponse findByUserId(long userId);
+    QueryResponse findCoursesByUserId(long userId);
 
-    @ApiOperation("教师查询创建的课程列表")
-    @ApiImplicitParam(name = "teacherId", value = "教师id", required = true,
-            paramType = "path", dataType = "long")
-    QueryResponse findByTeacherId(long teacherId);
 
-    @ApiOperation("用户置顶加入的课程/取消置顶")
+    @ApiOperation("置顶课程/取消置顶")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "courseId", value = "课程id", required = true,
                     paramType = "path", dataType = "long"),
             @ApiImplicitParam(name = "userId", value = "用户id", required = true,
-                    paramType = "path", dataType = "long"),
-            @ApiImplicitParam(name = "isTop", value = "是否置顶", required = true,
-                    paramType = "path", dataType = "boolean")
+                    paramType = "path", dataType = "long")
     })
-    CommonResponse updateTopSCourse(long courseId,long userId,boolean isTop);
+    CommonResponse updateTopCourse(long courseId,long userId);
 
-    @ApiOperation("教师置顶创建的课程/取消置顶")
-    @ApiImplicitParams({
-            @ApiImplicitParam(name = "courseId", value = "课程id", required = true,
-                    paramType = "path", dataType = "long"),
-            @ApiImplicitParam(name = "teacherId", value = "教师id", required = true,
-                    paramType = "path", dataType = "long"),
-            @ApiImplicitParam(name = "isTop", value = "是否置顶", required = true,
-                    paramType = "path", dataType = "boolean")
-    })
-    CommonResponse updateTopTCourse(long courseId,long teacherId,boolean isTop);
+
+
 
 }
