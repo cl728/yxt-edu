@@ -6,7 +6,7 @@
         <vHeadSpace />
       </el-header>
       <el-main id="main" :style="{backgroundColor:main_background_color}">
-        <CourseTableSpace />
+        <CourseTableSpace/>
       </el-main>
     </el-container>
   </el-container>
