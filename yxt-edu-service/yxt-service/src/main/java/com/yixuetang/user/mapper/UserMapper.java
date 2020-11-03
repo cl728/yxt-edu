@@ -82,15 +82,6 @@ public interface UserMapper extends BaseMapper<User> {
     void updateRoleIdByUsername(@Param("username") String username, @Param("roleId") Long roleId);
 
     /**
-     * 根据id修改roleId
-     *
-     * @param roleId 角色id
-     * @param id     用户主键id
-     */
-    @Update("update t_user set role_id = #{roleId} where id = #{id}")
-    void UpdateRoleIdById(@Param("roleId") Long roleId, @Param("id") Long id);
-
-    /**
      * 根据手机号码查询用户
      *
      * @param phone 手机号码
