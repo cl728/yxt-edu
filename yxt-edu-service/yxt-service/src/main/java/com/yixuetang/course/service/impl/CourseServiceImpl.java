@@ -158,6 +158,13 @@ public class CourseServiceImpl implements CourseService {
         // 生成加课码
         course.setCCode(GenCodeUtils.genRandomCode());
 
+        // 设置随机课程图片
+        String num = String.valueOf( (int) ( Math.ceil( Math.random() ) * 45 ) );
+        if ( num.length() == 1 ) {
+            num = "0" + num;
+        }
+        course.setCPic( "https://assets.ketangpai.com/theme/student/min/" + num + ".png" );
+
         // set createTime updateTime
         Date date = new Date();
         course.setCreateTime(date);
