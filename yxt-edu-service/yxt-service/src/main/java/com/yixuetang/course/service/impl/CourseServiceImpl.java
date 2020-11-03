@@ -195,7 +195,7 @@ public class CourseServiceImpl implements CourseService {
     @Override
     public QueryResponse findByPage(long currentPage, long pageSize) {
         List<Course> courses = this.courseMapper.findByPage(new Page<>(currentPage, pageSize));
-        return new QueryResponse(CommonCode.SUCCESS, new QueryResult<>(courses, this.courseMapper.selectCount( null )));
+        return new QueryResponse(CommonCode.SUCCESS, new QueryResult<>(courses, this.courseMapper.selectCount(null)));
     }
 
     @Transactional
@@ -294,29 +294,39 @@ public class CourseServiceImpl implements CourseService {
         final User user = this.userMapper.findById(userId);
         Long roleId = user.getRole().getId();
         // roleId非2,3则异常
-        if (roleId < 2 || roleId > 3){
+        if (roleId < 2 || roleId > 3) {
             return new CommonResponse(CommonCode.INVALID_PARAM);
         }
 
         // 判断为教师用户
-        if (roleId == 2){
-            // 修改isFiled为true
-            Course course = this.courseMapper.findById(courseId);
-            course.setIsFiled(true);
+        if (roleId == 2) {
+            Course course = this.courseMapper.selectOne(new QueryWrapper<Course>()
+                    .eq("id", courseId).eq("teacher_id", userId));
+            //  若该课程非该教师所有,非法请求
+            if (course == null){
+                return new CommonResponse(CommonCode.INVALID_PARAM);
+            }
+            // ifFiled的值,true为已归档,false为未归档
+            course.setIsFiled(!course.getIsFiled());
             int i = this.courseMapper.updateById(course);
-            if (i != 1){
+            if (i != 1) {
                 return new CommonResponse(CommonCode.FAIL);
             }
         }
 
         // 判断为学生用户
-        if (roleId == 3){
+        if (roleId == 3) {
             // isFiled设为true
             StudentCourse studentCourse = this.scMapper.selectOne(new QueryWrapper<StudentCourse>()
-                    .eq("course_id", courseId).eq("student_id", userId).select("id"));
-            studentCourse.setIsFiled(true);
+                    .eq("course_id", courseId).eq("student_id", userId));
+            //  若学生没有加入该课程,非法请求
+            if (studentCourse == null){
+                return new CommonResponse(CommonCode.INVALID_PARAM);
+            }
+            // ifFiled的值,true为已归档,false为未归档
+            studentCourse.setIsFiled(!studentCourse.getIsFiled());
             int i = this.scMapper.updateById(studentCourse);
-            if (i != 1){
+            if (i != 1) {
                 return new CommonResponse(CommonCode.FAIL);
             }
         }

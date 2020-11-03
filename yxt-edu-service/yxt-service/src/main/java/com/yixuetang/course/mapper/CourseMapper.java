@@ -40,7 +40,7 @@ public interface CourseMapper extends BaseMapper<Course> {
     List<Course> findByPage(Page<Course> page);
 
     @ResultMap("courseMap")
-    @Select("select id, teacher_id from t_course where c_code = #{code}")
+    @Select("select id, teacher_id, s_count from t_course where c_code = #{code}")
     Course findByCCode(String code);
 
     @Update("update t_course set teacher_id = #{teacherId} where c_code = #{cCode}")
