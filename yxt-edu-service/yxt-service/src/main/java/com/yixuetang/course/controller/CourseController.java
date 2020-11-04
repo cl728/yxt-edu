@@ -5,6 +5,7 @@ import com.yixuetang.course.service.CourseService;
 import com.yixuetang.entity.request.course.InsertCourse;
 import com.yixuetang.entity.request.course.TransferCourse;
 import com.yixuetang.entity.request.course.UpdateCourse;
+import com.yixuetang.entity.request.user.DelCourseUser;
 import com.yixuetang.entity.response.CommonResponse;
 import com.yixuetang.entity.response.QueryResponse;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -42,9 +43,9 @@ public class CourseController implements CourseControllerApi {
     }
 
     @Override
-    @DeleteMapping("id/{userId}/{courseId}")
-    public CommonResponse deleteCourse(@PathVariable Long userId, @PathVariable Long courseId) {
-        return this.courseService.deleteCourse(userId, courseId);
+    @DeleteMapping("id/{courseId}")
+    public CommonResponse deleteCourse(@PathVariable Long courseId, @RequestBody DelCourseUser delCourseUser) {
+        return this.courseService.deleteCourse(courseId, delCourseUser);
     }
 
     @Override

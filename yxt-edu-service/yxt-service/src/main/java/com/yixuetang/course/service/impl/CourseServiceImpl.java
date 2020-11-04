@@ -12,6 +12,7 @@ import com.yixuetang.entity.request.course.ListCourse;
 import com.yixuetang.entity.request.course.TransferCourse;
 import com.yixuetang.entity.request.course.UpdateCourse;
 import com.yixuetang.entity.request.user.AvatarUser;
+import com.yixuetang.entity.request.user.DelCourseUser;
 import com.yixuetang.entity.response.CommonResponse;
 import com.yixuetang.entity.response.QueryResponse;
 import com.yixuetang.entity.response.code.CommonCode;
@@ -68,13 +69,29 @@ public class CourseServiceImpl implements CourseService {
 
     @Override
     @Transactional
-    public CommonResponse deleteCourse(Long userId, Long courseId) {
-        // 先判断该id为学生还是老师
+    public CommonResponse deleteCourse(Long courseId, DelCourseUser delCourseUser) {
+
+        // delCourse 不合法
+        if (delCourseUser == null) {
+            ExceptionThrowUtils.cast( CommonCode.INVALID_PARAM );
+        }
+
+        long userId = delCourseUser.getUserId();
         User user = this.userMapper.findById(userId);
 
+        if (user == null) {
+            return new CommonResponse( UserCode.USER_NOT_FOUND );
+        }
+
+        // 校验密码
+        if (!StringUtils.equals( user.getPassword(), delCourseUser.getPassword() )) {
+            return new CommonResponse( CourseCode.DELETE_COURSE_FAIL_PASSWORD_WRONG );
+        }
+
+        // 判断该id为学生还是老师
         // roleId异常
         if (user.getRole().getId() <= 1 || user.getRole().getId() > 3) {
-            return new CommonResponse(CommonCode.INVALID_PARAM);
+            return new CommonResponse( CommonCode.INVALID_PARAM);
         }
         // 判断为教师用户
         if (user.getRole().getId() == 2) {

@@ -3,6 +3,7 @@ package com.yixuetang.api.course;
 import com.yixuetang.entity.request.course.InsertCourse;
 import com.yixuetang.entity.request.course.TransferCourse;
 import com.yixuetang.entity.request.course.UpdateCourse;
+import com.yixuetang.entity.request.user.DelCourseUser;
 import com.yixuetang.entity.response.CommonResponse;
 import com.yixuetang.entity.response.QueryResponse;
 import io.swagger.annotations.Api;
@@ -43,13 +44,9 @@ public interface CourseControllerApi {
     QueryResponse findAllCourses();
 
     @ApiOperation("教师删除课程/学生退课")
-    @ApiImplicitParams({
-            @ApiImplicitParam(name = "userId", value = "用户id", required = true,
-                    paramType = "path", dataType = "long"),
-            @ApiImplicitParam(name = "courseId", value = "课程主键id", required = true,
-                    paramType = "path", dataType = "long")
-    })
-    CommonResponse deleteCourse(Long userId, Long courseId);
+    @ApiImplicitParam(name = "courseId", value = "课程主键id", required = true,
+            paramType = "path", dataType = "long")
+    CommonResponse deleteCourse(Long courseId, DelCourseUser delCourseUser);
 
     @ApiOperation("加入课程")
     @ApiImplicitParams({

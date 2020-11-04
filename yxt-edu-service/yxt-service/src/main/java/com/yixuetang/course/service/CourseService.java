@@ -3,6 +3,7 @@ package com.yixuetang.course.service;
 import com.yixuetang.entity.request.course.InsertCourse;
 import com.yixuetang.entity.request.course.TransferCourse;
 import com.yixuetang.entity.request.course.UpdateCourse;
+import com.yixuetang.entity.request.user.DelCourseUser;
 import com.yixuetang.entity.response.CommonResponse;
 import com.yixuetang.entity.response.QueryResponse;
 
@@ -22,13 +23,13 @@ public interface CourseService {
     QueryResponse findAllCourses();
 
     /**
-     * 删除一门课程
+     * 删除课程/退课
      *
-     * @param teacherId 教师id
-     * @param courseId  课程id
+     * @param courseId      课程id
+     * @param delCourseUser 删除课程/退课的用户实体类
      * @return 响应结果实体类
      */
-    CommonResponse deleteCourse(Long teacherId, Long courseId);
+    CommonResponse deleteCourse(Long courseId, DelCourseUser delCourseUser);
 
     /**
      * 加入课程
