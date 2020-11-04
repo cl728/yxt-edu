@@ -10,279 +10,351 @@
 </head>
 
 <body>
-<div id="app">
-    <el-container>
-        <!-- 头部 -->
-        <el-header>
-            <!-- 导航栏：logo、菜单功能、头像下拉菜单 -->
-            <el-row>
-                <!-- logo -->
-                <el-col :span="4">
-                    <!-- <el-image style="margin-top: 10px;" src="./images/logo_blue.png" fit="contain"></el-image> -->
-                    <el-image>
-                        <div slot="error" class="image-slot">
-                            <div class="header-logo">LOGO</div>
-                        </div>
-                    </el-image>
-                </el-col>
-                <!-- 菜单功能 -->
-                <el-col :span="16">
-                    <el-menu mode="horizontal">
-                        <el-menu-item index="1" class="header-text" @click="location.href = '../homePage.html'">课堂</el-menu-item>
-                        <el-menu-item index="2" class="header-text">精品课程</el-menu-item>
-                        <el-menu-item index="3" class="header-text">本校课程</el-menu-item>
-                        <el-menu-item index="3" class="header-text">我的精品</el-menu-item>
-                    </el-menu>
-                </el-col>
-                <!-- 头像下拉菜单 -->
-                <el-col :span="4">
-                    <el-menu class="el-menu-demo" mode="horizontal">
-                        <el-menu-item>
-                            <i class="el-icon-bell"></i>
-                            <el-badge is-dot class="item"></el-badge>
-                        </el-menu-item>
-                        <el-submenu>
-                            <template slot="title">
-                                <span v-text="user.username" style="color: black; margin: 20px 10px;">用户名</span>
-                                <el-avatar size="large" :src="user.avatar">
-                                </el-avatar>
-                            </template>
-                            <el-menu-item><i class="el-icon-setting"></i> 个人设置</el-menu-item>
-                            <el-menu-item @click="logout()"><i class="el-icon-s-unfold"></i> 退出账户</el-menu-item>
-                        </el-submenu>
-                    </el-menu>
-                </el-col>
-            </el-row>
-        </el-header>
-
-        <!-- 中间 -->
+    <div id="app">
         <el-container>
-            <el-aside width="300px">
-                <div id="menu" style="padding-top: 250px">
-                    <el-menu  default-active="1">
-                        <el-menu-item index="1" @click="basicSetting()">
-                            <i class="el-icon-user"></i>
-                            <span slot="title">基本资料</span>
-                        </el-menu-item>
-                        <el-menu-item index="2" @click="accountSetting()">
-                            <i class="el-icon-warning-outline"></i>
-                            <span slot="title">账号设置</span>
-                        </el-menu-item>
-                    </el-menu>
-                </div>
-            </el-aside>
-            <el-main>
-               <div style="margin-left: 120px">
-                   <el-row>
-                       <el-col :span="2"></el-col>
-                       <el-col  :span="16">
-                           <div id="avatar" style="margin-top: 50px">
-                               <el-row class="demo-avatar demo-basic">
-                                   <el-col :span="24">
-                                       <div class="demo-basic--circle">
-                                           <div class="block" style="width: 930px">
-                                               <el-avatar :size="100" :src="user.avatar"></el-avatar>
-                                           </div>
-                                       </div>
-                                       <div id="realName" style="font-size: x-large; width: 930px"><b>{{realName}}</b></div>
-                                   </el-col>
-                               </el-row>
-                           </div>
-                       </el-col>
-                       <el-col :span="6"></el-col>
-                   </el-row>
-                   <el-row>
-                       <el-col :span="3"></el-col>
-                       <el-col :span="14">
-                           <div class="grid-content">
-                               <div id="setting-item" style="padding-top: 50px;width: 930px">
-                                   <!-- 基本资料表单 -->
-                                   <el-form :model="userInfo" :rules="updateRule" ref="settingForm" label-width="80px" v-if="isBasicSetting">
-                                       <el-form-item label="姓名" prop="realName">
-                                           <el-input prefix-icon="el-icon-user" placeholder="请输入姓名" v-model="userInfo.realName" autocomplete="off"
-                                                     clearable></el-input>
-                                       </el-form-item>
-                                       <el-form-item label="学校" prop="school">
-                                           <el-autocomplete style="width: 100%;" class="inline-input" prefix-icon="el-icon-school"
-                                                            v-model="userInfo.school" :fetch-suggestions="querySearch" placeholder="请选择学校"
-                                                            @select="handleSelect" clearable>
-                                           </el-autocomplete>
-                                       </el-form-item>
-                                       <el-form-item label="学/工号" prop="tsNo">
-                                           <el-input prefix-icon="el-icon-edit-outline" placeholder="请输入学/工号" v-model="userInfo.tsNo" autocomplete="off"
-                                                     clearable></el-input>
-                                       </el-form-item>
-                                       <el-form-item label="年龄" prop="age">
-                                           <el-input type="number" prefix-icon="el-icon-date" placeholder="请输入年龄" v-model="userInfo.age" autocomplete="off"
-                                                     clearable></el-input>
-                                       </el-form-item>
-                                       <el-form-item label="角色" prop="rname">
-                                           <el-input prefix-icon="el-icon-s-custom" v-model="userInfo.role.rname" autocomplete="off" :disabled="true" clearable></el-input>
-                                       </el-form-item>
-                                       <el-form-item label="性别" prop="gender">
-                                           <el-radio-group v-model="userInfo.gender">
-                                               <el-radio border label="男"><i class="el-icon-male">男</i></el-radio>
-                                               <el-radio border label="女"><i class="el-icon-female">女</i></el-radio>
-                                           </el-radio-group>
-                                       </el-form-item>
-                                       <br>
-                                       <el-form-item>
-                                           <el-button type="primary" @click="updateUsers('settingForm')" style="width: 150px">确认修改</el-button>
-                                       </el-form-item>
-                                   </el-form>
+            <!-- 头部 -->
+            <el-header>
+                <!-- 导航栏：logo、菜单功能、头像下拉菜单 -->
+                <el-row>
+                    <!-- logo -->
+                    <el-col :span="4">
+                        <!-- <el-image style="margin-top: 10px;" src="./images/logo_blue.png" fit="contain"></el-image> -->
+                        <el-image>
+                            <div slot="error" class="image-slot">
+                                <div class="header-logo">LOGO</div>
+                            </div>
+                        </el-image>
+                    </el-col>
+                    <!-- 菜单功能 -->
+                    <el-col :span="16">
+                        <el-menu mode="horizontal">
+                            <el-menu-item index="1" class="header-text" @click="location.href = '../homePage.html'">课堂
+                            </el-menu-item>
+                            <el-menu-item index="2" class="header-text">精品课程</el-menu-item>
+                            <el-menu-item index="3" class="header-text">本校课程</el-menu-item>
+                            <el-menu-item index="3" class="header-text">我的精品</el-menu-item>
+                        </el-menu>
+                    </el-col>
+                    <!-- 头像下拉菜单 -->
+                    <el-col :span="4">
+                        <el-menu class="el-menu-demo" mode="horizontal">
+                            <el-menu-item>
+                                <i class="el-icon-bell"></i>
+                                <el-badge is-dot class="item"></el-badge>
+                            </el-menu-item>
+                            <el-submenu>
+                                <template slot="title">
+                                    <span v-text="user.username" style="color: black; margin: 20px 10px;">用户名</span>
+                                    <el-avatar size="large" :src="user.avatar">
+                                    </el-avatar>
+                                </template>
+                                <el-menu-item><i class="el-icon-setting"></i> 个人设置</el-menu-item>
+                                <el-menu-item @click="logout()"><i class="el-icon-s-unfold"></i> 退出账户</el-menu-item>
+                            </el-submenu>
+                        </el-menu>
+                    </el-col>
+                </el-row>
+            </el-header>
 
-                                   <!-- 账号设置表单 -->
-                                   <el-form :model="userInfo" ref="accountForm" label-width="80px" v-else>
-                                       <el-form-item label="密码" prop="password">
-                                           <el-row>
-                                               <el-col :span="21" style="border: thin solid #DCDFE6;">
-                                                   <span>***********</span>
-                                               </el-col>
-                                               <el-col :span="3">
-                                                   <el-button type="primary" @click="updatePasswordFun()">修改密码</el-button>
-                                               </el-col>
-                                               <el-dialog title="修改密码" :visible.sync="updatePassword" destroy-on-close @close="updatePasswordForm={}" style="margin:auto">
-                                                   <el-form :model="updatePasswordForm" ref="updatePasswordForm" :rules="updateRule" label-width="80px">
-                                                       <el-form-item prop="newPassword" label="新密码" :label-width="formLabelWidth" style="width: 700px;margin: auto">
-                                                           <el-input prefix-icon="el-icon-lock" type="password" placeholder="请输入新密码" clearable v-model="updatePasswordForm.newPassword" autocomplete="off"></el-input>
-                                                       </el-form-item>
-                                                       <el-form-item prop="email" label="电子邮箱" :label-width="formLabelWidth" style="width: 700px;padding-top: 30px;margin: auto">
-                                                           <el-input prefix-icon="el-icon-postcard" clearable placeholder="请输入电子邮箱" v-model="updatePasswordForm.email" autocomplete="off"></el-input>
-                                                       </el-form-item>
-                                                       <el-form-item prop="code" label="验证码" :label-width="formLabelWidth" style="width: 700px;padding-top: 30px;margin: auto">
-                                                           <el-row>
-                                                               <el-col :span="16">
-                                                                   <el-input prefix-icon="el-icon-document" placeholder="请输入验证码"
-                                                                             v-model="updatePasswordForm.code" autocomplete="off" clearable></el-input>
-                                                               </el-col>
-                                                               <el-col :span="8">
-                                                                   <el-button type="primary" style="float: right;" @click="sendCode()" :disabled="checkEmailPass()"
-                                                                              v-if="!isSendingCode">
-                                                                       发送验证码
-                                                                   </el-button>
-                                                                   <el-button disabled style="float: right;" v-else>
-                                                                       <span v-text="times + 's后重新发送'"></span>
-                                                                   </el-button>
-                                                               </el-col>
-                                                           </el-row>
-                                                       </el-form-item>
-                                                   </el-form>
-                                                   <div slot="footer" class="dialog-footer" style="width: 700px;margin: auto">
-                                                       <el-button type="primary" @click="changePassword('updatePasswordForm')" style="width: 620px">确 定</el-button>
-                                                   </div>
-                                               </el-dialog>
-                                           </el-row>
-                                       </el-form-item>
-                                       <el-form-item label="邮箱" prop="email">
-                                           <el-row>
-                                               <el-col :span="21" style="border: thin solid #DCDFE6;">
-                                                   <span v-text="userInfo.email">email</span>
-                                               </el-col>
-                                               <el-col :span="3">
-                                                   <el-button type="primary" @click="updateEmailFun()">换绑邮箱</el-button>
-                                               </el-col>
-                                               <el-dialog title="换绑邮箱" :visible.sync="updateEmail" destroy-on-close @close="updateEmailForm = {}" style="margin:auto">
-                                                   <el-form :model="updateEmailForm" ref="updateEmailForm" :rules="updateRule" label-width="80px">
-                                                       <el-form-item prop="email" label="电子邮箱" :label-width="formLabelWidth" style="width: 700px;margin: auto">
-                                                           <el-input prefix-icon="el-icon-postcard" clearable placeholder="请输入要换绑的电子邮箱" v-model="updateEmailForm.email" autocomplete="off"></el-input>
-                                                       </el-form-item>
-                                                       <el-form-item prop="code" label="验证码" :label-width="formLabelWidth" style="width: 700px;padding-top: 30px;margin: auto">
-                                                           <el-row>
-                                                               <el-col :span="16">
-                                                                   <el-input prefix-icon="el-icon-document" placeholder="请输入验证码"
-                                                                             v-model="updateEmailForm.code" autocomplete="off" clearable></el-input>
-                                                               </el-col>
-                                                               <el-col :span="8">
-                                                                   <el-button type="primary" style="float: right;" @click="sendCode()" :disabled="checkEmail()"
-                                                                              v-if="!isSendingCode">
-                                                                       发送验证码
-                                                                   </el-button>
-                                                                   <el-button disabled style="float: right;" v-else>
-                                                                       <span v-text="times + 's后重新发送'"></span>
-                                                                   </el-button>
-                                                               </el-col>
-                                                           </el-row>
-                                                       </el-form-item>
-                                                   </el-form>
-                                                   <div slot="footer" class="dialog-footer" style="width: 700px;margin: auto">
-                                                       <el-button type="primary" @click="changeEmail('updateEmailForm')" style="width: 620px">确 定</el-button>
-                                                   </div>
-                                               </el-dialog>
-                                           </el-row>
-                                       </el-form-item>
-                                       <el-form-item label="手机号码" prop="phone">
-                                           <el-row>
-                                               <el-col :span="21" style="border: thin solid #DCDFE6;">
-                                                   <span v-text="userInfo.phone">phone</span>
-                                               </el-col>
-                                               <el-col :span="3">
-                                                   <el-button type="primary" @click="updatePhoneFun()">修改手机</el-button>
-                                               </el-col>
-                                               <el-dialog title="修改手机号码" :visible.sync="updatePhone" destroy-on-close @close="updatePhoneForm = {}" style="margin:auto">
-                                                   <el-form :model="updatePhoneForm" ref="updatePhoneForm" :rules="updateRule" label-width="80px">
-                                                       <el-form-item prop="phone" label="手机号码" :label-width="formLabelWidth" style="width: 700px;margin: auto">
-                                                           <el-input prefix-icon="el-icon-postcard" placeholder="请输入要修改的手机号码" clearable
-                                                                     v-model="updatePhoneForm.phone" autocomplete="off">
-                                                               <template slot="prepend">+86</template>
-                                                           </el-input>
-                                                       </el-form-item>
-                                                       <el-form-item prop="code" label="验证码" :label-width="formLabelWidth" style="width: 700px;padding-top: 30px;margin: auto">
-                                                           <el-row>
-                                                               <el-col :span="16">
-                                                                   <el-input prefix-icon="el-icon-document" placeholder="请输入验证码"
-                                                                             v-model="updatePhoneForm.code" autocomplete="off" clearable></el-input>
-                                                               </el-col>
-                                                               <el-col :span="8">
-                                                                   <el-button type="primary" style="float: right;" @click="sendCode()" :disabled="checkPhone()"
-                                                                              v-if="!isSendingCode">
-                                                                       发送验证码
-                                                                   </el-button>
-                                                                   <el-button disabled style="float: right;" v-else>
-                                                                       <span v-text="times + 's后重新发送'"></span>
-                                                                   </el-button>
-                                                               </el-col>
-                                                           </el-row>
-                                                       </el-form-item>
-                                                   </el-form>
-                                                   <div slot="footer" class="dialog-footer" style="width: 700px;margin: auto">
-                                                       <label label-width="80px"></label>
-                                                       <el-button type="primary" @click="changePhone('updatePhoneForm')" style="width: 620px">确 定</el-button>
-                                                   </div>
-                                               </el-dialog>
-                                           </el-row>
-                                       </el-form-item>
+            <!-- 中间 -->
+            <el-container>
+                <el-aside width="300px">
+                    <div id="menu" style="padding-top: 250px">
+                        <el-menu default-active="1">
+                            <el-menu-item index="1" @click="basicSetting()">
+                                <i class="el-icon-user"></i>
+                                <span slot="title">基本资料</span>
+                            </el-menu-item>
+                            <el-menu-item index="2" @click="accountSetting()">
+                                <i class="el-icon-warning-outline"></i>
+                                <span slot="title">账号设置</span>
+                            </el-menu-item>
+                        </el-menu>
+                    </div>
+                </el-aside>
+                <el-main>
+                    <div style="margin-left: 120px">
+                        <el-row>
+                            <el-col :span="2"></el-col>
+                            <el-col :span="16">
+                                <div id="avatar" style="margin-top: 50px">
+                                    <el-row class="demo-avatar demo-basic">
+                                        <el-col :span="24">
+                                            <div class="demo-basic--circle">
+                                                <div class="block" style="width: 930px">
+                                                    <el-avatar :size="100" :src="user.avatar" v-if="!isProgressVisable">
+                                                    </el-avatar>
+                                                    <el-progress type="circle" :percentage="progressPercent" v-else>
+                                                    </el-progress>
+                                                    <el-upload class="img-btn" action="#" :show-file-list="false"
+                                                        :before-upload="beforeAvatarUpload" :http-request="uploadImg">
+                                                        <el-button type="success" plain round size="mini">更改头像
+                                                        </el-button>
+                                                    </el-upload>
+                                                </div>
+                                            </div>
+                                            <div id="realName" style="font-size: x-large; width: 930px">
+                                                <b>{{realName}}</b></div>
+                                        </el-col>
+                                    </el-row>
+                                </div>
+                            </el-col>
+                            <el-col :span="6"></el-col>
+                        </el-row>
+                        <el-row>
+                            <el-col :span="3"></el-col>
+                            <el-col :span="14">
+                                <div class="grid-content">
+                                    <div id="setting-item" style="padding-top: 50px;width: 930px">
+                                        <!-- 基本资料表单 -->
+                                        <el-form :model="userInfo" :rules="updateRule" ref="settingForm"
+                                            label-width="80px" v-if="isBasicSetting">
+                                            <el-form-item label="姓名" prop="realName">
+                                                <el-input prefix-icon="el-icon-user" placeholder="请输入姓名"
+                                                    v-model="userInfo.realName" autocomplete="off" clearable></el-input>
+                                            </el-form-item>
+                                            <el-form-item label="学校" prop="school">
+                                                <el-autocomplete style="width: 100%;" class="inline-input"
+                                                    prefix-icon="el-icon-school" v-model="userInfo.school"
+                                                    :fetch-suggestions="querySearch" placeholder="请选择学校"
+                                                    @select="handleSelect" clearable>
+                                                </el-autocomplete>
+                                            </el-form-item>
+                                            <el-form-item label="学/工号" prop="tsNo">
+                                                <el-input prefix-icon="el-icon-edit-outline" placeholder="请输入学/工号"
+                                                    v-model="userInfo.tsNo" autocomplete="off" clearable></el-input>
+                                            </el-form-item>
+                                            <el-form-item label="年龄" prop="age">
+                                                <el-input type="number" prefix-icon="el-icon-date" placeholder="请输入年龄"
+                                                    v-model="userInfo.age" autocomplete="off" clearable></el-input>
+                                            </el-form-item>
+                                            <el-form-item label="角色" prop="rname">
+                                                <el-input prefix-icon="el-icon-s-custom" v-model="userInfo.role.rname"
+                                                    autocomplete="off" :disabled="true" clearable></el-input>
+                                            </el-form-item>
+                                            <el-form-item label="性别" prop="gender">
+                                                <el-radio-group v-model="userInfo.gender">
+                                                    <el-radio border label="男"><i class="el-icon-male">男</i></el-radio>
+                                                    <el-radio border label="女"><i class="el-icon-female">女</i>
+                                                    </el-radio>
+                                                </el-radio-group>
+                                            </el-form-item>
+                                            <br>
+                                            <el-form-item>
+                                                <el-button type="primary" @click="updateUsers('settingForm')"
+                                                    style="width: 150px">确认修改</el-button>
+                                            </el-form-item>
+                                        </el-form>
 
-                                       <br><br><br><br><br><br><br><br><br><br><br><br>
-                                   </el-form>
-                               </div>
-                           </div>
-                       </el-col>
-                       <el-col :span="7"></el-col>
-                   </el-row>
-               </div>
-            </el-main>
+                                        <!-- 账号设置表单 -->
+                                        <el-form :model="userInfo" ref="accountForm" label-width="80px" v-else>
+                                            <el-form-item label="密码" prop="password">
+                                                <el-row>
+                                                    <el-col :span="21" style="border: thin solid #DCDFE6;">
+                                                        <span>***********</span>
+                                                    </el-col>
+                                                    <el-col :span="3">
+                                                        <el-button type="primary" @click="updatePasswordFun()">修改密码
+                                                        </el-button>
+                                                    </el-col>
+                                                    <el-dialog title="修改密码" :visible.sync="updatePassword"
+                                                        destroy-on-close @close="updatePasswordForm={}"
+                                                        style="margin:auto">
+                                                        <el-form :model="updatePasswordForm" ref="updatePasswordForm"
+                                                            :rules="updateRule" label-width="80px">
+                                                            <el-form-item prop="newPassword" label="新密码"
+                                                                :label-width="formLabelWidth"
+                                                                style="width: 700px;margin: auto">
+                                                                <el-input prefix-icon="el-icon-lock" type="password"
+                                                                    placeholder="请输入新密码" clearable
+                                                                    v-model="updatePasswordForm.newPassword"
+                                                                    autocomplete="off"></el-input>
+                                                            </el-form-item>
+                                                            <el-form-item prop="email" label="电子邮箱"
+                                                                :label-width="formLabelWidth"
+                                                                style="width: 700px;padding-top: 30px;margin: auto">
+                                                                <el-input prefix-icon="el-icon-postcard" clearable
+                                                                    placeholder="请输入电子邮箱"
+                                                                    v-model="updatePasswordForm.email"
+                                                                    autocomplete="off"></el-input>
+                                                            </el-form-item>
+                                                            <el-form-item prop="code" label="验证码"
+                                                                :label-width="formLabelWidth"
+                                                                style="width: 700px;padding-top: 30px;margin: auto">
+                                                                <el-row>
+                                                                    <el-col :span="16">
+                                                                        <el-input prefix-icon="el-icon-document"
+                                                                            placeholder="请输入验证码"
+                                                                            v-model="updatePasswordForm.code"
+                                                                            autocomplete="off" clearable></el-input>
+                                                                    </el-col>
+                                                                    <el-col :span="8">
+                                                                        <el-button type="primary" style="float: right;"
+                                                                            @click="sendCode()"
+                                                                            :disabled="checkEmailPass()"
+                                                                            v-if="!isSendingCode">
+                                                                            发送验证码
+                                                                        </el-button>
+                                                                        <el-button disabled style="float: right;"
+                                                                            v-else>
+                                                                            <span v-text="times + 's后重新发送'"></span>
+                                                                        </el-button>
+                                                                    </el-col>
+                                                                </el-row>
+                                                            </el-form-item>
+                                                        </el-form>
+                                                        <div slot="footer" class="dialog-footer"
+                                                            style="width: 700px;margin: auto">
+                                                            <el-button type="primary"
+                                                                @click="changePassword('updatePasswordForm')"
+                                                                style="width: 620px">确 定</el-button>
+                                                        </div>
+                                                    </el-dialog>
+                                                </el-row>
+                                            </el-form-item>
+                                            <el-form-item label="邮箱" prop="email">
+                                                <el-row>
+                                                    <el-col :span="21" style="border: thin solid #DCDFE6;">
+                                                        <span v-text="userInfo.email">email</span>
+                                                    </el-col>
+                                                    <el-col :span="3">
+                                                        <el-button type="primary" @click="updateEmailFun()">换绑邮箱
+                                                        </el-button>
+                                                    </el-col>
+                                                    <el-dialog title="换绑邮箱" :visible.sync="updateEmail" destroy-on-close
+                                                        @close="updateEmailForm = {}" style="margin:auto">
+                                                        <el-form :model="updateEmailForm" ref="updateEmailForm"
+                                                            :rules="updateRule" label-width="80px">
+                                                            <el-form-item prop="email" label="电子邮箱"
+                                                                :label-width="formLabelWidth"
+                                                                style="width: 700px;margin: auto">
+                                                                <el-input prefix-icon="el-icon-postcard" clearable
+                                                                    placeholder="请输入要换绑的电子邮箱"
+                                                                    v-model="updateEmailForm.email" autocomplete="off">
+                                                                </el-input>
+                                                            </el-form-item>
+                                                            <el-form-item prop="code" label="验证码"
+                                                                :label-width="formLabelWidth"
+                                                                style="width: 700px;padding-top: 30px;margin: auto">
+                                                                <el-row>
+                                                                    <el-col :span="16">
+                                                                        <el-input prefix-icon="el-icon-document"
+                                                                            placeholder="请输入验证码"
+                                                                            v-model="updateEmailForm.code"
+                                                                            autocomplete="off" clearable></el-input>
+                                                                    </el-col>
+                                                                    <el-col :span="8">
+                                                                        <el-button type="primary" style="float: right;"
+                                                                            @click="sendCode()" :disabled="checkEmail()"
+                                                                            v-if="!isSendingCode">
+                                                                            发送验证码
+                                                                        </el-button>
+                                                                        <el-button disabled style="float: right;"
+                                                                            v-else>
+                                                                            <span v-text="times + 's后重新发送'"></span>
+                                                                        </el-button>
+                                                                    </el-col>
+                                                                </el-row>
+                                                            </el-form-item>
+                                                        </el-form>
+                                                        <div slot="footer" class="dialog-footer"
+                                                            style="width: 700px;margin: auto">
+                                                            <el-button type="primary"
+                                                                @click="changeEmail('updateEmailForm')"
+                                                                style="width: 620px">确 定</el-button>
+                                                        </div>
+                                                    </el-dialog>
+                                                </el-row>
+                                            </el-form-item>
+                                            <el-form-item label="手机号码" prop="phone">
+                                                <el-row>
+                                                    <el-col :span="21" style="border: thin solid #DCDFE6;">
+                                                        <span v-text="userInfo.phone">phone</span>
+                                                    </el-col>
+                                                    <el-col :span="3">
+                                                        <el-button type="primary" @click="updatePhoneFun()">修改手机
+                                                        </el-button>
+                                                    </el-col>
+                                                    <el-dialog title="修改手机号码" :visible.sync="updatePhone"
+                                                        destroy-on-close @close="updatePhoneForm = {}"
+                                                        style="margin:auto">
+                                                        <el-form :model="updatePhoneForm" ref="updatePhoneForm"
+                                                            :rules="updateRule" label-width="80px">
+                                                            <el-form-item prop="phone" label="手机号码"
+                                                                :label-width="formLabelWidth"
+                                                                style="width: 700px;margin: auto">
+                                                                <el-input prefix-icon="el-icon-postcard"
+                                                                    placeholder="请输入要修改的手机号码" clearable
+                                                                    v-model="updatePhoneForm.phone" autocomplete="off">
+                                                                    <template slot="prepend">+86</template>
+                                                                </el-input>
+                                                            </el-form-item>
+                                                            <el-form-item prop="code" label="验证码"
+                                                                :label-width="formLabelWidth"
+                                                                style="width: 700px;padding-top: 30px;margin: auto">
+                                                                <el-row>
+                                                                    <el-col :span="16">
+                                                                        <el-input prefix-icon="el-icon-document"
+                                                                            placeholder="请输入验证码"
+                                                                            v-model="updatePhoneForm.code"
+                                                                            autocomplete="off" clearable></el-input>
+                                                                    </el-col>
+                                                                    <el-col :span="8">
+                                                                        <el-button type="primary" style="float: right;"
+                                                                            @click="sendCode()" :disabled="checkPhone()"
+                                                                            v-if="!isSendingCode">
+                                                                            发送验证码
+                                                                        </el-button>
+                                                                        <el-button disabled style="float: right;"
+                                                                            v-else>
+                                                                            <span v-text="times + 's后重新发送'"></span>
+                                                                        </el-button>
+                                                                    </el-col>
+                                                                </el-row>
+                                                            </el-form-item>
+                                                        </el-form>
+                                                        <div slot="footer" class="dialog-footer"
+                                                            style="width: 700px;margin: auto">
+                                                            <label label-width="80px"></label>
+                                                            <el-button type="primary"
+                                                                @click="changePhone('updatePhoneForm')"
+                                                                style="width: 620px">确 定</el-button>
+                                                        </div>
+                                                    </el-dialog>
+                                                </el-row>
+                                            </el-form-item>
+
+                                            <br><br><br><br><br><br><br><br><br><br><br><br>
+                                        </el-form>
+                                    </div>
+                                </div>
+                            </el-col>
+                            <el-col :span="7"></el-col>
+                        </el-row>
+                    </div>
+                </el-main>
+            </el-container>
         </el-container>
-    </el-container>
 
-    <!-- 底部 -->
-    <el-footer style="padding-top: 50px">
-        <el-row type="flex" justify="center">
-            <el-col :span="8"></el-col>
-            <el-col :span="8" push="1">
-                <el-menu mode="horizontal">
-                    <el-menu-item>关于我们</el-menu-item>
-                    <el-menu-item>联系我们</el-menu-item>
-                    <el-menu-item>服务条款</el-menu-item>
-                    <el-menu-item>浏览器下载</el-menu-item>
-                    <el-menu-item>更新动态</el-menu-item>
-                </el-menu>
-            </el-col>
-            <el-col :span="8"></el-col>
-        </el-row>
-        <span class="foot-text">Copyright © 2020 yixuetang.com All Rights Reserved. </span>
-    </el-footer>
-    </el-container>
-</div>
+        <!-- 底部 -->
+        <el-footer style="padding-top: 50px">
+            <el-row type="flex" justify="center">
+                <el-col :span="8"></el-col>
+                <el-col :span="8" push="1">
+                    <el-menu mode="horizontal">
+                        <el-menu-item>关于我们</el-menu-item>
+                        <el-menu-item>联系我们</el-menu-item>
+                        <el-menu-item>服务条款</el-menu-item>
+                        <el-menu-item>浏览器下载</el-menu-item>
+                        <el-menu-item>更新动态</el-menu-item>
+                    </el-menu>
+                </el-col>
+                <el-col :span="8"></el-col>
+            </el-row>
+            <span class="foot-text">Copyright © 2020 yixuetang.com All Rights Reserved. </span>
+        </el-footer>
+        </el-container>
+    </div>
 </body>
 <script src="https://cdn.bootcss.com/vue/2.6.11/vue.min.js"></script>
 <script src="https://cdn.bootcss.com/axios/0.19.2/axios.min.js"></script>
@@ -304,17 +376,17 @@
                 id: "",
                 username: "",
                 isTeacher: "",
-                avatar:"https://picsum.photos/id/1005/200",
+                avatar: "",
                 rememberMe: "",
             },
-            userInfo:{
+            userInfo: {
                 id: "",
                 username: "",
                 realName: "",
                 gender: "",
                 age: "",
                 email: "",
-                avatar: "https://picsum.photos/id/1005/200",
+                avatar: "",
                 phone: "",
                 school: "",
                 role: {
@@ -331,7 +403,7 @@
                 tsNo: [{ required: true, message: '请输入学/工号', trigger: 'blur' }],
                 age: [{ required: true, message: '请输入年龄', trigger: 'blur' }],
                 email: [{ required: true, message: '请输入邮箱地址', trigger: 'blur' },
-                    { type: 'email', message: '请输入正确的邮箱地址', trigger: 'blur' }],
+                { type: 'email', message: '请输入正确的邮箱地址', trigger: 'blur' }],
                 phone: [{ required: true, message: '请输入手机号码', trigger: 'blur' }],
                 code: [{ required: true, message: '请输入验证码', trigger: 'blur' }],
                 newPassword: [{ required: true, message: '请输入验密码', trigger: 'blur' }],
@@ -362,22 +434,39 @@
             codeType: 3,
             sendType: 2,
             codeUser: {},
+            isProgressVisable: false,
+            progressPercent: 0
         },
         mounted() {
             // 加载学校列表
             this.loadSchools();
         },
         methods: {
-            logout() {
-                yxt.http.delete("/auth/logout/2").then(({data}) => {
+            verify() {
+                yxt.http.get("/auth/verify/2").then(({ data }) => {
                     if (data.success) {
-                    location.href = "../login.html"
-                } else {
+                        this.user = data.queryResult.data[0];
+                        yxt.http.get("/users/info/id/" + this.user.id).then(({ data }) => {
+                            this.userInfo = data.queryResult.data[0];
+                            this.realName = this.userInfo.realName;
+                        });
+                    } else {
+                        location.href = "../index.html"
+                    }
+                }).catch(() => {
+                    location.href = "../index.html";
+                });
+            },
+            logout() {
+                yxt.http.delete("/auth/logout/2").then(({ data }) => {
+                    if (data.success) {
+                        location.href = "../login.html"
+                    } else {
+                        this.$message.error("服务器繁忙，请稍候再试！");
+                    }
+                }).catch(() => {
                     this.$message.error("服务器繁忙，请稍候再试！");
-                }
-            }).catch(() => {
-                    this.$message.error("服务器繁忙，请稍候再试！");
-            })
+                })
             },
             onSubmit() {
                 console.log('submit!');
@@ -392,7 +481,7 @@
                 // 调用后台接口获取全国高校列表
                 yxt.http.get("users/schools").then(({ data }) => {
                     this.schools = data.queryResult.data;
-            })
+                })
             },
             querySearch(queryString, cb) {
                 let schools = this.schools;
@@ -408,17 +497,17 @@
             handleSelect(key, keyPath) {
                 console.log(key, keyPath);
             },
-            updatePasswordFun(){
+            updatePasswordFun() {
                 this.updatePassword = true;
                 this.codeType = 3;
                 this.sendType = 2;
             },
-            updateEmailFun(){
+            updateEmailFun() {
                 this.updateEmail = true;
                 this.codeType = 4;
                 this.sendType = 2;
             },
-            updatePhoneFun(){
+            updatePhoneFun() {
                 this.updatePhone = true;
                 this.codeType = 4;
                 this.sendType = 1;
@@ -436,72 +525,72 @@
                 return !regPhone.test(this.updatePhoneForm.phone);
             },
             //修改密码
-            changePassword(formName){
+            changePassword(formName) {
                 updatePassword = false;
                 this.$refs[formName].validate((valid) => {
                     this.updatePasswordForm.newPassword = hex_md5(this.updatePasswordForm.newPassword);
-                if (valid){
-                    yxt.http.put("/users/password/id/" + this.user.id, this.updatePasswordForm).then(({data}) => {
-                        if (data.success){
-                        this.$message.success(data.message);
-                    }else{
-                        this.$message.error(data.message);
+                    if (valid) {
+                        yxt.http.put("/users/password/id/" + this.user.id, this.updatePasswordForm).then(({ data }) => {
+                            if (data.success) {
+                                this.$message.success(data.message);
+                            } else {
+                                this.$message.error(data.message);
+                            }
+                            this.updatePassword = false;
+                            this.updatePasswordForm.newPassword = "";
+                            this.updatePasswordForm.email = "";
+                            this.updatePasswordForm.code = "";
+                            this.isSendingCode = false;
+                        }).catch(() => {
+                            this.$message.error("服务器繁忙，请稍后再试！");
+                            this.updatePassword = false;
+                        });
                     }
-                    this.updatePassword = false;
-                    this.updatePasswordForm.newPassword="";
-                    this.updatePasswordForm.email="";
-                    this.updatePasswordForm.code="";
-                    this.isSendingCode = false;
-                }).catch(() => {
-                        this.$message.error("服务器繁忙，请稍后再试！");
-                    this.updatePassword = false;
                 });
-                }
-            });
             },
             //换绑邮箱
-            changeEmail(formName){
+            changeEmail(formName) {
                 updateEmail = false;
                 this.$refs[formName].validate((valid) => {
-                    if (valid){
-                        yxt.http.put("/users/email/id/" + this.user.id, this.updateEmailForm).then(({data}) => {
-                            if (data.success){
-                            this.$message.success(data.message);
-                            this.userInfo.email = this.updateEmailForm.email;
-                        }else{
-                            this.$message.error(data.message);
-                        }
-                        this.updateEmail = false;
-                        this.updateEmailForm.email = null;
-                        this.updateEmailForm.code = null;
-                        this.isSendingCode = false;
-                    }).catch(() => {
+                    if (valid) {
+                        yxt.http.put("/users/email/id/" + this.user.id, this.updateEmailForm).then(({ data }) => {
+                            if (data.success) {
+                                this.$message.success(data.message);
+                                this.userInfo.email = this.updateEmailForm.email;
+                            } else {
+                                this.$message.error(data.message);
+                            }
+                            this.updateEmail = false;
+                            this.updateEmailForm.email = null;
+                            this.updateEmailForm.code = null;
+                            this.isSendingCode = false;
+                        }).catch(() => {
                             this.$message.error("服务器繁忙，请稍后再试！");
-                        this.updateEmail = false;
-                    });
+                            this.updateEmail = false;
+                        });
                     }
                 });
             },
             //修改手机号码
-            changePhone(formName){
+            changePhone(formName) {
                 updatePhone = false;
                 this.$refs[formName].validate((valid) => {
-                    if (valid){
-                        yxt.http.put("/users/phone/id/" + this.user.id, this.updatePhoneForm).then(({data}) => {
-                            if (data.success){
-                            this.$message.success(data.message);
-                            this.userInfo.phone = this.updatePhoneForm.phone;
-                        }else{
-                            this.$message.error(data.message);
-                        }
-                        this.updatePhone = false;
-                        this.updatePhoneForm.phone = "";
-                        this.updatePhoneForm.code = "";
-                        this.isSendingCode = false;
-                    }).catch(() => {
+                    if (valid) {
+                        yxt.http.put("/users/phone/id/" + this.user.id, this.updatePhoneForm).then(({ data }) => {
+                            if (data.success) {
+                                this.$message.success(data.message);
+                                this.userInfo.phone = this.updatePhoneForm.phone;
+                            } else {
+                                this.$message.error(data.message);
+                            }
+                            this.updatePhone = false;
+                            this.updatePhoneForm.phone = "";
+                            this.updatePhoneForm.code = "";
+                            this.isSendingCode = false;
+                        }).catch(() => {
                             this.$message.error("服务器繁忙，请稍后再试！");
-                        this.updatePhone = false;
-                    });
+                            this.updatePhone = false;
+                        });
                     }
                 });
             },
@@ -520,28 +609,28 @@
                 }, 1000);
                 // 调用后台接口发送验证码
                 var paramObj = null;
-                if (this.sendType === 2 && this.codeType === 3){
+                if (this.sendType === 2 && this.codeType === 3) {
                     paramObj = this.updatePasswordForm;
                 }
-                if (this.sendType === 2 && this.codeType === 4){
+                if (this.sendType === 2 && this.codeType === 4) {
                     paramObj = this.updateEmailForm;
                 }
-                if (this.sendType === 1 && this.codeType === 4){
+                if (this.sendType === 1 && this.codeType === 4) {
                     paramObj = this.updatePhoneForm;
                 }
                 yxt.http.post("/users/code/" + this.sendType + "/" + this.codeType, paramObj).then(({ data }) => {
                     if (data.success) {
-                    this.$message.success(data.message);
-                } else {
-                    this.$message.error(data.message);
-                    this.isSendingCode = false;
-                }
-            })
+                        this.$message.success(data.message);
+                    } else {
+                        this.$message.error(data.message);
+                        this.isSendingCode = false;
+                    }
+                })
             },
             //更新用户基本信息
-            updateUsers(formName){
+            updateUsers(formName) {
                 this.$refs[formName].validate((valid) => {
-                    if (valid){
+                    if (valid) {
                         this.updateUser = {
                             age: this.userInfo.age,
                             gender: this.userInfo.gender,
@@ -549,36 +638,71 @@
                             school: this.userInfo.school,
                             tsNo: this.userInfo.tsNo,
                         }
-                        yxt.http.put("/users/info/id/" + this.user.id, this.updateUser).then(({data}) => {
-                            if (data.success){
-                            this.$message.success(data.message);
-                            this.realName = this.updateUser.realName;
-                        }else{
-                            this.$message.error(data.message);
-                        }
-                    }).catch(() => {
+                        yxt.http.put("/users/info/id/" + this.user.id, this.updateUser).then(({ data }) => {
+                            if (data.success) {
+                                this.$message.success(data.message);
+                                this.realName = this.updateUser.realName;
+                            } else {
+                                this.$message.error(data.message);
+                            }
+                        }).catch(() => {
                             this.$message.error("服务器繁忙，请稍后再试！");
-                    });
+                        });
                     }
                 });
             },
+            uploadImg(f) {
+                this.isProgressVisable = true
+                let formdata = new FormData()
+                formdata.append('file', f.file)
+                yxt.http({
+                    url: '/users/avatar/id/' + this.user.id,
+                    method: 'put',
+                    data: formdata,
+                    headers: { 'Content-Type': 'multipart/form-data' },
+                    onUploadProgress: progressEvent => {
+                        // progressEvent.loaded:已上传文件大小
+                        // progressEvent.total:被上传文件的总大小
+                        this.progressPercent = (progressEvent.loaded / progressEvent.total * 100)
+                    }
+                }).then(({ data }) => {
+                    if (data.success) {
+                        this.verify();
+                        this.$message.success(data.message);
+                        if (this.progressPercent === 100) {
+                            this.isProgressVisable = false;
+                            this.progressPercent = 0;
+                        }
+                    } else {
+                        this.isProgressVisable = false;
+                        this.progressPercent = 0;
+                        this.$message.error(data.message);
+                    }
+                }).catch((() => {
+                    this.$message.error("服务器繁忙，请稍候再试！");
+                    this.isProgressVisable = false;
+                    this.progressPercent = 0;
+                }));
+            },
+            // 上传图片前的过滤
+            beforeAvatarUpload(file) {
+                const fileTypes = ['image/jpeg', 'image/png'];
+                const isValidType = fileTypes.indexOf(file.type) != -1;
+                const isLt2M = (file.size / 1024 / 1024) < 2;
+
+                if (!isValidType) {
+                    this.$message.error('上传头像图片只能是 JPG 或 PNG 格式!');
+                    return false;
+                }
+                if (!isLt2M) {
+                    this.$message.error('上传头像图片大小不能超过 2MB!');
+                    return false;
+                }
+                return isValidType && isLt2M;
+            },
         },
         created() {
-            var that = this;
-            yxt.http.get("/auth/verify/2").then(({data}) => {
-                if (data.success) {
-                this.user = data.queryResult.data[0];
-                yxt.http.get("/users/info/id/" + this.user.id).then(({data}) => {
-                    this.userInfo = data.queryResult.data[0];
-                this.realName = this.userInfo.realName;
-                console.log(this.userInfo);
-            });
-            } else {
-                location.href = "../index.html"
-            }
-        }).catch(() => {
-                location.href = "index.html";
-        });
+            this.verify();
         },
     })
 </script>
