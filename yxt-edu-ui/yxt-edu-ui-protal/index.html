@@ -21,7 +21,9 @@
                         <!-- <img src="./images/logo_blue.png"> -->
                         <el-image>
                             <div slot="error" class="image-slot">
-                                <div class="header-logo">LOGO</div>
+                                <!-- <div class="header-logo">LOGO</div> -->
+                                <el-image src="./images/logo.png" style="width: 192px; height: 48px; margin: 10px;">
+                                </el-image>
                             </div>
                         </el-image>
                     </el-col>
@@ -213,7 +215,8 @@
                 </el-row>
                 <el-row type="flex" justify="center" style="margin-top: 50px; margin-bottom: 40px;">
                     <el-button class="show-btn">了解详细功能</el-button>
-                    <el-button type="primary" style="width: 160px; height: 48px;" @click="location.href='register.html'">立即注册体验</el-button>
+                    <el-button type="primary" style="width: 160px; height: 48px;"
+                        @click="location.href='register.html'">立即注册体验</el-button>
                 </el-row>
             </el-main>
             <!-- 底部 -->
@@ -249,7 +252,7 @@
             activeIndex: '1',
             indexBannerPics: [
                 "https://prepc.ketangpai.com/img/banner-home01.9994acf5.jpg",
-                "https://prepc.ketangpai.com/img/banner-home02.ebb3d690.png",
+                "./images/index_banner_02.png",
                 "https://prepc.ketangpai.com/img/banner-home03.6c319494.png"
             ],
             isAuthorized: false

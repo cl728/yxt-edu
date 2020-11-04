@@ -37,8 +37,8 @@
                         <!-- <el-image style="margin-top: 10px;" src="./images/logo_blue.png" fit="contain"></el-image> -->
                         <el-image>
                             <div slot="error" class="image-slot">
-                                <div class="header-logo">LOGO</div>
-                                <!-- <el-image src="./images/logo.png" style="width: 192px; height: 48px;"></el-image> -->
+                                <!-- <div class="header-logo">LOGO</div> -->
+                                <el-image src="./images/logo.png" style="width: 192px; height: 48px; margin: 10px;"></el-image>
                             </div>
                         </el-image>
                     </el-col>
@@ -169,6 +169,13 @@
                                                     <span v-else>退课</span>
                                                 </el-link>
                                             </div>
+                                            <div style="margin: 5px; text-align: center;" v-show="user.isTeacher">
+                                                <el-link :underline="false" type="info" style="font-size: medium;"
+                                                    @click="showTransferCourseDialog(topCourse.id)">
+                                                    <i class="el-icon-refresh"></i>
+                                                    <span>转让</span>
+                                                </el-link>
+                                            </div>
                                             <el-link :underline="false" type="primary" slot="reference">更多 <i
                                                     class="fa fa-info"></i>
                                             </el-link>
@@ -253,11 +260,18 @@
                                             </div>
                                             <div style="margin: 5px; text-align: center;">
                                                 <el-link :underline="false" type="info" style="font-size: medium;"
-                                                @click="showDelCourseDialog(otherCourse.id)">
-                                                <i class="el-icon-delete"></i>
-                                                <span v-if="user.isTeacher">删除</span>
-                                                <span v-else>退课</span>
-                                            </el-link>
+                                                    @click="showDelCourseDialog(otherCourse.id)">
+                                                    <i class="el-icon-delete"></i>
+                                                    <span v-if="user.isTeacher">删除</span>
+                                                    <span v-else>退课</span>
+                                                </el-link>
+                                            </div>
+                                            <div style="margin: 5px; text-align: center;" v-show="user.isTeacher">
+                                                <el-link :underline="false" type="info" style="font-size: medium;"
+                                                    @click="showTransferCourseDialog(otherCourse.id)">
+                                                    <i class="el-icon-refresh"></i>
+                                                    <span>转让</span>
+                                                </el-link>
                                             </div>
                                             <el-link :underline="false" type="primary" slot="reference">更多 <i
                                                     class="fa fa-info"></i>
@@ -272,7 +286,8 @@
                 <!-- 归档管理 -->
                 <el-dialog title="归档管理" :visible.sync="filedCourseListVisable" center>
                     <el-row type="flex" justify="space-start" :gutter="20" style="margin: 40px;"
-                        v-for="(row, index) of filedCourseListRows" :key="index">
+                        v-for="(row, index) of filedCourseListRows" :key="index"
+                        v-show="filedCourseListRows.length != 0">
                         <el-col :span="12" v-for="(filedCourse, innerindex) in row" :key="filedCourse.id">
                             <el-card style="height: 120px; width: 288px;">
                                 <div slot="header" :style="{backgroundImage:'url(' + filedCourse.cpic + ')'}">
@@ -331,10 +346,14 @@
                             </el-card>
                         </el-col>
                     </el-row>
+                    <el-row v-show="filedCourseListRows.length === 0">
+                        <p style="text-align: center; font-size: 15px; color: black;">暂无课程被归档</p>
+                    </el-row>
                 </el-dialog>
                 <!-- 创建课程 -->
-                <el-dialog title="创建课程" :visible.sync="addCourseFormVisable" center width="30%">
-                    <el-form :model="course" :rules="addCourseRule" ref="addCourseForm" hide-required-asterisk="true">
+                <el-dialog title="创建课程" :visible.sync="addCourseFormVisable" center width="30%" destory-on-close
+                    @close="course = {}">
+                    <el-form :model="course" :rules="addCourseRules" ref="addCourseForm" hide-required-asterisk="true">
                         <el-form-item prop="name">
                             <el-input prefix-icon="el-icon-user" placeholder="请输入课程名称" v-model="course.name"
                                 autocomplete="off" clearable></el-input>
@@ -367,15 +386,34 @@
                 <!-- 删除课程/退课 -->
                 <el-dialog :title="user.isTeacher ? '确定要删除该课程吗？' : '确定要退课吗？'" :visible.sync="delCourseDialogVisable"
                     destory-on-close @close="password = ''" width="30%" center>
-                    <el-form>
-                        <el-form-item>
+                    <el-form :model="delCourseUser" :rules="delCourseRules" status-icon>
+                        <el-form-item prop="password">
                             <el-input prefix-icon="el-icon-lock" type="password" placeholder="请输入登录密码校验"
-                                v-model="password" autocomplete="off" show-password></el-input>
+                                v-model="delCourseUser.password" autocomplete="off" show-password></el-input>
                         </el-form-item>
                     </el-form>
                     <div slot="footer">
                         <el-button @click="delCourseDialogVisable = false">取 消</el-button>
                         <el-button type="primary" @click="delCourse()">确 定</el-button>
+                    </div>
+                </el-dialog>
+                <!-- 教师转让课程 -->
+                <el-dialog title="确定要转让该课程吗？" :visible.sync="transferCourseDialogVisable" destory-on-close
+                    @close="transferCourseUser = {}" width="30%" center>
+                    <el-form :model="transferCourseUser" :rules="transferCourseRules">
+                        <el-form-item prop="password">
+                            <el-input prefix-icon="el-icon-lock" type="password" placeholder="请输入登录密码校验"
+                                v-model="transferCourseUser.password" autocomplete="off" show-password></el-input>
+                        </el-form-item>
+                        <el-form-item prop="email">
+                            <el-input prefix-icon="el-icon-postcard" placeholder="请输入要转让的教师的邮箱地址"
+                                v-model="transferCourseUser.email" autocomplete="off" clearable>
+                            </el-input>
+                        </el-form-item>
+                    </el-form>
+                    <div slot="footer">
+                        <el-button @click="transferCourseDialogVisable = false">取 消</el-button>
+                        <el-button type="primary" @click="transferCourse()">确 定</el-button>
                     </div>
                 </el-dialog>
             </el-main>
@@ -426,7 +464,7 @@
                 "2020-2021",
                 "2021-2022"
             ],
-            addCourseRule: {
+            addCourseRules: {
                 name: [
                     { required: true, message: '请输入课程名称', trigger: 'blur' }
                 ],
@@ -440,10 +478,28 @@
                     { required: true, message: '请选择学期', trigger: 'blur' }
                 ]
             },
+            delCourseRules: {
+                password: [
+                    { required: true, message: '请输入登录密码校验', trigger: 'blur' }
+                ]
+            },
+            transferCourseRules: {
+                password: [
+                    { required: true, message: '请输入登录密码校验', trigger: 'blur' }
+                ],
+                email: [{ required: true, message: '请输入邮箱地址', trigger: 'blur' },
+                { type: 'email', message: '请输入正确的邮箱地址', trigger: 'blur' }]
+            },
             delCourseId: -1,
+            transferCourseId: -1,
             password: "",
             delCourseDialogVisable: false,
-            delCourseUser: {}
+            delCourseUser: {},
+            transferCourseDialogVisable: false,
+            transferCourseUser: {
+                password: "",
+                email: ""
+            }
         },
         methods: {
             handleSelect(key, keyPath) {
@@ -484,6 +540,7 @@
                     yxt.http.post("/courses/id/" + this.user.id + "/" + value).then(({ data }) => {
                         if (data.success) {
                             this.$message.success(data.message);
+                            this.getCourseData();
                         } else {
                             this.$message.error(data.message);
                         }
@@ -543,12 +600,16 @@
                 this.delCourseDialogVisable = true;
             },
             delCourse() {
-                this.delCourseUser = {
+                if (this.delCourseUser.password === '') {
+                    this.$message.error("请输入登录密码校验！")
+                    return;
+                }
+                let delCourse = {
                     userId: this.user.id,
-                    password: hex_md5(this.password)
+                    password: hex_md5(this.delCourseUser.password)
                 }
                 yxt.http.delete("/courses/id/" + this.delCourseId, {
-                    data: this.delCourseUser
+                    data: delCourse
                 }).then(({ data }) => {
                     if (data.success) {
                         this.$message.success(data.message);
@@ -560,7 +621,40 @@
                 }).catch(() => {
                     this.$message.error("服务器繁忙，请稍候再试！")
                 });
-            }
+            },
+            showTransferCourseDialog(courseId) {
+                this.transferCourseId = courseId;
+                this.transferCourseDialogVisable = true;
+            },
+            transferCourse() {
+                if (this.transferCourseUser.password === '') {
+                    this.$message.error("请输入登录密码校验！");
+                    return;
+                }
+                if (!this.checkEmail(this.transferCourseUser.email)) {
+                    this.$message.error("请输入正确的邮箱地址！");
+                    return;
+                }
+                let transferCourse = {
+                    password: hex_md5(this.transferCourseUser.password),
+                    email: this.transferCourseUser.email
+                }
+                yxt.http.put("/courses/teacherId/id/" + this.transferCourseId + "/" + this.user.id, transferCourse).then(({ data }) => {
+                    if (data.success) {
+                        this.$message.success(data.message);
+                        this.transferCourseDialogVisable = false;
+                        this.getCourseData();
+                    } else {
+                        this.$message.error(data.message);
+                    }
+                }).catch(() => {
+                    this.$message.error("服务器繁忙，请稍候再试！")
+                })
+            },
+            checkEmail(email) {
+                let regEmail = /^[a-zA-Z0-9_-]+@[a-zA-Z0-9_-]+(\.[a-zA-Z0-9_-]+)+$/;
+                return regEmail.test(email);
+            },
         },
         created() {
             yxt.http.get("/auth/verify/2").then(({ data }) => {
