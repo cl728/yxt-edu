@@ -30,10 +30,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 
 /**
  * @author Curtis
@@ -218,6 +215,15 @@ public class CourseServiceImpl implements CourseService {
 
         List<Course> courses = this.courseMapper.findByPage( new Page<>( currentPage, pageSize ), queryPageRequestCourse );
         return new QueryResponse( CommonCode.SUCCESS, new QueryResult<>( courses, this.courseMapper.selectCount( queryWrapper ) ) );
+    }
+
+    @Override
+    public QueryResponse findById(long courseId) {
+        Course course = this.courseMapper.selectById( courseId );
+        if (course == null) {
+            return new QueryResponse( CourseCode.COURSE_NOT_FOUND , null);
+        }
+        return new QueryResponse( CommonCode.SUCCESS, new QueryResult<>( Collections.singletonList( course ), 1 ) );
     }
 
     @Transactional

@@ -104,4 +104,12 @@ public interface CourseService {
      * @return 响应结果实体类
      */
     CommonResponse file(long courseId, long userId);
+
+    /**
+     * 根据课程id查询课程信息
+     *
+     * @param courseId 课程信息
+     * @return 查询结果实体类
+     */
+    QueryResponse findById(long courseId);
 }

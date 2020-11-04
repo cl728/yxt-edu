@@ -32,6 +32,12 @@ public class CourseController implements CourseControllerApi {
     }
 
     @Override
+    @GetMapping("info/id/{courseId}")
+    public QueryResponse findById(@PathVariable long courseId) {
+        return this.courseService.findById( courseId );
+    }
+
+    @Override
     @PutMapping("teacherId/id/{courseId}/{teacherId}")
     public CommonResponse transferCourses(@PathVariable Long courseId, @PathVariable Long teacherId, @RequestBody TransferCourse transferCourse) {
         return this.courseService.transferCourses(courseId, teacherId, transferCourse);

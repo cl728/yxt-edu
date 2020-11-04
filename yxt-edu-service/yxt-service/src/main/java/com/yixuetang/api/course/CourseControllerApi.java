@@ -30,6 +30,10 @@ public interface CourseControllerApi {
     })
     CommonResponse updateCourses(Long courseId, Long teacherId, UpdateCourse updateCourse);
 
+    @ApiOperation("根据id查询课程信息")
+    @ApiImplicitParam(name = "courseId", value = "课程id", required = true,
+            paramType = "path", dataType = "long")
+    QueryResponse findById(long courseId);
 
     @ApiOperation("教师转让课程")
     @ApiImplicitParams({
