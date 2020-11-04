@@ -354,13 +354,14 @@ const router = new VueRouter({
 })
 
 router.beforeEach((to, from, next) => {
+  let needLogin = to.meta.loginState // 是否需要登录
+  if (!needLogin) {
+    next()
+    document.title = to.meta.title
+  }
   axios.get("/auth/verify/1").then(({ data }) => {
     let isAuthorized = data.success
-    let needLogin = to.meta.loginState // 是否需要登录
-    if (!needLogin) {
-      next()
-      document.title = to.meta.title
-    } else if (needLogin && isAuthorized) {
+    if (needLogin && isAuthorized) {
       next()
       document.title = to.meta.title
     } else {
@@ -373,7 +374,6 @@ router.beforeEach((to, from, next) => {
         })
       }
     }
-    console.log(to.meta.isAuthorized)
   })
 
 })
