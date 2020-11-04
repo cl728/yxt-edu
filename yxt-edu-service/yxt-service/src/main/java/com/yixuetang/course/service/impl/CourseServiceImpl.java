@@ -123,6 +123,10 @@ public class CourseServiceImpl implements CourseService {
             } else {
                 // 将选课表关于该学生和该课程的记录删除
                 this.scMapper.delete(new QueryWrapper<StudentCourse>().eq("course_id", courseId).eq("student_id", userId));
+                // 将该课程的加课人数减一
+                Course course = this.courseMapper.selectById( courseId );
+                course.setSCount( course.getSCount() - 1 );
+                this.courseMapper.updateById( course );
             }
         }
         return new CommonResponse(CommonCode.SUCCESS);
