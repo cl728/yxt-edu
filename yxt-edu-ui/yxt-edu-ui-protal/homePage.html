@@ -37,8 +37,8 @@
                         <!-- <el-image style="margin-top: 10px;" src="./images/logo_blue.png" fit="contain"></el-image> -->
                         <el-image>
                             <div slot="error" class="image-slot">
-                                <!-- <div class="header-logo">LOGO</div> -->
-                                <el-image src="./images/logo.png" style="width: 192px; height: 48px;"></el-image>
+                                <div class="header-logo">LOGO</div>
+                                <!-- <el-image src="./images/logo.png" style="width: 192px; height: 48px;"></el-image> -->
                             </div>
                         </el-image>
                     </el-col>
@@ -157,12 +157,16 @@
                                             <div style="margin: 5px; text-align: center;">
                                                 <el-link :underline="false" type="info" style="font-size: medium;"
                                                     @click="switchIsFiled(topCourse.id)">
-                                                    <i class="el-icon-files"></i> 归档
+                                                    <i class="el-icon-files"></i>
+                                                    <span>归档</span>
                                                 </el-link>
                                             </div>
                                             <div style="margin: 5px; text-align: center;">
-                                                <el-link :underline="false" type="info" style="font-size: medium;">
-                                                    <i class="el-icon-delete"></i> 退课
+                                                <el-link :underline="false" type="info" style="font-size: medium;"
+                                                    @click="showDelCourseDialog(topCourse.id)">
+                                                    <i class="el-icon-delete"></i>
+                                                    <span v-if="user.isTeacher">删除</span>
+                                                    <span v-else>退课</span>
                                                 </el-link>
                                             </div>
                                             <el-link :underline="false" type="primary" slot="reference">更多 <i
@@ -243,13 +247,17 @@
                                             <div style="margin: 5px; text-align: center;">
                                                 <el-link :underline="false" type="info" style="font-size: medium;"
                                                     @click="switchIsFiled(otherCourse.id)">
-                                                    <i class="el-icon-files"></i> 归档
+                                                    <i class="el-icon-files"></i>
+                                                    <span>归档</span>
                                                 </el-link>
                                             </div>
                                             <div style="margin: 5px; text-align: center;">
-                                                <el-link :underline="false" type="info" style="font-size: medium;">
-                                                    <i class="el-icon-delete"></i> 退课
-                                                </el-link>
+                                                <el-link :underline="false" type="info" style="font-size: medium;"
+                                                @click="showDelCourseDialog(otherCourse.id)">
+                                                <i class="el-icon-delete"></i>
+                                                <span v-if="user.isTeacher">删除</span>
+                                                <span v-else>退课</span>
+                                            </el-link>
                                             </div>
                                             <el-link :underline="false" type="primary" slot="reference">更多 <i
                                                     class="fa fa-info"></i>
@@ -300,11 +308,13 @@
                                                 <div style="margin: 5px; text-align: center;">
                                                     <el-link :underline="false" type="info" style="font-size: medium;"
                                                         @click="switchIsFiled(filedCourse.id)">
-                                                        <i class="el-icon-files" style="margin-right: 5px;"></i> 恢复
+                                                        <i class="el-icon-files"></i>
+                                                        <span>恢复</span>
                                                     </el-link>
                                                 </div>
                                                 <div style="margin: 5px; text-align: center;">
-                                                    <el-link :underline="false" type="info" style="font-size: medium;">
+                                                    <el-link :underline="false" type="info" style="font-size: medium;"
+                                                        @click="showDelCourseDialog(filedCourse.id)">
                                                         <i class="el-icon-delete"></i>
                                                         <span v-if="user.isTeacher">删除</span>
                                                         <span v-else>退课</span>
@@ -354,6 +364,20 @@
                         </el-row>
                     </div>
                 </el-dialog>
+                <!-- 删除课程/退课 -->
+                <el-dialog :title="user.isTeacher ? '确定要删除该课程吗？' : '确定要退课吗？'" :visible.sync="delCourseDialogVisable"
+                    destory-on-close @close="password = ''" width="30%" center>
+                    <el-form>
+                        <el-form-item>
+                            <el-input prefix-icon="el-icon-lock" type="password" placeholder="请输入登录密码校验"
+                                v-model="password" autocomplete="off" show-password></el-input>
+                        </el-form-item>
+                    </el-form>
+                    <div slot="footer">
+                        <el-button @click="delCourseDialogVisable = false">取 消</el-button>
+                        <el-button type="primary" @click="delCourse()">确 定</el-button>
+                    </div>
+                </el-dialog>
             </el-main>
             <!-- 底部 -->
             <el-footer>
@@ -379,6 +403,7 @@
 <script src="https://cdn.bootcss.com/axios/0.19.2/axios.min.js"></script>
 <script src="https://cdn.bootcss.com/element-ui/2.13.2/index.js"></script>
 <script src="./js/common.js"></script>
+<script src="./js/md5.js"></script>
 
 <script>
     new Vue({
@@ -415,6 +440,10 @@
                     { required: true, message: '请选择学期', trigger: 'blur' }
                 ]
             },
+            delCourseId: -1,
+            password: "",
+            delCourseDialogVisable: false,
+            delCourseUser: {}
         },
         methods: {
             handleSelect(key, keyPath) {
@@ -508,6 +537,29 @@
                 }).catch(() => {
                     this.$message.error("服务器繁忙，请稍候再试一次！");
                 })
+            },
+            showDelCourseDialog(courseId) {
+                this.delCourseId = courseId;
+                this.delCourseDialogVisable = true;
+            },
+            delCourse() {
+                this.delCourseUser = {
+                    userId: this.user.id,
+                    password: hex_md5(this.password)
+                }
+                yxt.http.delete("/courses/id/" + this.delCourseId, {
+                    data: this.delCourseUser
+                }).then(({ data }) => {
+                    if (data.success) {
+                        this.$message.success(data.message);
+                        this.delCourseDialogVisable = false;
+                        this.getCourseData();
+                    } else {
+                        this.$message.error(data.message);
+                    }
+                }).catch(() => {
+                    this.$message.error("服务器繁忙，请稍候再试！")
+                });
             }
         },
         created() {
