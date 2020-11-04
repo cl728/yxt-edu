@@ -124,7 +124,7 @@ public interface UserService {
      *
      * @param id   用户主键id
      * @param file 头像文件
-     * @return 响应结果实体类
+     * @return 新上传的头像链接
      */
-    CommonResponse updateAvatar(long id, MultipartFile file);
+    String updateAvatar(long id, MultipartFile file);
 }

@@ -3,8 +3,6 @@ package com.yixuetang.user.service.impl;
 import com.aliyuncs.exceptions.ClientException;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.github.tobato.fastdfs.domain.StorePath;
-import com.github.tobato.fastdfs.service.FastFileStorageClient;
 import com.yixuetang.course.mapper.CourseMapper;
 import com.yixuetang.course.mapper.ScMapper;
 import com.yixuetang.entity.course.Course;
@@ -34,9 +32,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
-import javax.imageio.ImageIO;
-import java.awt.image.BufferedImage;
-import java.io.IOException;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
@@ -388,7 +383,8 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public CommonResponse updateAvatar(long id, MultipartFile file) {
+    @Transactional
+    public String updateAvatar(long id, MultipartFile file) {
 
         // 参数不合法
         if (file == null) {
@@ -399,7 +395,7 @@ public class UserServiceImpl implements UserService {
         String avatar = uploadUtils.uploadImage( file );
 
         if (StringUtils.isBlank( avatar )) {
-            return new CommonResponse( UserCode.INVALID_CONTENT_TYPE );
+            return null;
         }
 
         // 修改用户头像
@@ -408,7 +404,7 @@ public class UserServiceImpl implements UserService {
         user.setUpdateTime( new Date() );
         this.userMapper.updateById( user );
 
-        return new CommonResponse( CommonCode.SUCCESS );
+        return avatar;
 
     }
 

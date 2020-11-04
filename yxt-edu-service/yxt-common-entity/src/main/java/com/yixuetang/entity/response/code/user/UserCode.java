@@ -36,9 +36,7 @@ public enum UserCode implements ResponseCode {
 
     PHONE_NOT_REGISTERED( false, 30012, "该手机号码尚未注册，请先进行注册！" ),
 
-    PHONE_HAS_BEEN_REGISTERED( false, 30013, "该手机号码已被注册！" ),
-
-    INVALID_CONTENT_TYPE( false, 30014, "暂不支持该文件类型！" );
+    PHONE_HAS_BEEN_REGISTERED( false, 30013, "该手机号码已被注册！" );
 
     private boolean success;
     private int code;

@@ -12,6 +12,7 @@ import com.yixuetang.utils.auth.CookieUtils;
 import com.yixuetang.utils.auth.JwtConfig;
 import com.yixuetang.utils.auth.JwtUtils;
 import com.yixuetang.utils.exception.ExceptionThrowUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,6 +20,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 /**
  * @author Colin
@@ -75,9 +77,33 @@ public class UserController implements UserControllerApi {
 
     @Override
     @PutMapping("avatar/id/{id}")
-    public CommonResponse updateAvatar(@PathVariable long id, MultipartFile file, HttpServletRequest request) {
+    public CommonResponse updateAvatar(@PathVariable long id, MultipartFile file, HttpServletRequest request, HttpServletResponse response) {
         if (checkIdIfInvalid( id, request )) return new CommonResponse( CommonCode.INVALID_PARAM );
-        return this.userService.updateAvatar(id, file);
+
+        String avatar = this.userService.updateAvatar( id, file );
+        if (StringUtils.isBlank( avatar )) {
+            return new CommonResponse( CommonCode.FAIL );
+        }
+
+        String cookieName = id == 3 ? config.getAdminCookieName() : config.getUserCookieName();
+        String token = CookieUtils.getCookieValue( request, cookieName );
+        try {
+            // 重新生成 token 信息
+            UserInfo userInfo = JwtUtils.getInfoFromToken( token, config.getPublicKey() );
+            String newToken = JwtUtils.generateToken( new UserInfo( userInfo.getId(), userInfo.getUsername(),
+                            userInfo.getIsTeacher(), avatar, userInfo.getRememberMe() ),
+                    config.getPrivateKey(), config.getExpire() );
+            // 重新写入cookie
+            CookieUtils.setCookie( request, response, cookieName, newToken,
+                    // 如果用户勾选了记住我，则将 cookie 存活时间设置为 7 天
+                    userInfo.getRememberMe() ? 14 * config.getCookieMaxAge() : config.getCookieMaxAge(),
+                    null, true );
+        } catch (Exception e) {
+            LOGGER.error( "解析token信息异常！异常原因：{}", e );
+            return new CommonResponse( CommonCode.SERVER_ERROR );
+        }
+
+        return new CommonResponse( CommonCode.SUCCESS );
     }
 
     @Override
