@@ -7,10 +7,7 @@ import com.yixuetang.course.mapper.ScMapper;
 import com.yixuetang.course.service.CourseService;
 import com.yixuetang.entity.course.Course;
 import com.yixuetang.entity.course.StudentCourse;
-import com.yixuetang.entity.request.course.InsertCourse;
-import com.yixuetang.entity.request.course.ListCourse;
-import com.yixuetang.entity.request.course.TransferCourse;
-import com.yixuetang.entity.request.course.UpdateCourse;
+import com.yixuetang.entity.request.course.*;
 import com.yixuetang.entity.request.user.AvatarUser;
 import com.yixuetang.entity.request.user.DelCourseUser;
 import com.yixuetang.entity.response.CommonResponse;
@@ -214,9 +211,13 @@ public class CourseServiceImpl implements CourseService {
     }
 
     @Override
-    public QueryResponse findByPage(long currentPage, long pageSize) {
-        List<Course> courses = this.courseMapper.findByPage(new Page<>(currentPage, pageSize));
-        return new QueryResponse(CommonCode.SUCCESS, new QueryResult<>(courses, this.courseMapper.selectCount(null)));
+    public QueryResponse findByPage(long currentPage, long pageSize, QueryPageRequestCourse queryPageRequestCourse) {
+        QueryWrapper<Course> queryWrapper = new QueryWrapper<>();
+
+        this.screen( queryPageRequestCourse, queryWrapper );
+
+        List<Course> courses = this.courseMapper.findByPage( new Page<>( currentPage, pageSize ), queryPageRequestCourse );
+        return new QueryResponse( CommonCode.SUCCESS, new QueryResult<>( courses, this.courseMapper.selectCount( queryWrapper ) ) );
     }
 
     @Transactional
@@ -443,5 +444,29 @@ public class CourseServiceImpl implements CourseService {
         return new CommonResponse(CommonCode.SUCCESS);
     }
 
-
+    private void screen(QueryPageRequestCourse queryPageRequestCourse, QueryWrapper<Course> queryWrapper) {
+        String schoolYear = queryPageRequestCourse.getSchoolYear();
+        if (StringUtils.isNoneBlank( schoolYear ) && !StringUtils.equals( "all", schoolYear )) {
+            queryWrapper.eq( "school_year", schoolYear );
+        }
+        String semester = queryPageRequestCourse.getSemester();
+        if (StringUtils.isNoneBlank( semester ) && !StringUtils.equals( "all", semester )) {
+            queryWrapper.eq( "semester", semester );
+        }
+        String courseName = queryPageRequestCourse.getCourseName();
+        if (StringUtils.isNoneBlank( courseName)) {
+            queryPageRequestCourse.setCourseName("%" + courseName + "%");
+            queryWrapper.like("c_name", courseName);
+        }
+        Integer minStudentCount = queryPageRequestCourse.getMinStudentCount();
+        Integer maxStudentCount = queryPageRequestCourse.getMaxStudentCount();
+        if (ObjectUtils.isEmpty( minStudentCount ) && ObjectUtils.isNotEmpty( maxStudentCount )) {
+            queryWrapper.le( "s_count", maxStudentCount );
+        } else if (ObjectUtils.isEmpty( maxStudentCount ) && ObjectUtils.isNotEmpty( minStudentCount )) {
+            queryWrapper.ge( "s_count", minStudentCount );
+        } else if (ObjectUtils.allNotNull( minStudentCount, maxStudentCount )
+                && ObjectUtils.compare( minStudentCount, maxStudentCount ) < 0) {
+            queryWrapper.between( "s_count", minStudentCount, maxStudentCount );
+        }
+    }
 }

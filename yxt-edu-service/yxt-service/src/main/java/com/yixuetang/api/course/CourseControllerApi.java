@@ -1,6 +1,7 @@
 package com.yixuetang.api.course;
 
 import com.yixuetang.entity.request.course.InsertCourse;
+import com.yixuetang.entity.request.course.QueryPageRequestCourse;
 import com.yixuetang.entity.request.course.TransferCourse;
 import com.yixuetang.entity.request.course.UpdateCourse;
 import com.yixuetang.entity.request.user.DelCourseUser;
@@ -69,7 +70,7 @@ public interface CourseControllerApi {
             @ApiImplicitParam(name = "pageSize", value = "每页显示条数", required = true,
                     paramType = "path", dataType = "long")
     })
-    QueryResponse findByPage(long currentPage, long pageSize);
+    QueryResponse findByPage(long currentPage, long pageSize, QueryPageRequestCourse queryPageRequestCourse);
 
     @ApiOperation("查询用户课程列表")
     @ApiImplicitParam(name = "userId", value = "用户id", required = true,

@@ -108,8 +108,8 @@ public class UserController implements UserControllerApi {
 
     @Override
     @GetMapping("page/{currentPage}/{pageSize}")
-    public QueryResponse findByPage(@PathVariable long currentPage, @PathVariable long pageSize, QueryPageRequest queryPageRequest) {
-        return this.userService.findByPage( currentPage, pageSize, queryPageRequest );
+    public QueryResponse findByPage(@PathVariable long currentPage, @PathVariable long pageSize, QueryPageRequestUser queryPageRequestUser) {
+        return this.userService.findByPage( currentPage, pageSize, queryPageRequestUser );
     }
 
     @Override

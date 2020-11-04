@@ -5,12 +5,58 @@
         <span>课程信息</span>
       </div>
       <div id="charts_one" style="width: 100%; min-height: 300px">
-        <el-table
-          :data="courseData"
-          max-height="528"
-          style="width: 100%"
+        <el-form
+          :inline="true"
+          :model="pageData.queryPageRequest"
+          class="demo-form-inline"
         >
-          <el-table-column type="selection" width="55"></el-table-column>
+          <el-form-item>
+            <el-select
+              v-model="pageData.queryPageRequest.schoolYear"
+              placeholder="选择学年"
+            >
+              <el-option label="不限" value="all"></el-option>
+              <el-option
+                v-for="(schoolYear, index) in schoolYears"
+                :key="index"
+                :label="schoolYear"
+                :value="schoolYear"
+              ></el-option>
+            </el-select>
+          </el-form-item>
+          <el-form-item>
+            <el-select
+              v-model="pageData.queryPageRequest.semester"
+              placeholder="选择学期"
+            >
+              <el-option label="不限" value="all"></el-option>
+              <el-option label="第一学期" value="第一学期"></el-option>
+              <el-option label="第二学期" value="第二学期"></el-option>
+            </el-select>
+          </el-form-item>
+          <el-form-item>
+            <el-input
+              v-model="pageData.queryPageRequest.courseName"
+              placeholder="课程名称"
+            ></el-input>
+          </el-form-item>
+          <el-form-item>
+            <el-input-number
+              v-model="pageData.queryPageRequest.minStudentCount"
+              controls-position="right"
+              placeholder="最少加课人数"
+              :min="0"
+            ></el-input-number>
+            &nbsp;-&nbsp;
+            <el-input-number
+              v-model="pageData.queryPageRequest.maxStudentCount"
+              controls-position="right"
+              placeholder="最多加课人数"
+              :min="pageData.queryPageRequest.minStudentCount + 1"
+            ></el-input-number>
+          </el-form-item>
+        </el-form>
+        <el-table :data="courseData" max-height="528" style="width: 100%">
           <el-table-column
             type="index"
             label="序号"
@@ -84,7 +130,15 @@ export default {
         pageSize: 10,
         currentPage: 1,
         pageTotal: 200,
+        queryPageRequest: {},
       },
+      schoolYears: [
+        "2017-2018",
+        "2018-2019",
+        "2019-2020",
+        "2020-2021",
+        "2021-2022",
+      ],
     };
   },
   methods: {
@@ -103,7 +157,9 @@ export default {
           "/courses/page/" +
             this.pageData.currentPage +
             "/" +
-            this.pageData.pageSize
+            this.pageData.pageSize + 
+            "?" + 
+            this.$qs.stringify(this.pageData.queryPageRequest)
         )
         .then(({ data }) => {
           this.courseData = data.queryResult.data;
@@ -113,6 +169,14 @@ export default {
   },
   mounted() {
     this.getCourseData();
+  },
+  watch: {
+    pageData: {
+      deep: true,
+      handler() {
+        this.getCourseData();
+      },
+    },
   },
 };
 </script>

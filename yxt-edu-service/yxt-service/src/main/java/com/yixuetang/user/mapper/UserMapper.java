@@ -2,7 +2,7 @@ package com.yixuetang.user.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.yixuetang.entity.request.user.QueryPageRequest;
+import com.yixuetang.entity.request.user.QueryPageRequestUser;
 import com.yixuetang.entity.user.User;
 import org.apache.ibatis.annotations.*;
 import org.apache.ibatis.mapping.FetchType;
@@ -49,7 +49,7 @@ public interface UserMapper extends BaseMapper<User> {
             "</where>" +
             " order by role_id" +
             "</script>")
-    List<User> findByPage(@Param("page") Page<User> page, @Param("request") QueryPageRequest request);
+    List<User> findByPage(@Param("page") Page<User> page, @Param("request") QueryPageRequestUser request);
 
     /**
      * 根据用户名和密码查询用户

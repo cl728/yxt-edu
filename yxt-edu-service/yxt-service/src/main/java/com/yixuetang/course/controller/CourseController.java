@@ -3,6 +3,7 @@ package com.yixuetang.course.controller;
 import com.yixuetang.api.course.CourseControllerApi;
 import com.yixuetang.course.service.CourseService;
 import com.yixuetang.entity.request.course.InsertCourse;
+import com.yixuetang.entity.request.course.QueryPageRequestCourse;
 import com.yixuetang.entity.request.course.TransferCourse;
 import com.yixuetang.entity.request.course.UpdateCourse;
 import com.yixuetang.entity.request.user.DelCourseUser;
@@ -62,8 +63,8 @@ public class CourseController implements CourseControllerApi {
 
     @Override
     @GetMapping("page/{currentPage}/{pageSize}")
-    public QueryResponse findByPage(@PathVariable long currentPage, @PathVariable long pageSize) {
-        return this.courseService.findByPage(currentPage, pageSize);
+    public QueryResponse findByPage(@PathVariable long currentPage, @PathVariable long pageSize, QueryPageRequestCourse queryPageRequestCourse) {
+        return this.courseService.findByPage(currentPage, pageSize, queryPageRequestCourse);
     }
 
     @Override

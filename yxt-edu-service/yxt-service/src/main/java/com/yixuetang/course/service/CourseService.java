@@ -1,6 +1,7 @@
 package com.yixuetang.course.service;
 
 import com.yixuetang.entity.request.course.InsertCourse;
+import com.yixuetang.entity.request.course.QueryPageRequestCourse;
 import com.yixuetang.entity.request.course.TransferCourse;
 import com.yixuetang.entity.request.course.UpdateCourse;
 import com.yixuetang.entity.request.user.DelCourseUser;
@@ -52,11 +53,12 @@ public interface CourseService {
     /**
      * 分页查询课程
      *
-     * @param currentPage 当前页
-     * @param pageSize    每页数量
+     * @param currentPage            当前页
+     * @param pageSize               每页数量
+     * @param queryPageRequestCourse 课程管理页面分页查询实体类
      * @return 查询结果实体类
      */
-    QueryResponse findByPage(long currentPage, long pageSize);
+    QueryResponse findByPage(long currentPage, long pageSize, QueryPageRequestCourse queryPageRequestCourse);
 
     /**
      * 查询用户课程列表
@@ -70,8 +72,8 @@ public interface CourseService {
     /**
      * 课程置顶/取消置顶
      *
-     * @param courseId
-     * @param userId
+     * @param courseId 课程id
+     * @param userId   用户id
      * @return 响应结果实体类
      */
     CommonResponse updateTopCourse(long courseId, long userId);
@@ -97,8 +99,8 @@ public interface CourseService {
     /**
      * 归档
      *
-     * @param courseId
-     * @param userId
+     * @param courseId 课程id
+     * @param userId   用户id
      * @return 响应结果实体类
      */
     CommonResponse file(long courseId, long userId);

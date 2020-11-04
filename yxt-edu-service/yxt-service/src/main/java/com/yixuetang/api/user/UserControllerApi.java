@@ -44,7 +44,7 @@ public interface UserControllerApi {
             @ApiImplicitParam(name = "pageSize", value = "每页显示条数", required = true,
                     paramType = "path", dataType = "long")
     })
-    QueryResponse findByPage(long currentPage, long pageSize, QueryPageRequest queryPageRequest);
+    QueryResponse findByPage(long currentPage, long pageSize, QueryPageRequestUser queryPageRequestUser);
 
     @ApiOperation("换绑邮箱")
     @ApiImplicitParam(name = "id", value = "用户主键id", required = true,

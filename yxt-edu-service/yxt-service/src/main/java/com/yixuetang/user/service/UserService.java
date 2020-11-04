@@ -28,10 +28,10 @@ public interface UserService {
      *
      * @param currentPage      当前页码数
      * @param pageSize         每页显示条数
-     * @param queryPageRequest 分页查询条件实体类
+     * @param queryPageRequestUser 分页查询条件实体类
      * @return 响应结果实体类
      */
-    QueryResponse findByPage(long currentPage, long pageSize, QueryPageRequest queryPageRequest);
+    QueryResponse findByPage(long currentPage, long pageSize, QueryPageRequestUser queryPageRequestUser);
 
     /**
      * 分页查询角色

@@ -6,11 +6,11 @@ import lombok.Data;
 /**
  * @author Colin
  * @version 1.0.0
- * @description 后台管理页面分页查询实体类
+ * @description 用户管理页面分页查询实体类
  * @date 2020/10/30 20:57
  */
 @Data
-public class QueryPageRequest {
+public class QueryPageRequestUser {
 
     @ApiModelProperty("角色名称")
     private String roleName;

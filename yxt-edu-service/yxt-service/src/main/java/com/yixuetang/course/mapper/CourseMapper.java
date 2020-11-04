@@ -3,6 +3,7 @@ package com.yixuetang.course.mapper;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.yixuetang.entity.course.Course;
+import com.yixuetang.entity.request.course.QueryPageRequestCourse;
 import org.apache.ibatis.annotations.*;
 import org.apache.ibatis.mapping.FetchType;
 
@@ -36,8 +37,18 @@ public interface CourseMapper extends BaseMapper<Course> {
             @Result(column = "teacher_id", property = "teacher",
                     one = @One(select = "com.yixuetang.user.mapper.UserMapper.findById", fetchType = FetchType.EAGER))
     })
-    @Select("select id, teacher_id, c_name, class, school_year, semester, c_code, s_count from t_course")
-    List<Course> findByPage(Page<Course> page);
+    @Select("<script>" +
+            "select id, teacher_id, c_name, class, school_year, semester, c_code, s_count " +
+            " from t_course <where>" +
+            "<if test='request.schoolYear != null and request.schoolYear.length() > 3'> and school_year = #{request.schoolYear}</if>" +
+            "<if test='request.semester != null and request.semester.length() > 3'> and semester = #{request.semester}</if>" +
+            "<if test='request.courseName != null and request.courseName.length() > 0'> and c_name like #{request.courseName}</if>" +
+            "<if test='request.minStudentCount == null and request.maxStudentCount != null'> and #{request.maxStudentCount} >= s_count</if>" +
+            "<if test='request.maxStudentCount == null and request.minStudentCount != null'> and s_count >= #{request.minStudentCount}</if>" +
+            "<if test='request.minStudentCount != null and request.maxStudentCount != null and request.maxStudentCount > request.minStudentCount'> and s_count between #{request.minStudentCount} and #{request.maxStudentCount}</if>" +
+            "</where>" +
+            "</script>")
+    List<Course> findByPage(Page<Course> page, QueryPageRequestCourse request);
 
     @ResultMap("courseMap")
     @Select("select id, teacher_id, s_count from t_course where c_code = #{code}")
