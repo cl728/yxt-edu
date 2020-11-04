@@ -5,6 +5,7 @@ import com.yixuetang.entity.request.auth.LoginUser;
 import com.yixuetang.entity.request.user.*;
 import com.yixuetang.entity.response.CommonResponse;
 import com.yixuetang.entity.response.QueryResponse;
+import org.springframework.web.multipart.MultipartFile;
 
 /**
  * @author Colin
@@ -117,4 +118,13 @@ public interface UserService {
      * @return 响应结果实体类
      */
     CommonResponse delById(long userId);
+
+    /**
+     * 用户更换头像
+     *
+     * @param id   用户主键id
+     * @param file 头像文件
+     * @return 响应结果实体类
+     */
+    CommonResponse updateAvatar(long id, MultipartFile file);
 }

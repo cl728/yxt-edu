@@ -16,6 +16,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -70,6 +71,13 @@ public class UserController implements UserControllerApi {
     public CommonResponse updatePhone(@PathVariable long id, @RequestBody PhoneUser phoneUser, HttpServletRequest request) {
         if (checkIdIfInvalid( id, request )) return new CommonResponse( CommonCode.INVALID_PARAM );
         return this.userService.updatePhone( id, phoneUser );
+    }
+
+    @Override
+    @PutMapping("avatar/id/{id}")
+    public CommonResponse updateAvatar(@PathVariable long id, MultipartFile file, HttpServletRequest request) {
+        if (checkIdIfInvalid( id, request )) return new CommonResponse( CommonCode.INVALID_PARAM );
+        return this.userService.updateAvatar(id, file);
     }
 
     @Override

@@ -26,6 +26,14 @@ spring:
   redis:
     host: ENC(xGJHqtnNQ7QY0/Zmn7J3JVevS8FrsCLX)
     password: ENC(UBm3TeLHwCHy3FZXXk4ffZtulNrEz5zT)
+fdfs:
+  so-timeout: 1501 # 超时时间
+  connect-timeout: 601 # 连接超时时间
+  thumb-image: # 缩略图
+    width: 100
+    height: 100
+  tracker-list: # tracker地址
+    - ENC(2dfNoUual8RdwZ5p7E2XVGb3h7eS3AtVNHcyT1GHceE=)
 yxt:
   filter:
     allowPaths:

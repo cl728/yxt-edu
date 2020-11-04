@@ -3,6 +3,8 @@ package com.yixuetang.user.service.impl;
 import com.aliyuncs.exceptions.ClientException;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.github.tobato.fastdfs.domain.StorePath;
+import com.github.tobato.fastdfs.service.FastFileStorageClient;
 import com.yixuetang.course.mapper.CourseMapper;
 import com.yixuetang.course.mapper.ScMapper;
 import com.yixuetang.entity.course.Course;
@@ -30,7 +32,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
+import javax.imageio.ImageIO;
+import java.awt.image.BufferedImage;
+import java.io.IOException;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
@@ -70,6 +76,8 @@ public class UserServiceImpl implements UserService {
     private ScMapper scMapper;
     @Autowired
     private CourseMapper courseMapper;
+    @Autowired
+    private UploadUtils uploadUtils;
 
     @Override
     public QueryResponse findOneUser(long id) {
@@ -377,6 +385,31 @@ public class UserServiceImpl implements UserService {
         this.userMapper.updateById(user);
 
         return new CommonResponse(CommonCode.SUCCESS);
+    }
+
+    @Override
+    public CommonResponse updateAvatar(long id, MultipartFile file) {
+
+        // 参数不合法
+        if (file == null) {
+            ExceptionThrowUtils.cast( CommonCode.INVALID_PARAM );
+        }
+
+        // 上传头像
+        String avatar = uploadUtils.uploadImage( file );
+
+        if (StringUtils.isBlank( avatar )) {
+            return new CommonResponse( UserCode.INVALID_CONTENT_TYPE );
+        }
+
+        // 修改用户头像
+        User user = this.userMapper.selectById( id );
+        user.setAvatar( avatar );
+        user.setUpdateTime( new Date() );
+        this.userMapper.updateById( user );
+
+        return new CommonResponse( CommonCode.SUCCESS );
+
     }
 
     @Override

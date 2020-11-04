@@ -37,6 +37,7 @@
         <jasypt.version>2.1.0</jasypt.version>
         <aliyun-java-sdk-core.version>3.3.1</aliyun-java-sdk-core.version>
         <aliyun-java-sdk-dysmsapi.version>1.0.0</aliyun-java-sdk-dysmsapi.version>
+        <fastdfs-client.version>1.26.1-RELEASE</fastdfs-client.version>
     </properties>
 
     <dependencyManagement>
@@ -126,6 +127,13 @@
                 <groupId>com.aliyun</groupId>
                 <artifactId>aliyun-java-sdk-dysmsapi</artifactId>
                 <version>${aliyun-java-sdk-dysmsapi.version}</version>
+            </dependency>
+
+            <!-- fastdfs-client -->
+            <dependency>
+                <groupId>com.github.tobato</groupId>
+                <artifactId>fastdfs-client</artifactId>
+                <version>${fastdfs-client.version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>
