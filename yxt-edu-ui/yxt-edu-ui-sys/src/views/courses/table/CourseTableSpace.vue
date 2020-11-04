@@ -46,6 +46,7 @@
               controls-position="right"
               placeholder="最少加课人数"
               :min="0"
+              :max="pageData.queryPageRequest.maxStudentCount - 1"
             ></el-input-number>
             &nbsp;-&nbsp;
             <el-input-number
