@@ -137,7 +137,7 @@
                                 <el-row>
                                     <el-col :span="8" style="float: left; width: 30%;">
                                         <el-row v-if="user.isTeacher">
-                                            <span style="font-size: smaller;">成员<span v-text="topCourse.sCount"></span>人
+                                            <span style="font-size: smaller;">成员<span v-text="topCourse.scount"></span>人
                                         </el-row>
                                         <el-row v-else>
                                             <el-col :span="12">
@@ -223,7 +223,7 @@
                                     <el-col :span="8" style="float: left; width: 35%;">
                                         <el-row v-if="user.isTeacher">
                                             <span style="font-size: smaller;">成员<span
-                                                    v-text="otherCourse.sCount"></span>人
+                                                    v-text="otherCourse.scount"></span>人
                                         </el-row>
                                         <el-row v-else>
                                             <el-col :span="12">
@@ -283,7 +283,7 @@
                                             <el-col :span="12" style="float: left; margin: 5px;">
                                                 <span style="font-size: small; color: #EBEEF5; margin-left: 10px;"
                                                     v-if="user.isTeacher">
-                                                    成员：<span v-text="filedCourse.sCount">0</span>人
+                                                    成员：<span v-text="filedCourse.scount">0</span>人
                                                 </span>
                                                 <span style="font-size: small; color: #EBEEF5; margin-left: 10px;"
                                                     v-else>
@@ -475,6 +475,7 @@
                             if (data.success) {
                                 this.$message.success(data.message);
                                 this.addCourseFormVisable = false;
+                                this.getCourseData();
                             } else {
                                 this.$message.error(data.message)
                             }
