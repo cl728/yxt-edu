@@ -38,7 +38,8 @@
                         <el-image>
                             <div slot="error" class="image-slot">
                                 <!-- <div class="header-logo">LOGO</div> -->
-                                <el-image src="./images/logo.png" style="width: 192px; height: 48px; margin: 10px;"></el-image>
+                                <el-image src="./images/logo.png" style="width: 192px; height: 48px; margin: 10px;">
+                                </el-image>
                             </div>
                         </el-image>
                     </el-col>
@@ -154,6 +155,13 @@
                                         <el-link :underline="false" type="info" @click="switchTop(topCourse.id)">取消置顶
                                         </el-link>
                                         <el-popover placement="bottom" width="150" trigger="click">
+                                            <div style="margin: 5px; text-align: center;" v-show="user.isTeacher">
+                                                <el-link :underline="false" type="info" style="font-size: medium;"
+                                                    @click="showUpdateCourseDialog(topCourse.id)">
+                                                    <i class="el-icon-edit"></i>
+                                                    <span>编辑</span>
+                                                </el-link>
+                                            </div>
                                             <div style="margin: 5px; text-align: center;">
                                                 <el-link :underline="false" type="info" style="font-size: medium;"
                                                     @click="switchIsFiled(topCourse.id)">
@@ -251,6 +259,13 @@
                                         <el-link :underline="false" type="info" @click="switchTop(otherCourse.id)">置顶
                                         </el-link>
                                         <el-popover placement="bottom" width="150" trigger="click">
+                                            <div style="margin: 5px; text-align: center;" v-show="user.isTeacher">
+                                                <el-link :underline="false" type="info" style="font-size: medium;"
+                                                    @click="showUpdateCourseDialog(otherCourse.id)">
+                                                    <i class="el-icon-edit"></i>
+                                                    <span>编辑</span>
+                                                </el-link>
+                                            </div>
                                             <div style="margin: 5px; text-align: center;">
                                                 <el-link :underline="false" type="info" style="font-size: medium;"
                                                     @click="switchIsFiled(otherCourse.id)">
@@ -383,6 +398,40 @@
                         </el-row>
                     </div>
                 </el-dialog>
+                <!-- 编辑课程信息 -->
+                <el-dialog title="编辑课程信息" :visible.sync="updateCourseFormVisable" center width="30%" destory-on-close
+                    @close="updateCourse = {}">
+                    <el-form :model="updateCourse" :rules="updateCourseRules" ref="updateCourseForm"
+                        hide-required-asterisk="true">
+                        <el-form-item prop="cname">
+                            <el-input prefix-icon="el-icon-user" placeholder="请输入课程名称" v-model="updateCourse.cname"
+                                autocomplete="off" clearable></el-input>
+                        </el-form-item>
+                        <el-form-item prop="clazz">
+                            <el-input prefix-icon="el-icon-user" placeholder="请输入班级名称" v-model="updateCourse.clazz"
+                                autocomplete="off" clearable></el-input>
+                        </el-form-item>
+                        <el-form-item label="选择学年" prop="schoolYear">
+                            <el-select v-model="updateCourse.schoolYear" placeholder="请选择学年">
+                                <el-option v-for="(schoolYear, index) in schoolYears" :key="index" :label="schoolYear"
+                                    :value="schoolYear"></el-option>
+                            </el-select>
+                        </el-form-item>
+                        <el-form-item label="选择学期" prop="semester">
+                            <el-select v-model="updateCourse.semester" placeholder="请选择学期">
+                                <el-option label="第一学期" value="第一学期"></el-option>
+                                <el-option label="第二学期" value="第二学期"></el-option>
+                            </el-select>
+                        </el-form-item>
+                    </el-form>
+                    <div slot="footer">
+                        <el-row>
+                            <el-button type="primary" @click="editCourse('updateCourseForm')"
+                                style="display: block; width: 100%;">修 改
+                            </el-button>
+                        </el-row>
+                    </div>
+                </el-dialog>
                 <!-- 删除课程/退课 -->
                 <el-dialog :title="user.isTeacher ? '确定要删除该课程吗？' : '确定要退课吗？'" :visible.sync="delCourseDialogVisable"
                     destory-on-close @close="password = ''" width="30%" center>
@@ -478,6 +527,20 @@
                     { required: true, message: '请选择学期', trigger: 'blur' }
                 ]
             },
+            updateCourseRules: {
+                cname: [
+                    { required: true, message: '请输入课程名称', trigger: 'blur' }
+                ],
+                clazz: [
+                    { required: true, message: '请输入班级名称', trigger: 'blur' }
+                ],
+                schoolYear: [
+                    { required: true, message: '请选择学年', trigger: 'blur' }
+                ],
+                semester: [
+                    { required: true, message: '请选择学期', trigger: 'blur' }
+                ]
+            },
             delCourseRules: {
                 password: [
                     { required: true, message: '请输入登录密码校验', trigger: 'blur' }
@@ -492,6 +555,7 @@
             },
             delCourseId: -1,
             transferCourseId: -1,
+            updateCourseId: -1,
             password: "",
             delCourseDialogVisable: false,
             delCourseUser: {},
@@ -499,7 +563,9 @@
             transferCourseUser: {
                 password: "",
                 email: ""
-            }
+            },
+            updateCourse: {},
+            updateCourseFormVisable: false
         },
         methods: {
             handleSelect(key, keyPath) {
@@ -571,6 +637,23 @@
                     }
                 });
             },
+            editCourse(formName) {
+                this.$refs[formName].validate((valid) => {
+                    if (valid) {
+                        yxt.http.put("/courses/info/id/" + this.updateCourseId + "/" + this.user.id, this.updateCourse).then(({ data }) => {
+                            if (data.success) {
+                                this.$message.success(data.message);
+                                this.updateCourseFormVisable = false;
+                                this.getCourseData();
+                            } else {
+                                this.$message.error(data.message);
+                            }
+                        }).catch(() => {
+                            this.$message.error("服务器繁忙，请稍候再试！")
+                        });
+                    }
+                })
+            },
             switchTop(courseId) {
                 yxt.http.put("/courses/topNum/id/" + courseId + "/" + this.user.id).then(({ data }) => {
                     if (data.success) {
@@ -594,6 +677,20 @@
                 }).catch(() => {
                     this.$message.error("服务器繁忙，请稍候再试一次！");
                 })
+            },
+            showUpdateCourseDialog(courseId) {
+                yxt.http.get("/courses/info/id/" + courseId).then(({ data }) => {
+                    if (data.success) {
+                        this.updateCourse = data.queryResult.data[0];
+                        this.updateCourseId = courseId;
+                        this.updateCourseFormVisable = true;
+                    } else {
+                        this.$message.error(data.message);
+                    }
+                }).catch(() => {
+                    this.$message.error("服务器繁忙，请稍候再试！")
+                })
+
             },
             showDelCourseDialog(courseId) {
                 this.delCourseId = courseId;
