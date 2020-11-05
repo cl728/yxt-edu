@@ -226,6 +226,25 @@ public class CourseServiceImpl implements CourseService {
         return new QueryResponse( CommonCode.SUCCESS, new QueryResult<>( Collections.singletonList( course ), 1 ) );
     }
 
+    @Override
+    @Transactional
+    public CommonResponse delById(long courseId) {
+
+        Course course = this.courseMapper.selectById( courseId );
+        if (course == null) {
+            return new CommonResponse( CourseCode.COURSE_NOT_FOUND );
+        }
+
+        // 先删除选课表的记录
+        this.scMapper.delete( new QueryWrapper<StudentCourse>().eq( "course_id", courseId ) );
+
+        // 再删除这门课程的记录
+        this.courseMapper.deleteById( courseId );
+
+        return CommonResponse.SUCCESS();
+
+    }
+
     @Transactional
     @Override
     public CommonResponse transferCourses(Long courseId, Long teacherId, TransferCourse transferCourse) {
@@ -400,7 +419,6 @@ public class CourseServiceImpl implements CourseService {
             return new QueryResponse(CommonCode.FAIL, null);
         }
     }
-
 
     @Override
     public CommonResponse updateTopCourse(long courseId, long userId) {

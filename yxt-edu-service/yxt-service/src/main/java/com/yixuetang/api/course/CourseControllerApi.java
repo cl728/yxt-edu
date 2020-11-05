@@ -99,4 +99,9 @@ public interface CourseControllerApi {
                     paramType = "path", dataType = "long")
     })
     CommonResponse file(long courseId, long userId);
+
+    @ApiOperation("管理员删除某门课程")
+    @ApiImplicitParam(name = "courseId", value = "课程id", required = true,
+            paramType = "path", dataType = "long")
+    CommonResponse delById(long courseId);
 }

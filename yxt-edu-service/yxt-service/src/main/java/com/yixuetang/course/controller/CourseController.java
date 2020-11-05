@@ -92,5 +92,10 @@ public class CourseController implements CourseControllerApi {
         return this.courseService.file(courseId, userId);
     }
 
+    @Override
+    @DeleteMapping("admin/id/{courseId}")
+    public CommonResponse delById(@PathVariable long courseId) {
+        return this.courseService.delById( courseId );
+    }
 
 }

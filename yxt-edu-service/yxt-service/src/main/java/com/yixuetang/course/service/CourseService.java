@@ -112,4 +112,12 @@ public interface CourseService {
      * @return 查询结果实体类
      */
     QueryResponse findById(long courseId);
+
+    /**
+     * 管理员删除某门课程
+     *
+     * @param courseId 课程id
+     * @return 响应结果实体类
+     */
+    CommonResponse delById(long courseId);
 }
