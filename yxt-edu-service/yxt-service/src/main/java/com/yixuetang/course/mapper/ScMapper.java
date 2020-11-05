@@ -22,7 +22,7 @@ public interface ScMapper extends BaseMapper<StudentCourse> {
      * @param studentId 学生主键id
      * @param courseId  课程主键id
      */
-    @Insert("insert into t_sc(student_id, course_id) value (#{studentId}, #{courseId})")
+    @Insert("insert into t_sc(student_id, course_id) values (#{studentId}, #{courseId})")
     void joinCourse(@Param("studentId") Long studentId, @Param("courseId") Long courseId);
 
     /**
@@ -44,7 +44,7 @@ public interface ScMapper extends BaseMapper<StudentCourse> {
      * @return 操作影响行数
      */
     @Update("update t_sc set top_num=#{topNum} where student_id = #{studentId} and course_id = #{courseId}")
-    void updateTopNumByStudentIdAndCourseId(@Param("topNum") int topNum,@Param("studentId") Long studentId, @Param("courseId") Long courseId);
+    void updateTopNumByStudentIdAndCourseId(@Param("topNum") int topNum, @Param("studentId") Long studentId, @Param("courseId") Long courseId);
 
     @Select("SELECT MAX(top_num) FROM t_sc WHERE student_id=#{studentId}")
     int selectMaxTopByStudentId(@Param("studentId") Long studentId);
