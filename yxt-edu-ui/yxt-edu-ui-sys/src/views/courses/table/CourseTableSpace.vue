@@ -86,7 +86,7 @@
                 cancelButtonText="取消"
                 confirmButtonType="danger"
                 cancelButtonType="success"
-                @onConfirm="deleteCourse(scope.$index, scope.row)"
+                @confirm="deleteCourse(scope.row.id)"
                 title="确认要删除该课程吗？"
               >
                 <el-button size="mini" slot="reference" type="danger">
@@ -143,7 +143,21 @@ export default {
     };
   },
   methods: {
-    deleteCourse() {},
+    deleteCourse(courseId) {
+      this.$axios
+        .delete("/courses/admin/id/" + courseId)
+        .then(({ data }) => {
+          if (data.success) {
+            this.$message.success(data.message);
+            this.getCourseData();
+          } else {
+            this.$message.error(data.message);
+          }
+        })
+        .catch(() => {
+          this.$message.error("服务器繁忙，请稍候再试一次！");
+        });
+    },
     pageSizeChange(pageSize) {
       this.pageData.pageSize = pageSize;
       this.getCourseData();
@@ -158,8 +172,8 @@ export default {
           "/courses/page/" +
             this.pageData.currentPage +
             "/" +
-            this.pageData.pageSize + 
-            "?" + 
+            this.pageData.pageSize +
+            "?" +
             this.$qs.stringify(this.pageData.queryPageRequest)
         )
         .then(({ data }) => {

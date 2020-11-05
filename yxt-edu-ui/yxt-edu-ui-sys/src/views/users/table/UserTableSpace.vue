@@ -152,8 +152,6 @@ export default {
   },
   methods: {
     deleteUser(userId) {
-      // eslint-disable-next-line no-debugger
-      debugger;
       this.$axios
         .delete("/users/admin/id/" + userId)
         .then(({ data }) => {
