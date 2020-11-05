@@ -37,9 +37,9 @@
                         <!-- <el-image style="margin-top: 10px;" src="./images/logo_blue.png" fit="contain"></el-image> -->
                         <el-image>
                             <div slot="error" class="image-slot">
-                                <!-- <div class="header-logo">LOGO</div> -->
-                                <el-image src="./images/logo.png" style="width: 192px; height: 48px; margin: 10px;">
-                                </el-image>
+                                <div class="header-logo">LOGO</div>
+                                <!-- <el-image src="./images/logo.png" style="width: 192px; height: 48px; margin: 10px;">
+                                </el-image> -->
                             </div>
                         </el-image>
                     </el-col>
@@ -239,7 +239,7 @@
                             <el-divider></el-divider>
                             <div class="bottom">
                                 <el-row>
-                                    <el-col :span="8" style="float: left; width: 35%;">
+                                    <el-col :span="8" style="float: left; width: 30%;">
                                         <el-row v-if="user.isTeacher">
                                             <span style="font-size: smaller;">成员<span
                                                     v-text="otherCourse.scount"></span>人
