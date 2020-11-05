@@ -82,13 +82,13 @@
                                         <el-col :span="24">
                                             <div class="demo-basic--circle">
                                                 <div class="block" style="width: 930px">
-                                                    <el-avatar :size="100" :src="user.avatar" v-if="!isProgressVisable">
-                                                    </el-avatar>
-                                                    <el-progress type="circle" :percentage="progressPercent" v-else>
-                                                    </el-progress>
                                                     <el-upload class="img-btn" action="#" :show-file-list="false"
-                                                        :before-upload="beforeAvatarUpload" :http-request="uploadImg">
-                                                        <el-button type="success" plain round size="mini">更改头像
+                                                               :before-upload="beforeAvatarUpload" :http-request="uploadImg">
+                                                        <el-button circle style="padding: 3px">
+                                                            <el-avatar :size="100" :src="user.avatar" v-if="!isProgressVisable">
+                                                            </el-avatar>
+                                                            <el-progress type="circle" :percentage="progressPercent" v-else>
+                                                            </el-progress>
                                                         </el-button>
                                                     </el-upload>
                                                 </div>
