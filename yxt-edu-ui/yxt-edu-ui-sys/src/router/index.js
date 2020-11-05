@@ -358,6 +358,7 @@ router.beforeEach((to, from, next) => {
   if (!needLogin) {
     next()
     document.title = to.meta.title
+    return;
   }
   axios.get("/auth/verify/1").then(({ data }) => {
     let isAuthorized = data.success
