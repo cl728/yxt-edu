@@ -8,6 +8,7 @@ import org.apache.ibatis.annotations.*;
 import org.apache.ibatis.mapping.FetchType;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author Colin
@@ -93,4 +94,18 @@ public interface UserMapper extends BaseMapper<User> {
 
     @Select("select u.avatar, u.real_name from t_user u, t_course c where c.id = #{courseId} and u.id = c.teacher_id")
     User findByCourseId(long courseId);
+
+    @ResultMap( "userMap" )
+    @Select( "<script>" +
+                "select id, role_id, avatar, ts_no, real_name, school " +
+                " from t_user " +
+                "<where>" +
+                    "<if test='ids != null and ids.size() > 0'> " +
+                        "<foreach collection='ids' open='and id in (' close=')' separator=', ' item='id'>" +
+                            "#{id}" +
+                        "</foreach>" +
+                    "</if>" +
+                "</where>" +
+            "</script>" )
+    List<User> findPageByIds(@Param("page") Page<User> page, @Param("ids") List<Long> ids);
 }

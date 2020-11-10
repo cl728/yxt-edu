@@ -1,5 +1,6 @@
 package com.yixuetang.user;
 
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.yixuetang.YxtServiceApplication;
 import com.yixuetang.entity.user.User;
 import com.yixuetang.user.mapper.UserMapper;
@@ -8,6 +9,8 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
+
+import java.util.Arrays;
 
 /**
  * @author Colin
@@ -37,6 +40,11 @@ public class TestUserMapper {
     @Test
     public void testFindByCourseId() {
         System.out.println( this.userMapper.findByCourseId( 4L ) );
+    }
+
+    @Test
+    public void testFindPageByIds() {
+        this.userMapper.findPageByIds( new Page<>( 1L, 5L ), Arrays.asList( 4L, 8L, 1L, 9L ) ).forEach( System.out::println );
     }
 
 }

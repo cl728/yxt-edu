@@ -26,8 +26,8 @@ public interface UserService {
     /**
      * 分页查询用户
      *
-     * @param currentPage      当前页码数
-     * @param pageSize         每页显示条数
+     * @param currentPage          当前页码数
+     * @param pageSize             每页显示条数
      * @param queryPageRequestUser 分页查询条件实体类
      * @return 响应结果实体类
      */
@@ -127,4 +127,14 @@ public interface UserService {
      * @return 新上传的头像链接
      */
     String updateAvatar(long id, MultipartFile file);
+
+    /**
+     * 分页查询某门课程下的成员
+     *
+     * @param courseId    课程id
+     * @param currentPage 当前页码数
+     * @param pageSize    每页显示条数
+     * @return 响应结果实体类
+     */
+    QueryResponse findPageByCourseId(long courseId, long currentPage, long pageSize);
 }

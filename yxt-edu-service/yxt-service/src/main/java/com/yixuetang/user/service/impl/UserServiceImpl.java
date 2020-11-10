@@ -435,4 +435,33 @@ public class UserServiceImpl implements UserService {
         this.userMapper.deleteById(userId);
         return CommonResponse.SUCCESS();
     }
+
+
+    @Override
+    public QueryResponse findPageByCourseId(long courseId, long currentPage, long pageSize) {
+
+        // courseId 不合法
+        if (this.courseMapper.selectById( courseId ) == null) {
+            ExceptionThrowUtils.cast( CommonCode.INVALID_PARAM );
+        }
+
+        // 查询该门课程下的成员（包括教师和学生）
+        // 1. 查询该门课程的教师
+        Long id = this.courseMapper.findById( courseId ).getTeacher().getId();
+
+        // 2. 查询选修了该门课程的学生
+        QueryWrapper<StudentCourse> queryWrapper = new QueryWrapper<StudentCourse>().eq( "course_id", courseId );
+        List<Long> ids = this.scMapper.selectList( queryWrapper
+                .select( "student_id" ) )
+                .stream()
+                .map( StudentCourse::getStudentId )
+                .collect( Collectors.toList() );
+
+        ids.add( id );
+
+        List<User> users = this.userMapper.findPageByIds( new Page<>( currentPage, pageSize ), ids );
+
+        return new QueryResponse( CommonCode.SUCCESS, new QueryResult<>( users, this.scMapper.selectCount( queryWrapper ) ) );
+
+    }
 }

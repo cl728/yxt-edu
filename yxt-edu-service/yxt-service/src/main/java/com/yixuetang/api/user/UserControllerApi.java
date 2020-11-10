@@ -97,4 +97,7 @@ public interface UserControllerApi {
     @ApiOperation("管理员删除用户")
     @ApiImplicitParam(name = "userId", value = "用户id", required = true, paramType = "path", dataType = "long")
     CommonResponse delById(long userId);
+
+    @ApiOperation( "分页查询某门课程下的成员" )
+    QueryResponse findPageByCourseId(long courseId, long currentPage, long pageSize);
 }
