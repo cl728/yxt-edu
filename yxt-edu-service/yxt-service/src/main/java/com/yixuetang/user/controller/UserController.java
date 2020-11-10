@@ -155,8 +155,9 @@ public class UserController implements UserControllerApi {
     @GetMapping("courseId/{courseId}/{currentPage}/{pageSize}")
     public QueryResponse findPageByCourseId(@PathVariable long courseId,
                                             @PathVariable long currentPage,
-                                            @PathVariable long pageSize) {
-        return this.userService.findPageByCourseId( courseId, currentPage, pageSize );
+                                            @PathVariable long pageSize,
+                                            @RequestParam(required = false) String search) {
+        return this.userService.findPageByCourseId( courseId, currentPage, pageSize, search );
     }
 
     private boolean checkIdIfInvalid(@PathVariable long id, HttpServletRequest request) {

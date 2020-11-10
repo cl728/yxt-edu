@@ -44,7 +44,7 @@ public class TestUserMapper {
 
     @Test
     public void testFindPageByIds() {
-        this.userMapper.findPageByIds( new Page<>( 1L, 5L ), Arrays.asList( 4L, 8L, 1L, 9L ) ).forEach( System.out::println );
+//        this.userMapper.findPageByIds( new Page<>( 1L, 5L ), Arrays.asList( 4L, 8L, 1L, 9L ) ).forEach( System.out::println );
     }
 
 }

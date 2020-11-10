@@ -134,7 +134,8 @@ public interface UserService {
      * @param courseId    课程id
      * @param currentPage 当前页码数
      * @param pageSize    每页显示条数
+     * @param search      搜索字段（学号、姓名）
      * @return 响应结果实体类
      */
-    QueryResponse findPageByCourseId(long courseId, long currentPage, long pageSize);
+    QueryResponse findPageByCourseId(long courseId, long currentPage, long pageSize, String search);
 }

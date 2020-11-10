@@ -105,7 +105,10 @@ public interface UserMapper extends BaseMapper<User> {
                             "#{id}" +
                         "</foreach>" +
                     "</if>" +
+                    "<if test='search != null and search.length() > 0'> " +
+                        "and real_name like #{search} or ts_no like #{search}" +
+                    "</if>" +
                 "</where>" +
             "</script>" )
-    List<User> findPageByIds(@Param("page") Page<User> page, @Param("ids") List<Long> ids);
+    List<User> findPageByIds(@Param("page") Page<User> page, @Param("ids") List<Long> ids, @Param( "search" ) String search);
 }

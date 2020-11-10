@@ -438,16 +438,21 @@ public class UserServiceImpl implements UserService {
 
 
     @Override
-    public QueryResponse findPageByCourseId(long courseId, long currentPage, long pageSize) {
+    public QueryResponse findPageByCourseId(long courseId, long currentPage, long pageSize, String search) {
 
         // courseId 不合法
-        if (this.courseMapper.selectById( courseId ) == null) {
+        Course course = this.courseMapper.findById( courseId );
+        if (course == null) {
             ExceptionThrowUtils.cast( CommonCode.INVALID_PARAM );
+        }
+
+        if (StringUtils.isNoneBlank( search)) {
+            search = "%" + search + "%";
         }
 
         // 查询该门课程下的成员（包括教师和学生）
         // 1. 查询该门课程的教师
-        Long id = this.courseMapper.findById( courseId ).getTeacher().getId();
+        Long id = course.getTeacher().getId();
 
         // 2. 查询选修了该门课程的学生
         QueryWrapper<StudentCourse> queryWrapper = new QueryWrapper<StudentCourse>().eq( "course_id", courseId );
@@ -459,7 +464,7 @@ public class UserServiceImpl implements UserService {
 
         ids.add( id );
 
-        List<User> users = this.userMapper.findPageByIds( new Page<>( currentPage, pageSize ), ids );
+        List<User> users = this.userMapper.findPageByIds( new Page<>( currentPage, pageSize ), ids, search );
 
         return new QueryResponse( CommonCode.SUCCESS, new QueryResult<>( users, this.scMapper.selectCount( queryWrapper ) ) );
 
