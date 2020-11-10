@@ -446,10 +446,6 @@ public class UserServiceImpl implements UserService {
             ExceptionThrowUtils.cast( CommonCode.INVALID_PARAM );
         }
 
-        if (StringUtils.isNoneBlank( search)) {
-            search = "%" + search + "%";
-        }
-
         // 查询该门课程下的成员（包括教师和学生）
         // 1. 查询该门课程的教师
         Long id = course.getTeacher().getId();
@@ -464,9 +460,30 @@ public class UserServiceImpl implements UserService {
 
         ids.add( id );
 
+        List<User> filterUsers = new ArrayList<>();
+        // 如果 search 字段不为空，先在 User 总表里查询出符合条件的 User 列表，再将其中不是该门课程成员的 User 过滤掉
+        // 得到的 filterUsers 即为符合搜索条件且为该门课程的成员列表
+        if (StringUtils.isNoneBlank( search)) {
+            QueryWrapper<User> userQueryWrapper =
+                    new QueryWrapper<User>()
+                            .like( "real_name", search )
+                            .or()
+                            .like( "ts_no", search );
+            filterUsers = this.userMapper
+                    .selectList( userQueryWrapper )
+                    .stream()
+                    .filter( user -> ids.contains( user.getId() ) )
+                    .collect( Collectors.toList() );
+            search = "%" + search + "%";
+        }
+
         List<User> users = this.userMapper.findPageByIds( new Page<>( currentPage, pageSize ), ids, search );
 
-        return new QueryResponse( CommonCode.SUCCESS, new QueryResult<>( users, this.scMapper.selectCount( queryWrapper ) ) );
+        return new QueryResponse( CommonCode.SUCCESS,
+                new QueryResult<>( users,
+                        StringUtils.isBlank( search )
+                                ? ids.size() // 如果搜索字段为空，则 total 为总的课程成员
+                                : filterUsers.size() ) ); // 否则为过滤后的成员
 
     }
 }
