@@ -1,13 +1,12 @@
 package com.yixuetang.homework.controller;
 
 import com.yixuetang.api.homework.HomeworkControllerApi;
+import com.yixuetang.entity.request.homework.InsertHomework;
+import com.yixuetang.entity.response.CommonResponse;
 import com.yixuetang.entity.response.QueryResponse;
 import com.yixuetang.homework.service.HomeworkService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 /**
  * @author Colin
@@ -25,7 +24,13 @@ public class HomeworkController implements HomeworkControllerApi {
     @Override
     @GetMapping("courseId/{courseId}/{userId}")
     public QueryResponse findByCourseId(@PathVariable long courseId, @PathVariable long userId) {
-        return this.homeworkService.findByCourseId( courseId, userId );
+        return this.homeworkService.findByCourseId(courseId, userId);
+    }
+
+    @Override
+    @PostMapping("courseId/{courseId}/{teacherId}")
+    public CommonResponse saveHomework(@PathVariable long courseId, @PathVariable long teacherId, @RequestBody InsertHomework insertHomework) {
+        return this.homeworkService.saveByCourseId(courseId, teacherId, insertHomework);
     }
 
 }

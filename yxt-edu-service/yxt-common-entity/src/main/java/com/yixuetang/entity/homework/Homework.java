@@ -36,4 +36,7 @@ public class Homework {
     @TableField("submit_count")
     private Integer submitCount; // 已提交人数
 
+    @TableField("total_score")
+    private Double totalScore; //
+
 }

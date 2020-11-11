@@ -59,4 +59,6 @@ public interface ScMapper extends BaseMapper<StudentCourse> {
     @Select("select * from t_sc where student_id=#{userId} order by top_num desc")
     List<StudentCourse> findByUserId(long userId);
 
+    @Select("select student_id from t_sc where course_id = #{courseId}")
+    List<Long> findStudentIdByCourseId(Long courseId);
 }

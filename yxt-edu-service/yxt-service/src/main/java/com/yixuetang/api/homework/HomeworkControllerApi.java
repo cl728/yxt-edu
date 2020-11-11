@@ -1,5 +1,7 @@
 package com.yixuetang.api.homework;
 
+import com.yixuetang.entity.request.homework.InsertHomework;
+import com.yixuetang.entity.response.CommonResponse;
 import com.yixuetang.entity.response.QueryResponse;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
@@ -16,12 +18,21 @@ import io.swagger.annotations.ApiOperation;
 public interface HomeworkControllerApi {
 
     @ApiOperation("查询某门课程下的作业")
-    @ApiImplicitParams( value = {
+    @ApiImplicitParams(value = {
             @ApiImplicitParam(name = "courseId", value = "课程id", required = true,
                     paramType = "path", dataType = "long"),
             @ApiImplicitParam(name = "userId", value = "用户id", required = true,
                     paramType = "path", dataType = "long")
     })
     QueryResponse findByCourseId(long courseId, long userId);
+
+    @ApiOperation("新增作业")
+    @ApiImplicitParams(value = {
+            @ApiImplicitParam(name = "courseId", value = "课程id", required = true,
+                    paramType = "path", dataType = "long"),
+            @ApiImplicitParam(name = "teacherId", value = "教师id", required = true,
+                    paramType = "path", dataType = "long"),
+    })
+    CommonResponse saveHomework(long courseId, long teacherId, InsertHomework insertHomework);
 
 }

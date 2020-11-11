@@ -9,9 +9,11 @@ package com.yixuetang.entity.response.code;
  * - 授权模块响应代码：40000 - 49999
  * - 课程模块响应代码：50000 - 59999
  * - 资源模块响应代码：60000 - 69999
+ * - 作业模块相应代码：70000 - 79999
  * @date 2020/10/23 15:48
  */
 public interface ResponseCode {
+
 
     // 操作是否成功
     boolean success();
