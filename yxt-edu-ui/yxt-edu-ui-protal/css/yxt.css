@@ -152,3 +152,11 @@
     width: 100%;
     margin: 35px 0 10px 0;
 }
+
+.course-name {
+    color: white;
+    font-size: xx-large;
+    float: left;
+    margin-left: 40px;
+    margin-top: 50px
+}

@@ -1,4 +1,5 @@
 
+
 // 字符串格式化
 String.prototype.format = function () {
     const args = arguments;
@@ -515,6 +516,7 @@ const stringify = function (object, options) {
 
     return values.join("&");
 }
+
 
 axios.defaults.baseURL = "http://api.yixuetang.com/api";
 axios.defaults.timeout = 8000;

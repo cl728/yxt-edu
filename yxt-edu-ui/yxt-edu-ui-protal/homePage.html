@@ -110,7 +110,7 @@
                                         </el-tag>
                                     </el-row>
                                     <el-row>
-                                        <el-link :underline="false" type="info"
+                                        <el-link :underline="false" type="info" :href="'courseDetail.html?id='+topCourse.id"
                                             style="float: left; font-size: larger; padding: 0px 0px 5px 15px; color: rgb(252, 249, 249);">
                                             <span v-text="topCourse.cname">Web编程与设计</span></el-link>
                                     </el-row>
@@ -213,7 +213,7 @@
                                         </el-tag>
                                     </el-row>
                                     <el-row>
-                                        <el-link :underline="false" type="info"
+                                        <el-link :underline="false" type="info" :href="'courseDetail.html?id='+otherCourse.id"
                                             style="float: left; font-size: larger; padding: 0px 0px 5px 15px; color: rgb(252, 249, 249);">
                                             <span v-text="otherCourse.cname">Web编程与设计</span></el-link>
                                     </el-row>
