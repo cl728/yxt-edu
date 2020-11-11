@@ -8,7 +8,6 @@ import org.apache.ibatis.annotations.*;
 import org.apache.ibatis.mapping.FetchType;
 
 import java.util.List;
-import java.util.Map;
 
 /**
  * @author Colin

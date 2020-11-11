@@ -32,9 +32,9 @@ public class FileServiceImpl implements FileService {
     @Autowired
     private FastFileStorageClient storageClient;
 
-    // 支持的文件类型：.jpg .jpeg .png .mp4 .avi .doc .xls .pdf
+    // 支持的文件类型：.jpg .jpeg .png .mp4 .avi .doc .xls .pdf .ppt .txt
     private static final List<String> CONTENT_TYPES = Arrays.asList( "image/jpeg", "image/png", "video/mpeg4",
-            "video/avi", "application/msword", "application/x-xls", "application/pdf" );
+            "video/avi", "application/msword", "application/x-xls", "application/pdf", "application/x-ppt", "text/plain" );
 
     private static final Logger LOGGER = LoggerFactory.getLogger( FileServiceImpl.class );
 

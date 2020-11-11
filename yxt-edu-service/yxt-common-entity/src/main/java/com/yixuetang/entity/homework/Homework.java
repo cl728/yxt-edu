@@ -36,7 +36,4 @@ public class Homework {
     @TableField("submit_count")
     private Integer submitCount; // 已提交人数
 
-    @TableField("ht_enclosure")
-    private String htEnclosure; // 老师上传的作业附件地址
-
 }
