@@ -67,25 +67,25 @@ public class CourseServiceImpl implements CourseService {
 
         // delCourse 不合法
         if (delCourseUser == null) {
-            ExceptionThrowUtils.cast( CommonCode.INVALID_PARAM );
+            ExceptionThrowUtils.cast(CommonCode.INVALID_PARAM);
         }
 
         long userId = delCourseUser.getUserId();
         User user = this.userMapper.findById(userId);
 
         if (user == null) {
-            return new CommonResponse( UserCode.USER_NOT_FOUND );
+            return new CommonResponse(UserCode.USER_NOT_FOUND);
         }
 
         // 校验密码
-        if (!StringUtils.equals( user.getPassword(), delCourseUser.getPassword() )) {
-            return new CommonResponse( CourseCode.DELETE_COURSE_FAIL_PASSWORD_WRONG );
+        if (!StringUtils.equals(user.getPassword(), delCourseUser.getPassword())) {
+            return new CommonResponse(CourseCode.DELETE_COURSE_FAIL_PASSWORD_WRONG);
         }
 
         // 判断该id为学生还是老师
         // roleId异常
         if (user.getRole().getId() <= 1 || user.getRole().getId() > 3) {
-            return new CommonResponse( CommonCode.INVALID_PARAM);
+            return new CommonResponse(CommonCode.INVALID_PARAM);
         }
         // 判断为教师用户
         if (user.getRole().getId() == 2) {
@@ -118,9 +118,9 @@ public class CourseServiceImpl implements CourseService {
                 // 将选课表关于该学生和该课程的记录删除
                 this.scMapper.delete(new QueryWrapper<StudentCourse>().eq("course_id", courseId).eq("student_id", userId));
                 // 将该课程的加课人数减一
-                Course course = this.courseMapper.selectById( courseId );
-                course.setSCount( course.getSCount() - 1 );
-                this.courseMapper.updateById( course );
+                Course course = this.courseMapper.selectById(courseId);
+                course.setSCount(course.getSCount() - 1);
+                this.courseMapper.updateById(course);
             }
         }
         return new CommonResponse(CommonCode.SUCCESS);
@@ -181,7 +181,7 @@ public class CourseServiceImpl implements CourseService {
         course.setCCode(cCode);
 
         // 设置随机课程图片
-        String num = String.valueOf((int) (Math.ceil(Math.random() * 44 )));
+        String num = String.valueOf((int) (Math.ceil(Math.random() * 44)));
         if (num.length() == 1) {
             num = "0" + num;
         }
@@ -211,35 +211,35 @@ public class CourseServiceImpl implements CourseService {
     public QueryResponse findByPage(long currentPage, long pageSize, QueryPageRequestCourse queryPageRequestCourse) {
         QueryWrapper<Course> queryWrapper = new QueryWrapper<>();
 
-        this.screen( queryPageRequestCourse, queryWrapper );
+        this.screen(queryPageRequestCourse, queryWrapper);
 
-        List<Course> courses = this.courseMapper.findByPage( new Page<>( currentPage, pageSize ), queryPageRequestCourse );
-        return new QueryResponse( CommonCode.SUCCESS, new QueryResult<>( courses, this.courseMapper.selectCount( queryWrapper ) ) );
+        List<Course> courses = this.courseMapper.findByPage(new Page<>(currentPage, pageSize), queryPageRequestCourse);
+        return new QueryResponse(CommonCode.SUCCESS, new QueryResult<>(courses, this.courseMapper.selectCount(queryWrapper)));
     }
 
     @Override
     public QueryResponse findById(long courseId) {
-        Course course = this.courseMapper.selectById( courseId );
+        Course course = this.courseMapper.findById(courseId);
         if (course == null) {
-            return new QueryResponse( CourseCode.COURSE_NOT_FOUND , null);
+            return new QueryResponse(CourseCode.COURSE_NOT_FOUND, null);
         }
-        return new QueryResponse( CommonCode.SUCCESS, new QueryResult<>( Collections.singletonList( course ), 1 ) );
+        return new QueryResponse(CommonCode.SUCCESS, new QueryResult<>(Collections.singletonList(course), 1));
     }
 
     @Override
     @Transactional
     public CommonResponse delById(long courseId) {
 
-        Course course = this.courseMapper.selectById( courseId );
+        Course course = this.courseMapper.selectById(courseId);
         if (course == null) {
-            return new CommonResponse( CourseCode.COURSE_NOT_FOUND );
+            return new CommonResponse(CourseCode.COURSE_NOT_FOUND);
         }
 
         // 先删除选课表的记录
-        this.scMapper.delete( new QueryWrapper<StudentCourse>().eq( "course_id", courseId ) );
+        this.scMapper.delete(new QueryWrapper<StudentCourse>().eq("course_id", courseId));
 
         // 再删除这门课程的记录
-        this.courseMapper.deleteById( courseId );
+        this.courseMapper.deleteById(courseId);
 
         return CommonResponse.SUCCESS();
 
@@ -350,7 +350,7 @@ public class CourseServiceImpl implements CourseService {
             Course course = this.courseMapper.selectOne(new QueryWrapper<Course>()
                     .eq("id", courseId).eq("teacher_id", userId));
             //  若该课程非该教师所有,非法请求
-            if (course == null){
+            if (course == null) {
                 return new CommonResponse(CommonCode.INVALID_PARAM);
             }
             // ifFiled的值,true为已归档,false为未归档
@@ -367,7 +367,7 @@ public class CourseServiceImpl implements CourseService {
             StudentCourse studentCourse = this.scMapper.selectOne(new QueryWrapper<StudentCourse>().eq("course_id", courseId)
                     .eq("student_id", userId));
             //  若学生没有加入该课程,非法请求
-            if (studentCourse == null){
+            if (studentCourse == null) {
                 return new CommonResponse(CommonCode.INVALID_PARAM);
             }
             // ifFiled的值,true为已归档,false为未归档
@@ -409,7 +409,7 @@ public class CourseServiceImpl implements CourseService {
                 listCourse.setTopNum(item.getTopNum());
                 listCourse.setAvatarUser(new AvatarUser());
                 // avatarUser 修改为教师的头像和真实姓名
-                User user = this.userMapper.findByCourseId( item.getCourse().getId() );
+                User user = this.userMapper.findByCourseId(item.getCourse().getId());
                 listCourse.getAvatarUser().setAvatar(user.getAvatar());
                 listCourse.getAvatarUser().setRealName(user.getRealName());
                 listCourses.add(listCourse);
@@ -470,27 +470,27 @@ public class CourseServiceImpl implements CourseService {
 
     private void screen(QueryPageRequestCourse queryPageRequestCourse, QueryWrapper<Course> queryWrapper) {
         String schoolYear = queryPageRequestCourse.getSchoolYear();
-        if (StringUtils.isNoneBlank( schoolYear ) && !StringUtils.equals( "all", schoolYear )) {
-            queryWrapper.eq( "school_year", schoolYear );
+        if (StringUtils.isNoneBlank(schoolYear) && !StringUtils.equals("all", schoolYear)) {
+            queryWrapper.eq("school_year", schoolYear);
         }
         String semester = queryPageRequestCourse.getSemester();
-        if (StringUtils.isNoneBlank( semester ) && !StringUtils.equals( "all", semester )) {
-            queryWrapper.eq( "semester", semester );
+        if (StringUtils.isNoneBlank(semester) && !StringUtils.equals("all", semester)) {
+            queryWrapper.eq("semester", semester);
         }
         String courseName = queryPageRequestCourse.getCourseName();
-        if (StringUtils.isNoneBlank( courseName)) {
+        if (StringUtils.isNoneBlank(courseName)) {
             queryPageRequestCourse.setCourseName("%" + courseName + "%");
             queryWrapper.like("c_name", courseName);
         }
         Integer minStudentCount = queryPageRequestCourse.getMinStudentCount();
         Integer maxStudentCount = queryPageRequestCourse.getMaxStudentCount();
-        if (ObjectUtils.isEmpty( minStudentCount ) && ObjectUtils.isNotEmpty( maxStudentCount )) {
-            queryWrapper.le( "s_count", maxStudentCount );
-        } else if (ObjectUtils.isEmpty( maxStudentCount ) && ObjectUtils.isNotEmpty( minStudentCount )) {
-            queryWrapper.ge( "s_count", minStudentCount );
-        } else if (ObjectUtils.allNotNull( minStudentCount, maxStudentCount )
-                && ObjectUtils.compare( minStudentCount, maxStudentCount ) < 0) {
-            queryWrapper.between( "s_count", minStudentCount, maxStudentCount );
+        if (ObjectUtils.isEmpty(minStudentCount) && ObjectUtils.isNotEmpty(maxStudentCount)) {
+            queryWrapper.le("s_count", maxStudentCount);
+        } else if (ObjectUtils.isEmpty(maxStudentCount) && ObjectUtils.isNotEmpty(minStudentCount)) {
+            queryWrapper.ge("s_count", minStudentCount);
+        } else if (ObjectUtils.allNotNull(minStudentCount, maxStudentCount)
+                && ObjectUtils.compare(minStudentCount, maxStudentCount) < 0) {
+            queryWrapper.between("s_count", minStudentCount, maxStudentCount);
         }
     }
 }
