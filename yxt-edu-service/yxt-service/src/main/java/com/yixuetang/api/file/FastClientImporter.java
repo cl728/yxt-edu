@@ -1,4 +1,4 @@
-package com.yixuetang.utils.user;
+package com.yixuetang.api.file;
 
 import com.github.tobato.fastdfs.FdfsClientConfig;
 import org.springframework.context.annotation.Configuration;

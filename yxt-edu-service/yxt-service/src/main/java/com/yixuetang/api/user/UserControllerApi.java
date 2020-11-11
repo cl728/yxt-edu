@@ -8,7 +8,6 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
-import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -59,7 +58,7 @@ public interface UserControllerApi {
     @ApiOperation("更换头像")
     @ApiImplicitParam(name = "id", value = "用户主键id", required = true,
             paramType = "path", dataType = "long")
-    CommonResponse updateAvatar(long id, MultipartFile file, HttpServletRequest request, HttpServletResponse response);
+    CommonResponse updateAvatar(long id, AvatarUser avatarUser, HttpServletRequest request, HttpServletResponse response);
 
     @ApiOperation("分页查询角色")
     @ApiImplicitParams({

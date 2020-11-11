@@ -83,11 +83,13 @@
                                             <div class="demo-basic--circle">
                                                 <div class="block" style="width: 930px">
                                                     <el-upload class="img-btn" action="#" :show-file-list="false"
-                                                               :before-upload="beforeAvatarUpload" :http-request="uploadImg">
+                                                        :before-upload="beforeAvatarUpload" :http-request="uploadImg">
                                                         <el-button circle style="padding: 3px">
-                                                            <el-avatar :size="100" :src="user.avatar" v-if="!isProgressVisable">
+                                                            <el-avatar :size="100" :src="user.avatar"
+                                                                v-if="!isProgressVisable">
                                                             </el-avatar>
-                                                            <el-progress type="circle" :percentage="progressPercent" v-else>
+                                                            <el-progress type="circle" :percentage="progressPercent"
+                                                                v-else>
                                                             </el-progress>
                                                         </el-button>
                                                     </el-upload>
@@ -656,8 +658,8 @@
                 let formdata = new FormData()
                 formdata.append('file', f.file)
                 yxt.http({
-                    url: '/users/avatar/id/' + this.user.id,
-                    method: 'put',
+                    url: '/file/upload',
+                    method: 'post',
                     data: formdata,
                     headers: { 'Content-Type': 'multipart/form-data' },
                     onUploadProgress: progressEvent => {
@@ -667,12 +669,23 @@
                     }
                 }).then(({ data }) => {
                     if (data.success) {
-                        this.verify();
-                        this.$message.success(data.message);
-                        if (this.progressPercent === 100) {
-                            this.isProgressVisable = false;
-                            this.progressPercent = 0;
+                        const avatarUser = {
+                            avatar: data.queryResult.data[0]
                         }
+                        yxt.http.put("/users/avatar/id/" + this.user.id, avatarUser).then(({ data }) => {
+                            if (data.success) {
+                                this.verify();
+                                this.$message.success(data.message);
+                                if (this.progressPercent === 100) {
+                                    this.isProgressVisable = false;
+                                    this.progressPercent = 0;
+                                }
+                            } else {
+                                this.isProgressVisable = false;
+                                this.progressPercent = 0;
+                                this.$message.error(data.message);
+                            }
+                        })
                     } else {
                         this.isProgressVisable = false;
                         this.progressPercent = 0;
