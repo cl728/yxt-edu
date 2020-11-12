@@ -235,7 +235,7 @@
                             </el-menu-item>
                         </el-menu>
                     </div>
-                    <div id="course-homework" v-if="activeIndex2=='1'" style="padding-top: 40px">
+                    <div id="course-homework" v-if="activeIndex2=='1'" style="margin-top: 30px">
                         <div id="course-homework-menubar" v-if="user.isTeacher">
                             <el-row>
                                 <el-col :span="12">
@@ -288,9 +288,9 @@
                             </el-card>
                         </div>
                         <div id="course-homework-box">
-                            <div id="course-homework-card" style="width: 1224px; padding-top: 30px">
+                            <div id="course-homework-card" style="width: 1224px; margin-top: 30px">
                                 <el-card class="box-card" v-for="(homework, index) in homeworkList"
-                                    style="margin-top: 30px;width: 1184px;height: 220px;border-radius: 6px;border-width: 2px">
+                                    style="margin-top: 20px;width: 1184px;height: 220px;border-radius: 6px;border-width: 2px">
                                     <el-row id="course-title" style="height: 30px">
                                         <el-col :span="12">
                                             <div class="homework-create-time" style="float: left">
@@ -387,7 +387,7 @@
                                     </el-row>
                                 </el-card>
                                 <el-card class="box-card"
-                                    style="margin-top: 30px;width: 1184px;height: 220px;border-radius: 6px;border-width: 2px">
+                                    style="margin-top: 20px;width: 1184px;height: 220px;border-radius: 6px;border-width: 2px">
                                     <el-row id="course-title" style="height: 30px">
                                         <el-col :span="12">
                                             <div class="homework-create-time" style="float: left">
@@ -480,7 +480,7 @@
                     <div id="course-resources" v-if="activeIndex2=='2'">
                         <div class="course-resources-box">
                             <el-card class="box-card"
-                                style="margin-top: 30px;width: 1184px;height: 230px;border-radius: 6px;border-width: 2px">
+                                style="margin-top: 20px;width: 1184px;height: 230px;border-radius: 6px;border-width: 2px">
                                 <div style="width: 1144px">
                                     <span style="font-size: xx-large;width: 1144px">资源文件上传</span>
                                     <div id="resources-upload" style="margin-top: 30px">
@@ -501,9 +501,9 @@
                     </div>
                     <div id="course-exam" v-if="activeIndex2=='3'">
                         <div id="course-exam-box" style="margin-top: 30px">
-                            <div id="exam-buttons" style="float:left;margin-bottom: 30px">
+                            <div id="exam-buttons" style="float:left;margin-bottom: 10px" v-if="user.isTeacher">
                                 <el-row>
-                                    <el-col :span="24" style="padding-left: 30px">
+                                    <el-col :span="24">
                                         <el-button type="primary">
                                             <i class="el-icon-plus"></i>
                                             新建测试（考试）
@@ -524,14 +524,14 @@
                                     </el-col>
                                 </el-row>
                             </div>
-                            <div id="exam-menubar" style="padding-top: 30px">
+                            <div id="exam-menubar" style="margin-top: 30px">
                                 <el-row>
                                     <el-col :span="24">
                                         <el-tabs v-model="activeName" @tab-click="handleClick">
                                             <el-tab-pane label="全部(4)" name="first">
                                                 <div class="exam-cards">
                                                     <el-card class="box-card"
-                                                        style="margin-top: 30px;width: 1184px;height: 230px;border-radius: 6px;border-width: 2px">
+                                                        style="margin-top: 20px;width: 1184px;height: 230px;border-radius: 6px;border-width: 2px">
                                                         <el-row id="course-title" style="height: 30px">
                                                             <el-col :span="14">
                                                                 <div class="homework-create-time" style="float: left">
@@ -617,7 +617,7 @@
                                                         </el-row>
                                                     </el-card>
                                                     <el-card class="box-card"
-                                                        style="margin-top: 30px;width: 1184px;height: 230px;border-radius: 6px;border-width: 2px">
+                                                        style="margin-top: 20px;width: 1184px;height: 230px;border-radius: 6px;border-width: 2px">
                                                         <el-row id="course-title" style="height: 30px">
                                                             <el-col :span="14">
                                                                 <div class="homework-create-time" style="float: left">
@@ -705,7 +705,7 @@
                                                         </el-row>
                                                     </el-card>
                                                     <el-card class="box-card"
-                                                        style="margin-top: 30px;width: 1184px;height: 230px;border-radius: 6px;border-width: 2px">
+                                                        style="margin-top: 20px;width: 1184px;height: 230px;border-radius: 6px;border-width: 2px">
                                                         <el-row id="course-title" style="height: 30px">
                                                             <el-col :span="14">
                                                                 <div class="homework-create-time" style="float: left">
@@ -824,7 +824,7 @@
                                                         </el-row>
                                                     </el-card>
                                                     <el-card class="box-card"
-                                                        style="margin-top: 30px;width: 1184px;height: 230px;border-radius: 6px;border-width: 2px">
+                                                        style="margin-top: 20px;width: 1184px;height: 230px;border-radius: 6px;border-width: 2px">
                                                         <el-row id="course-title" style="height: 30px">
                                                             <el-col :span="14">
                                                                 <div class="homework-create-time" style="float: left">
@@ -1336,28 +1336,30 @@
                     </div>
                     <div id="course-notice" v-if="activeIndex2=='4'">
                         <div id="course-notice-box">
-                            <div id="notice-menubar" style="margin-top: 30px;padding-bottom: 30px;padding-left: 30px">
-                                <el-button type="primary" style="float: left" @click="notice_input = true"
-                                    :disabled="notice_input">发布公告</el-button>
-                            </div>
-                            <div id="notice-input" style="margin-top: 30px" v-if="notice_input===true">
-                                <el-card class="box-card"
-                                    style="margin-top: 30px;width: 1184px;height: 266px;border-radius: 6px;border-width: 2px">
-                                    <el-input placeholder="请输入公告标题" v-model="notice_title" clearable>
-                                    </el-input>
-                                    <el-input style="padding-top: 20px" type="textarea" :rows="6"
-                                        placeholder="请输入公告具体内容" v-model="notice_content" maxlength="1000"
-                                        show-word-limit>
-                                    </el-input>
-                                    <div id="notice-button" style="float: right;padding-top: 10px">
-                                        <el-button type="primary" plain @click="notice_input=false">取消</el-button>
-                                        <el-button type="primary">确定</el-button>
-                                    </div>
-                                </el-card>
+                            <div id="notice-teacher" v-if="user.isTeacher">
+                                <div id="notice-menubar" style="margin-top: 30px;padding-bottom: 30px;padding-left: 30px">
+                                    <el-button type="primary" style="float: left" @click="notice_input = true"
+                                               :disabled="notice_input">发布公告</el-button>
+                                </div>
+                                <div id="notice-input" style="margin-top: 30px" v-if="notice_input===true">
+                                    <el-card class="box-card"
+                                             style="margin-top: 30px;width: 1184px;height: 266px;border-radius: 6px;border-width: 2px">
+                                        <el-input placeholder="请输入公告标题" v-model="notice_title" clearable>
+                                        </el-input>
+                                        <el-input style="padding-top: 20px" type="textarea" :rows="6"
+                                                  placeholder="请输入公告具体内容" v-model="notice_content" maxlength="1000"
+                                                  show-word-limit>
+                                        </el-input>
+                                        <div id="notice-button" style="float: right;padding-top: 10px">
+                                            <el-button type="primary" plain @click="notice_input=false">取消</el-button>
+                                            <el-button type="primary">确定</el-button>
+                                        </div>
+                                    </el-card>
+                                </div>
                             </div>
                             <div id="notice-cards" style="margin-top: 30px">
                                 <el-card class="box-card"
-                                    style="margin-top: 30px;width: 1184px;height: 220px;border-radius: 6px;border-width: 2px">
+                                    style="margin-top: 20px;width: 1184px;height: 220px;border-radius: 6px;border-width: 2px">
                                     <el-row id="course-title" style="height: 30px">
                                         <el-col :span="12">
                                             <div class="homework-create-time" style="float: left">
@@ -1418,7 +1420,7 @@
                                     </el-row>
                                 </el-card>
                                 <el-card class="box-card"
-                                    style="margin-top: 30px;width: 1184px;height: 220px;border-radius: 6px;border-width: 2px">
+                                    style="margin-top: 20px;width: 1184px;height: 220px;border-radius: 6px;border-width: 2px">
                                     <el-row id="course-title" style="height: 30px">
                                         <el-col :span="12">
                                             <div class="homework-create-time" style="float: left">
