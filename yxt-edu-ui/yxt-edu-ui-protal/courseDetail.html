@@ -71,12 +71,12 @@
                                             <div id="course-name"
                                                 style="color: white;font-size: 36px;float: left;text-align: left;padding-top: 40px;width: 612px">
                                                 <span style="width: 612px" v-text="course.cname">课程名称</span>
-                                                <el-link v-show="user.isTeacher" @click="dialogFormVisible = true"
+                                                <el-link v-show="user.isTeacher" @click="dialogUpdateCourseFormVisible = true"
                                                     icon="el-icon-edit-outline" :underline="false"
                                                     style="font-size: x-large;color: white">
                                                 </el-link>
-                                                <el-dialog title="编辑课程" :visible.sync="dialogFormVisible"
-                                                    destroy-on-close @close="dialogFormVisible=false"
+                                                <el-dialog title="编辑课程" :visible.sync="dialogUpdateCourseFormVisible"
+                                                    destroy-on-close @close="dialogUpdateCourseFormVisible=false"
                                                     @closed="updateCourseForm=Object.assign({},course)">
                                                     <el-form :model="updateCourseForm" ref="updateCourseForm">
                                                         <el-form-item label="课程名称" :label-width="formLabelWidth">
@@ -106,7 +106,7 @@
                                                         </el-form-item>
                                                     </el-form>
                                                     <div slot="footer" class="dialog-footer">
-                                                        <el-button @click="dialogFormVisible = false">取 消</el-button>
+                                                        <el-button @click="dialogUpdateCourseFormVisible = false">取 消</el-button>
                                                         <el-button type="primary"
                                                             @click="updateCourse('updateCourseForm')">确 定</el-button>
                                                     </div>
@@ -239,7 +239,7 @@
                         <div id="course-homework-menubar" v-if="user.isTeacher">
                             <el-row>
                                 <el-col :span="12">
-                                    <el-button type="primary" plain style="float: left">发布个人作业</el-button>
+                                    <el-button @click="homework_input=true" :disabled="homework_input" type="primary" plain style="float: left">发布个人作业</el-button>
                                 </el-col>
                                 <el-col :span="12">
                                     <div id="homework-manage" style="float:right;">
@@ -256,6 +256,36 @@
                                     </div>
                                 </el-col>
                             </el-row>
+                        </div>
+                        <div id="homework-input" style="margin-top: 30px" v-if="homework_input===true">
+                            <el-card class="box-card" style="margin-top: 30px;width: 1184px;height: 346px;border-radius: 6px;border-width: 2px">
+                                <el-form :model="homeworkInputForm" :rules="inputHomeworkRule" ref="inputHomeworkForm">
+                                    <el-input placeholder="作业名称" v-model="homeworkInputForm.title" clearable>
+                                    </el-input>
+                                    <el-input style="padding-top: 20px" type="textarea" :rows="6"
+                                              placeholder="作业简介，作业格式等要求" v-model="homeworkInputForm.description" maxlength="1000"
+                                              show-word-limit>
+                                    </el-input>
+                                    <div class="block" style="margin-top: 20px;float: left">
+                                        <span class="demonstration">截止日期：</span>
+                                        <el-date-picker
+                                                v-model="homeworkInputForm.deadline"
+                                                type="datetime"
+                                                placeholder="选择日期时间"
+                                                align="right"
+                                                :picker-options="pickerOptions">
+                                        </el-date-picker>
+                                    </div>
+                                    <div class="block" style="margin-top: 20px">
+                                        <span class="demonstration">满分值：</span>
+                                        <el-input-number v-model="homeworkInputForm.totalScore" @change="handleChange" :min="1" :step="0.5" :max="100" label="分值"></el-input-number>
+                                    </div>
+                                    <div id="homework-button" style="float: right;padding-top: 10px">
+                                        <el-button type="primary" plain @click="homework_input=false">取消</el-button>
+                                        <el-button type="primary" @click="inputHomework('inputHomeworkForm')">确定</el-button>
+                                    </div>
+                                </el-form>
+                            </el-card>
                         </div>
                         <div id="course-homework-box">
                             <div id="course-homework-card" style="width: 1224px; padding-top: 30px">
@@ -1478,6 +1508,7 @@
 <script src="https://cdn.bootcss.com/vue/2.6.11/vue.min.js"></script>
 <script src="https://cdn.bootcss.com/axios/0.19.2/axios.min.js"></script>
 <script src="https://cdn.bootcss.com/element-ui/2.13.2/index.js"></script>
+<script src="js/date-format.js"></script>
 <script src="js/md5.js"></script>
 <script src="js/common.js"></script>
 
@@ -1532,27 +1563,120 @@
                 cpic: "https://assets.ketangpai.com/theme/student/min/22.png",
                 cname: "数据结构"
             },
+            homework: {
+                id: 0,
+                courseId: 0,
+                title: "",
+                description: "",
+                createTime: "",
+                deadline: "new Date()",
+                submitCount: 0,
+                totalScore: 0,
+            },
+            homeworkInputForm: {
+                title: "",
+                description: "",
+                deadline: new Date(),
+                totalScore: 0,
+            },
             updateCourseForm: {
                 clazz: "",
                 cname: "",
                 schoolYear: "",
                 semester: "",
             },
+            pickerOptions: {
+                shortcuts: [{
+                    text: '40分钟后',
+                    onClick(picker) {
+                        const date = new Date();
+                        date.setTime(date.getTime() + 2400 * 1000);
+                        picker.$emit('pick', date);
+                    }
+                },{
+                    text: '1小时后',
+                    onClick(picker) {
+                        const date = new Date();
+                        date.setTime(date.getTime() + 3600 * 1000);
+                        picker.$emit('pick', date);
+                    }
+                }, {
+                    text: '2小时后',
+                    onClick(picker) {
+                        const date = new Date();
+                        date.setTime(date.getTime() + 3600 * 1000 * 2);
+                        picker.$emit('pick', date);
+                    }
+                },{
+                    text: '12小时后',
+                    onClick(picker) {
+                        const date = new Date();
+                        date.setTime(date.getTime() + 3600 * 1000 * 12);
+                        picker.$emit('pick', date);
+                    }
+                }, {
+                    text: '明天',
+                    onClick(picker) {
+                        const date = new Date();
+                        date.setTime(date.getTime() + 3600 * 1000 * 24 );
+                        picker.$emit('pick', date);
+                    }
+                }, {
+                    text: '后天',
+                    onClick(picker) {
+                        const date = new Date();
+                        date.setTime(date.getTime() + 3600 * 1000 *24 *2);
+                        picker.$emit('pick', date);
+                    }
+                },{
+                    text: '一周后',
+                    onClick(picker) {
+                        const date = new Date();
+                        date.setTime(date.getTime() + 3600 * 1000 *24 *7);
+                        picker.$emit('pick', date);
+                    }
+                }]
+            },
+            inputHomeworkRule: {
+                title: [{ required: true, message: '请输入作业名称', trigger: 'blur' }],
+                deadline: [{ required: true, message: '请输入截止日期', trigger: 'blur' }],
+                totalScore: [{ required: true, message: '请输入满分值', trigger: 'blur' }],
+            },
+            homework_input: false,
             cname: "",
             notice_title: "",
             notice_content: '',
             isProgressVisable: false,
             progressPercent: 0,
             notice_input: false,
-            dialogTableVisible: false,
-            dialogFormVisible: false,
+            dialogUpdateCourseFormVisible: false,
             formLabelWidth: '120px',
             fileList: [{ name: 'food.jpeg', url: 'https://fuss10.elemecdn.com/3/63/4e7f3a15429bfda99bce42a18cdd1jpeg.jpeg?imageMogr2/thumbnail/360x360/format/webp/quality/100' }, { name: 'food2.jpeg', url: 'https://fuss10.elemecdn.com/3/63/4e7f3a15429bfda99bce42a18cdd1jpeg.jpeg?imageMogr2/thumbnail/360x360/format/webp/quality/100' }],
             homeworkList: []
         },
         methods: {
+            inputHomework(formName) {
+                this.homework_input = false;
+                this.$refs[formName].validate((valid) => {
+                    if(valid){
+                        this.homeworkInputForm.deadline = this.formatDateTime();
+                        yxt.http.post("/homework/courseId/" + this.course.id + "/" + this.user.id, this.homeworkInputForm).then(({ data }) => {
+                            if (data.success){
+                                this.$message.success(data.message);
+                            } else {
+                                this.$message.error(data.message);
+                            }
+                            this.homework_input = false;
+                            this.homeworkInputForm = {};
+                        }).catch(() => {
+                            this.$message.error("服务器繁忙，请稍后再试！");
+                            this.homework_input = false;
+                        })
+                    }
+                });
+            },
             updateCourse(formName) {
-                this.dialogFormVisible = false;
+                this.dialogUpdateCourseFormVisible = false;
                 this.$refs[formName].validate((valid) => {
                     if (valid) {
                         yxt.http.put("/courses/info/id/" + this.course.id + "/" + this.user.id, this.updateCourseForm).then(({ data }) => {
@@ -1562,13 +1686,16 @@
                             } else {
                                 this.$message.error(data.message);
                             }
-                            this.dialogFormVisible = false;
+                            this.dialogUpdateCourseFormVisible = false;
                         }).catch(() => {
                             this.$message.error("服务器繁忙，请稍后再试！");
-                            this.dialogFormVisible = false;
+                            this.dialogUpdateCourseFormVisible = false;
                         })
                     }
                 });
+            },
+            handleChange(value) {
+                console.log(value);
             },
             submitUpload() {
                 this.$refs.upload.submit();
@@ -1628,6 +1755,10 @@
                     }
                 })
             },
+            formatDateTime() {
+                let t = this.homeworkInputForm.deadline;
+                return t.getFullYear()+"-"+(t.getMonth()+1)+"-"+t.getDate()+" "+t.getHours()+":"+t.getMinutes()+":"+t.getSeconds();
+            }
         },
         created() {
             this.verify();

@@ -127,6 +127,9 @@ public class HomeworkServiceImpl implements HomeworkService {
         }
 
         // 5. 截止时间至少比当前时间大30分钟
+        if (ObjectUtils.isEmpty(insertHomework.getDeadline())) {
+            return new CommonResponse(HomeworkCode.SAVE_HOMEWORK_FAIL_DEADLINE_IS_NULL);
+        }
         Date dateAdd30Mins = DateUtils.addMinutes(new Date(), 30);
         int truncatedCompareTo = DateUtils.truncatedCompareTo(insertHomework.getDeadline(), dateAdd30Mins, Calendar.SECOND);
         if (truncatedCompareTo == -1) {
