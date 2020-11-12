@@ -29,7 +29,8 @@
                     <!-- 菜单功能 -->
                     <el-col :span="16">
                         <el-menu :default-active="activeIndex" mode="horizontal" @select="handleSelect">
-                            <el-menu-item index="1" class="header-text" @click="location.href = '../homePage.html'">课堂</el-menu-item>
+                            <el-menu-item index="1" class="header-text" @click="location.href = '../homePage.html'">课堂
+                            </el-menu-item>
                             <el-menu-item index="2" class="header-text">精品课程</el-menu-item>
                             <el-menu-item index="3" class="header-text">本校课程</el-menu-item>
                             <el-menu-item index="4" class="header-text">我的精品</el-menu-item>
@@ -48,7 +49,8 @@
                                     <el-avatar size="large" :src="user.avatar">
                                     </el-avatar>
                                 </template>
-                                <el-menu-item @click="location.href = 'user/setting.html' "><i class="el-icon-setting"></i> 个人设置</el-menu-item>
+                                <el-menu-item @click="location.href = 'user/setting.html' "><i
+                                        class="el-icon-setting"></i> 个人设置</el-menu-item>
                                 <el-menu-item @click="logout()"><i class="el-icon-s-unfold"></i> 退出账户</el-menu-item>
                             </el-submenu>
                         </el-menu>
@@ -59,30 +61,44 @@
             <!-- 中间 -->
             <el-container style="width: 1224px;margin: auto">
                 <el-main style="margin-top: 60px;">
-                    <div id="course-header" style="border-radius: 10px;margin: auto;height: 200px;width:1224px;background-image: url('https://assets.ketangpai.com/theme/teacher/big/20.png')">
+                    <div id="course-header"
+                        style="border-radius: 10px;margin: auto;height: 200px;width:1224px;background-image: url('https://assets.ketangpai.com/theme/teacher/big/20.png')">
                         <el-row style="height: 200px">
                             <el-col :span="12">
                                 <el-row id="course-name">
                                     <el-col :span="12">
                                         <div id="top-menu" style="padding-left: 40px;width: 612px">
-                                            <div id="course-name" style="color: white;font-size: 36px;float: left;text-align: left;padding-top: 40px;width: 612px">
+                                            <div id="course-name"
+                                                style="color: white;font-size: 36px;float: left;text-align: left;padding-top: 40px;width: 612px">
                                                 <span style="width: 612px" v-text="course.cname">课程名称</span>
-                                                <el-link @click="dialogFormVisible = true" icon="el-icon-edit-outline" :underline="false" style="font-size: x-large;color: white"></el-link>
-                                                <el-dialog title="编辑课程" :visible.sync="dialogFormVisible" destroy-on-close @close="dialogFormVisible=false" @closed="updateCourseForm=Object.assign({},course)">
+                                                <el-link v-show="user.isTeacher" @click="dialogFormVisible = true"
+                                                    icon="el-icon-edit-outline" :underline="false"
+                                                    style="font-size: x-large;color: white">
+                                                </el-link>
+                                                <el-dialog title="编辑课程" :visible.sync="dialogFormVisible"
+                                                    destroy-on-close @close="dialogFormVisible=false"
+                                                    @closed="updateCourseForm=Object.assign({},course)">
                                                     <el-form :model="updateCourseForm" ref="updateCourseForm">
                                                         <el-form-item label="课程名称" :label-width="formLabelWidth">
-                                                            <el-input v-model="updateCourseForm.cname" placeholder="请输入课程名称" autocomplete="off"></el-input>
+                                                            <el-input v-model="updateCourseForm.cname"
+                                                                placeholder="请输入课程名称" autocomplete="off"></el-input>
                                                         </el-form-item>
                                                         <el-form-item label="班级名称" :label-width="formLabelWidth">
-                                                            <el-input v-model="updateCourseForm.clazz" placeholder="请输入班级名称" autocomplete="off"></el-input>
+                                                            <el-input v-model="updateCourseForm.clazz"
+                                                                placeholder="请输入班级名称" autocomplete="off"></el-input>
                                                         </el-form-item>
                                                         <el-form-item label="学年-学期" :label-width="formLabelWidth">
-                                                            <el-select v-model="updateCourseForm.schoolYear" placeholder="请选择学年" style="width: 390px">
-                                                                <el-option label="2019-2020" value="2019-2020"></el-option>
-                                                                <el-option label="2020-2021" value="2020-2021"></el-option>
-                                                                <el-option label="2021-2022" value="2021-2022"></el-option>
+                                                            <el-select v-model="updateCourseForm.schoolYear"
+                                                                placeholder="请选择学年" style="width: 390px">
+                                                                <el-option label="2019-2020" value="2019-2020">
+                                                                </el-option>
+                                                                <el-option label="2020-2021" value="2020-2021">
+                                                                </el-option>
+                                                                <el-option label="2021-2022" value="2021-2022">
+                                                                </el-option>
                                                             </el-select>
-                                                            <el-select v-model="updateCourseForm.semester" placeholder="请选择学期" style="width: 390px">
+                                                            <el-select v-model="updateCourseForm.semester"
+                                                                placeholder="请选择学期" style="width: 390px">
                                                                 <el-option label="不限" value="不限"></el-option>
                                                                 <el-option label="第一学期" value="第一学期"></el-option>
                                                                 <el-option label="第二学期" value="第二学期"></el-option>
@@ -91,7 +107,8 @@
                                                     </el-form>
                                                     <div slot="footer" class="dialog-footer">
                                                         <el-button @click="dialogFormVisible = false">取 消</el-button>
-                                                        <el-button type="primary" @click="updateCourse('updateCourseForm')">确 定</el-button>
+                                                        <el-button type="primary"
+                                                            @click="updateCourse('updateCourseForm')">确 定</el-button>
                                                     </div>
                                                 </el-dialog>
                                             </div>
@@ -104,7 +121,8 @@
                                         <div id="box-box" style="padding-left: 40px;padding-top: 20px">
                                             <el-row :gutter="30">
                                                 <el-col :span="5">
-                                                    <div id="qr-code" style="border-radius: 3px;color: white;height: 24px;background-color: #909399;font-size: 12px">
+                                                    <div id="qr-code"
+                                                        style="border-radius: 3px;color: white;height: 24px;background-color: #909399;font-size: 12px">
                                                         <el-link :underline="false" style="color: white">
                                                             <div id="qr-code-content" style="padding-top: 3px">
                                                                 <i class="fa fa-qrcode"></i>
@@ -114,25 +132,29 @@
                                                     </div>
                                                 </el-col>
                                                 <el-col :span="6">
-                                                    <div id="course-code" style="border-radius: 3px;color: white;height: 24px;background-color: #909399;font-size: 12px">
+                                                    <div id="course-code"
+                                                        style="border-radius: 3px;color: white;height: 24px;background-color: #909399;font-size: 12px">
                                                         <el-dropdown>
                                                             <span class="el-dropdown-link">
                                                                 <el-link :underline="false" style="color: white">
-                                                                    <div id="course-code-content" style="padding-top: 3px">
+                                                                    <div id="course-code-content"
+                                                                        style="padding-top: 3px">
                                                                         <span>加课码:</span>
                                                                         <span v-text="course.ccode">R6AD65</span>
                                                                     </div>
                                                                 </el-link>
                                                             </span>
-                                                            <el-dropdown-menu slot="dropdown" style="width: 106px;text-align: center">
+                                                            <!-- <el-dropdown-menu slot="dropdown" v-show="user.isTeacher"
+                                                                style="width: 106px;text-align: center">
                                                                 <el-dropdown-item>停用</el-dropdown-item>
                                                                 <el-dropdown-item>重置</el-dropdown-item>
-                                                            </el-dropdown-menu>
+                                                            </el-dropdown-menu> -->
                                                         </el-dropdown>
                                                     </div>
                                                 </el-col>
                                                 <el-col :span="4">
-                                                    <div id="course-member" style="border-radius: 3px;color: white;height: 24px;background-color: #909399;font-size: 12px">
+                                                    <div id="course-member"
+                                                        style="border-radius: 3px;color: white;height: 24px;background-color: #909399;font-size: 12px">
                                                         <el-link :underline="false" style="color: white">
                                                             <div id="course-member-content" style="padding-top: 3px">
                                                                 <i class="fa fa-user-o"></i>
@@ -143,7 +165,8 @@
                                                     </div>
                                                 </el-col>
                                                 <el-col :span="5">
-                                                    <div id="course-data" style="border-radius: 3px;color: white;height: 24px;background-color: #909399;font-size: 12px">
+                                                    <div id="course-data"
+                                                        style="border-radius: 3px;color: white;height: 24px;background-color: #909399;font-size: 12px">
                                                         <el-link :underline="false" style="color: white">
                                                             <div id="course-data-content" style="padding-top: 3px">
                                                                 <i class="fa fa-bar-chart"></i>
@@ -153,7 +176,8 @@
                                                     </div>
                                                 </el-col>
                                                 <el-col :span="4">
-                                                    <div id="course-score" style="border-radius: 3px;color: white;width: 80px;height: 24px;background-color: #909399;font-size: 12px">
+                                                    <div id="course-score"
+                                                        style="border-radius: 3px;color: white;width: 80px;height: 24px;background-color: #909399;font-size: 12px">
                                                         <el-link :underline="false" style="color: white">
                                                             <div id="course-score-content" style="padding-top: 3px">
                                                                 <i class="fa fa-mortar-board"></i>
@@ -170,7 +194,8 @@
                             </el-col>
                             <el-col :span="12">
                                 <div id="course-statics">
-                                    <el-row style="padding-left: 160px;padding-right: 50px;height: 200px;color: white;padding-top: 40px">
+                                    <el-row
+                                        style="padding-left: 160px;padding-right: 50px;height: 200px;color: white;padding-top: 40px">
                                         <el-col :span="8">
                                             <ul style="list-style: none">
                                                 <li style="font-size: 48px">1</li>
@@ -196,22 +221,22 @@
                     </div>
                     <div id="course-menu">
                         <el-menu :default-active="activeIndex2" mode="horizontal" @select="handleSelect2">
-                                <el-menu-item index="1" style="width: 200px">
-                                    <span style="font-size: 16px">作业</span>
-                                </el-menu-item>
-                                <el-menu-item index="2" style="width: 200px">
-                                    <span style="font-size: 16px">资料</span>
-                                </el-menu-item>
-                                <el-menu-item index="3" style="width: 200px">
-                                    <span style="font-size: 16px">测试（考试）</span>
-                                </el-menu-item>
-                                <el-menu-item index="4" style="width: 200px">
-                                    <span style="font-size: 16px">公告</span>
-                                </el-menu-item>
+                            <el-menu-item index="1" style="width: 200px">
+                                <span style="font-size: 16px">作业</span>
+                            </el-menu-item>
+                            <el-menu-item index="2" style="width: 200px">
+                                <span style="font-size: 16px">资料</span>
+                            </el-menu-item>
+                            <el-menu-item index="3" style="width: 200px">
+                                <span style="font-size: 16px">测试（考试）</span>
+                            </el-menu-item>
+                            <el-menu-item index="4" style="width: 200px">
+                                <span style="font-size: 16px">公告</span>
+                            </el-menu-item>
                         </el-menu>
                     </div>
                     <div id="course-homework" v-if="activeIndex2=='1'" style="padding-top: 40px">
-                        <div id="course-homework-menubar">
+                        <div id="course-homework-menubar" v-if="user.isTeacher">
                             <el-row>
                                 <el-col :span="12">
                                     <el-button type="primary" plain style="float: left">发布个人作业</el-button>
@@ -234,14 +259,16 @@
                         </div>
                         <div id="course-homework-box">
                             <div id="course-homework-card" style="width: 1224px; padding-top: 30px">
-                                <el-card class="box-card" style="margin-top: 30px;width: 1184px;height: 220px;border-radius: 6px;border-width: 2px">
+                                <el-card class="box-card" v-for="(homework, index) in homeworkList"
+                                    style="margin-top: 30px;width: 1184px;height: 220px;border-radius: 6px;border-width: 2px">
                                     <el-row id="course-title" style="height: 30px">
                                         <el-col :span="12">
                                             <div class="homework-create-time" style="float: left">
-                                                <span style="padding-left: 30px;font-size: 15px;color: #A0A0A0">2020-11-09 22:17</span>
+                                                <span style="padding-left: 30px;font-size: 15px;color: #A0A0A0"
+                                                    v-text="homework.createTime">2020-11-09 22:17</span>
                                             </div>
                                         </el-col>
-                                        <el-col :span="12">
+                                        <el-col :span="12" v-show="user.isTeacher">
                                             <div class="homework-operation" style="float: right">
                                                 <el-dropdown style="padding-right: 30px">
                                                     <span class="el-dropdown-link">
@@ -260,26 +287,31 @@
                                         <el-col :span="12">
                                             <el-row style="height: 45px">
                                                 <el-col :span="24">
-                                                    <el-link :underline="false" style="font-size: 26px;float: left;padding-left: 30px">
-                                                        <span style="font-weight: bold">范例_第一次作业</span>
+                                                    <el-link :underline="false"
+                                                        style="font-size: 26px;float: left;padding-left: 30px">
+                                                        <span style="font-weight: bold"
+                                                            v-text="homework.title">范例_第一次作业</span>
                                                     </el-link>
                                                 </el-col>
                                             </el-row>
                                             <el-row style="height: 85px">
                                                 <el-col :span="24">
                                                     <span style="float: left;padding-left: 30px;padding-top: 5px">
-                                                        <span style="font-size: 15px;color: #707070">如题所述</span>
+                                                        <span style="font-size: 15px;color: #707070"
+                                                            v-html="homework.description">如题所述</span>
                                                     </span>
                                                 </el-col>
                                             </el-row>
                                         </el-col>
                                         <el-col :span="12">
                                             <div class="homework-statics" style="height: 130px">
-                                                <el-row style="height: 130px;padding-top: 30px">
+                                                <el-row style="height: 130px;padding-top: 30px" v-if="user.isTeacher">
                                                     <el-col :span="8">
                                                         <ul style="list-style: none">
                                                             <li>
-                                                                <el-link :underline="false" style="font-size: 30px;color: #32C76E">15</el-link>
+                                                                <el-link :underline="false"
+                                                                    style="font-size: 30px;color: #32C76E"
+                                                                    v-text="homework.correctedCount">15</el-link>
                                                             </li>
                                                             <li style="font-size: 14px;color: #707070">已批</li>
                                                         </ul>
@@ -287,7 +319,9 @@
                                                     <el-col :span="8">
                                                         <ul style="list-style: none">
                                                             <li>
-                                                                <el-link :underline="false" style="font-size: 30px;color: #707070">4</el-link>
+                                                                <el-link :underline="false"
+                                                                    style="font-size: 30px;color: #707070"
+                                                                    v-text="homework.uncorrectedCount">4</el-link>
                                                             </li>
                                                             <li style="font-size: 14px;color: #970002">未批</li>
                                                         </ul>
@@ -295,10 +329,17 @@
                                                     <el-col :span="8">
                                                         <ul style="list-style: none">
                                                             <li>
-                                                                <el-link :underline="false" style="font-size: 30px;color: #E03838">5</el-link>
+                                                                <el-link :underline="false"
+                                                                    style="font-size: 30px;color: #E03838"
+                                                                    v-text="homework.uncommittedCount">5</el-link>
                                                             </li>
                                                             <li style="font-size: 14px;color: #707070">未交</li>
                                                         </ul>
+                                                    </el-col>
+                                                </el-row>
+                                                <el-row style="height: 130px;padding-top: 30px" v-else>
+                                                    <el-col :span="5" style="float: right; margin-top: 40px;">
+                                                        <el-button type="primary" plain>已提交</el-button>
                                                     </el-col>
                                                 </el-row>
                                             </div>
@@ -307,18 +348,22 @@
                                     <el-row id="course-message" style="height: 60px">
                                         <el-row>
                                             <el-col style="height: 50px">
-                                                <span style="font-size: 15px;color: #A0A0A0;float: left;padding-left: 30px;padding-top: 0;padding-bottom: 10px">
-                                                    截止日期：2020-11-07 22:17
+                                                <span
+                                                    style="font-size: 15px;color: #A0A0A0;float: left;padding-left: 30px;padding-top: 0;padding-bottom: 10px">
+                                                    <i class="el-icon-timer"></i> 截止日期：<span v-text="homework.deadline">2020-11-07 22:17</span>
                                                 </span>
                                             </el-col>
                                         </el-row>
                                     </el-row>
                                 </el-card>
-                                <el-card class="box-card" style="margin-top: 30px;width: 1184px;height: 220px;border-radius: 6px;border-width: 2px">
+                                <el-card class="box-card"
+                                    style="margin-top: 30px;width: 1184px;height: 220px;border-radius: 6px;border-width: 2px">
                                     <el-row id="course-title" style="height: 30px">
                                         <el-col :span="12">
                                             <div class="homework-create-time" style="float: left">
-                                                <span style="padding-left: 30px;font-size: 15px;color: #A0A0A0">2020-11-09 22:17</span>
+                                                <span
+                                                    style="padding-left: 30px;font-size: 15px;color: #A0A0A0">2020-11-09
+                                                    22:17</span>
                                             </div>
                                         </el-col>
                                         <el-col :span="12">
@@ -340,7 +385,8 @@
                                         <el-col :span="12">
                                             <el-row style="height: 45px">
                                                 <el-col :span="24">
-                                                    <el-link :underline="false" style="font-size: 26px;float: left;padding-left: 30px">
+                                                    <el-link :underline="false"
+                                                        style="font-size: 26px;float: left;padding-left: 30px">
                                                         <span style="font-weight: bold">范例_第二次作业</span>
                                                     </el-link>
                                                 </el-col>
@@ -359,7 +405,8 @@
                                                     <el-col :span="8">
                                                         <ul style="list-style: none">
                                                             <li>
-                                                                <el-link :underline="false" style="font-size: 30px;color: #32C76E">15</el-link>
+                                                                <el-link :underline="false"
+                                                                    style="font-size: 30px;color: #32C76E">15</el-link>
                                                             </li>
                                                             <li style="font-size: 14px;color: #707070">已批</li>
                                                         </ul>
@@ -367,7 +414,8 @@
                                                     <el-col :span="8">
                                                         <ul style="list-style: none">
                                                             <li>
-                                                                <el-link :underline="false" style="font-size: 30px;color: #707070">4</el-link>
+                                                                <el-link :underline="false"
+                                                                    style="font-size: 30px;color: #707070">4</el-link>
                                                             </li>
                                                             <li style="font-size: 14px;color: #970002">未批</li>
                                                         </ul>
@@ -375,7 +423,8 @@
                                                     <el-col :span="8">
                                                         <ul style="list-style: none">
                                                             <li>
-                                                                <el-link :underline="false" style="font-size: 30px;color: #E03838">5</el-link>
+                                                                <el-link :underline="false"
+                                                                    style="font-size: 30px;color: #E03838">5</el-link>
                                                             </li>
                                                             <li style="font-size: 14px;color: #707070">未交</li>
                                                         </ul>
@@ -387,7 +436,8 @@
                                     <el-row id="course-message" style="height: 60px">
                                         <el-row>
                                             <el-col style="height: 50px">
-                                                <span style="font-size: 15px;color: #A0A0A0;float: left;padding-left: 30px;padding-top: 0;padding-bottom: 10px">
+                                                <span
+                                                    style="font-size: 15px;color: #A0A0A0;float: left;padding-left: 30px;padding-top: 0;padding-bottom: 10px">
                                                     截止日期：2020-11-07 22:17
                                                 </span>
                                             </el-col>
@@ -399,21 +449,18 @@
                     </div>
                     <div id="course-resources" v-if="activeIndex2=='2'">
                         <div class="course-resources-box">
-                            <el-card class="box-card" style="margin-top: 30px;width: 1184px;height: 230px;border-radius: 6px;border-width: 2px">
+                            <el-card class="box-card"
+                                style="margin-top: 30px;width: 1184px;height: 230px;border-radius: 6px;border-width: 2px">
                                 <div style="width: 1144px">
                                     <span style="font-size: xx-large;width: 1144px">资源文件上传</span>
                                     <div id="resources-upload" style="margin-top: 30px">
-                                        <el-upload
-                                                style="width: 1144px"
-                                                class="upload-demo"
-                                                ref="upload"
-                                                action="https://jsonplaceholder.typicode.com/posts/"
-                                                :on-preview="handlePreview"
-                                                :on-remove="handleRemove"
-                                                :file-list="fileList"
-                                                :auto-upload="false">
+                                        <el-upload style="width: 1144px" class="upload-demo" ref="upload"
+                                            action="https://jsonplaceholder.typicode.com/posts/"
+                                            :on-preview="handlePreview" :on-remove="handleRemove" :file-list="fileList"
+                                            :auto-upload="false">
                                             <el-button slot="trigger" size="small" type="primary">选取文件</el-button>
-                                            <el-button style="margin-left: 10px;" size="small" type="success" @click="submitUpload">上传到服务器</el-button>
+                                            <el-button style="margin-left: 10px;" size="small" type="success"
+                                                @click="submitUpload">上传到服务器</el-button>
                                             <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过500kb</div>
                                         </el-upload>
                                     </div>
@@ -434,7 +481,8 @@
                                         <el-button type="primary" plain>
                                             导入测试（考试）
                                         </el-button>
-                                        <el-link type="primary" :underline="false" style="padding-left: 30px">先去备课区组卷</el-link>
+                                        <el-link type="primary" :underline="false" style="padding-left: 30px">先去备课区组卷
+                                        </el-link>
                                         <el-link :underline="false" style="padding-left: 450px">
                                             <i class="el-icon-document"></i>
                                             测试成绩管理
@@ -452,13 +500,17 @@
                                         <el-tabs v-model="activeName" @tab-click="handleClick">
                                             <el-tab-pane label="全部(4)" name="first">
                                                 <div class="exam-cards">
-                                                    <el-card class="box-card" style="margin-top: 30px;width: 1184px;height: 230px;border-radius: 6px;border-width: 2px">
+                                                    <el-card class="box-card"
+                                                        style="margin-top: 30px;width: 1184px;height: 230px;border-radius: 6px;border-width: 2px">
                                                         <el-row id="course-title" style="height: 30px">
                                                             <el-col :span="14">
                                                                 <div class="homework-create-time" style="float: left">
                                                                     <el-tag type="danger">未发布</el-tag>
-                                                                    <span style="padding-left: 30px;font-size: 15px;color: #5F6368">限时：无</span>
-                                                                    <span style="padding-left: 30px;font-size: 15px;color: #5F6368">起止时间：2020-11-09 22:17 ~ 2020-11-09 23:17</span>
+                                                                    <span
+                                                                        style="padding-left: 30px;font-size: 15px;color: #5F6368">限时：无</span>
+                                                                    <span
+                                                                        style="padding-left: 30px;font-size: 15px;color: #5F6368">起止时间：2020-11-09
+                                                                        22:17 ~ 2020-11-09 23:17</span>
                                                                 </div>
                                                             </el-col>
                                                             <el-col :span="10">
@@ -471,7 +523,8 @@
                                                             <el-col :span="12">
                                                                 <el-row style="height: 55px">
                                                                     <el-col :span="24">
-                                                                        <el-link :underline="false" style="color: #3B3D45;font-size: 26px;float: left;padding-left: 30px;padding-top: 3px">
+                                                                        <el-link :underline="false"
+                                                                            style="color: #3B3D45;font-size: 26px;float: left;padding-left: 30px;padding-top: 3px">
                                                                             <b>未发布_测试（考试）</b>
                                                                         </el-link>
                                                                     </el-col>
@@ -479,7 +532,8 @@
                                                                 <el-row style="height: 75px">
                                                                     <el-col :span="24" style="height: 75px">
                                                                         <span style="float: left;padding-left: 30px">
-                                                                            <span style="font-size: 15px;color: #707070">
+                                                                            <span
+                                                                                style="font-size: 15px;color: #707070">
                                                                                 description试卷描述
                                                                             </span>
                                                                         </span>
@@ -489,8 +543,11 @@
                                                             <el-col :span="12">
                                                                 <el-row>
                                                                     <el-col :span="12" style="float: right">
-                                                                        <div class="homework-statics" style="height: 130px">
-                                                                            <el-row style="height: 130px;padding-top: 15px"></el-row>
+                                                                        <div class="homework-statics"
+                                                                            style="height: 130px">
+                                                                            <el-row
+                                                                                style="height: 130px;padding-top: 15px">
+                                                                            </el-row>
                                                                         </div>
                                                                     </el-col>
                                                                 </el-row>
@@ -499,21 +556,28 @@
                                                         <el-row id="course-message" style="height: 60px">
                                                             <el-row>
                                                                 <el-col :span="12" style="height: 50px">
-                                                                    <span style="font-size: 15px;color: #A0A0A0;float: left;padding-left: 30px;padding-top: 10px;padding-bottom: 10px">
+                                                                    <span
+                                                                        style="font-size: 15px;color: #A0A0A0;float: left;padding-left: 30px;padding-top: 10px;padding-bottom: 10px">
                                                                         创建于2020-11-09 22:17
                                                                     </span>
                                                                 </el-col>
                                                                 <el-col :span="12">
-                                                                    <div class="exam-finished-buttons" style="float: right">
-                                                                        <el-button type="primary" plain>编辑标题及简介</el-button>
-                                                                        <el-button type="primary" plain>编辑试题内容</el-button>
+                                                                    <div class="exam-finished-buttons"
+                                                                        style="float: right">
+                                                                        <el-button type="primary" plain>编辑标题及简介
+                                                                        </el-button>
+                                                                        <el-button type="primary" plain>编辑试题内容
+                                                                        </el-button>
                                                                         <el-dropdown>
                                                                             <el-button type="primary">
-                                                                                更多<i class="el-icon-arrow-down el-icon--right"></i>
+                                                                                更多<i
+                                                                                    class="el-icon-arrow-down el-icon--right"></i>
                                                                             </el-button>
                                                                             <el-dropdown-menu slot="dropdown">
-                                                                                <el-dropdown-item>保存到备课区</el-dropdown-item>
-                                                                                <el-dropdown-item>分享试卷给同事</el-dropdown-item>
+                                                                                <el-dropdown-item>保存到备课区
+                                                                                </el-dropdown-item>
+                                                                                <el-dropdown-item>分享试卷给同事
+                                                                                </el-dropdown-item>
                                                                                 <el-dropdown-item>删除</el-dropdown-item>
                                                                             </el-dropdown-menu>
                                                                         </el-dropdown>
@@ -522,24 +586,31 @@
                                                             </el-row>
                                                         </el-row>
                                                     </el-card>
-                                                    <el-card class="box-card" style="margin-top: 30px;width: 1184px;height: 230px;border-radius: 6px;border-width: 2px">
+                                                    <el-card class="box-card"
+                                                        style="margin-top: 30px;width: 1184px;height: 230px;border-radius: 6px;border-width: 2px">
                                                         <el-row id="course-title" style="height: 30px">
                                                             <el-col :span="14">
                                                                 <div class="homework-create-time" style="float: left">
                                                                     <el-tag type="warning">未开始</el-tag>
-                                                                    <span style="padding-left: 30px;font-size: 15px;color: #5F6368">限时：无</span>
-                                                                    <span style="padding-left: 30px;font-size: 15px;color: #5F6368">起止时间：2020-11-09 22:17 ~ 2020-11-09 23:17</span>
+                                                                    <span
+                                                                        style="padding-left: 30px;font-size: 15px;color: #5F6368">限时：无</span>
+                                                                    <span
+                                                                        style="padding-left: 30px;font-size: 15px;color: #5F6368">起止时间：2020-11-09
+                                                                        22:17 ~ 2020-11-09 23:17</span>
                                                                 </div>
                                                             </el-col>
                                                             <el-col :span="10">
-                                                                <span style="color: #FF6E48;font-size: 16px;font-weight: bold;float: right">开始时间2020-11-14 24:10</span>
+                                                                <span
+                                                                    style="color: #FF6E48;font-size: 16px;font-weight: bold;float: right">开始时间2020-11-14
+                                                                    24:10</span>
                                                             </el-col>
                                                         </el-row>
                                                         <el-row id="course-announce" style="height: 130px">
                                                             <el-col :span="12">
                                                                 <el-row style="height: 55px">
                                                                     <el-col :span="24">
-                                                                        <el-link :underline="false" style="color: #3B3D45;font-size: 26px;float: left;padding-left: 30px;padding-top: 3px">
+                                                                        <el-link :underline="false"
+                                                                            style="color: #3B3D45;font-size: 26px;float: left;padding-left: 30px;padding-top: 3px">
                                                                             <b>未开始_测试（考试）</b>
                                                                         </el-link>
                                                                     </el-col>
@@ -547,7 +618,8 @@
                                                                 <el-row style="height: 75px">
                                                                     <el-col :span="24" style="height: 75px">
                                                                         <span style="float: left;padding-left: 30px">
-                                                                            <span style="font-size: 15px;color: #707070">
+                                                                            <span
+                                                                                style="font-size: 15px;color: #707070">
                                                                                 description试卷描述
                                                                             </span>
                                                                         </span>
@@ -557,8 +629,11 @@
                                                             <el-col :span="12">
                                                                 <el-row>
                                                                     <el-col :span="12" style="float: right">
-                                                                        <div class="homework-statics" style="height: 130px">
-                                                                            <el-row style="height: 130px;padding-top: 15px"></el-row>
+                                                                        <div class="homework-statics"
+                                                                            style="height: 130px">
+                                                                            <el-row
+                                                                                style="height: 130px;padding-top: 15px">
+                                                                            </el-row>
                                                                         </div>
                                                                     </el-col>
                                                                 </el-row>
@@ -567,22 +642,30 @@
                                                         <el-row id="course-message" style="height: 60px">
                                                             <el-row>
                                                                 <el-col :span="12" style="height: 50px">
-                                                                    <span style="font-size: 15px;color: #A0A0A0;float: left;padding-left: 30px;padding-top: 10px;padding-bottom: 10px">
+                                                                    <span
+                                                                        style="font-size: 15px;color: #A0A0A0;float: left;padding-left: 30px;padding-top: 10px;padding-bottom: 10px">
                                                                         创建于2020-11-09 22:17
                                                                     </span>
                                                                 </el-col>
                                                                 <el-col :span="12">
-                                                                    <div class="exam-finished-buttons" style="float: right">
-                                                                        <el-button type="primary" plain>编辑标题及简介</el-button>
-                                                                        <el-button type="primary" plain>编辑试题内容</el-button>
+                                                                    <div class="exam-finished-buttons"
+                                                                        style="float: right">
+                                                                        <el-button type="primary" plain>编辑标题及简介
+                                                                        </el-button>
+                                                                        <el-button type="primary" plain>编辑试题内容
+                                                                        </el-button>
                                                                         <el-dropdown>
                                                                             <el-button type="primary">
-                                                                                更多<i class="el-icon-arrow-down el-icon--right"></i>
+                                                                                更多<i
+                                                                                    class="el-icon-arrow-down el-icon--right"></i>
                                                                             </el-button>
                                                                             <el-dropdown-menu slot="dropdown">
-                                                                                <el-dropdown-item>取消发布</el-dropdown-item>
-                                                                                <el-dropdown-item>保存到备课区</el-dropdown-item>
-                                                                                <el-dropdown-item>分享试卷给同事</el-dropdown-item>
+                                                                                <el-dropdown-item>取消发布
+                                                                                </el-dropdown-item>
+                                                                                <el-dropdown-item>保存到备课区
+                                                                                </el-dropdown-item>
+                                                                                <el-dropdown-item>分享试卷给同事
+                                                                                </el-dropdown-item>
                                                                                 <el-dropdown-item>删除</el-dropdown-item>
                                                                             </el-dropdown-menu>
                                                                         </el-dropdown>
@@ -591,13 +674,17 @@
                                                             </el-row>
                                                         </el-row>
                                                     </el-card>
-                                                    <el-card class="box-card" style="margin-top: 30px;width: 1184px;height: 230px;border-radius: 6px;border-width: 2px">
+                                                    <el-card class="box-card"
+                                                        style="margin-top: 30px;width: 1184px;height: 230px;border-radius: 6px;border-width: 2px">
                                                         <el-row id="course-title" style="height: 30px">
                                                             <el-col :span="14">
                                                                 <div class="homework-create-time" style="float: left">
                                                                     <el-tag type="success">已发布</el-tag>
-                                                                    <span style="padding-left: 30px;font-size: 15px;color: #5F6368">限时：无</span>
-                                                                    <span style="padding-left: 30px;font-size: 15px;color: #5F6368">起止时间：2020-11-09 22:17 ~ 2020-11-09 23:17</span>
+                                                                    <span
+                                                                        style="padding-left: 30px;font-size: 15px;color: #5F6368">限时：无</span>
+                                                                    <span
+                                                                        style="padding-left: 30px;font-size: 15px;color: #5F6368">起止时间：2020-11-09
+                                                                        22:17 ~ 2020-11-09 23:17</span>
                                                                 </div>
                                                             </el-col>
                                                         </el-row>
@@ -605,15 +692,17 @@
                                                             <el-col :span="12">
                                                                 <el-row style="height: 55px">
                                                                     <el-col :span="24">
-                                                                        <el-link :underline="false" style="color: #3B3D45;font-size: 26px;float: left;padding-left: 30px;padding-top: 3px">
+                                                                        <el-link :underline="false"
+                                                                            style="color: #3B3D45;font-size: 26px;float: left;padding-left: 30px;padding-top: 3px">
                                                                             <b>已发布_测试（考试）</b>
                                                                         </el-link>
                                                                     </el-col>
                                                                 </el-row>
                                                                 <el-row style="height: 75px">
-                                                                    <el-col :span="24"  style="height: 75px">
+                                                                    <el-col :span="24" style="height: 75px">
                                                                         <span style="float: left;padding-left: 30px">
-                                                                            <span style="font-size: 15px;color: #707070">
+                                                                            <span
+                                                                                style="font-size: 15px;color: #707070">
                                                                                 description试卷描述
                                                                             </span>
                                                                         </span>
@@ -623,29 +712,43 @@
                                                             <el-col :span="12">
                                                                 <el-row>
                                                                     <el-col :span="12" style="float: right">
-                                                                        <div class="homework-statics" style="height: 130px">
-                                                                            <el-row style="height: 130px;padding-top: 15px">
+                                                                        <div class="homework-statics"
+                                                                            style="height: 130px">
+                                                                            <el-row
+                                                                                style="height: 130px;padding-top: 15px">
                                                                                 <el-col :span="8">
                                                                                     <ul style="list-style: none">
-                                                                                        <li style="font-size: 14px;color: #202124;font-weight: bold">已批</li>
+                                                                                        <li
+                                                                                            style="font-size: 14px;color: #202124;font-weight: bold">
+                                                                                            已批</li>
                                                                                         <li>
-                                                                                            <el-link :underline="false" style="font-size: 30px;color: #32BAF2;font-weight: bold">15</el-link>
+                                                                                            <el-link :underline="false"
+                                                                                                style="font-size: 30px;color: #32BAF2;font-weight: bold">
+                                                                                                15</el-link>
                                                                                         </li>
                                                                                     </ul>
                                                                                 </el-col>
                                                                                 <el-col :span="8">
                                                                                     <ul style="list-style: none">
-                                                                                        <li style="font-size: 14px;color: #202124;font-weight: bold">未批</li>
+                                                                                        <li
+                                                                                            style="font-size: 14px;color: #202124;font-weight: bold">
+                                                                                            未批</li>
                                                                                         <li>
-                                                                                            <el-link :underline="false" style="font-size: 30px;color: #707070;font-weight: bold">4</el-link>
+                                                                                            <el-link :underline="false"
+                                                                                                style="font-size: 30px;color: #707070;font-weight: bold">
+                                                                                                4</el-link>
                                                                                         </li>
                                                                                     </ul>
                                                                                 </el-col>
                                                                                 <el-col :span="8">
                                                                                     <ul style="list-style: none">
-                                                                                        <li style="font-size: 14px;color: #202124;font-weight: bold">未交</li>
+                                                                                        <li
+                                                                                            style="font-size: 14px;color: #202124;font-weight: bold">
+                                                                                            未交</li>
                                                                                         <li>
-                                                                                            <el-link :underline="false" style="font-size: 30px;color: #FF6000;font-weight: bold">5</el-link>
+                                                                                            <el-link :underline="false"
+                                                                                                style="font-size: 30px;color: #FF6000;font-weight: bold">
+                                                                                                5</el-link>
                                                                                         </li>
                                                                                     </ul>
                                                                                 </el-col>
@@ -658,22 +761,30 @@
                                                         <el-row id="course-message" style="height: 60px">
                                                             <el-row>
                                                                 <el-col :span="12" style="height: 50px">
-                                                                    <span style="font-size: 15px;color: #A0A0A0;float: left;padding-left: 30px;padding-top: 10px;padding-bottom: 10px">
+                                                                    <span
+                                                                        style="font-size: 15px;color: #A0A0A0;float: left;padding-left: 30px;padding-top: 10px;padding-bottom: 10px">
                                                                         创建于2020-11-09 22:17
                                                                     </span>
                                                                 </el-col>
                                                                 <el-col :span="12">
-                                                                    <div class="exam-finished-buttons" style="float: right">
-                                                                        <el-button type="primary" plain>编辑标题及简介</el-button>
-                                                                        <el-button type="primary" plain>编辑试题内容</el-button>
+                                                                    <div class="exam-finished-buttons"
+                                                                        style="float: right">
+                                                                        <el-button type="primary" plain>编辑标题及简介
+                                                                        </el-button>
+                                                                        <el-button type="primary" plain>编辑试题内容
+                                                                        </el-button>
                                                                         <el-dropdown>
                                                                             <el-button type="primary">
-                                                                                更多<i class="el-icon-arrow-down el-icon--right"></i>
+                                                                                更多<i
+                                                                                    class="el-icon-arrow-down el-icon--right"></i>
                                                                             </el-button>
                                                                             <el-dropdown-menu slot="dropdown">
-                                                                                <el-dropdown-item>结束发布</el-dropdown-item>
-                                                                                <el-dropdown-item>保存到备课区</el-dropdown-item>
-                                                                                <el-dropdown-item>分享试卷给同事</el-dropdown-item>
+                                                                                <el-dropdown-item>结束发布
+                                                                                </el-dropdown-item>
+                                                                                <el-dropdown-item>保存到备课区
+                                                                                </el-dropdown-item>
+                                                                                <el-dropdown-item>分享试卷给同事
+                                                                                </el-dropdown-item>
                                                                                 <el-dropdown-item>删除</el-dropdown-item>
                                                                             </el-dropdown-menu>
                                                                         </el-dropdown>
@@ -682,13 +793,17 @@
                                                             </el-row>
                                                         </el-row>
                                                     </el-card>
-                                                    <el-card class="box-card" style="margin-top: 30px;width: 1184px;height: 230px;border-radius: 6px;border-width: 2px">
+                                                    <el-card class="box-card"
+                                                        style="margin-top: 30px;width: 1184px;height: 230px;border-radius: 6px;border-width: 2px">
                                                         <el-row id="course-title" style="height: 30px">
                                                             <el-col :span="14">
                                                                 <div class="homework-create-time" style="float: left">
                                                                     <el-tag>已结束</el-tag>
-                                                                    <span style="padding-left: 30px;font-size: 15px;color: #5F6368">限时：无</span>
-                                                                    <span style="padding-left: 30px;font-size: 15px;color: #5F6368">起止时间：2020-11-09 22:17 ~ 2020-11-09 23:17</span>
+                                                                    <span
+                                                                        style="padding-left: 30px;font-size: 15px;color: #5F6368">限时：无</span>
+                                                                    <span
+                                                                        style="padding-left: 30px;font-size: 15px;color: #5F6368">起止时间：2020-11-09
+                                                                        22:17 ~ 2020-11-09 23:17</span>
                                                                 </div>
                                                             </el-col>
                                                         </el-row>
@@ -696,7 +811,8 @@
                                                             <el-col :span="12">
                                                                 <el-row style="height: 55px">
                                                                     <el-col :span="24">
-                                                                        <el-link :underline="false" style="color: #3B3D45;font-size: 26px;float: left;padding-left: 30px;padding-top: 3px">
+                                                                        <el-link :underline="false"
+                                                                            style="color: #3B3D45;font-size: 26px;float: left;padding-left: 30px;padding-top: 3px">
                                                                             <b>已结束_测试（考试）</b>
                                                                         </el-link>
                                                                     </el-col>
@@ -704,7 +820,8 @@
                                                                 <el-row style="height: 75px">
                                                                     <el-col :span="24" style="height: 75px">
                                                                         <span style="float: left;padding-left: 30px">
-                                                                            <span style="font-size: 15px;color: #707070">
+                                                                            <span
+                                                                                style="font-size: 15px;color: #707070">
                                                                                 description试卷描述
                                                                             </span>
                                                                         </span>
@@ -714,29 +831,43 @@
                                                             <el-col :span="12">
                                                                 <el-row>
                                                                     <el-col :span="12" style="float: right">
-                                                                        <div class="homework-statics" style="height: 130px">
-                                                                            <el-row style="height: 130px;padding-top: 15px">
+                                                                        <div class="homework-statics"
+                                                                            style="height: 130px">
+                                                                            <el-row
+                                                                                style="height: 130px;padding-top: 15px">
                                                                                 <el-col :span="8">
                                                                                     <ul style="list-style: none">
-                                                                                        <li style="font-size: 14px;color: #202124;font-weight: bold">已批</li>
+                                                                                        <li
+                                                                                            style="font-size: 14px;color: #202124;font-weight: bold">
+                                                                                            已批</li>
                                                                                         <li>
-                                                                                            <el-link :underline="false" style="font-size: 30px;color: #32BAF2;font-weight: bold">15</el-link>
+                                                                                            <el-link :underline="false"
+                                                                                                style="font-size: 30px;color: #32BAF2;font-weight: bold">
+                                                                                                15</el-link>
                                                                                         </li>
                                                                                     </ul>
                                                                                 </el-col>
                                                                                 <el-col :span="8">
                                                                                     <ul style="list-style: none">
-                                                                                        <li style="font-size: 14px;color: #202124;font-weight: bold">未批</li>
+                                                                                        <li
+                                                                                            style="font-size: 14px;color: #202124;font-weight: bold">
+                                                                                            未批</li>
                                                                                         <li>
-                                                                                            <el-link :underline="false" style="font-size: 30px;color: #707070;font-weight: bold">4</el-link>
+                                                                                            <el-link :underline="false"
+                                                                                                style="font-size: 30px;color: #707070;font-weight: bold">
+                                                                                                4</el-link>
                                                                                         </li>
                                                                                     </ul>
                                                                                 </el-col>
                                                                                 <el-col :span="8">
                                                                                     <ul style="list-style: none">
-                                                                                        <li style="font-size: 14px;color: #202124;font-weight: bold">未交</li>
+                                                                                        <li
+                                                                                            style="font-size: 14px;color: #202124;font-weight: bold">
+                                                                                            未交</li>
                                                                                         <li>
-                                                                                            <el-link :underline="false" style="font-size: 30px;color: #FF6000;font-weight: bold">5</el-link>
+                                                                                            <el-link :underline="false"
+                                                                                                style="font-size: 30px;color: #FF6000;font-weight: bold">
+                                                                                                5</el-link>
                                                                                         </li>
                                                                                     </ul>
                                                                                 </el-col>
@@ -749,22 +880,29 @@
                                                         <el-row id="course-message" style="height: 60px">
                                                             <el-row>
                                                                 <el-col :span="12" style="height: 50px">
-                                                                    <span style="font-size: 15px;color: #A0A0A0;float: left;padding-left: 30px;padding-top: 10px;padding-bottom: 10px">
+                                                                    <span
+                                                                        style="font-size: 15px;color: #A0A0A0;float: left;padding-left: 30px;padding-top: 10px;padding-bottom: 10px">
                                                                         创建于2020-11-09 22:17
                                                                     </span>
                                                                 </el-col>
                                                                 <el-col :span="12">
-                                                                    <div class="exam-finished-buttons" style="float: right">
+                                                                    <div class="exam-finished-buttons"
+                                                                        style="float: right">
                                                                         <el-button type="primary">重新发布</el-button>
-                                                                        <el-button type="primary" plain>编辑标题及简介</el-button>
-                                                                        <el-button type="primary" plain>编辑试题内容</el-button>
+                                                                        <el-button type="primary" plain>编辑标题及简介
+                                                                        </el-button>
+                                                                        <el-button type="primary" plain>编辑试题内容
+                                                                        </el-button>
                                                                         <el-dropdown>
                                                                             <el-button type="primary">
-                                                                                更多<i class="el-icon-arrow-down el-icon--right"></i>
+                                                                                更多<i
+                                                                                    class="el-icon-arrow-down el-icon--right"></i>
                                                                             </el-button>
                                                                             <el-dropdown-menu slot="dropdown">
-                                                                                <el-dropdown-item>保存到备课区</el-dropdown-item>
-                                                                                <el-dropdown-item>分享试卷给同事</el-dropdown-item>
+                                                                                <el-dropdown-item>保存到备课区
+                                                                                </el-dropdown-item>
+                                                                                <el-dropdown-item>分享试卷给同事
+                                                                                </el-dropdown-item>
                                                                                 <el-dropdown-item>删除</el-dropdown-item>
                                                                             </el-dropdown-menu>
                                                                         </el-dropdown>
@@ -776,13 +914,17 @@
                                                 </div>
                                             </el-tab-pane>
                                             <el-tab-pane label="未发布(1)" name="second">
-                                                <el-card class="box-card" style="margin-top: 30px;width: 1184px;height: 230px;border-radius: 6px;border-width: 2px">
+                                                <el-card class="box-card"
+                                                    style="margin-top: 30px;width: 1184px;height: 230px;border-radius: 6px;border-width: 2px">
                                                     <el-row id="course-title" style="height: 30px">
                                                         <el-col :span="14">
                                                             <div class="homework-create-time" style="float: left">
                                                                 <el-tag type="danger">未发布</el-tag>
-                                                                <span style="padding-left: 30px;font-size: 15px;color: #5F6368">限时：无</span>
-                                                                <span style="padding-left: 30px;font-size: 15px;color: #5F6368">起止时间：2020-11-09 22:17 ~ 2020-11-09 23:17</span>
+                                                                <span
+                                                                    style="padding-left: 30px;font-size: 15px;color: #5F6368">限时：无</span>
+                                                                <span
+                                                                    style="padding-left: 30px;font-size: 15px;color: #5F6368">起止时间：2020-11-09
+                                                                    22:17 ~ 2020-11-09 23:17</span>
                                                             </div>
                                                         </el-col>
                                                         <el-col :span="10">
@@ -795,18 +937,19 @@
                                                         <el-col :span="12">
                                                             <el-row style="height: 55px">
                                                                 <el-col :span="24">
-                                                                    <el-link :underline="false" style="color: #3B3D45;font-size: 26px;float: left;padding-left: 30px;padding-top: 3px">
+                                                                    <el-link :underline="false"
+                                                                        style="color: #3B3D45;font-size: 26px;float: left;padding-left: 30px;padding-top: 3px">
                                                                         <b>未发布_测试（考试）</b>
                                                                     </el-link>
                                                                 </el-col>
                                                             </el-row>
                                                             <el-row style="height: 75px">
                                                                 <el-col :span="24" style="height: 75px">
-                                                                        <span style="float: left;padding-left: 30px">
-                                                                            <span style="font-size: 15px;color: #707070">
-                                                                                description试卷描述
-                                                                            </span>
+                                                                    <span style="float: left;padding-left: 30px">
+                                                                        <span style="font-size: 15px;color: #707070">
+                                                                            description试卷描述
                                                                         </span>
+                                                                    </span>
                                                                 </el-col>
                                                             </el-row>
                                                         </el-col>
@@ -814,7 +957,8 @@
                                                             <el-row>
                                                                 <el-col :span="12" style="float: right">
                                                                     <div class="homework-statics" style="height: 130px">
-                                                                        <el-row style="height: 130px;padding-top: 15px"></el-row>
+                                                                        <el-row style="height: 130px;padding-top: 15px">
+                                                                        </el-row>
                                                                     </div>
                                                                 </el-col>
                                                             </el-row>
@@ -823,9 +967,10 @@
                                                     <el-row id="course-message" style="height: 60px">
                                                         <el-row>
                                                             <el-col :span="12" style="height: 50px">
-                                                                    <span style="font-size: 15px;color: #A0A0A0;float: left;padding-left: 30px;padding-top: 10px;padding-bottom: 10px">
-                                                                        创建于2020-11-09 22:17
-                                                                    </span>
+                                                                <span
+                                                                    style="font-size: 15px;color: #A0A0A0;float: left;padding-left: 30px;padding-top: 10px;padding-bottom: 10px">
+                                                                    创建于2020-11-09 22:17
+                                                                </span>
                                                             </el-col>
                                                             <el-col :span="12">
                                                                 <div class="exam-finished-buttons" style="float: right">
@@ -833,7 +978,8 @@
                                                                     <el-button type="primary" plain>编辑试题内容</el-button>
                                                                     <el-dropdown>
                                                                         <el-button type="primary">
-                                                                            更多<i class="el-icon-arrow-down el-icon--right"></i>
+                                                                            更多<i
+                                                                                class="el-icon-arrow-down el-icon--right"></i>
                                                                         </el-button>
                                                                         <el-dropdown-menu slot="dropdown">
                                                                             <el-dropdown-item>保存到备课区</el-dropdown-item>
@@ -848,35 +994,42 @@
                                                 </el-card>
                                             </el-tab-pane>
                                             <el-tab-pane label="未开始(1)" name="third">
-                                                <el-card class="box-card" style="margin-top: 30px;width: 1184px;height: 230px;border-radius: 6px;border-width: 2px">
+                                                <el-card class="box-card"
+                                                    style="margin-top: 30px;width: 1184px;height: 230px;border-radius: 6px;border-width: 2px">
                                                     <el-row id="course-title" style="height: 30px">
                                                         <el-col :span="14">
                                                             <div class="homework-create-time" style="float: left">
                                                                 <el-tag type="warning">未开始</el-tag>
-                                                                <span style="padding-left: 30px;font-size: 15px;color: #5F6368">限时：无</span>
-                                                                <span style="padding-left: 30px;font-size: 15px;color: #5F6368">起止时间：2020-11-09 22:17 ~ 2020-11-09 23:17</span>
+                                                                <span
+                                                                    style="padding-left: 30px;font-size: 15px;color: #5F6368">限时：无</span>
+                                                                <span
+                                                                    style="padding-left: 30px;font-size: 15px;color: #5F6368">起止时间：2020-11-09
+                                                                    22:17 ~ 2020-11-09 23:17</span>
                                                             </div>
                                                         </el-col>
                                                         <el-col :span="10">
-                                                            <span style="color: #FF6E48;font-size: 16px;font-weight: bold;float: right">开始时间2020-11-14 24:10</span>
+                                                            <span
+                                                                style="color: #FF6E48;font-size: 16px;font-weight: bold;float: right">开始时间2020-11-14
+                                                                24:10</span>
                                                         </el-col>
                                                     </el-row>
                                                     <el-row id="course-announce" style="height: 130px">
                                                         <el-col :span="12">
                                                             <el-row style="height: 55px">
                                                                 <el-col :span="24">
-                                                                    <el-link :underline="false" style="color: #3B3D45;font-size: 26px;float: left;padding-left: 30px;padding-top: 3px">
+                                                                    <el-link :underline="false"
+                                                                        style="color: #3B3D45;font-size: 26px;float: left;padding-left: 30px;padding-top: 3px">
                                                                         <b>未开始_测试（考试）</b>
                                                                     </el-link>
                                                                 </el-col>
                                                             </el-row>
                                                             <el-row style="height: 75px">
                                                                 <el-col :span="24" style="height: 75px">
-                                                                        <span style="float: left;padding-left: 30px">
-                                                                            <span style="font-size: 15px;color: #707070">
-                                                                                description试卷描述
-                                                                            </span>
+                                                                    <span style="float: left;padding-left: 30px">
+                                                                        <span style="font-size: 15px;color: #707070">
+                                                                            description试卷描述
                                                                         </span>
+                                                                    </span>
                                                                 </el-col>
                                                             </el-row>
                                                         </el-col>
@@ -884,7 +1037,8 @@
                                                             <el-row>
                                                                 <el-col :span="12" style="float: right">
                                                                     <div class="homework-statics" style="height: 130px">
-                                                                        <el-row style="height: 130px;padding-top: 15px"></el-row>
+                                                                        <el-row style="height: 130px;padding-top: 15px">
+                                                                        </el-row>
                                                                     </div>
                                                                 </el-col>
                                                             </el-row>
@@ -893,9 +1047,10 @@
                                                     <el-row id="course-message" style="height: 60px">
                                                         <el-row>
                                                             <el-col :span="12" style="height: 50px">
-                                                                    <span style="font-size: 15px;color: #A0A0A0;float: left;padding-left: 30px;padding-top: 10px;padding-bottom: 10px">
-                                                                        创建于2020-11-09 22:17
-                                                                    </span>
+                                                                <span
+                                                                    style="font-size: 15px;color: #A0A0A0;float: left;padding-left: 30px;padding-top: 10px;padding-bottom: 10px">
+                                                                    创建于2020-11-09 22:17
+                                                                </span>
                                                             </el-col>
                                                             <el-col :span="12">
                                                                 <div class="exam-finished-buttons" style="float: right">
@@ -903,7 +1058,8 @@
                                                                     <el-button type="primary" plain>编辑试题内容</el-button>
                                                                     <el-dropdown>
                                                                         <el-button type="primary">
-                                                                            更多<i class="el-icon-arrow-down el-icon--right"></i>
+                                                                            更多<i
+                                                                                class="el-icon-arrow-down el-icon--right"></i>
                                                                         </el-button>
                                                                         <el-dropdown-menu slot="dropdown">
                                                                             <el-dropdown-item>取消发布</el-dropdown-item>
@@ -919,13 +1075,17 @@
                                                 </el-card>
                                             </el-tab-pane>
                                             <el-tab-pane label="已发布(1)" name="fourth">
-                                                <el-card class="box-card" style="margin-top: 30px;width: 1184px;height: 230px;border-radius: 6px;border-width: 2px">
+                                                <el-card class="box-card"
+                                                    style="margin-top: 30px;width: 1184px;height: 230px;border-radius: 6px;border-width: 2px">
                                                     <el-row id="course-title" style="height: 30px">
                                                         <el-col :span="14">
                                                             <div class="homework-create-time" style="float: left">
                                                                 <el-tag type="success">已发布</el-tag>
-                                                                <span style="padding-left: 30px;font-size: 15px;color: #5F6368">限时：无</span>
-                                                                <span style="padding-left: 30px;font-size: 15px;color: #5F6368">起止时间：2020-11-09 22:17 ~ 2020-11-09 23:17</span>
+                                                                <span
+                                                                    style="padding-left: 30px;font-size: 15px;color: #5F6368">限时：无</span>
+                                                                <span
+                                                                    style="padding-left: 30px;font-size: 15px;color: #5F6368">起止时间：2020-11-09
+                                                                    22:17 ~ 2020-11-09 23:17</span>
                                                             </div>
                                                         </el-col>
                                                     </el-row>
@@ -933,18 +1093,19 @@
                                                         <el-col :span="12">
                                                             <el-row style="height: 55px">
                                                                 <el-col :span="24">
-                                                                    <el-link :underline="false" style="color: #3B3D45;font-size: 26px;float: left;padding-left: 30px;padding-top: 3px">
+                                                                    <el-link :underline="false"
+                                                                        style="color: #3B3D45;font-size: 26px;float: left;padding-left: 30px;padding-top: 3px">
                                                                         <b>已发布_测试（考试）</b>
                                                                     </el-link>
                                                                 </el-col>
                                                             </el-row>
                                                             <el-row style="height: 75px">
                                                                 <el-col :span="24" style="height: 75px">
-                                                                        <span style="float: left;padding-left: 30px">
-                                                                            <span style="font-size: 15px;color: #707070">
-                                                                                description试卷描述
-                                                                            </span>
+                                                                    <span style="float: left;padding-left: 30px">
+                                                                        <span style="font-size: 15px;color: #707070">
+                                                                            description试卷描述
                                                                         </span>
+                                                                    </span>
                                                                 </el-col>
                                                             </el-row>
                                                         </el-col>
@@ -955,25 +1116,37 @@
                                                                         <el-row style="height: 130px;padding-top: 15px">
                                                                             <el-col :span="8">
                                                                                 <ul style="list-style: none">
-                                                                                    <li style="font-size: 14px;color: #202124;font-weight: bold">已批</li>
+                                                                                    <li
+                                                                                        style="font-size: 14px;color: #202124;font-weight: bold">
+                                                                                        已批</li>
                                                                                     <li>
-                                                                                        <el-link :underline="false" style="font-size: 30px;color: #32BAF2;font-weight: bold">15</el-link>
+                                                                                        <el-link :underline="false"
+                                                                                            style="font-size: 30px;color: #32BAF2;font-weight: bold">
+                                                                                            15</el-link>
                                                                                     </li>
                                                                                 </ul>
                                                                             </el-col>
                                                                             <el-col :span="8">
                                                                                 <ul style="list-style: none">
-                                                                                    <li style="font-size: 14px;color: #202124;font-weight: bold">未批</li>
+                                                                                    <li
+                                                                                        style="font-size: 14px;color: #202124;font-weight: bold">
+                                                                                        未批</li>
                                                                                     <li>
-                                                                                        <el-link :underline="false" style="font-size: 30px;color: #707070;font-weight: bold">4</el-link>
+                                                                                        <el-link :underline="false"
+                                                                                            style="font-size: 30px;color: #707070;font-weight: bold">
+                                                                                            4</el-link>
                                                                                     </li>
                                                                                 </ul>
                                                                             </el-col>
                                                                             <el-col :span="8">
                                                                                 <ul style="list-style: none">
-                                                                                    <li style="font-size: 14px;color: #202124;font-weight: bold">未交</li>
+                                                                                    <li
+                                                                                        style="font-size: 14px;color: #202124;font-weight: bold">
+                                                                                        未交</li>
                                                                                     <li>
-                                                                                        <el-link :underline="false" style="font-size: 30px;color: #FF6000;font-weight: bold">5</el-link>
+                                                                                        <el-link :underline="false"
+                                                                                            style="font-size: 30px;color: #FF6000;font-weight: bold">
+                                                                                            5</el-link>
                                                                                     </li>
                                                                                 </ul>
                                                                             </el-col>
@@ -986,9 +1159,10 @@
                                                     <el-row id="course-message" style="height: 60px">
                                                         <el-row>
                                                             <el-col :span="12" style="height: 50px">
-                                                                    <span style="font-size: 15px;color: #A0A0A0;float: left;padding-left: 30px;padding-top: 10px;padding-bottom: 10px">
-                                                                        创建于2020-11-09 22:17
-                                                                    </span>
+                                                                <span
+                                                                    style="font-size: 15px;color: #A0A0A0;float: left;padding-left: 30px;padding-top: 10px;padding-bottom: 10px">
+                                                                    创建于2020-11-09 22:17
+                                                                </span>
                                                             </el-col>
                                                             <el-col :span="12">
                                                                 <div class="exam-finished-buttons" style="float: right">
@@ -996,7 +1170,8 @@
                                                                     <el-button type="primary" plain>编辑试题内容</el-button>
                                                                     <el-dropdown>
                                                                         <el-button type="primary">
-                                                                            更多<i class="el-icon-arrow-down el-icon--right"></i>
+                                                                            更多<i
+                                                                                class="el-icon-arrow-down el-icon--right"></i>
                                                                         </el-button>
                                                                         <el-dropdown-menu slot="dropdown">
                                                                             <el-dropdown-item>结束发布</el-dropdown-item>
@@ -1012,13 +1187,17 @@
                                                 </el-card>
                                             </el-tab-pane>
                                             <el-tab-pane label="已结束(1)" name="fifth">
-                                                <el-card class="box-card" style="margin-top: 30px;width: 1184px;height: 230px;border-radius: 6px;border-width: 2px">
+                                                <el-card class="box-card"
+                                                    style="margin-top: 30px;width: 1184px;height: 230px;border-radius: 6px;border-width: 2px">
                                                     <el-row id="course-title" style="height: 30px">
                                                         <el-col :span="14">
                                                             <div class="homework-create-time" style="float: left">
                                                                 <el-tag>已结束</el-tag>
-                                                                <span style="padding-left: 30px;font-size: 15px;color: #5F6368">限时：无</span>
-                                                                <span style="padding-left: 30px;font-size: 15px;color: #5F6368">起止时间：2020-11-09 22:17 ~ 2020-11-09 23:17</span>
+                                                                <span
+                                                                    style="padding-left: 30px;font-size: 15px;color: #5F6368">限时：无</span>
+                                                                <span
+                                                                    style="padding-left: 30px;font-size: 15px;color: #5F6368">起止时间：2020-11-09
+                                                                    22:17 ~ 2020-11-09 23:17</span>
                                                             </div>
                                                         </el-col>
                                                     </el-row>
@@ -1026,18 +1205,19 @@
                                                         <el-col :span="12">
                                                             <el-row style="height: 55px">
                                                                 <el-col :span="24">
-                                                                    <el-link :underline="false" style="color: #3B3D45;font-size: 26px;float: left;padding-left: 30px;padding-top: 3px">
+                                                                    <el-link :underline="false"
+                                                                        style="color: #3B3D45;font-size: 26px;float: left;padding-left: 30px;padding-top: 3px">
                                                                         <b>已结束_测试（考试）</b>
                                                                     </el-link>
                                                                 </el-col>
                                                             </el-row>
                                                             <el-row style="height: 75px">
                                                                 <el-col :span="24" style="height: 75px">
-                                                                        <span style="float: left;padding-left: 30px">
-                                                                            <span style="font-size: 15px;color: #707070">
-                                                                                description试卷描述
-                                                                            </span>
+                                                                    <span style="float: left;padding-left: 30px">
+                                                                        <span style="font-size: 15px;color: #707070">
+                                                                            description试卷描述
                                                                         </span>
+                                                                    </span>
                                                                 </el-col>
                                                             </el-row>
                                                         </el-col>
@@ -1048,25 +1228,37 @@
                                                                         <el-row style="height: 130px;padding-top: 15px">
                                                                             <el-col :span="8">
                                                                                 <ul style="list-style: none">
-                                                                                    <li style="font-size: 14px;color: #202124;font-weight: bold">已批</li>
+                                                                                    <li
+                                                                                        style="font-size: 14px;color: #202124;font-weight: bold">
+                                                                                        已批</li>
                                                                                     <li>
-                                                                                        <el-link :underline="false" style="font-size: 30px;color: #32BAF2;font-weight: bold">15</el-link>
+                                                                                        <el-link :underline="false"
+                                                                                            style="font-size: 30px;color: #32BAF2;font-weight: bold">
+                                                                                            15</el-link>
                                                                                     </li>
                                                                                 </ul>
                                                                             </el-col>
                                                                             <el-col :span="8">
                                                                                 <ul style="list-style: none">
-                                                                                    <li style="font-size: 14px;color: #202124;font-weight: bold">未批</li>
+                                                                                    <li
+                                                                                        style="font-size: 14px;color: #202124;font-weight: bold">
+                                                                                        未批</li>
                                                                                     <li>
-                                                                                        <el-link :underline="false" style="font-size: 30px;color: #707070;font-weight: bold">4</el-link>
+                                                                                        <el-link :underline="false"
+                                                                                            style="font-size: 30px;color: #707070;font-weight: bold">
+                                                                                            4</el-link>
                                                                                     </li>
                                                                                 </ul>
                                                                             </el-col>
                                                                             <el-col :span="8">
                                                                                 <ul style="list-style: none">
-                                                                                    <li style="font-size: 14px;color: #202124;font-weight: bold">未交</li>
+                                                                                    <li
+                                                                                        style="font-size: 14px;color: #202124;font-weight: bold">
+                                                                                        未交</li>
                                                                                     <li>
-                                                                                        <el-link :underline="false" style="font-size: 30px;color: #FF6000;font-weight: bold">5</el-link>
+                                                                                        <el-link :underline="false"
+                                                                                            style="font-size: 30px;color: #FF6000;font-weight: bold">
+                                                                                            5</el-link>
                                                                                     </li>
                                                                                 </ul>
                                                                             </el-col>
@@ -1079,9 +1271,10 @@
                                                     <el-row id="course-message" style="height: 60px">
                                                         <el-row>
                                                             <el-col :span="12" style="height: 50px">
-                                                                    <span style="font-size: 15px;color: #A0A0A0;float: left;padding-left: 30px;padding-top: 10px;padding-bottom: 10px">
-                                                                        创建于2020-11-09 22:17
-                                                                    </span>
+                                                                <span
+                                                                    style="font-size: 15px;color: #A0A0A0;float: left;padding-left: 30px;padding-top: 10px;padding-bottom: 10px">
+                                                                    创建于2020-11-09 22:17
+                                                                </span>
                                                             </el-col>
                                                             <el-col :span="12">
                                                                 <div class="exam-finished-buttons" style="float: right">
@@ -1090,7 +1283,8 @@
                                                                     <el-button type="primary" plain>编辑试题内容</el-button>
                                                                     <el-dropdown>
                                                                         <el-button type="primary">
-                                                                            更多<i class="el-icon-arrow-down el-icon--right"></i>
+                                                                            更多<i
+                                                                                class="el-icon-arrow-down el-icon--right"></i>
                                                                         </el-button>
                                                                         <el-dropdown-menu slot="dropdown">
                                                                             <el-dropdown-item>保存到备课区</el-dropdown-item>
@@ -1113,24 +1307,17 @@
                     <div id="course-notice" v-if="activeIndex2=='4'">
                         <div id="course-notice-box">
                             <div id="notice-menubar" style="margin-top: 30px;padding-bottom: 30px;padding-left: 30px">
-                                <el-button type="primary" style="float: left" @click="notice_input=true" :disabled="notice_input">发布公告</el-button>
+                                <el-button type="primary" style="float: left" @click="notice_input = true"
+                                    :disabled="notice_input">发布公告</el-button>
                             </div>
-                            <div id="notice-input" style="margin-top: 30px" v-if="notice_input==true">
-                                <el-card class="box-card" style="margin-top: 30px;width: 1184px;height: 266px;border-radius: 6px;border-width: 2px">
-                                    <el-input
-                                            placeholder="请输入公告标题"
-                                            v-model="notice_title"
-                                            clearable>
+                            <div id="notice-input" style="margin-top: 30px" v-if="notice_input===true">
+                                <el-card class="box-card"
+                                    style="margin-top: 30px;width: 1184px;height: 266px;border-radius: 6px;border-width: 2px">
+                                    <el-input placeholder="请输入公告标题" v-model="notice_title" clearable>
                                     </el-input>
-                                    <el-input
-                                            style="padding-top: 20px"
-                                            type="textarea"
-                                            :rows="6"
-                                            placeholder="请输入公告具体内容"
-                                            v-model="notice_content"
-                                            maxlength="1000"
-                                            show-word-limit
-                                    >
+                                    <el-input style="padding-top: 20px" type="textarea" :rows="6"
+                                        placeholder="请输入公告具体内容" v-model="notice_content" maxlength="1000"
+                                        show-word-limit>
                                     </el-input>
                                     <div id="notice-button" style="float: right;padding-top: 10px">
                                         <el-button type="primary" plain @click="notice_input=false">取消</el-button>
@@ -1139,12 +1326,16 @@
                                 </el-card>
                             </div>
                             <div id="notice-cards" style="margin-top: 30px">
-                                <el-card class="box-card" style="margin-top: 30px;width: 1184px;height: 220px;border-radius: 6px;border-width: 2px">
+                                <el-card class="box-card"
+                                    style="margin-top: 30px;width: 1184px;height: 220px;border-radius: 6px;border-width: 2px">
                                     <el-row id="course-title" style="height: 30px">
                                         <el-col :span="12">
                                             <div class="homework-create-time" style="float: left">
-                                                <span style="padding-left: 30px;font-size: 15px;color: #A0A0A0">发布人：CurtisCheng</span>
-                                                <span style="padding-left: 30px;font-size: 15px;color: #A0A0A0">发布时间：2020-11-09 22:17</span>
+                                                <span
+                                                    style="padding-left: 30px;font-size: 15px;color: #A0A0A0">发布人：CurtisCheng</span>
+                                                <span
+                                                    style="padding-left: 30px;font-size: 15px;color: #A0A0A0">发布时间：2020-11-09
+                                                    22:17</span>
                                             </div>
                                         </el-col>
                                         <el-col :span="12">
@@ -1166,7 +1357,8 @@
                                         <el-col :span="12">
                                             <el-row style="height: 75px">
                                                 <el-col :span="24">
-                                                    <el-link :underline="false" style="font-size: 26px;float: left;padding-left: 30px;padding-top: 30px">
+                                                    <el-link :underline="false"
+                                                        style="font-size: 26px;float: left;padding-left: 30px;padding-top: 30px">
                                                         <span>范例_公告一</span>
                                                     </el-link>
                                                 </el-col>
@@ -1183,22 +1375,28 @@
                                     <el-row id="course-message" style="height: 60px">
                                         <el-row>
                                             <el-col style="height: 50px">
-                                                <span style="font-size: 15px;color: #A0A0A0;float: left;padding-left: 30px;padding-top: 0;padding-bottom: 10px">
+                                                <span
+                                                    style="font-size: 15px;color: #A0A0A0;float: left;padding-left: 30px;padding-top: 0;padding-bottom: 10px">
                                                     0人已读
                                                 </span>
-                                                <span style="font-size: 15px;color: #A0A0A0;float: left;padding-left: 30px;padding-top: 0;padding-bottom: 10px">
+                                                <span
+                                                    style="font-size: 15px;color: #A0A0A0;float: left;padding-left: 30px;padding-top: 0;padding-bottom: 10px">
                                                     0条评论
                                                 </span>
                                             </el-col>
                                         </el-row>
                                     </el-row>
                                 </el-card>
-                                <el-card class="box-card" style="margin-top: 30px;width: 1184px;height: 220px;border-radius: 6px;border-width: 2px">
+                                <el-card class="box-card"
+                                    style="margin-top: 30px;width: 1184px;height: 220px;border-radius: 6px;border-width: 2px">
                                     <el-row id="course-title" style="height: 30px">
                                         <el-col :span="12">
                                             <div class="homework-create-time" style="float: left">
-                                                <span style="padding-left: 30px;font-size: 15px;color: #A0A0A0">发布人：CurtisCheng</span>
-                                                <span style="padding-left: 30px;font-size: 15px;color: #A0A0A0">发布时间：2020-11-09 22:17</span>
+                                                <span
+                                                    style="padding-left: 30px;font-size: 15px;color: #A0A0A0">发布人：CurtisCheng</span>
+                                                <span
+                                                    style="padding-left: 30px;font-size: 15px;color: #A0A0A0">发布时间：2020-11-09
+                                                    22:17</span>
                                             </div>
                                         </el-col>
                                         <el-col :span="12">
@@ -1220,7 +1418,8 @@
                                         <el-col :span="12">
                                             <el-row style="height: 75px">
                                                 <el-col :span="24">
-                                                    <el-link :underline="false" style="font-size: 26px;float: left;padding-left: 30px;padding-top: 30px">
+                                                    <el-link :underline="false"
+                                                        style="font-size: 26px;float: left;padding-left: 30px;padding-top: 30px">
                                                         <span>范例_公告二</span>
                                                     </el-link>
                                                 </el-col>
@@ -1237,10 +1436,12 @@
                                     <el-row id="course-message" style="height: 60px">
                                         <el-row>
                                             <el-col style="height: 50px">
-                                                <span style="font-size: 15px;color: #A0A0A0;float: left;padding-left: 30px;padding-top: 0;padding-bottom: 10px">
+                                                <span
+                                                    style="font-size: 15px;color: #A0A0A0;float: left;padding-left: 30px;padding-top: 0;padding-bottom: 10px">
                                                     0人已读
                                                 </span>
-                                                <span style="font-size: 15px;color: #A0A0A0;float: left;padding-left: 30px;padding-top: 0;padding-bottom: 10px">
+                                                <span
+                                                    style="font-size: 15px;color: #A0A0A0;float: left;padding-left: 30px;padding-top: 0;padding-bottom: 10px">
                                                     0条评论
                                                 </span>
                                             </el-col>
@@ -1346,18 +1547,19 @@
             dialogTableVisible: false,
             dialogFormVisible: false,
             formLabelWidth: '120px',
-            fileList: [{name: 'food.jpeg', url: 'https://fuss10.elemecdn.com/3/63/4e7f3a15429bfda99bce42a18cdd1jpeg.jpeg?imageMogr2/thumbnail/360x360/format/webp/quality/100'}, {name: 'food2.jpeg', url: 'https://fuss10.elemecdn.com/3/63/4e7f3a15429bfda99bce42a18cdd1jpeg.jpeg?imageMogr2/thumbnail/360x360/format/webp/quality/100'}]
+            fileList: [{ name: 'food.jpeg', url: 'https://fuss10.elemecdn.com/3/63/4e7f3a15429bfda99bce42a18cdd1jpeg.jpeg?imageMogr2/thumbnail/360x360/format/webp/quality/100' }, { name: 'food2.jpeg', url: 'https://fuss10.elemecdn.com/3/63/4e7f3a15429bfda99bce42a18cdd1jpeg.jpeg?imageMogr2/thumbnail/360x360/format/webp/quality/100' }],
+            homeworkList: []
         },
         methods: {
             updateCourse(formName) {
                 this.dialogFormVisible = false;
                 this.$refs[formName].validate((valid) => {
-                    if(valid){
-                        yxt.http.put("/courses/info/id/"+this.course.id+"/"+this.user.id,this.updateCourseForm).then(({ data }) => {
-                            if (data.success){
+                    if (valid) {
+                        yxt.http.put("/courses/info/id/" + this.course.id + "/" + this.user.id, this.updateCourseForm).then(({ data }) => {
+                            if (data.success) {
                                 this.$message.success(data.message);
-                                this.course = Object.assign({},this.updateCourseForm);
-                            }else{
+                                this.course = Object.assign({}, this.updateCourseForm);
+                            } else {
                                 this.$message.error(data.message);
                             }
                             this.dialogFormVisible = false;
@@ -1395,11 +1597,12 @@
                             this.userInfo = data.queryResult.data[0];
                             this.realName = this.userInfo.realName;
                             this.course.id = yxt.getUrlParam("id");
-                            yxt.http.get("/courses/info/id/"+this.course.id).then(({data}) => {
+                            yxt.http.get("/courses/info/id/" + this.course.id).then(({ data }) => {
                                 this.course = data.queryResult.data[0];
-                                this.updateCourseForm = Object.assign({},this.course);
+                                this.updateCourseForm = Object.assign({}, this.course);
                             })
                         });
+                        this.getHomeworkData();
                     } else {
                         location.href = "../index.html"
                     }
@@ -1416,6 +1619,13 @@
                     }
                 }).catch(() => {
                     this.$message.error("服务器繁忙，请稍候再试！");
+                })
+            },
+            getHomeworkData() {
+                yxt.http.get("homework/courseId/" + yxt.getUrlParam("id") + "/" + this.user.id).then(({ data }) => {
+                    if (data.success) {
+                        this.homeworkList = data.queryResult.data;
+                    }
                 })
             },
         },
