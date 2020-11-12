@@ -21,7 +21,7 @@ public class NoticeController implements NoticeControllerApi {
     private NoticeService noticeService;
 
     @Override
-    @PostMapping("/notice/courseId/{courseId}/{teacherId}")
+    @PostMapping("courseId/{courseId}/{teacherId}")
     public CommonResponse saveNotice(@PathVariable long courseId, @PathVariable long teacherId, @RequestBody InsertNotice insertNotice) {
         return this.noticeService.saveNotice(courseId, teacherId, insertNotice);
     }
