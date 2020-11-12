@@ -10,6 +10,7 @@ package com.yixuetang.entity.response.code;
  * - 课程模块响应代码：50000 - 59999
  * - 资源模块响应代码：60000 - 69999
  * - 作业模块相应代码：70000 - 79999
+ * - 公告模块相应代码：80000 - 89999
  * @date 2020/10/23 15:48
  */
 public interface ResponseCode {

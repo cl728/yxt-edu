@@ -118,27 +118,27 @@ public class HomeworkServiceImpl implements HomeworkService {
         User oldTeacher = this.userMapper.findById(teacherId);
         if (ObjectUtils.notEqual(oldTeacher.getId(), course.getTeacher().getId())) {
             //若该教师不是该课程授课老师，则不允许新增作业
-            return new CommonResponse(HomeworkCode.SAVE_HOMEWORK_FAIL_COURSE_NOT_BELONGS_TO_THIS_TEACHER);
+            return new CommonResponse(HomeworkCode.INSERT_HOMEWORK_FAIL_COURSE_NOT_BELONGS_TO_THIS_TEACHER);
         }
 
         // 4. 作业题目非空判断
         if (!StringUtils.isNoneBlank(insertHomework.getTitle())) {
-            return new CommonResponse(HomeworkCode.SAVE_HOMEWORK_FAIL_TITLE_IS_NULL);
+            return new CommonResponse(HomeworkCode.INSERT_HOMEWORK_FAIL_TITLE_IS_NULL);
         }
 
         // 5. 截止时间至少比当前时间大30分钟
         if (ObjectUtils.isEmpty(insertHomework.getDeadline())) {
-            return new CommonResponse(HomeworkCode.SAVE_HOMEWORK_FAIL_DEADLINE_IS_NULL);
+            return new CommonResponse(HomeworkCode.INSERT_HOMEWORK_FAIL_DEADLINE_IS_NULL);
         }
         Date dateAdd30Mins = DateUtils.addMinutes(new Date(), 30);
         int truncatedCompareTo = DateUtils.truncatedCompareTo(insertHomework.getDeadline(), dateAdd30Mins, Calendar.SECOND);
         if (truncatedCompareTo == -1) {
-            return new CommonResponse(HomeworkCode.SAVE_HOMEWORK_FAIL_DEADLINE_LESS_THAN_30_MINS);
+            return new CommonResponse(HomeworkCode.INSERT_HOMEWORK_FAIL_DEADLINE_LESS_THAN_30_MINS);
         }
 
         // 6. 总分值>0 <1
         if (insertHomework.getTotalScore() <= 0 || insertHomework.getTotalScore() > 100) {
-            return new CommonResponse(HomeworkCode.SAVE_HOMEWORK_FAIL_TOTAL_SCORE_INVAILD);
+            return new CommonResponse(HomeworkCode.INSERT_HOMEWORK_FAIL_TOTAL_SCORE_INVAILD);
         }
 
         // 7. 根据课程id创建作业
