@@ -155,11 +155,11 @@
                                                 <el-col :span="4">
                                                     <div id="course-member"
                                                         style="border-radius: 3px;color: white;height: 24px;background-color: #909399;font-size: 12px">
-                                                        <el-link :underline="false" style="color: white">
+                                                        <el-link :underline="false" style="color: white" :href="'courseMembers.html?courseId=' + course.id">
                                                             <div id="course-member-content" style="padding-top: 3px">
                                                                 <i class="fa fa-user-o"></i>
                                                                 <span>成员</span>
-                                                                <span v-text="course.scount">25</span>
+                                                                <span v-text="course.scount + 1">25</span>
                                                             </div>
                                                         </el-link>
                                                     </div>

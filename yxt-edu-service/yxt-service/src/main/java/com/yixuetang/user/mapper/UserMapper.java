@@ -96,7 +96,7 @@ public interface UserMapper extends BaseMapper<User> {
 
     @ResultMap( "userMap" )
     @Select( "<script>" +
-                "select id, role_id, avatar, ts_no, real_name, school " +
+                "select id, role_id, username, avatar, ts_no, real_name " +
                 " from t_user " +
                 "<where>" +
                     "<if test='ids != null and ids.size() > 0'> " +

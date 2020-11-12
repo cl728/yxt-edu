@@ -147,7 +147,11 @@ public class CourseServiceImpl implements CourseService {
         }
 
         // 向选课表添加数据
-        this.scMapper.joinCourse(userId, course.getId());
+        StudentCourse studentCourse = StudentCourse.builder()
+                .courseId( course.getId() )
+                .studentId( userId )
+                .joinTime( new Date() ).build();
+        this.scMapper.insert( studentCourse );
 
         // 更新课程表的加课人数
         course.setSCount(course.getSCount() + 1);

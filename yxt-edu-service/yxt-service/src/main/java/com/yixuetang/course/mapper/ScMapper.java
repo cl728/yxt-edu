@@ -17,15 +17,6 @@ import java.util.List;
 @Mapper
 public interface ScMapper extends BaseMapper<StudentCourse> {
     /**
-     * 加入课程
-     *
-     * @param studentId 学生主键id
-     * @param courseId  课程主键id
-     */
-    @Insert("insert into t_sc(student_id, course_id) values (#{studentId}, #{courseId})")
-    void joinCourse(@Param("studentId") Long studentId, @Param("courseId") Long courseId);
-
-    /**
      * 根据学生id和课程id在SC表查找记录
      *
      * @param studentId 学生主键id

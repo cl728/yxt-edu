@@ -2,62 +2,65 @@
 <html lang="en">
 
 <head>
-    <meta charset="UTF-8">
+	<meta charset="UTF-8">
 	<title>成员管理</title>
-    <link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">
-    <style>
-    	.el-header {
-    		background-color: lightcyan;
-    		color: #333;
-    		line-height: 60px;
-    	}
-    </style>
+	<link rel="stylesheet" href="https://cdn.bootcss.com/element-ui/2.13.2/theme-chalk/index.css">
+	<style>
+		.el-header {
+			background-color: lightcyan;
+			color: #333;
+			line-height: 60px;
+		}
+	</style>
 </head>
+
 <body>
 	<div id="app">
-		<el-menu :default-active="activeIndex" class="el-menu-demo" mode="horizontal" @select="handleSelectFirst" >
-		  
+		<el-menu :default-active="activeIndex" class="el-menu-demo" mode="horizontal" @select="handleSelectFirst">
+
 			<el-menu-item style="float: left;">
-				<el-button type="text"><i class="el-icon-back"></i></el-button>
-				<el-button type="primary" round> {{courseName}} </el-button>
+				<el-button type="text" onclick="location.href = 'courseDetail.html?id=' + yxt.getUrlParam('courseId')">
+					<i class="el-icon-back"></i></el-button>
+				<el-button type="primary" round><span v-text="course.cname">数据结构</span></el-button>
 			</el-menu-item>
-		
-			
+
+
 			<el-menu-item index="1" style="font-size: 20px;margin-left: 400px;">成员</el-menu-item>
 			<el-menu-item index="2" style="font-size: 20px;">学生分组</el-menu-item>
-		
+
 			<el-menu-item index="3" style="font-size: 20px;">成绩管理</el-menu-item>
-		
+
 			<el-menu-item style="float: right;">
-				<el-dropdown trigger="click" >
-				  <span class="el-dropdown-link" style="font-size: 15px;">
-				    <i class="el-icon-suitcase" ></i>工具
-				  </span>
-				  <el-dropdown-menu slot="dropdown">
-				    <el-dropdown-item>论文查重</el-dropdown-item>
-				    <el-dropdown-item>学术存证</el-dropdown-item>
-				    <el-dropdown-item>邀请教师</el-dropdown-item>
-				  </el-dropdown-menu>
+				<el-dropdown trigger="click">
+					<span class="el-dropdown-link" style="font-size: 15px;">
+						<i class="el-icon-suitcase"></i>工具
+					</span>
+					<el-dropdown-menu slot="dropdown">
+						<el-dropdown-item>论文查重</el-dropdown-item>
+						<el-dropdown-item>学术存证</el-dropdown-item>
+						<el-dropdown-item>邀请教师</el-dropdown-item>
+					</el-dropdown-menu>
 				</el-dropdown>
-				
-				<el-popover placement="bottom" title="通知信息:" width="200" trigger="click"
-				    content="暂无通知">
-				    <el-button slot="reference" @click="open" type="text" icon="el-icon-bell" style="padding-inline: 10px;"></el-button>
-				 </el-popover>
-				
-				<el-avatar src="https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png"></el-avatar>
-			</el-menu-item>	
+
+				<el-popover placement="bottom" title="通知信息:" width="200" trigger="click" content="暂无通知">
+					<el-button slot="reference" @click="open" type="text" icon="el-icon-bell"
+						style="padding-inline: 10px;"></el-button>
+				</el-popover>
+
+				<el-avatar :src="user.avatar"></el-avatar>
+			</el-menu-item>
 		</el-menu>
-		<div class="line"></div><br/>
+		<div class="line"></div><br />
 		<!-- 成员管理 -->
 		<div v-show="activeIndex == '1'">
 			<el-row :gutter="20">
 				<el-col :span="6" :offset="2">
 					<el-button type="primary">导入成员</el-button>
 					</el-button>
-		
-					<el-link href="#" target="_blank" style="margin-inline: 10px;"><i class="el-icon-cloudy"></i>下载成员信息</el-link>
-		
+
+					<el-link href="#" target="_blank" style="margin-inline: 10px;"><i class="el-icon-cloudy"></i>下载成员信息
+					</el-link>
+
 					<el-popover placement="right" width="400" trigger="click">
 						<el-table :data="gridData" v-show="false">
 							<el-table-column width="150" property="date" label="日期"></el-table-column>
@@ -70,49 +73,46 @@
 					</el-popover>
 				</el-col>
 				<el-col :span="6" :offset="8">
-					<el-input
-					    placeholder="学号,姓名"
-					    suffix-icon="el-icon-search"
-					    v-model="sousuo">
+					<el-input placeholder="学号,姓名" suffix-icon="el-icon-search" v-model="pageData.search">
 					</el-input>
 				</el-col>
 			</el-row>
-		
+
 			<el-row>
 				<el-col :offset="2" :span="20">
 					<el-divider></el-divider>
 				</el-col>
 			</el-row>
-		
+
 			<el-row>
 				<el-col :offset="2" :span="20">
 					<el-container style="height: 800px; border: 1px solid #eee">
 						<el-aside width="300px" style="background-color: white">
 							<el-menu :default-active="index" @select="handleSelect">
-		
+
 								<el-menu-item index="1">
 									<span slot="title" style="font-size: 20px;">教师团队</span>
 								</el-menu-item>
-		
+
 								<el-menu-item index="2">
 									<span slot="title" style="font-size: 20px;">全部学生</span>
 								</el-menu-item>
 							</el-menu>
 						</el-aside>
-		
+
 						<el-container v-show="index == 1">
 							<el-header style="font-size: 20px">
-								<span>教师团队（{{teacherData.length}}) </span>
+								<span>教师团队（1) </span>
 								<span style="float: right;">
 									<el-button type="primary" icon="el-icon-user">添加助教/老师</el-button>
 								</span>
 							</el-header>
-		
+
 							<el-main>
 								<el-table :data="teacherData">
 									<el-table-column label="头像" width="110">
 										<template slot-scope="scope">
-											<el-avatar :src="scope.row.avator"></el-avatar>
+											<el-avatar :src="scope.row.avatar"></el-avatar>
 										</template>
 									</el-table-column>
 									<el-table-column prop="realName" label="姓名" width="300">
@@ -121,9 +121,10 @@
 									</el-table-column>
 									<el-table-column fixed="right" label="操作" width="100">
 										<template slot-scope="scope">
-		
-											<el-button type="text" icon="el-icon-chat-dot-round size" style="margin-right: 10px;"></el-button>
-		
+
+											<el-button type="text" icon="el-icon-chat-dot-round size"
+												style="margin-right: 10px;"></el-button>
+
 											<el-dropdown trigger="click">
 												<span class="el-dropdown-link" style="font-size: 15px;">
 													<i class="el-icon-more"></i>
@@ -133,7 +134,7 @@
 													<el-dropdown-item>删除</el-dropdown-item>
 												</el-dropdown-menu>
 											</el-dropdown>
-		
+
 											<!-- <el-button @click="handleClick(scope.row)" type="text" size="small">查看</el-button>
 							        <el-button type="text" size="small">编辑</el-button> -->
 										</template>
@@ -141,42 +142,46 @@
 								</el-table>
 							</el-main>
 						</el-container>
-		
+
 						<el-container v-show="index == 2">
 							<el-header style="font-size: 20px">
-								<span>全部学生（{{studentData.length}}) </span>
+								<span>全部学生（{{pageData.pageTotal}}) </span>
 								<span style="float: right;">
-									<el-switch v-model="NoExitCourse" active-color="#13ce66" inactive-color="#ff4949" active-text="不允许退课">
+									<el-switch v-model="NoExitCourse" active-color="#13ce66" inactive-color="#ff4949"
+										active-text="不允许退课">
 									</el-switch>
 								</span>
 							</el-header>
-		
+
 							<el-main>
-								<sapn style="margin-left: 10px;margin-right: 10px;">当前已选中 {{selectStudentConut}} 人</sapn>
+								<sapn style="margin-left: 10px;margin-right: 10px;">当前已选中 {{selectStudentConut}} 人
+								</sapn>
 								<el-button type="primary">删除选中成员</el-button>
-								<div class="line"></div><br/>
-								<el-table :data="studentData" ref="multipleTable" @selection-change="handleSelectionChange">
+								<div class="line"></div><br />
+								<el-table :data="studentData" ref="multipleTable"
+									@selection-change="handleSelectionChange">
 									<el-table-column type="selection" width="50"></el-table-column>
 									<el-table-column label="头像" width="100">
 										<template slot-scope="scope">
-											<el-avatar :src="scope.row.avator"></el-avatar>
+											<el-avatar :src="scope.row.avatar"></el-avatar>
 										</template>
 									</el-table-column>
-									<el-table-column prop="sno" label="学号" width="120">
+									<el-table-column prop="tsNo" label="学号" width="120">
 									</el-table-column>
 									<el-table-column prop="realName" label="姓名" width="105">
 									</el-table-column>
 									<el-table-column prop="username" label="用户名" width="120">
 									</el-table-column>
-									<el-table-column prop="class" label="班级" width="125">
+									<el-table-column prop="clazz" label="班级" width="125">
 									</el-table-column>
-									<el-table-column prop="joinTime" label="加入时间" width="110">
+									<el-table-column prop="joinTime" label="加课日期" width="155">
 									</el-table-column>
 									<el-table-column fixed="right" label="操作" width="100">
 										<template slot-scope="scope">
-		
-											<el-button type="text" icon="el-icon-chat-dot-round size" style="margin-right: 10px;"></el-button>
-		
+
+											<el-button type="text" icon="el-icon-chat-dot-round size"
+												style="margin-right: 10px;"></el-button>
+
 											<el-dropdown trigger="click">
 												<span class="el-dropdown-link" style="font-size: 15px;">
 													<i class="el-icon-more"></i>
@@ -186,142 +191,220 @@
 													<el-dropdown-item>删除</el-dropdown-item>
 												</el-dropdown-menu>
 											</el-dropdown>
-		
-		
+
+
 											<!-- <el-button @click="handleClick(scope.row)" type="text" size="small">查看</el-button>
 					  						        <el-button type="text" size="small">编辑</el-button> -->
 										</template>
 									</el-table-column>
 								</el-table>
+								<!-- <el-pagination @size-change="pageSizeChange" @current-change="currentChange"
+									:current-page="pageData.currentPage" :page-sizes="[1, 2, 3, 4]"
+									:page-size="pageData.pageSize" layout="total, sizes, prev, pager, next, jumper"
+									:total="pageData.pageTotal" style="margin-top: 10px"></el-pagination> -->
 							</el-main>
 						</el-container>
-		
-		
+
+
 					</el-container>
 				</el-col>
 			</el-row>
 		</div>
-		
+
 		<div v-show="activeIndex == '2'">
-			<br/>
+			<br />
 			<el-row>
-			  <el-col :span="18" :offset="3">
-				  	<div style="box-shadow: 0 2px 4px rgba(0, 0, 0, .12), 0 0 6px rgba(0, 0, 0, .04);height: 100px;padding: 20px;">
-				  		
-						<span style="padding: 10px;font-size: 10px;color: gold;">固定分组</span><br/><br/>
-						<strong style="padding: 10px; margin-right: 360px ;font-size: 20px;">课程固定分组</strong>  
-						<el-divider direction="vertical" ></el-divider>
+				<el-col :span="18" :offset="3">
+					<div
+						style="box-shadow: 0 2px 4px rgba(0, 0, 0, .12), 0 0 6px rgba(0, 0, 0, .04);height: 100px;padding: 20px;">
+
+						<span style="padding: 10px;font-size: 10px;color: gold;">固定分组</span><br /><br />
+						<strong style="padding: 10px; margin-right: 360px ;font-size: 20px;">课程固定分组</strong>
+						<el-divider direction="vertical"></el-divider>
 						<span style="padding: 10px; margin-left: 200px ;">0</span>
 						<span style="padding: 10px; margin-left: 200px ;">0</span>
-						<br/> <br/>
-						
-						<span style="padding: 10px; margin-right: 128px ;font-size: 15px;color: grey;">*本分组主要应用于成绩统计，考勤等活动的默认分组</span> 
+						<br /> <br />
+
+						<span
+							style="padding: 10px; margin-right: 128px ;font-size: 15px;color: grey;">*本分组主要应用于成绩统计，考勤等活动的默认分组</span>
 						<el-divider direction="vertical"></el-divider>
 						<span style="padding: 10px; margin-left: 190px ;">组数</span>
 						<span style="padding: 10px; margin-left: 155px ;">未进组人数</span>
-					</div><br/><br/>
+					</div><br /><br />
 					<span style="float: left;">任务分组</span>
 					<el-button style="float: right;" type="primary" icon="el-icon-plus">新建分组任务</el-button>
-			  </el-col>
+				</el-col>
 			</el-row>
 		</div>
-		
+
 		<div v-show="activeIndex == '3'">
-			<br/>
+			<br />
 			<el-row>
-			  <el-col :span="18" :offset="3">
-				<div style="box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1); width: 100%;padding: 10px;height: 700px;">
-					<div style="text-align: center;">
-						<el-radio-group  v-model="activeName" style="margin-top: 10px;">
-							<el-radio-button label="1">总成绩</el-radio-button>
-							<el-radio-button label="2">作业成绩</el-radio-button>
-							<el-radio-button label="3">测试成绩</el-radio-button>
-							<el-radio-button label="4">考勤统计</el-radio-button>
-							<el-radio-button label="5">表现统计</el-radio-button>
-							<el-radio-button label="6">平时成绩</el-radio-button>
-							<el-radio-button label="7">期末成绩</el-radio-button>
-						</el-radio-group>
+				<el-col :span="18" :offset="3">
+					<div style="box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1); width: 100%;padding: 10px;height: 700px;">
+						<div style="text-align: center;">
+							<el-radio-group v-model="activeName" style="margin-top: 10px;">
+								<el-radio-button label="1">总成绩</el-radio-button>
+								<el-radio-button label="2">作业成绩</el-radio-button>
+								<el-radio-button label="3">测试成绩</el-radio-button>
+								<el-radio-button label="4">考勤统计</el-radio-button>
+								<el-radio-button label="5">表现统计</el-radio-button>
+								<el-radio-button label="6">平时成绩</el-radio-button>
+								<el-radio-button label="7">期末成绩</el-radio-button>
+							</el-radio-group>
+						</div>
+						<el-divider></el-divider>
+						<el-container>
+							<el-main>
+								<div style="text-align: center;color: darkgrey;">
+									暂无记录 ！
+								</div>
+							</el-main>
+						</el-container>
 					</div>
-					<el-divider></el-divider>
-					<el-container >
-					  <el-main>
-						  <div style="text-align: center;color: darkgrey;">
-							  暂无记录 ！
-						  </div>
-					  </el-main>
-					</el-container>
-				</div>  	
-			  </el-col>
+				</el-col>
 			</el-row>
-			
-			
+
+
 		</div>
-		
+
 	</div>
-</body>	
-	<!-- import Vue before Element -->
-	<script src="https://unpkg.com/vue/dist/vue.js"></script>
-	<!-- import JavaScript -->
-	<script src="https://unpkg.com/element-ui/lib/index.js"></script>
-	<script>
-	    new Vue({
-	        el: '#app',
-	        data: {
-	            courseName: '数据结构',
-	            activeIndex: '1',
-				index: '1',
-				activeName: '1',
-				NoExitCourse:true,
-				selectStudentConut:0,
-				sousuo:'',
-				teacherData: [
-					{
-						avator:'https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg',
-						realName:'qqweq',
-						username:'sasaf'
-					}
-				],
-				studentData:[
-					{
-						avator:'https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png',
-						sno:'20145',
-						realName:'qqweq',
-						username:'sasaf',
-						class:'12asda34',
-						joinTime:'2as1d3a'
-					},
-					{
-						avator:'https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg',
-						sno:'2014asd5',
-						realName:'qqasdaweq',
-						username:'saasdsaf',
-						class:'12asddsaaa34',
-						joinTime:'2adsas1d3a'
-					}
-				],
-	        },
-	        methods: {
-	            handleSelectFirst(key, keyPath) {
-	            	if(key != null){
-	            		this.activeIndex = key;
-	            	}
-	            },
-				handleSelect(key, keyPath) {
-					this.index = key;
-					console.log(key);
-				},
-				handleClick(data) {
-					alert(data.username)
-				},
-				handleSelectionChange (val) {
-					this.selectStudentConut = val.length;
-				    console.log(val);
-				},
-				handleClick(tab, event) {
-				  console.log(tab, event);
+</body>
+<script src="https://unpkg.com/vue/dist/vue.js"></script>
+<script src="https://cdn.bootcss.com/axios/0.19.2/axios.min.js"></script>
+<script src="https://cdn.bootcss.com/element-ui/2.13.2/index.js"></script>
+<script src="./js/common.js"></script>
+
+<script>
+	new Vue({
+		el: '#app',
+		data: {
+			course: {
+				cname: ''
+			},
+			user: {},
+			activeIndex: '1',
+			index: '1',
+			activeName: '1',
+			NoExitCourse: true,
+			selectStudentConut: 0,
+			search: '',
+			teacherData: [
+				{
+					avator: 'https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg',
+					realName: 'qqweq',
+					username: 'sasaf'
 				}
-				
-	        }
-	    })
-	</script>
+			],
+			studentData: [
+				{
+					avator: 'https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png',
+					sno: '20145',
+					realName: 'qqweq',
+					username: 'sasaf',
+					class: '12asda34',
+					joinTime: '2as1d3a'
+				},
+				{
+					avator: 'https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg',
+					sno: '2014asd5',
+					realName: 'qqasdaweq',
+					username: 'saasdsaf',
+					class: '12asddsaaa34',
+					joinTime: '2adsas1d3a'
+				}
+			],
+			pageData: {
+				currentPage: 1,
+				pageSize: 20,
+				pageTotal: 200,
+				search: ""
+			}
+		},
+		methods: {
+			handleSelectFirst(key, keyPath) {
+				if (key != null) {
+					this.activeIndex = key;
+				}
+			},
+			handleSelect(key, keyPath) {
+				this.index = key;
+				console.log(key);
+			},
+			handleClick(data) {
+				alert(data.username)
+			},
+			handleSelectionChange(val) {
+				this.selectStudentConut = val.length;
+				console.log(val);
+			},
+			handleClick(tab, event) {
+				console.log(tab, event);
+			},
+			pageSizeChange(pageSize) {
+				this.pageData.pageSize = pageSize;
+			},
+			currentChange(clickPage) {
+				this.pageData.currentPage = clickPage;
+			},
+			getCourseMemberData() {
+				yxt.http
+					.get(
+						"/users/courseId/" +
+						yxt.getUrlParam("courseId") +
+						"/" +
+						this.pageData.currentPage +
+						"/" +
+						this.pageData.pageSize +
+						"?search=" +
+						this.pageData.search
+					)
+					.then(({ data }) => {
+						if (data.success) {
+							let courseMemberList = data.queryResult.data;
+							this.teacherData = courseMemberList.filter(courseMember => courseMember.role.id === 2);
+							this.studentData = courseMemberList.filter(courseMember => courseMember.role.id === 3);
+							this.studentData.forEach(student => {
+								student.joinTime = student.joinTime.substring(0, 11)
+							})
+							this.pageData.pageTotal = data.queryResult.total - 1; // - 1 for teacher
+						}
+					})
+					.catch(() => {
+						this.$message.error("服务器繁忙！")
+					})
+			},
+			getCourseData() {
+				yxt.http.get("/courses/info/id/" + yxt.getUrlParam("courseId")).then(({ data }) => {
+					this.course = data.queryResult.data[0];
+				})
+			},
+			verify() {
+				yxt.http.get("/auth/verify/2").then(({ data }) => {
+					if (data.success) {
+						this.user = data.queryResult.data[0];
+					} else {
+						location.href = "../index.html"
+					}
+				}).catch(() => {
+					location.href = "../index.html";
+				});
+			},
+		},
+		created() {
+			this.verify();
+			this.getCourseMemberData();
+			this.getCourseData();
+		},
+		watch: {
+			pageData: {
+				deep: true,
+				handler() {
+					this.getCourseMemberData();
+				}
+			}
+		},
+	})
+</script>
+
 </html>

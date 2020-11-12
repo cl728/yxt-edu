@@ -15,6 +15,7 @@ import com.yixuetang.entity.response.QueryResponse;
 import com.yixuetang.entity.response.code.CommonCode;
 import com.yixuetang.entity.response.code.user.UserCode;
 import com.yixuetang.entity.response.result.QueryResult;
+import com.yixuetang.entity.response.result.UserResp;
 import com.yixuetang.entity.user.Role;
 import com.yixuetang.entity.user.School;
 import com.yixuetang.entity.user.User;
@@ -30,6 +31,7 @@ import com.yixuetang.utils.user.*;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
@@ -495,8 +497,26 @@ public class UserServiceImpl implements UserService {
 
         List<User> users = this.userMapper.findPageByIds( new Page<>( currentPage, pageSize ), ids, search );
 
+        List<UserResp> userRespList = new ArrayList<>( users.size() );
+        users.forEach( user -> {
+            UserResp userResp = new UserResp();
+
+            BeanUtils.copyProperties( user, userResp );
+
+            if (user.getRole().getId() == 3) {
+                userResp.setClazz( course.getClazz() );
+                userResp.setJoinTime( this.scMapper.selectOne( new QueryWrapper<StudentCourse>()
+                        .eq( "course_id", course.getId() )
+                        .eq( "student_id", user.getId() )
+                        .select( "join_time" ) ).getJoinTime() );
+            }
+
+            userRespList.add( userResp );
+
+        } );
+
         return new QueryResponse( CommonCode.SUCCESS,
-                new QueryResult<>( users,
+                new QueryResult<>( userRespList,
                         StringUtils.isBlank( search )
                                 ? ids.size() // 如果搜索字段为空，则 total 为总的课程成员
                                 : filterUsers.size() ) ); // 否则为过滤后的成员

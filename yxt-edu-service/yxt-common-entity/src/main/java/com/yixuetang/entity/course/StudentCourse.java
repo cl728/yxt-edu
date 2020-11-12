@@ -5,7 +5,12 @@ import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.yixuetang.entity.user.User;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
+
+import java.util.Date;
 
 /**
  * @author Hemon
@@ -15,6 +20,9 @@ import lombok.Data;
  */
 
 @Data
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 @TableName("t_sc")
 public class StudentCourse {
 
@@ -35,6 +43,9 @@ public class StudentCourse {
 
     @TableField("is_filed")
     private Boolean isFiled; // 是否被归档，true 是 false 不是
+
+    @TableField("join_time")
+    private Date joinTime;  // 加课时间
 
     @TableField(exist = false)
     private Course course;
