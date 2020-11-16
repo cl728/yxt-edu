@@ -40,7 +40,7 @@ public class NoticeController implements NoticeControllerApi {
     }
 
     @Override
-    @PutMapping("courseId/{noticeId}")
+    @PutMapping("info/noticeId/{noticeId}")
     public CommonResponse updateNotice(@PathVariable long noticeId,@RequestBody InsertNotice insertNotice) {
         return this.noticeService.updateNotice(noticeId,insertNotice);
     }
