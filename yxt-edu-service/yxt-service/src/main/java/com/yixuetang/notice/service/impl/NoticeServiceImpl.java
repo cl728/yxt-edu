@@ -8,8 +8,10 @@ import com.yixuetang.entity.notice.Notice;
 import com.yixuetang.entity.notice.NoticeUser;
 import com.yixuetang.entity.request.notice.InsertNotice;
 import com.yixuetang.entity.response.CommonResponse;
+import com.yixuetang.entity.response.QueryResponse;
 import com.yixuetang.entity.response.code.CommonCode;
 import com.yixuetang.entity.response.code.notice.NoticeCode;
+import com.yixuetang.entity.response.result.QueryResult;
 import com.yixuetang.entity.user.User;
 import com.yixuetang.notice.mapper.NoticeMapper;
 import com.yixuetang.notice.mapper.NoticeUserMapper;
@@ -166,5 +168,25 @@ public class NoticeServiceImpl implements NoticeService {
         }
 
         return new CommonResponse(CommonCode.SUCCESS);
+    }
+
+    /**
+     * 根据课程id查询该门课程下的公告列表
+     *
+     * @param courseId 课程id
+     * @return 带查询结果集的响应实体类
+     */
+    @Override
+    public QueryResponse findNotices(long courseId) {
+
+        // 1. 判断courseId 不合法
+        Course course = this.courseMapper.findById(courseId);
+        if (course == null) {
+            ExceptionThrowUtils.cast(CommonCode.INVALID_PARAM);
+        }
+
+        // 0. 根据课程id查询该门课程下的公告列表
+        List<Notice> notices = this.noticeMapper.findNoticeByCourseId(courseId);
+        return new QueryResponse(CommonCode.SUCCESS, new QueryResult<>(notices, notices.size()));
     }
 }

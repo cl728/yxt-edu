@@ -2,6 +2,7 @@ package com.yixuetang.notice.service;
 
 import com.yixuetang.entity.request.notice.InsertNotice;
 import com.yixuetang.entity.response.CommonResponse;
+import com.yixuetang.entity.response.QueryResponse;
 
 /**
  * @author Curtis
@@ -17,7 +18,7 @@ public interface NoticeService {
      * @param courseId     课程id
      * @param teacherId    教师id
      * @param insertNotice 新增公告实体类
-     * @return 通用相应实体类
+     * @return 通用响应实体类
      */
     CommonResponse saveNotice(long courseId, long teacherId, InsertNotice insertNotice);
 
@@ -35,4 +36,12 @@ public interface NoticeService {
      * @return 通用相应实体类
      */
     CommonResponse updateNotice(long noticeId,InsertNotice insertNotice);
+
+    /**
+     * 根据课程id查询公告列表
+     *
+     * @param courseId 课程id
+     * @return 带查询结果集的响应实体类
+     */
+    QueryResponse findNotices(long courseId);
 }

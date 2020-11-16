@@ -3,6 +3,7 @@ package com.yixuetang.notice.controller;
 import com.yixuetang.api.notice.NoticeControllerApi;
 import com.yixuetang.entity.request.notice.InsertNotice;
 import com.yixuetang.entity.response.CommonResponse;
+import com.yixuetang.entity.response.QueryResponse;
 import com.yixuetang.notice.service.NoticeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -19,6 +20,12 @@ public class NoticeController implements NoticeControllerApi {
 
     @Autowired
     private NoticeService noticeService;
+
+    @Override
+    @GetMapping("courseId/{courseId}")
+    public QueryResponse FindNotices(@PathVariable long courseId) {
+        return this.noticeService.findNotices(courseId);
+    }
 
     @Override
     @PostMapping("courseId/{courseId}/{teacherId}")

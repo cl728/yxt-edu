@@ -35,4 +35,6 @@ public class Notice {
     @TableField(exist = false)
     private Course course;  // 课程-公告 一对多
 
+    @TableField(exist = false)
+    private Long views;  //已读人数
 }

@@ -2,6 +2,7 @@ package com.yixuetang.api.notice;
 
 import com.yixuetang.entity.request.notice.InsertNotice;
 import com.yixuetang.entity.response.CommonResponse;
+import com.yixuetang.entity.response.QueryResponse;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
@@ -15,6 +16,13 @@ import io.swagger.annotations.ApiOperation;
  */
 @Api(value = "公告管理接口", description = "公告管理接口，提供作业的增、删、改、查")
 public interface NoticeControllerApi {
+
+    @ApiOperation("查询某门课程下的公告")
+    @ApiImplicitParams(value = {
+            @ApiImplicitParam(name = "courseId", value = "课程id", required = true,
+                    paramType = "path", dataType = "long"),
+    })
+    QueryResponse FindNotices(long courseId);
 
     @ApiOperation("新增公告")
     @ApiImplicitParams(value = {
