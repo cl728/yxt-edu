@@ -24,6 +24,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
@@ -189,4 +190,15 @@ public class NoticeServiceImpl implements NoticeService {
         List<Notice> notices = this.noticeMapper.findNoticeByCourseId(courseId);
         return new QueryResponse(CommonCode.SUCCESS, new QueryResult<>(notices, notices.size()));
     }
+
+    @Override
+    public QueryResponse findById(long noticeId) {
+        //  公告是否存在
+        Notice notice = noticeMapper.selectOne(new QueryWrapper<Notice>().eq("id", noticeId));
+        if (notice == null){
+            ExceptionThrowUtils.cast(CommonCode.INVALID_PARAM);
+        }
+        return new QueryResponse( CommonCode.SUCCESS, new QueryResult<>( Collections.singletonList( notice ), 1 ) );
+    }
+
 }

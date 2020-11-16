@@ -43,4 +43,9 @@ public interface NoticeControllerApi {
             paramType = "path", dataType = "long")
     CommonResponse updateNotice(long noticeId,InsertNotice insertNotice);
 
+    @ApiOperation("根据公告id查询公告信息")
+    @ApiImplicitParam(name = "noticeId", value = "公告id", required = true,
+            paramType = "path", dataType = "long")
+    QueryResponse findById(long noticeId);
+
 }

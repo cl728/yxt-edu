@@ -24,18 +24,20 @@ public interface NoticeService {
 
     /**
      * 教师删除公告
-     * @param noticeId  公告id
+     *
+     * @param noticeId 公告id
      * @return 通用相应实体类
      */
     CommonResponse deleteNotice(long noticeId);
 
     /**
      * 修改公告
-     * @param noticeId  公告id
-     * @param insertNotice  修改公告实体类
+     *
+     * @param noticeId     公告id
+     * @param insertNotice 修改公告实体类
      * @return 通用相应实体类
      */
-    CommonResponse updateNotice(long noticeId,InsertNotice insertNotice);
+    CommonResponse updateNotice(long noticeId, InsertNotice insertNotice);
 
     /**
      * 根据课程id查询公告列表
@@ -44,4 +46,12 @@ public interface NoticeService {
      * @return 带查询结果集的响应实体类
      */
     QueryResponse findNotices(long courseId);
+
+    /**
+     * 根据公告id查询公告信息
+     *
+     * @param noticeId 课程公告Id
+     * @return 带查询结果集的响应实体类
+     */
+    QueryResponse findById(long noticeId);
 }

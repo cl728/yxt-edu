@@ -45,4 +45,10 @@ public class NoticeController implements NoticeControllerApi {
         return this.noticeService.updateNotice(noticeId,insertNotice);
     }
 
+    @Override
+    @GetMapping("noticeId/{noticeId}")
+    public QueryResponse findById(@PathVariable long noticeId) {
+        return this.noticeService.findById( noticeId );
+    }
+
 }
