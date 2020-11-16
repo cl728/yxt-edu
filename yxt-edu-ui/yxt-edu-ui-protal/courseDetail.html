@@ -71,7 +71,8 @@
                                             <div id="course-name"
                                                 style="color: white;font-size: 36px;float: left;text-align: left;padding-top: 40px;width: 612px">
                                                 <span style="width: 612px" v-text="course.cname">课程名称</span>
-                                                <el-link v-show="user.isTeacher" @click="dialogUpdateCourseFormVisible = true"
+                                                <el-link v-show="user.isTeacher"
+                                                    @click="dialogUpdateCourseFormVisible = true"
                                                     icon="el-icon-edit-outline" :underline="false"
                                                     style="font-size: x-large;color: white">
                                                 </el-link>
@@ -106,7 +107,8 @@
                                                         </el-form-item>
                                                     </el-form>
                                                     <div slot="footer" class="dialog-footer">
-                                                        <el-button @click="dialogUpdateCourseFormVisible = false">取 消</el-button>
+                                                        <el-button @click="dialogUpdateCourseFormVisible = false">取 消
+                                                        </el-button>
                                                         <el-button type="primary"
                                                             @click="updateCourse('updateCourseForm')">确 定</el-button>
                                                     </div>
@@ -155,7 +157,8 @@
                                                 <el-col :span="4">
                                                     <div id="course-member"
                                                         style="border-radius: 3px;color: white;height: 24px;background-color: #909399;font-size: 12px">
-                                                        <el-link :underline="false" style="color: white" :href="'courseMembers.html?courseId=' + course.id">
+                                                        <el-link :underline="false" style="color: white"
+                                                            :href="'courseMembers.html?courseId=' + course.id">
                                                             <div id="course-member-content" style="padding-top: 3px">
                                                                 <i class="fa fa-user-o"></i>
                                                                 <span>成员</span>
@@ -239,7 +242,8 @@
                         <div id="course-homework-menubar" v-if="user.isTeacher">
                             <el-row>
                                 <el-col :span="12">
-                                    <el-button @click="homework_input=true" :disabled="homework_input" type="primary" plain style="float: left">发布个人作业</el-button>
+                                    <el-button @click="homework_input=true" :disabled="homework_input" type="primary"
+                                        plain style="float: left">发布个人作业</el-button>
                                 </el-col>
                                 <el-col :span="12">
                                     <div id="homework-manage" style="float:right;">
@@ -258,32 +262,41 @@
                             </el-row>
                         </div>
                         <div id="homework-input" style="margin-top: 30px" v-if="homework_input===true">
-                            <el-card class="box-card" style="margin-top: 30px;width: 1184px;height: 346px;border-radius: 6px;border-width: 2px">
+                            <el-card class="box-card"
+                                style="margin-top: 30px;width: 1184px;height: 400px;border-radius: 6px;border-width: 2px">
                                 <el-form :model="homeworkInputForm" :rules="inputHomeworkRule" ref="inputHomeworkForm">
-                                    <el-input placeholder="作业名称" v-model="homeworkInputForm.title" clearable>
-                                    </el-input>
-                                    <el-input style="padding-top: 20px" type="textarea" :rows="6"
-                                              placeholder="作业简介，作业格式等要求" v-model="homeworkInputForm.description" maxlength="1000"
-                                              show-word-limit>
-                                    </el-input>
-                                    <div class="block" style="margin-top: 20px;float: left">
-                                        <span class="demonstration">截止日期：</span>
-                                        <el-date-picker
-                                                v-model="homeworkInputForm.deadline"
-                                                type="datetime"
-                                                placeholder="选择日期时间"
-                                                align="right"
-                                                :picker-options="pickerOptions">
-                                        </el-date-picker>
-                                    </div>
-                                    <div class="block" style="margin-top: 20px">
-                                        <span class="demonstration">满分值：</span>
-                                        <el-input-number v-model="homeworkInputForm.totalScore" @change="handleChange" :min="1" :step="0.5" :max="100" label="分值"></el-input-number>
-                                    </div>
-                                    <div id="homework-button" style="float: right;padding-top: 10px">
-                                        <el-button type="primary" plain @click="homework_input=false">取消</el-button>
-                                        <el-button type="primary" @click="inputHomework('inputHomeworkForm')">确定</el-button>
-                                    </div>
+                                    <el-form-item prop="title">
+                                        <el-input placeholder="作业名称" v-model="homeworkInputForm.title" clearable>
+                                        </el-input>
+                                    </el-form-item>
+                                    <el-form-item>
+                                        <el-input type="textarea" :rows="6" id="mytextarea" placeholder="作业简介，作业格式等要求"
+                                            v-model="homeworkInputForm.description" maxlength="1000" show-word-limit>
+                                        </el-input>
+                                    </el-form-item>
+                                    <el-form-item prop="deadline">
+                                        <div class="block" style="float: left">
+                                            <span class="demonstration">截止日期：</span>
+                                            <el-date-picker v-model="homeworkInputForm.deadline" type="datetime"
+                                                placeholder="选择日期时间" align="right" :picker-options="pickerOptions">
+                                            </el-date-picker>
+                                        </div>
+                                    </el-form-item>
+                                    <el-form-item prop="totalScore">
+                                        <div class="block" style="float: left;">
+                                            <span class="demonstration">满&ensp;分&ensp;值：</span>
+                                            <el-input-number v-model="homeworkInputForm.totalScore"
+                                                @change="handleChange" :min="1" :step="0.5" :max="100" label="分值">
+                                            </el-input-number>
+                                        </div>
+                                    </el-form-item>
+                                    <el-form-item>
+                                        <div id="homework-button" style="float: right;">
+                                            <el-button type="primary" plain @click="homework_input=false">取消</el-button>
+                                            <el-button type="primary" @click="inputHomework('inputHomeworkForm')">确定
+                                            </el-button>
+                                        </div>
+                                    </el-form-item>
                                 </el-form>
                             </el-card>
                         </div>
@@ -300,14 +313,24 @@
                                         </el-col>
                                         <el-col :span="12" v-show="user.isTeacher">
                                             <div class="homework-operation" style="float: right">
-                                                <el-dropdown style="padding-right: 30px">
+                                                <el-dropdown>
                                                     <span class="el-dropdown-link">
                                                         更多操作 <i class="el-icon-more"></i>
                                                     </span>
                                                     <el-dropdown-menu slot="dropdown">
                                                         <el-dropdown-item>编辑</el-dropdown-item>
-                                                        <el-dropdown-item>保存到...</el-dropdown-item>
-                                                        <el-dropdown-item>删除</el-dropdown-item>
+                                                        <!-- <el-dropdown-item>保存到...</el-dropdown-item> -->
+                                                        <el-popover placement="top" width="160"
+                                                            v-model="delHomeworkVisible">
+                                                            <p>确认要删除此作业吗？</p>
+                                                            <div style="text-align: right; margin: 0">
+                                                                <el-button size="mini" type="text"
+                                                                    @click="delHomeworkVisible = false">取消</el-button>
+                                                                <el-button type="primary" size="mini"
+                                                                    @click="deleteHomework(homework.id)">确定</el-button>
+                                                            </div>
+                                                            <el-dropdown-item slot="reference">删除</el-dropdown-item>
+                                                        </el-popover>
                                                     </el-dropdown-menu>
                                                 </el-dropdown>
                                             </div>
@@ -380,95 +403,8 @@
                                             <el-col style="height: 50px">
                                                 <span
                                                     style="font-size: 15px;color: #A0A0A0;float: left;padding-left: 30px;padding-top: 0;padding-bottom: 10px">
-                                                    <i class="el-icon-timer"></i> 截止日期：<span v-text="homework.deadline">2020-11-07 22:17</span>
-                                                </span>
-                                            </el-col>
-                                        </el-row>
-                                    </el-row>
-                                </el-card>
-                                <el-card class="box-card"
-                                    style="margin-top: 20px;width: 1184px;height: 220px;border-radius: 6px;border-width: 2px">
-                                    <el-row id="course-title" style="height: 30px">
-                                        <el-col :span="12">
-                                            <div class="homework-create-time" style="float: left">
-                                                <span
-                                                    style="padding-left: 30px;font-size: 15px;color: #A0A0A0">2020-11-09
-                                                    22:17</span>
-                                            </div>
-                                        </el-col>
-                                        <el-col :span="12">
-                                            <div class="homework-operation" style="float: right">
-                                                <el-dropdown style="padding-right: 30px">
-                                                    <span class="el-dropdown-link">
-                                                        更多操作 <i class="el-icon-more"></i>
-                                                    </span>
-                                                    <el-dropdown-menu slot="dropdown">
-                                                        <el-dropdown-item>编辑</el-dropdown-item>
-                                                        <el-dropdown-item>保存到...</el-dropdown-item>
-                                                        <el-dropdown-item>删除</el-dropdown-item>
-                                                    </el-dropdown-menu>
-                                                </el-dropdown>
-                                            </div>
-                                        </el-col>
-                                    </el-row>
-                                    <el-row id="course-announce" style="height: 130px">
-                                        <el-col :span="12">
-                                            <el-row style="height: 45px">
-                                                <el-col :span="24">
-                                                    <el-link :underline="false"
-                                                        style="font-size: 26px;float: left;padding-left: 30px">
-                                                        <span style="font-weight: bold">范例_第二次作业</span>
-                                                    </el-link>
-                                                </el-col>
-                                            </el-row>
-                                            <el-row style="height: 85px">
-                                                <el-col :span="24">
-                                                    <span style="float: left;padding-left: 30px;padding-top: 5px">
-                                                        <span style="font-size: 15px;color: #707070">如题所述</span>
-                                                    </span>
-                                                </el-col>
-                                            </el-row>
-                                        </el-col>
-                                        <el-col :span="12">
-                                            <div class="homework-statics" style="height: 130px">
-                                                <el-row style="height: 130px;padding-top: 30px">
-                                                    <el-col :span="8">
-                                                        <ul style="list-style: none">
-                                                            <li>
-                                                                <el-link :underline="false"
-                                                                    style="font-size: 30px;color: #32C76E">15</el-link>
-                                                            </li>
-                                                            <li style="font-size: 14px;color: #707070">已批</li>
-                                                        </ul>
-                                                    </el-col>
-                                                    <el-col :span="8">
-                                                        <ul style="list-style: none">
-                                                            <li>
-                                                                <el-link :underline="false"
-                                                                    style="font-size: 30px;color: #707070">4</el-link>
-                                                            </li>
-                                                            <li style="font-size: 14px;color: #970002">未批</li>
-                                                        </ul>
-                                                    </el-col>
-                                                    <el-col :span="8">
-                                                        <ul style="list-style: none">
-                                                            <li>
-                                                                <el-link :underline="false"
-                                                                    style="font-size: 30px;color: #E03838">5</el-link>
-                                                            </li>
-                                                            <li style="font-size: 14px;color: #707070">未交</li>
-                                                        </ul>
-                                                    </el-col>
-                                                </el-row>
-                                            </div>
-                                        </el-col>
-                                    </el-row>
-                                    <el-row id="course-message" style="height: 60px">
-                                        <el-row>
-                                            <el-col style="height: 50px">
-                                                <span
-                                                    style="font-size: 15px;color: #A0A0A0;float: left;padding-left: 30px;padding-top: 0;padding-bottom: 10px">
-                                                    截止日期：2020-11-07 22:17
+                                                    <i class="el-icon-timer"></i> 截止日期：<span
+                                                        v-text="homework.deadline">2020-11-07 22:17</span>
                                                 </span>
                                             </el-col>
                                         </el-row>
@@ -1337,37 +1273,79 @@
                     <div id="course-notice" v-if="activeIndex2=='4'">
                         <div id="course-notice-box">
                             <div id="notice-teacher" v-if="user.isTeacher">
-                                <div id="notice-menubar" style="margin-top: 30px;padding-bottom: 30px;padding-left: 30px">
+                                <div id="notice-menubar"
+                                    style="margin-top: 30px;padding-bottom: 30px;padding-left: 30px">
                                     <el-button type="primary" style="float: left" @click="notice_input = true"
-                                               :disabled="notice_input">发布公告</el-button>
+                                        :disabled="notice_input">发布公告</el-button>
                                 </div>
+                                <!-- 发布公告表单 -->
                                 <div id="notice-input" style="margin-top: 30px" v-if="notice_input===true">
                                     <el-card class="box-card"
-                                             style="margin-top: 30px;width: 1184px;height: 266px;border-radius: 6px;border-width: 2px">
-                                        <el-input placeholder="请输入公告标题" v-model="notice_title" clearable>
-                                        </el-input>
-                                        <el-input style="padding-top: 20px" type="textarea" :rows="6"
-                                                  placeholder="请输入公告具体内容" v-model="notice_content" maxlength="1000"
-                                                  show-word-limit>
-                                        </el-input>
-                                        <div id="notice-button" style="float: right;padding-top: 10px">
-                                            <el-button type="primary" plain @click="notice_input=false">取消</el-button>
-                                            <el-button type="primary">确定</el-button>
-                                        </div>
+                                        style="margin-top: 30px;width: 1184px;height: 306px;border-radius: 6px;border-width: 2px">
+                                        <el-form :model="noticeInputForm" :rules="inputNoticeRule"
+                                            ref="inputNoticeForm">
+                                            <el-form-item prop="title">
+                                                <el-input placeholder="请输入公告标题" v-model="noticeInputForm.title"
+                                                    clearable>
+                                                </el-input>
+                                            </el-form-item>
+                                            <el-form-item prop="content">
+                                                <el-input style="padding-top: 20px" type="textarea" :rows="6"
+                                                    placeholder="请输入公告具体内容" v-model="noticeInputForm.content"
+                                                    maxlength="1000" show-word-limit>
+                                                </el-input>
+                                            </el-form-item>
+                                            <el-form-item>
+                                                <div id="notice-button" style="float: right;padding-top: 10px">
+                                                    <el-button type="primary" plain @click="notice_input=false">取消
+                                                    </el-button>
+                                                    <el-button type="primary" @click="inputNotice('inputNoticeForm')">确定
+                                                    </el-button>
+                                                </div>
+                                            </el-form-item>
+                                        </el-form>
+                                    </el-card>
+                                </div>
+                                <!-- 编辑公告表单 -->
+                                <div id="notice-edit" style="margin-top: 30px" v-if="notice_edit===true">
+                                    <el-card class="box-card"
+                                        style="margin-top: 30px;width: 1184px;height: 306px;border-radius: 6px;border-width: 2px">
+                                        <el-form :model="noticeEditForm" :rules="editNoticeRule" ref="editNoticeForm">
+                                            <el-form-item prop="title">
+                                                <el-input placeholder="请输入公告标题" v-model="noticeEditForm.title"
+                                                    clearable>
+                                                </el-input>
+                                            </el-form-item>
+                                            <el-form-item prop="content">
+                                                <el-input style="padding-top: 20px" type="textarea" :rows="6"
+                                                    placeholder="请输入公告具体内容" v-model="noticeEditForm.content"
+                                                    maxlength="1000" show-word-limit>
+                                                </el-input>
+                                            </el-form-item>
+                                            <el-form-item>
+                                                <div id="notice-button" style="float: right;padding-top: 10px">
+                                                    <el-button type="primary" plain @click="notice_edit=false">取消
+                                                    </el-button>
+                                                    <el-button type="primary" @click="editNotice('editNoticeForm')">确定
+                                                    </el-button>
+                                                </div>
+                                            </el-form-item>
+                                        </el-form>
                                     </el-card>
                                 </div>
                             </div>
                             <div id="notice-cards" style="margin-top: 30px">
-                                <el-card class="box-card"
+                                <el-card class="box-card" v-for="(notice, index) in noticeList" :key="index"
                                     style="margin-top: 20px;width: 1184px;height: 220px;border-radius: 6px;border-width: 2px">
                                     <el-row id="course-title" style="height: 30px">
                                         <el-col :span="12">
                                             <div class="homework-create-time" style="float: left">
                                                 <span
-                                                    style="padding-left: 30px;font-size: 15px;color: #A0A0A0">发布人：CurtisCheng</span>
+                                                    style="padding-left: 30px;font-size: 15px;color: #A0A0A0">发布人：<span
+                                                        v-text="notice.course.teacher.realName">CurtisCheng</span></span>
                                                 <span
-                                                    style="padding-left: 30px;font-size: 15px;color: #A0A0A0">发布时间：2020-11-09
-                                                    22:17</span>
+                                                    style="padding-left: 30px;font-size: 15px;color: #A0A0A0">发布时间：<span
+                                                        v-text="notice.createTime">2020-11-09 22:17</span></span>
                                             </div>
                                         </el-col>
                                         <el-col :span="12">
@@ -1377,9 +1355,22 @@
                                                         操作 <i class="el-icon-more"></i>
                                                     </span>
                                                     <el-dropdown-menu slot="dropdown">
-                                                        <el-dropdown-item>置顶</el-dropdown-item>
-                                                        <el-dropdown-item>编辑</el-dropdown-item>
-                                                        <el-dropdown-item>删除</el-dropdown-item>
+                                                        <!-- <el-dropdown-item>置顶</el-dropdown-item> -->
+                                                        <el-dropdown-item>
+                                                            <router-link @click="showEditNoticeForm(notice.id)">编辑
+                                                            </router-link>
+                                                        </el-dropdown-item>
+                                                        <el-popover placement="top" width="160"
+                                                            v-model="delNoticeVisible">
+                                                            <p>确认要删除此公告吗？</p>
+                                                            <div style="text-align: right; margin: 0">
+                                                                <el-button size="mini" type="text"
+                                                                    @click="delNoticeVisible = false">取消</el-button>
+                                                                <el-button type="primary" size="mini"
+                                                                    @click="deleteNotice(notice.id)">确定</el-button>
+                                                            </div>
+                                                            <el-dropdown-item slot="reference">删除</el-dropdown-item>
+                                                        </el-popover>
                                                     </el-dropdown-menu>
                                                 </el-dropdown>
                                             </div>
@@ -1391,14 +1382,15 @@
                                                 <el-col :span="24">
                                                     <el-link :underline="false"
                                                         style="font-size: 26px;float: left;padding-left: 30px;padding-top: 30px">
-                                                        <span>范例_公告一</span>
+                                                        <span v-text="notice.title">范例_公告一</span>
                                                     </el-link>
                                                 </el-col>
                                             </el-row>
                                             <el-row style="height: 55px">
                                                 <el-col :span="24">
                                                     <span style="float: left;padding-left: 30px;padding-top: 5px">
-                                                        <span style="font-size: 15px;color: #707070">如题所述</span>
+                                                        <span style="font-size: 15px;color: #707070"
+                                                            v-html="notice.content">如题所述</span>
                                                     </span>
                                                 </el-col>
                                             </el-row>
@@ -1409,68 +1401,7 @@
                                             <el-col style="height: 50px">
                                                 <span
                                                     style="font-size: 15px;color: #A0A0A0;float: left;padding-left: 30px;padding-top: 0;padding-bottom: 10px">
-                                                    0人已读
-                                                </span>
-                                                <span
-                                                    style="font-size: 15px;color: #A0A0A0;float: left;padding-left: 30px;padding-top: 0;padding-bottom: 10px">
-                                                    0条评论
-                                                </span>
-                                            </el-col>
-                                        </el-row>
-                                    </el-row>
-                                </el-card>
-                                <el-card class="box-card"
-                                    style="margin-top: 20px;width: 1184px;height: 220px;border-radius: 6px;border-width: 2px">
-                                    <el-row id="course-title" style="height: 30px">
-                                        <el-col :span="12">
-                                            <div class="homework-create-time" style="float: left">
-                                                <span
-                                                    style="padding-left: 30px;font-size: 15px;color: #A0A0A0">发布人：CurtisCheng</span>
-                                                <span
-                                                    style="padding-left: 30px;font-size: 15px;color: #A0A0A0">发布时间：2020-11-09
-                                                    22:17</span>
-                                            </div>
-                                        </el-col>
-                                        <el-col :span="12">
-                                            <div class="homework-operation" style="float: right">
-                                                <el-dropdown>
-                                                    <span class="el-dropdown-link">
-                                                        操作 <i class="el-icon-more"></i>
-                                                    </span>
-                                                    <el-dropdown-menu slot="dropdown">
-                                                        <el-dropdown-item>置顶</el-dropdown-item>
-                                                        <el-dropdown-item>编辑</el-dropdown-item>
-                                                        <el-dropdown-item>删除</el-dropdown-item>
-                                                    </el-dropdown-menu>
-                                                </el-dropdown>
-                                            </div>
-                                        </el-col>
-                                    </el-row>
-                                    <el-row id="course-announce" style="height: 130px">
-                                        <el-col :span="12">
-                                            <el-row style="height: 75px">
-                                                <el-col :span="24">
-                                                    <el-link :underline="false"
-                                                        style="font-size: 26px;float: left;padding-left: 30px;padding-top: 30px">
-                                                        <span>范例_公告二</span>
-                                                    </el-link>
-                                                </el-col>
-                                            </el-row>
-                                            <el-row style="height: 55px">
-                                                <el-col :span="24">
-                                                    <span style="float: left;padding-left: 30px;padding-top: 5px">
-                                                        <span style="font-size: 15px;color: #707070">如题所述</span>
-                                                    </span>
-                                                </el-col>
-                                            </el-row>
-                                        </el-col>
-                                    </el-row>
-                                    <el-row id="course-message" style="height: 60px">
-                                        <el-row>
-                                            <el-col style="height: 50px">
-                                                <span
-                                                    style="font-size: 15px;color: #A0A0A0;float: left;padding-left: 30px;padding-top: 0;padding-bottom: 10px">
-                                                    0人已读
+                                                    <span v-text="notice.views">0</span> 人已读
                                                 </span>
                                                 <span
                                                     style="font-size: 15px;color: #A0A0A0;float: left;padding-left: 30px;padding-top: 0;padding-bottom: 10px">
@@ -1510,10 +1441,76 @@
 <script src="https://cdn.bootcss.com/vue/2.6.11/vue.min.js"></script>
 <script src="https://cdn.bootcss.com/axios/0.19.2/axios.min.js"></script>
 <script src="https://cdn.bootcss.com/element-ui/2.13.2/index.js"></script>
-<script src="js/date-format.js"></script>
 <script src="js/md5.js"></script>
 <script src="js/common.js"></script>
+<script src='./js/tinymce/tinymce.min.js'></script>
+<script>
+    tinymce.init({
+        selector: '#mytextarea',
+        language_url: "./js/tinymce/langs/zh_CN.js", // 导入语言文件
+        language: "zh_CN", // 语言设置
+        // disabled:true, // 禁用
+        skin_url: "./js/tinymce/skins/ui/oxide", // 主题样式
+        content_css: "./js/tinymce/skins/content/default/content.min.css",
+        height: 100, // 高度
+        menubar: false, // 隐藏最上方menu菜单
+        // toolbar: true, // false 禁用工具栏（隐藏工具栏）
+        browser_spellcheck: true, // 拼写检查
+        branding: false, // 去水印
+        statusbar: false, // 隐藏编辑器底部的状态栏
+        elementpath: false, // 禁用下角的当前标签路径
+        paste_data_images: true, // 允许粘贴图像
+        attachment_max_size: 100 * 1024 * 1024, // 限制附件上传大小为 100 M，默认为 200 M
+        attachment_assets_path: './js/tinymce/icons/attachment/', // 静态资源的路径，用于文件 icon 以及上传等待动画，上传错误的信息提示图标
+        plugins:
+            "lists image media table wordcount code fullscreen help  toc fullpage autosave nonbreaking insertdatetime visualchars visualblocks searchreplace spellchecker pagebreak link charmap paste print preview hr anchor attachment",
 
+        toolbar: [
+            "bold italic underline strikethrough |codeformat blockformats| superscript subscript  | forecolor backcolor | alignleft aligncenter alignright alignjustify | outdent indent |  removeformat ",
+            "code  bullist numlist | lists image media table link |fullscreen help toc fullpage restoredraft nonbreaking insertdatetime visualchars visualblocks searchreplace spellchecker pagebreak anchor charmap  pastetext print preview hr attachment",
+        ],
+        // 此处为图片上传处理函数，这个直接用了base64的图片形式上传图片，
+        // 如需ajax上传可参考https://www.tiny.cloud/docs/configure/file-image-upload/#images_upload_handler
+        images_upload_handler: (blobInfo, success, failure) => {
+            let formData = new FormData();
+            // 服务端接收文件的参数名，文件数据，文件名
+            console.log(blobInfo.blob())
+            formData.append("file", blobInfo.blob());
+            yxt.http({
+                method: "POST",
+                url: "/file/upload/",
+                data: formData
+            }).then(({ data }) => {
+                if (data.success) {
+                    success(data.queryResult.data[0])
+                } else {
+                    failure(data.message)
+                }
+            }).catch(() => {
+                failure("服务器繁忙，请稍候再试！");
+            });
+        },
+        // 上传附件处理函数
+        attachment_upload_handler: (file, successCallback, failureCallback, progressCallback) => {
+            console.log(file)
+            let formData = new FormData();
+            formData.append("file", file);
+            yxt.http({
+                method: "POST",
+                url: "/file/upload/",
+                data: formData
+            }).then(({ data }) => {
+                if (data.success) {
+                    successCallback(data.queryResult.data[0])
+                } else {
+                    failureCallback(data.message)
+                }
+            }).catch(() => {
+                failureCallback("服务器繁忙，请稍候再试！");
+            });
+        }
+    });
+</script>
 <script>
     new Vue({
         el: '#app',
@@ -1527,7 +1524,7 @@
                 "https://prepc.ketangpai.com/img/banner-home03.6c319494.png"
             ],
             user: {
-                id: "",
+                id: -1,
                 username: "",
                 isTeacher: "",
                 avatar: "",
@@ -1581,6 +1578,14 @@
                 deadline: new Date(),
                 totalScore: 0,
             },
+            noticeInputForm: {
+                title: "",
+                content: "",
+            },
+            noticeEditForm: {
+                title: "",
+                content: "",
+            },
             updateCourseForm: {
                 clazz: "",
                 cname: "",
@@ -1595,7 +1600,7 @@
                         date.setTime(date.getTime() + 2400 * 1000);
                         picker.$emit('pick', date);
                     }
-                },{
+                }, {
                     text: '1小时后',
                     onClick(picker) {
                         const date = new Date();
@@ -1609,7 +1614,7 @@
                         date.setTime(date.getTime() + 3600 * 1000 * 2);
                         picker.$emit('pick', date);
                     }
-                },{
+                }, {
                     text: '12小时后',
                     onClick(picker) {
                         const date = new Date();
@@ -1620,21 +1625,21 @@
                     text: '明天',
                     onClick(picker) {
                         const date = new Date();
-                        date.setTime(date.getTime() + 3600 * 1000 * 24 );
+                        date.setTime(date.getTime() + 3600 * 1000 * 24);
                         picker.$emit('pick', date);
                     }
                 }, {
                     text: '后天',
                     onClick(picker) {
                         const date = new Date();
-                        date.setTime(date.getTime() + 3600 * 1000 *24 *2);
+                        date.setTime(date.getTime() + 3600 * 1000 * 24 * 2);
                         picker.$emit('pick', date);
                     }
-                },{
+                }, {
                     text: '一周后',
                     onClick(picker) {
                         const date = new Date();
-                        date.setTime(date.getTime() + 3600 * 1000 *24 *7);
+                        date.setTime(date.getTime() + 3600 * 1000 * 24 * 7);
                         picker.$emit('pick', date);
                     }
                 }]
@@ -1644,27 +1649,37 @@
                 deadline: [{ required: true, message: '请输入截止日期', trigger: 'blur' }],
                 totalScore: [{ required: true, message: '请输入满分值', trigger: 'blur' }],
             },
+            inputNoticeRule: {
+                title: [{ required: true, message: '请输入公告标题', trigger: 'blur' }],
+                content: [{ required: true, message: '请输入公告内容', trigger: 'blur' }],
+            },
+            editNoticeRule: {
+                title: [{ required: true, message: '请输入公告标题', trigger: 'blur' }],
+                content: [{ required: true, message: '请输入公告内容', trigger: 'blur' }],
+            },
             homework_input: false,
             cname: "",
-            notice_title: "",
-            notice_content: '',
             isProgressVisable: false,
             progressPercent: 0,
             notice_input: false,
+            notice_edit: false,
             dialogUpdateCourseFormVisible: false,
             formLabelWidth: '120px',
             fileList: [{ name: 'food.jpeg', url: 'https://fuss10.elemecdn.com/3/63/4e7f3a15429bfda99bce42a18cdd1jpeg.jpeg?imageMogr2/thumbnail/360x360/format/webp/quality/100' }, { name: 'food2.jpeg', url: 'https://fuss10.elemecdn.com/3/63/4e7f3a15429bfda99bce42a18cdd1jpeg.jpeg?imageMogr2/thumbnail/360x360/format/webp/quality/100' }],
-            homeworkList: []
+            homeworkList: [],
+            noticeList: [],
+            delNoticeVisible: false,
+            delHomeworkVisible: false
         },
         methods: {
             inputHomework(formName) {
-                this.homework_input = false;
                 this.$refs[formName].validate((valid) => {
-                    if(valid){
+                    if (valid) {
                         this.homeworkInputForm.deadline = this.formatDateTime();
                         yxt.http.post("/homework/courseId/" + this.course.id + "/" + this.user.id, this.homeworkInputForm).then(({ data }) => {
-                            if (data.success){
+                            if (data.success) {
                                 this.$message.success(data.message);
+                                this.getHomeworkData();
                             } else {
                                 this.$message.error(data.message);
                             }
@@ -1675,6 +1690,83 @@
                             this.homework_input = false;
                         })
                     }
+                });
+            },
+            inputNotice(formName) {
+                this.notice_input = true;
+                this.$refs[formName].validate((valid) => {
+                    if (valid) {
+                        yxt.http.post("/notice/courseId/" + this.course.id + "/" + this.user.id, this.noticeInputForm).then(({ data }) => {
+                            if (data.success) {
+                                this.$message.success(data.message);
+                                this.getNoticeData();
+                            } else {
+                                this.$message.error(data.message);
+                            }
+                            this.notice_input = false;
+                            this.noticeInputForm = {};
+                        }).catch(() => {
+                            this.$message.error("服务器繁忙，请稍后再试！");
+                            this.notice_input = false;
+                        })
+                    }
+                });
+            },
+            showEditNoticeForm(noticeId) {
+                yxt.http.get("/notice/noticeId/" + noticeId).then(({ data }) => {
+                    if (data.success) {
+                        this.noticeEditForm = data.queryResult.data[0];
+                        this.notice_edit = true;
+                    } else {
+                        this.$message.error(data.message);
+                    }
+                })
+            },
+            editNotice(formName) {
+                this.notice_edit = true;
+                this.$refs[formName].validate((valid) => {
+                    if (valid) {
+                        yxt.http.put("/notice/courseId/" + this.noticeEditForm.id, this.noticeEditForm).then(({ data }) => {
+                            if (data.success) {
+                                this.$message.success(data.message);
+                                this.getNoticeData();
+                            } else {
+                                this.$message.error(data.message);
+                            }
+                            this.notice_edit = false;
+                            this.noticeEditForm = {};
+                        }).catch(() => {
+                            this.$message.error("服务器繁忙，请稍后再试！");
+                            this.notice_edit = false;
+                        })
+                    }
+                });
+            },
+            deleteNotice(noticeId) {
+                this.delNoticeVisible = true;
+                yxt.http.delete("/notice/courseId/" + noticeId).then(({ data }) => {
+                    if (data.success) {
+                        this.$message.success(data.message);
+                        this.delNoticeVisible = false;
+                        this.getNoticeData();
+                    } else {
+                        this.$message.error(data.message);
+                    }
+                }).catch(() => {
+                    this.$message.error("服务器繁忙，请稍候再试！")
+                });
+            },
+            deleteHomework(homeworkId) {
+                this.delHomeworkVisible = true;
+                yxt.http.delete("/homework/courseId/" + homeworkId).then(({ data }) => {
+                    if (data.success) {
+                        this.$message.success(data.message);
+                        this.getHomeworkData();
+                    } else {
+                        this.$message.error(data.message);
+                    }
+                }).catch(() => {
+                    this.$message.error("服务器繁忙，请稍候再试！")
                 });
             },
             updateCourse(formName) {
@@ -1757,13 +1849,21 @@
                     }
                 })
             },
+            getNoticeData() {
+                yxt.http.get("notice/courseId/" + yxt.getUrlParam("id")).then(({ data }) => {
+                    if (data.success) {
+                        this.noticeList = data.queryResult.data;
+                    }
+                })
+            },
             formatDateTime() {
                 let t = this.homeworkInputForm.deadline;
-                return t.getFullYear()+"-"+(t.getMonth()+1)+"-"+t.getDate()+" "+t.getHours()+":"+t.getMinutes()+":"+t.getSeconds();
+                return t.getFullYear() + "-" + (t.getMonth() + 1) + "-" + t.getDate() + " " + t.getHours() + ":" + t.getMinutes() + ":" + t.getSeconds();
             }
         },
         created() {
             this.verify();
+            this.getNoticeData();
         },
     })
 </script>
