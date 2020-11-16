@@ -1,5 +1,6 @@
 package com.yixuetang.notice.service.impl;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.yixuetang.course.mapper.CourseMapper;
 import com.yixuetang.course.mapper.ScMapper;
 import com.yixuetang.entity.course.Course;
@@ -106,6 +107,62 @@ public class NoticeServiceImpl implements NoticeService {
             noticeUserS.setUserId(studentId);
             noticeUserS.setView(false);
             this.noticeUserMapper.insert(noticeUserS);
+        }
+
+        return new CommonResponse(CommonCode.SUCCESS);
+    }
+
+    @Override
+    public CommonResponse deleteNotice(long noticeId) {
+        //  公告是否存在
+        Notice notice = noticeMapper.selectOne(new QueryWrapper<Notice>().eq("id", noticeId));
+        if(notice == null){
+            ExceptionThrowUtils.cast(CommonCode.INVALID_PARAM);
+        }
+
+        //删除公告与用户表的记录
+        noticeUserMapper.delete(new QueryWrapper<NoticeUser>().eq("notice_id",noticeId));
+
+        //删除公告
+        noticeMapper.delete(new QueryWrapper<Notice>().eq("id", noticeId));
+
+        return new CommonResponse(CommonCode.SUCCESS);
+    }
+
+    @Override
+    public CommonResponse updateNotice(long noticeId, InsertNotice insertNotice) {
+        //  公告是否存在
+        Notice notice = noticeMapper.selectOne(new QueryWrapper<Notice>().eq("id", noticeId));
+        if(notice == null){
+            ExceptionThrowUtils.cast(CommonCode.INVALID_PARAM);
+        }
+
+        // 参数验证
+        if (insertNotice == null) {
+            ExceptionThrowUtils.cast(CommonCode.INVALID_PARAM);
+        }
+
+        // 4. 公告标题非空判断
+        if (!StringUtils.isNoneBlank(insertNotice.getTitle())) {
+            return new CommonResponse(NoticeCode.INSERT_NOTICE_FAIL_TITLE_IS_NULL);
+        }
+
+        // 0. 公告内容非空判断
+        if (!StringUtils.isNoneBlank(insertNotice.getContent())) {
+            return new CommonResponse(NoticeCode.INSERT_NOTICE_FAIL_CONTENT_IS_NULL);
+        }
+
+        //修改公告
+        notice.setContent(insertNotice.getContent());  //修改内容
+        notice.setTitle(insertNotice.getTitle());      //修改标题
+        notice.setUpdateTime(new Date());              //修改更新时间
+        noticeMapper.updateById(notice);
+
+        //修改公告之后，公告和用户之间的记录设置为未读
+        List<NoticeUser> noticeUsers = noticeUserMapper.selectList(new QueryWrapper<NoticeUser>().eq("notice_id", notice.getId()));
+        for (NoticeUser noticeUser : noticeUsers) {
+            noticeUser.setView(false);
+            noticeUserMapper.updateById(noticeUser);
         }
 
         return new CommonResponse(CommonCode.SUCCESS);

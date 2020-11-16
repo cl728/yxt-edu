@@ -20,4 +20,19 @@ public interface NoticeService {
      * @return 通用相应实体类
      */
     CommonResponse saveNotice(long courseId, long teacherId, InsertNotice insertNotice);
+
+    /**
+     * 教师删除公告
+     * @param noticeId  公告id
+     * @return 通用相应实体类
+     */
+    CommonResponse deleteNotice(long noticeId);
+
+    /**
+     * 修改公告
+     * @param noticeId  公告id
+     * @param insertNotice  修改公告实体类
+     * @return 通用相应实体类
+     */
+    CommonResponse updateNotice(long noticeId,InsertNotice insertNotice);
 }

@@ -24,4 +24,15 @@ public interface NoticeControllerApi {
                     paramType = "path", dataType = "long"),
     })
     CommonResponse saveNotice(long courseId, long teacherId, InsertNotice insertNotice);
+
+    @ApiOperation("删除公告")
+    @ApiImplicitParam(name = "noticeId", value = "公告id", required = true,
+                    paramType = "path", dataType = "long")
+    CommonResponse deleteNotice(long noticeId);
+
+    @ApiOperation("编辑公告")
+    @ApiImplicitParam(name = "noticeId", value = "公告id", required = true,
+            paramType = "path", dataType = "long")
+    CommonResponse updateNotice(long noticeId,InsertNotice insertNotice);
+
 }

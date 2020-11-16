@@ -26,4 +26,16 @@ public class NoticeController implements NoticeControllerApi {
         return this.noticeService.saveNotice(courseId, teacherId, insertNotice);
     }
 
+    @Override
+    @DeleteMapping("courseId/{noticeId}")
+    public CommonResponse deleteNotice(@PathVariable long noticeId) {
+        return this.noticeService.deleteNotice(noticeId);
+    }
+
+    @Override
+    @PutMapping("courseId/{noticeId}")
+    public CommonResponse updateNotice(@PathVariable long noticeId,@RequestBody InsertNotice insertNotice) {
+        return this.noticeService.updateNotice(noticeId,insertNotice);
+    }
+
 }
