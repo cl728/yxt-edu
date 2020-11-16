@@ -35,4 +35,13 @@ public interface HomeworkControllerApi {
     })
     CommonResponse saveHomework(long courseId, long teacherId, InsertHomework insertHomework);
 
+    @ApiOperation("教师删除作业")
+    @ApiImplicitParams(value = {
+            @ApiImplicitParam(name = "homeworkId", value = "作业id", required = true,
+                    paramType = "path", dataType = "long"),
+            @ApiImplicitParam(name = "courseId", value = "课程id", required = true,
+                    paramType = "path", dataType = "long")
+    })
+    CommonResponse deleteHomework(long homeworkId, long courseId);
+
 }

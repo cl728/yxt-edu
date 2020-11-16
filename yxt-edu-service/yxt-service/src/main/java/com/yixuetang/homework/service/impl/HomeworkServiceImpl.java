@@ -1,5 +1,6 @@
 package com.yixuetang.homework.service.impl;
 
+import com.baomidou.mybatisplus.core.conditions.Wrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.yixuetang.course.mapper.CourseMapper;
 import com.yixuetang.course.mapper.ScMapper;
@@ -163,6 +164,26 @@ public class HomeworkServiceImpl implements HomeworkService {
             this.homeworkStudentMapper.insert(homeworkStudent);
         }
 
+        return new CommonResponse(CommonCode.SUCCESS);
+    }
+
+    @Override
+    public CommonResponse deleteByHomeworkId(long homeworkId , long courseId) {
+        //  根据作业id查询作业
+        Homework homework = this.homeworkMapper.selectById(homeworkId);
+        //  查询不到作业
+        if (homework == null){
+            return new CommonResponse(HomeworkCode.HOMEWORK_NOT_EXIST);
+        }
+        //  验证课程id
+        if (homework.getCourseId() != courseId) {
+            return new CommonResponse(HomeworkCode.HOMEWORK_IS_NOT_BELONG_TO_THIS_COURSE);
+        }
+
+        //  执行t_hs表删除对应作业id的作业操作
+        this.homeworkStudentMapper.delete(new QueryWrapper<HomeworkStudent>().eq("homework_id", homeworkId));
+        //  执行t_homework表删除作业操作
+        this.homeworkMapper.deleteById(homeworkId);
         return new CommonResponse(CommonCode.SUCCESS);
     }
 

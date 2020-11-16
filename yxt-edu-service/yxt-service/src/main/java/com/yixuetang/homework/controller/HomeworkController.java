@@ -33,4 +33,10 @@ public class HomeworkController implements HomeworkControllerApi {
         return this.homeworkService.saveByCourseId(courseId, teacherId, insertHomework);
     }
 
+    @Override
+    @DeleteMapping("id/{homeworkId}/{courseId}")
+    public CommonResponse deleteHomework(@PathVariable long homeworkId,  @PathVariable long courseId) {
+        return this.homeworkService.deleteByHomeworkId(homeworkId, courseId);
+    }
+
 }

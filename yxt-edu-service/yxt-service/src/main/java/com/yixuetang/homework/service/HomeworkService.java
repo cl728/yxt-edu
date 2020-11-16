@@ -30,4 +30,13 @@ public interface HomeworkService {
      * @return 通用相应结果实体类
      */
     CommonResponse saveByCourseId(long courseId, long teacherId, InsertHomework insertHomework);
+
+    /**
+     * 根据作业id删除作业
+     *
+     * @param homeworkId    作业id
+     * @param courseId      课程id
+     * @return
+     */
+    CommonResponse deleteByHomeworkId(long homeworkId, long courseId);
 }
