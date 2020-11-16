@@ -44,4 +44,9 @@ public interface HomeworkControllerApi {
     })
     CommonResponse deleteHomework(long homeworkId, long courseId);
 
+    @ApiOperation("根据作业id查询作业信息")
+    @ApiImplicitParam(name = "homeworkId", value = "作业id", required = true,
+            paramType = "path", dataType = "long")
+    QueryResponse findById(long homeworkId);
+
 }

@@ -39,4 +39,10 @@ public class HomeworkController implements HomeworkControllerApi {
         return this.homeworkService.deleteByHomeworkId(homeworkId, courseId);
     }
 
+    @Override
+    @GetMapping("homeworkId/{homeworkId}")
+    public QueryResponse findById(@PathVariable long homeworkId) {
+        return this.homeworkService.findById( homeworkId );
+    }
+
 }

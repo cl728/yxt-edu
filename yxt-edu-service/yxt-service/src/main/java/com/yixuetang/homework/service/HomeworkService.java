@@ -39,4 +39,12 @@ public interface HomeworkService {
      * @return
      */
     CommonResponse deleteByHomeworkId(long homeworkId, long courseId);
+
+    /**
+     * 根据作业id查询作业信息
+     *
+     * @param homeworkId 作业Id
+     * @return 带查询结果集的响应实体类
+     */
+    QueryResponse findById(long homeworkId);
 }

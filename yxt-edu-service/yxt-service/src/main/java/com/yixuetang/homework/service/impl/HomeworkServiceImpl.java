@@ -7,6 +7,7 @@ import com.yixuetang.course.mapper.ScMapper;
 import com.yixuetang.entity.course.Course;
 import com.yixuetang.entity.homework.Homework;
 import com.yixuetang.entity.homework.HomeworkStudent;
+import com.yixuetang.entity.notice.Notice;
 import com.yixuetang.entity.request.homework.InsertHomework;
 import com.yixuetang.entity.response.CommonResponse;
 import com.yixuetang.entity.response.QueryResponse;
@@ -28,10 +29,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 /**
  * @author Colin
@@ -185,6 +183,17 @@ public class HomeworkServiceImpl implements HomeworkService {
         //  执行t_homework表删除作业操作
         this.homeworkMapper.deleteById(homeworkId);
         return new CommonResponse(CommonCode.SUCCESS);
+    }
+
+    @Override
+    public QueryResponse findById(long homeworkId) {
+        //  公告是否存在
+        Homework homework = this.homeworkMapper.selectOne(new QueryWrapper<Homework>().eq("id", homeworkId));
+        if (homework == null){
+            ExceptionThrowUtils.cast(CommonCode.INVALID_PARAM);
+        }
+        return new QueryResponse( CommonCode.SUCCESS, new QueryResult<>( Collections.singletonList( homework ), 1 ) );
+
     }
 
     private Integer getCount(int countType, long courseId) {
