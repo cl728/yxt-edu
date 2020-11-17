@@ -91,6 +91,7 @@ public class NoticeServiceImpl implements NoticeService {
         notice.setCourse(course);
         notice.setCreateTime(new Date());
         notice.setUpdateTime(new Date());
+        notice.setTopNum( 0 );
         this.noticeMapper.insertNotice(notice);
 
         // 0. 根据课程id查询选修了该课程的所有学生
@@ -116,6 +117,7 @@ public class NoticeServiceImpl implements NoticeService {
     }
 
     @Override
+    @Transactional
     public CommonResponse deleteNotice(long noticeId) {
         //  公告是否存在
         Notice notice = noticeMapper.selectOne(new QueryWrapper<Notice>().eq("id", noticeId));
@@ -199,6 +201,20 @@ public class NoticeServiceImpl implements NoticeService {
             ExceptionThrowUtils.cast(CommonCode.INVALID_PARAM);
         }
         return new QueryResponse( CommonCode.SUCCESS, new QueryResult<>( Collections.singletonList( notice ), 1 ) );
+    }
+
+    @Override
+    @Transactional
+    public CommonResponse switchTopNum(long noticeId) {
+        //  公告是否存在
+        Notice notice = noticeMapper.selectOne(new QueryWrapper<Notice>().eq("id", noticeId));
+        if (notice == null){
+            ExceptionThrowUtils.cast(CommonCode.INVALID_PARAM);
+        }
+        notice.setTopNum( notice.getTopNum() == 0 ? 10 : 0 );
+        notice.setUpdateTime( new Date() );
+        this.noticeMapper.updateById( notice );
+        return CommonResponse.SUCCESS();
     }
 
 }

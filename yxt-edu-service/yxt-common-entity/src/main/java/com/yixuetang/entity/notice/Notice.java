@@ -32,9 +32,12 @@ public class Notice {
     @TableField("update_time")
     private Date updateTime; // 最后一次更新时间
 
+    @TableField("top_num")
+    private Integer topNum; // 置顶字段，0代表不置顶
+
     @TableField(exist = false)
     private Course course;  // 课程-公告 一对多
 
     @TableField(exist = false)
-    private Long views;  //已读人数
+    private Long views;  // 已读人数
 }

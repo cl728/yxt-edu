@@ -51,4 +51,10 @@ public class NoticeController implements NoticeControllerApi {
         return this.noticeService.findById( noticeId );
     }
 
+    @Override
+    @PutMapping("topNum/noticeId/{noticeId}")
+    public CommonResponse switchTop(@PathVariable long noticeId) {
+        return this.noticeService.switchTopNum( noticeId );
+    }
+
 }

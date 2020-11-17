@@ -48,4 +48,9 @@ public interface NoticeControllerApi {
             paramType = "path", dataType = "long")
     QueryResponse findById(long noticeId);
 
+    @ApiOperation( "根据公告id切换置顶字段" )
+    @ApiImplicitParam(name = "noticeId", value = "公告id", required = true,
+            paramType = "path", dataType = "long")
+    CommonResponse switchTop(long noticeId);
+
 }

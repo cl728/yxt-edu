@@ -26,7 +26,7 @@ public interface NoticeService {
      * 教师删除公告
      *
      * @param noticeId 公告id
-     * @return 通用相应实体类
+     * @return 通用响应实体类
      */
     CommonResponse deleteNotice(long noticeId);
 
@@ -35,7 +35,7 @@ public interface NoticeService {
      *
      * @param noticeId     公告id
      * @param insertNotice 修改公告实体类
-     * @return 通用相应实体类
+     * @return 通用响应实体类
      */
     CommonResponse updateNotice(long noticeId, InsertNotice insertNotice);
 
@@ -54,4 +54,11 @@ public interface NoticeService {
      * @return 带查询结果集的响应实体类
      */
     QueryResponse findById(long noticeId);
+
+    /**
+     * 根据公告id切换置顶字段
+     * @param noticeId 课程公告Id
+     * @return 通用响应实体类
+     */
+    CommonResponse switchTopNum(long noticeId);
 }

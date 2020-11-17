@@ -17,7 +17,7 @@ import java.util.List;
 public interface NoticeMapper extends BaseMapper<Notice> {
 
     @SelectKey(keyColumn = "id", keyProperty = "notice.id", before = false, resultType = Long.class, statement = "select last_insert_id()")
-    @Insert("insert into t_notice values(#{notice.id},#{notice.course.id},#{notice.title},#{notice.content},#{notice.createTime},#{notice.updateTime})")
+    @Insert("insert into t_notice values(#{notice.id},#{notice.course.id},#{notice.title},#{notice.content},#{notice.createTime},#{notice.updateTime},#{notice.topNum})")
     void insertNotice(@Param("notice") Notice notice);
 
     @Results(id = "noticeMapper", value = {
@@ -31,6 +31,6 @@ public interface NoticeMapper extends BaseMapper<Notice> {
             @Result(column = "id", property = "views",
                     one = @One(select = "com.yixuetang.notice.mapper.NoticeUserMapper.findViewsByNoticeId", fetchType = FetchType.EAGER))
     })
-    @Select("select * from t_notice where course_id = #{courseId}")
+    @Select("select * from t_notice where course_id = #{courseId} order by top_num desc, create_time desc")
     List<Notice> findNoticeByCourseId(@Param("courseId") long courseId);
 }
