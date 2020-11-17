@@ -1,5 +1,6 @@
 package com.yixuetang.resource.service;
 
+import com.yixuetang.entity.request.resource.InsertResource;
 import com.yixuetang.entity.response.CommonResponse;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -20,4 +21,14 @@ public interface ResourceService {
      * @return 响应结果实体类
      */
     CommonResponse upload(MultipartFile file, Long userId, Long parentResourceId);
+
+    /**
+     * 创建文件夹
+     *
+     * @param userId           创建者id
+     * @param parentResourceId 父级资源id
+     * @param resource         创建文件夹的资源实体类
+     * @return 响应结果实体类
+     */
+    CommonResponse createFolder(Long userId, Long parentResourceId, InsertResource resource);
 }

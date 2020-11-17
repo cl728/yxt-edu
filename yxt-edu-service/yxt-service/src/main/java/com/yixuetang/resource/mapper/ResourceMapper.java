@@ -18,6 +18,6 @@ public interface ResourceMapper extends BaseMapper<Resource> {
     @Update("update t_resource set user_id = #{userId} where id = #{id}")
     void updateUserIdById(@Param("userId") Long userId, @Param("id") Long id);
 
-    @Update("update t_resource set parent_resource_id = #{patentResourceId} where id = #{id}")
+    @Update("update t_resource set parent_resource_id = #{parentResourceId} where id = #{id}")
     void updateParentResourceIdById(@Param("parentResourceId") Long parentResourceId, @Param("id") Long id);
 }

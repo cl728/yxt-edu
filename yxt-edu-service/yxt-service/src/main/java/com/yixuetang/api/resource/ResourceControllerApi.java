@@ -1,5 +1,7 @@
 package com.yixuetang.api.resource;
 
+import com.yixuetang.entity.request.resource.InsertResource;
+import com.yixuetang.entity.resource.Resource;
 import com.yixuetang.entity.response.CommonResponse;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
@@ -24,5 +26,14 @@ public interface ResourceControllerApi {
                     paramType = "query", dataType = "long")
     })
     CommonResponse upload(MultipartFile file, Long userId, Long parentResourceId);
+
+    @ApiOperation("创建文件夹")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "userId", value = "用户id", required = true,
+                    paramType = "path", dataType = "long"),
+            @ApiImplicitParam(name = "parentResourceId", value = "父级资源id",
+                    paramType = "query", dataType = "long")
+    })
+    CommonResponse createFolder(Long userId, Long parentResourceId, InsertResource resource);
 
 }

@@ -1,6 +1,8 @@
 package com.yixuetang.resource.controller;
 
 import com.yixuetang.api.resource.ResourceControllerApi;
+import com.yixuetang.entity.request.resource.InsertResource;
+import com.yixuetang.entity.resource.Resource;
 import com.yixuetang.entity.response.CommonResponse;
 import com.yixuetang.resource.service.ResourceService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,5 +28,13 @@ public class ResourceController implements ResourceControllerApi {
                                  @PathVariable Long userId,
                                  @RequestParam(required = false) Long parentResourceId) {
         return this.resourceService.upload( file, userId, parentResourceId );
+    }
+
+    @Override
+    @PostMapping("folder/userId/{userId}")
+    public CommonResponse createFolder(@PathVariable Long userId,
+                                       @RequestParam(required = false) Long parentResourceId,
+                                       @RequestBody InsertResource resource) {
+        return this.resourceService.createFolder( userId, parentResourceId, resource );
     }
 }

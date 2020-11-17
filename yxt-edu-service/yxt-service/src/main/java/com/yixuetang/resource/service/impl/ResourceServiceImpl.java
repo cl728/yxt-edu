@@ -1,6 +1,7 @@
 package com.yixuetang.resource.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.yixuetang.entity.request.resource.InsertResource;
 import com.yixuetang.entity.resource.Resource;
 import com.yixuetang.entity.response.CommonResponse;
 import com.yixuetang.entity.response.QueryResponse;
@@ -80,7 +81,6 @@ public class ResourceServiceImpl implements ResourceService {
             return new CommonResponse( CommonCode.FAIL );
         }
 
-        // 保存到资源表中
         String ext = StringUtils.substringAfterLast( originalFilename, "." );
         Resource resource = Resource.builder()
                 .id( null )
@@ -90,7 +90,42 @@ public class ResourceServiceImpl implements ResourceService {
                 .location( filePath )
                 .createTime( new Date() )
                 .updateTime( new Date() ).build();
+        // 保存到资源表中
+        this.saveToDatabase( userId, parentResourceId, resource );
+
+        return new QueryResponse( CommonCode.SUCCESS,
+                new QueryResult<>( Collections.singletonList( filePath ), 1 ) );
+
+    }
+
+    @Override
+    @Transactional
+    public CommonResponse createFolder(Long userId, Long parentResourceId, InsertResource resource) {
+
+        // userId 或者 resource 不合法
+        if (resource == null || this.userMapper.selectOne( new QueryWrapper<User>().eq( "id", userId ).select( "id" ) ) == null) {
+            ExceptionThrowUtils.cast( CommonCode.INVALID_PARAM );
+        }
+
+        Resource insertResource = Resource.builder()
+                .id( null )
+                .type( 0 )
+                .ext( null )
+                .name( resource.getName() )
+                .location( null )
+                .createTime( new Date() )
+                .updateTime( new Date() ).build();
+        // 保存到资源表中
+        this.saveToDatabase( userId, parentResourceId, insertResource );
+
+        return new QueryResponse( CommonCode.SUCCESS,
+                new QueryResult<>( Collections.singletonList( insertResource ), 1 ) );
+    }
+
+    private void saveToDatabase(Long userId, Long parentResourceId, Resource resource) {
+
         this.resourceMapper.insert( resource );
+
         // 关联userId
         this.resourceMapper.updateUserIdById( userId, resource.getId() );
 
@@ -102,9 +137,6 @@ public class ResourceServiceImpl implements ResourceService {
                 this.resourceMapper.updateParentResourceIdById( parentResourceId, resource.getId() );
             }
         }
-
-        return new QueryResponse( CommonCode.SUCCESS,
-                new QueryResult<>( Collections.singletonList( filePath ), 1 ) );
 
     }
 }
