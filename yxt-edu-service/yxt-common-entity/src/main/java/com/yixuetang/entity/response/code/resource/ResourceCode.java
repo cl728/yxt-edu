@@ -1,16 +1,18 @@
-package com.yixuetang.entity.response.code.file;
+package com.yixuetang.entity.response.code.resource;
 
 import com.yixuetang.entity.response.code.ResponseCode;
 
-public enum FileCode implements ResponseCode {
+public enum ResourceCode implements ResponseCode {
 
-    CONTENT_TYPE_INVALID(false, 60000, "暂不支持该文件类型！");
+    CONTENT_TYPE_INVALID( false, 60000, "暂不支持该文件类型！" ),
+
+    PARENT_RESOURCE_NOT_EXISTS( false, 60001, "父级资源不存在！" );
 
     private boolean success;
     private int code;
     private String message;
 
-    FileCode(boolean success, int code, String message) {
+    ResourceCode(boolean success, int code, String message) {
         this.success = success;
         this.code = code;
         this.message = message;
@@ -30,4 +32,4 @@ public enum FileCode implements ResponseCode {
     public String message() {
         return this.message;
     }
-}
+    }

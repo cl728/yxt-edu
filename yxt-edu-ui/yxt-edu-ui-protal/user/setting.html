@@ -48,7 +48,8 @@
                                     <el-avatar size="large" :src="user.avatar">
                                     </el-avatar>
                                 </template>
-                                <el-menu-item @click="location.href = 'setting.html' "><i class="el-icon-setting"></i> 个人设置</el-menu-item>
+                                <el-menu-item @click="location.href = 'setting.html' "><i class="el-icon-setting"></i>
+                                    个人设置</el-menu-item>
                                 <el-menu-item @click="logout()"><i class="el-icon-s-unfold"></i> 退出账户</el-menu-item>
                             </el-submenu>
                         </el-menu>
@@ -658,7 +659,7 @@
                 let formdata = new FormData()
                 formdata.append('file', f.file)
                 yxt.http({
-                    url: '/file/upload',
+                    url: '/resource/upload/userId/' + this.user.id,
                     method: 'post',
                     data: formdata,
                     headers: { 'Content-Type': 'multipart/form-data' },

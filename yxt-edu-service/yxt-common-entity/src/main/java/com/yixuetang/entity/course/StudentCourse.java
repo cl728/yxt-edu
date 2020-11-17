@@ -30,7 +30,7 @@ public class StudentCourse {
     private Long id; // SC主键自增id
 
     @TableField("student_id")
-    private long studentId; // 学生主键id
+    private Long studentId; // 学生主键id
 
     @TableField("course_id")
     private Long courseId; // 课程主键id

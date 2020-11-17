@@ -8,6 +8,11 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css">
     <link rel="stylesheet" href="css/yxt.css">
     <title>课程详情</title>
+    <style>
+        #course-resources-card>.el-card__body {
+            padding: 0;
+        }
+    </style>
 </head>
 
 <body>
@@ -458,12 +463,114 @@
                             </div>
                         </div>
                     </div>
-                    <div id="course-resources" v-if="activeIndex2=='2'">
+                    <div id="course-resources" v-if="activeIndex2=='2'" style="margin-top: 30px">
+                        <div v-if="user.isTeacher">
+                            <el-row>
+                                <el-button type="primary" plain style="float: left"><i class="el-icon-upload"></i> 上传资源
+                                </el-button>
+                                <el-button type="primary" plain style="float: left"><i class="el-icon-plus"></i> 新建文件夹
+                                </el-button>
+                            </el-row>
+                        </div>
                         <div class="course-resources-box">
-                            <el-card class="box-card"
-                                style="margin-top: 20px;width: 1184px;height: 230px;border-radius: 6px;border-width: 2px">
+                            <el-card class="box-card" id="course-resources-card"
+                                style="margin-top: 20px;width: 1184px;border-radius: 6px;border-width: 2px;padding: 0;">
                                 <div style="width: 1144px">
-                                    <span style="font-size: xx-large;width: 1144px">资源文件上传</span>
+                                    <el-container>
+                                        <el-header style="background-color:#F1F3F4; width: 1200px;">
+                                            <span style="float: left;">
+                                                <el-button type="text" style="color: #3b3d45;">所有文件</el-button> <i
+                                                    class="el-icon-arrow-right"></i>
+                                                <el-button type="text" style="color: #3b3d45;">实验</el-button> <i
+                                                    class="el-icon-arrow-right"></i>
+                                                <el-button type="text">实验一</el-button>
+                                            </span>
+                                        </el-header>
+                                        <!-- 文件列表 -->
+                                        <el-main>
+                                            <el-row type="flex" justify="space-start" :gutter="20"
+                                                style="margin: 40px;">
+                                                <el-col :span="3" style="margin-right: 20px;">
+                                                    <el-button style="height: 150px; width: 129px; padding: 12px 0;">
+                                                        <el-row style="margin-bottom: 15px;">
+                                                            <img src="https://www.ketangpai.com/Public/Common/img/fileicon/file_ext_big_folder.png"
+                                                                alt="" srcset="" style="height: 48px; width: 48px;">
+                                                        </el-row>
+                                                        <el-row>
+                                                            <span style="font-size: 10px;">实验</span>
+                                                        </el-row>
+                                                    </el-button>
+                                                </el-col>
+                                                <el-col :span="3" style="margin-right: 20px;">
+                                                    <el-button style="height: 150px; width: 129px; padding: 12px 0;">
+                                                        <el-row style="margin-bottom: 15px;">
+                                                            <img src="https://www.ketangpai.com/Public/Common/img/fileicon/file_ext_big_folder.png"
+                                                                alt="" srcset="" style="height: 48px; width: 48px;">
+                                                        </el-row>
+                                                        <el-row>
+                                                            <span style="font-size: 10px;">实验</span>
+                                                        </el-row>
+                                                    </el-button>
+                                                </el-col>
+                                                <el-col :span="3" style="margin-right: 20px;">
+                                                    <el-button style="height: 150px; width: 129px; padding: 12px 0;">
+                                                        <el-row style="margin-bottom: 15px;">
+                                                            <img src="https://www.ketangpai.com/Public/Common/img/fileicon/file_ext_big_doc.png"
+                                                                alt="" srcset="" style="height: 48px; width: 48px;">
+                                                        </el-row>
+                                                        <el-row>
+                                                            <span style="font-size: 10px;">第一次实验指导书.doc</span>
+                                                        </el-row>
+                                                    </el-button>
+                                                </el-col>
+                                                <el-col :span="3" style="margin-right: 20px;">
+                                                    <el-button style="height: 150px; width: 129px; padding: 12px 0;">
+                                                        <el-row style="margin-bottom: 15px;">
+                                                            <img src="https://www.ketangpai.com/Public/Common/img/fileicon/file_ext_big_ppt.png"
+                                                                alt="" srcset="" style="height: 48px; width: 48px;">
+                                                        </el-row>
+                                                        <el-row>
+                                                            <span style="font-size: 10px;">第3章 总线.pptx</span>
+                                                        </el-row>
+                                                    </el-button>
+                                                </el-col>
+                                                <el-col :span="3" style="margin-right: 20px;">
+                                                    <el-button style="height: 150px; width: 129px; padding: 12px 0;">
+                                                        <el-row style="margin-bottom: 15px;">
+                                                            <img src="./images/video-icon.png" alt="" srcset=""
+                                                                style="height: 48px; width: 48px;">
+                                                        </el-row>
+                                                        <el-row>
+                                                            <span style="font-size: 10px;">实验设备安装方法.mp4</span>
+                                                        </el-row>
+                                                    </el-button>
+                                                </el-col>
+                                                <el-col :span="3" style="margin-right: 20px;">
+                                                    <el-button style="height: 150px; width: 129px; padding: 12px 0;">
+                                                        <el-row style="margin-bottom: 15px;">
+                                                            <img src="https://www.ketangpai.com/Public/Common/img/fileicon/file_ext_big_jpg.png" alt="" srcset=""
+                                                                style="height: 48px; width: 48px;">
+                                                        </el-row>
+                                                        <el-row>
+                                                            <span style="font-size: 10px;">实验图片一.jpg</span>
+                                                        </el-row>
+                                                    </el-button>
+                                                </el-col>
+                                                <el-col :span="3" style="margin-right: 20px;">
+                                                    <el-button style="height: 150px; width: 129px; padding: 12px 0;">
+                                                        <el-row style="margin-bottom: 15px;">
+                                                            <img src="https://www.ketangpai.com/Public/Common/img/fileicon/file_ext_big_png.png" alt="" srcset=""
+                                                                style="height: 48px; width: 48px;">
+                                                        </el-row>
+                                                        <el-row>
+                                                            <span style="font-size: 10px;">实验图片一.png</span>
+                                                        </el-row>
+                                                    </el-button>
+                                                </el-col>
+                                            </el-row>
+                                        </el-main>
+                                    </el-container>
+                                    <!-- <span style="font-size: xx-large;width: 1144px">资源文件上传</span>
                                     <div id="resources-upload" style="margin-top: 30px">
                                         <el-upload style="width: 1144px" class="upload-demo" ref="upload"
                                             action="https://jsonplaceholder.typicode.com/posts/"
@@ -474,7 +581,7 @@
                                                 @click="submitUpload">上传到服务器</el-button>
                                             <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过500kb</div>
                                         </el-upload>
-                                    </div>
+                                    </div> -->
                                 </div>
                             </el-card>
                         </div>
@@ -1497,74 +1604,6 @@
 <script src="https://cdn.bootcss.com/element-ui/2.13.2/index.js"></script>
 <script src="js/md5.js"></script>
 <script src="js/common.js"></script>
-<script src='./js/tinymce/tinymce.min.js'></script>
-<script>
-    tinymce.init({
-        selector: '#mytextarea',
-        language_url: "./js/tinymce/langs/zh_CN.js", // 导入语言文件
-        language: "zh_CN", // 语言设置
-        // disabled:true, // 禁用
-        skin_url: "./js/tinymce/skins/ui/oxide", // 主题样式
-        content_css: "./js/tinymce/skins/content/default/content.min.css",
-        height: 100, // 高度
-        menubar: false, // 隐藏最上方menu菜单
-        // toolbar: true, // false 禁用工具栏（隐藏工具栏）
-        browser_spellcheck: true, // 拼写检查
-        branding: false, // 去水印
-        statusbar: false, // 隐藏编辑器底部的状态栏
-        elementpath: false, // 禁用下角的当前标签路径
-        paste_data_images: true, // 允许粘贴图像
-        attachment_max_size: 100 * 1024 * 1024, // 限制附件上传大小为 100 M，默认为 200 M
-        attachment_assets_path: './js/tinymce/icons/attachment/', // 静态资源的路径，用于文件 icon 以及上传等待动画，上传错误的信息提示图标
-        plugins:
-            "lists image media table wordcount code fullscreen help  toc fullpage autosave nonbreaking insertdatetime visualchars visualblocks searchreplace spellchecker pagebreak link charmap paste print preview hr anchor attachment",
-
-        toolbar: [
-            "bold italic underline strikethrough |codeformat blockformats| superscript subscript  | forecolor backcolor | alignleft aligncenter alignright alignjustify | outdent indent |  removeformat ",
-            "code  bullist numlist | lists image media table link |fullscreen help toc fullpage restoredraft nonbreaking insertdatetime visualchars visualblocks searchreplace spellchecker pagebreak anchor charmap  pastetext print preview hr attachment",
-        ],
-        // 此处为图片上传处理函数，这个直接用了base64的图片形式上传图片，
-        // 如需ajax上传可参考https://www.tiny.cloud/docs/configure/file-image-upload/#images_upload_handler
-        images_upload_handler: (blobInfo, success, failure) => {
-            let formData = new FormData();
-            // 服务端接收文件的参数名，文件数据，文件名
-            console.log(blobInfo.blob())
-            formData.append("file", blobInfo.blob());
-            yxt.http({
-                method: "POST",
-                url: "/file/upload/",
-                data: formData
-            }).then(({ data }) => {
-                if (data.success) {
-                    success(data.queryResult.data[0])
-                } else {
-                    failure(data.message)
-                }
-            }).catch(() => {
-                failure("服务器繁忙，请稍候再试！");
-            });
-        },
-        // 上传附件处理函数
-        attachment_upload_handler: (file, successCallback, failureCallback, progressCallback) => {
-            console.log(file)
-            let formData = new FormData();
-            formData.append("file", file);
-            yxt.http({
-                method: "POST",
-                url: "/file/upload/",
-                data: formData
-            }).then(({ data }) => {
-                if (data.success) {
-                    successCallback(data.queryResult.data[0])
-                } else {
-                    failureCallback(data.message)
-                }
-            }).catch(() => {
-                failureCallback("服务器繁忙，请稍候再试！");
-            });
-        }
-    });
-</script>
 <script>
     new Vue({
         el: '#app',
