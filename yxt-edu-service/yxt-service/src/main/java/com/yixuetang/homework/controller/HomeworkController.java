@@ -45,4 +45,11 @@ public class HomeworkController implements HomeworkControllerApi {
         return this.homeworkService.findById( homeworkId );
     }
 
+    @Override
+    @PutMapping("info/homeworkId/{homeworkId}")
+    public CommonResponse updateHomework(@PathVariable long homeworkId, @RequestBody InsertHomework insertHomework) {
+        return this.homeworkService.updateHomework(homeworkId, insertHomework);
+    }
+
+
 }

@@ -22,7 +22,11 @@ public enum HomeworkCode implements ResponseCode {
 
     HOMEWORK_NOT_EXIST(false, 70005, "作业不存在！"),
 
-    HOMEWORK_IS_NOT_BELONG_TO_THIS_COURSE(false, 70006, "作业不属于该门课程！");
+    HOMEWORK_IS_NOT_BELONG_TO_THIS_COURSE(false, 70006, "作业不属于该门课程！"),
+
+    UPDATE_HOMEWORK_FAIL_TITLE_IS_NULL(false, 70007, "作业题目不能为空！"),
+
+    UPDATE_HOMEWORK_FAIL_DESCRIPTION_IS_NULL(false, 70007, "作业题目不能为空！");
 
     private boolean success;
     private int code;

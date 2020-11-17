@@ -49,4 +49,10 @@ public interface HomeworkControllerApi {
             paramType = "path", dataType = "long")
     QueryResponse findById(long homeworkId);
 
+    @ApiOperation("教师编辑作业")
+    @ApiImplicitParams(value = {
+            @ApiImplicitParam(name = "homeworkId", value = "作业id", required = true,
+                    paramType = "path", dataType = "long")
+    })
+    CommonResponse updateHomework(long homeworkId, InsertHomework insertHomework);
 }

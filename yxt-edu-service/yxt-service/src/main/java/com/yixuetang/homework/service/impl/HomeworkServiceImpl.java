@@ -13,6 +13,7 @@ import com.yixuetang.entity.response.CommonResponse;
 import com.yixuetang.entity.response.QueryResponse;
 import com.yixuetang.entity.response.code.CommonCode;
 import com.yixuetang.entity.response.code.homework.HomeworkCode;
+import com.yixuetang.entity.response.code.notice.NoticeCode;
 import com.yixuetang.entity.response.result.HomeworkResp;
 import com.yixuetang.entity.response.result.QueryResult;
 import com.yixuetang.entity.user.User;
@@ -182,6 +183,48 @@ public class HomeworkServiceImpl implements HomeworkService {
         this.homeworkStudentMapper.delete(new QueryWrapper<HomeworkStudent>().eq("homework_id", homeworkId));
         //  执行t_homework表删除作业操作
         this.homeworkMapper.deleteById(homeworkId);
+        return new CommonResponse(CommonCode.SUCCESS);
+    }
+
+    @Override
+    public CommonResponse updateHomework(long homeworkId, InsertHomework insertHomework) {
+        //  根据作业id查询作业
+        Homework homework = this.homeworkMapper.selectById(homeworkId);
+        //  判断作业是否存在
+        if (homework == null){
+            return new CommonResponse(HomeworkCode.HOMEWORK_NOT_EXIST);
+        }
+        //  判断作业标题是否为空
+        if (!StringUtils.isNoneBlank(insertHomework.getTitle())) {
+            return new CommonResponse(HomeworkCode.UPDATE_HOMEWORK_FAIL_TITLE_IS_NULL);
+        }
+
+        //  判断作业描述是否为空
+        if (!StringUtils.isNoneBlank(insertHomework.getDescription())) {
+            return new CommonResponse(HomeworkCode.UPDATE_HOMEWORK_FAIL_DESCRIPTION_IS_NULL);
+        }
+
+        //  截止时间至少比当前时间大30分钟
+        if (ObjectUtils.isEmpty(insertHomework.getDeadline())) {
+            return new CommonResponse(HomeworkCode.INSERT_HOMEWORK_FAIL_DEADLINE_IS_NULL);
+        }
+        Date dateAdd30Mins = DateUtils.addMinutes(new Date(), 30);
+        int truncatedCompareTo = DateUtils.truncatedCompareTo(insertHomework.getDeadline(), dateAdd30Mins, Calendar.SECOND);
+        if (truncatedCompareTo == -1) {
+            return new CommonResponse(HomeworkCode.INSERT_HOMEWORK_FAIL_DEADLINE_LESS_THAN_30_MINS);
+        }
+
+        //  总分值>0 <1
+        if (insertHomework.getTotalScore() <= 0 || insertHomework.getTotalScore() > 100) {
+            return new CommonResponse(HomeworkCode.INSERT_HOMEWORK_FAIL_TOTAL_SCORE_INVAILD);
+        }
+
+        //  把编辑内容存入Homework实体类
+        homework.setTitle(insertHomework.getTitle());
+        homework.setDescription(insertHomework.getDescription());
+        homework.setDeadline(insertHomework.getDeadline());
+        homework.setTotalScore(insertHomework.getTotalScore());
+        this.homeworkMapper.updateById(homework);
         return new CommonResponse(CommonCode.SUCCESS);
     }
 

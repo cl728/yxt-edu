@@ -47,4 +47,13 @@ public interface HomeworkService {
      * @return 带查询结果集的响应实体类
      */
     QueryResponse findById(long homeworkId);
+
+    /**
+     *  教师编辑作业
+     *
+     * @param homeworkId        作业id
+     * @param insertHomework    编辑作业实体类
+     * @return
+     */
+    CommonResponse updateHomework(long homeworkId, InsertHomework insertHomework);
 }
