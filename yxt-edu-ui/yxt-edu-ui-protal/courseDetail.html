@@ -1385,6 +1385,7 @@
                                     <el-row id="course-title" style="height: 30px">
                                         <el-col :span="12">
                                             <div class="homework-create-time" style="float: left">
+                                                <el-tag v-show="notice.topNum != 0" size="medium">置顶</el-tag>
                                                 <span
                                                     style="padding-left: 30px;font-size: 15px;color: #A0A0A0">发布人：<span
                                                         v-text="notice.course.teacher.realName">CurtisCheng</span></span>
@@ -1400,7 +1401,15 @@
                                                         操作 <i class="el-icon-more"></i>
                                                     </span>
                                                     <el-dropdown-menu slot="dropdown">
-                                                        <!-- <el-dropdown-item>置顶</el-dropdown-item> -->
+                                                        <el-dropdown-item>
+                                                            <router-link @click="switchTop(notice.id)"
+                                                                v-if="notice.topNum === 0">
+                                                                置顶
+                                                            </router-link>
+                                                            <router-link @click="switchTop(notice.id)" v-else>
+                                                                取消置顶
+                                                            </router-link>
+                                                        </el-dropdown-item>
                                                         <el-dropdown-item>
                                                             <router-link @click="showEditNoticeForm(notice.id)">编辑
                                                             </router-link>
@@ -1870,6 +1879,18 @@
                         })
                     }
                 });
+            },
+            switchTop(noticeId) {
+                yxt.http.put("/notice/topNum/noticeId/" + noticeId).then(({ data }) => {
+                    if (data.success) {
+                        this.$message.success(data.message);
+                        this.getNoticeData();
+                    } else {
+                        this.$message.error(data.message);
+                    }
+                }).catch(() => {
+                    this.$message.error("服务器繁忙，请稍候再试！")
+                })
             },
             handleChange(value) {
                 console.log(value);
