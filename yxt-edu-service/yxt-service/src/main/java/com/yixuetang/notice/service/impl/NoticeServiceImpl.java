@@ -91,7 +91,7 @@ public class NoticeServiceImpl implements NoticeService {
         notice.setCourse(course);
         notice.setCreateTime(new Date());
         notice.setUpdateTime(new Date());
-        notice.setTopNum( 0 );
+        notice.setTopNum(0);
         this.noticeMapper.insertNotice(notice);
 
         // 0. 根据课程id查询选修了该课程的所有学生
@@ -121,12 +121,12 @@ public class NoticeServiceImpl implements NoticeService {
     public CommonResponse deleteNotice(long noticeId) {
         //  公告是否存在
         Notice notice = noticeMapper.selectOne(new QueryWrapper<Notice>().eq("id", noticeId));
-        if(notice == null){
+        if (notice == null) {
             ExceptionThrowUtils.cast(CommonCode.INVALID_PARAM);
         }
 
         //删除公告与用户表的记录
-        noticeUserMapper.delete(new QueryWrapper<NoticeUser>().eq("notice_id",noticeId));
+        noticeUserMapper.delete(new QueryWrapper<NoticeUser>().eq("notice_id", noticeId));
 
         //删除公告
         noticeMapper.delete(new QueryWrapper<Notice>().eq("id", noticeId));
@@ -134,11 +134,12 @@ public class NoticeServiceImpl implements NoticeService {
         return new CommonResponse(CommonCode.SUCCESS);
     }
 
+    @Transactional
     @Override
     public CommonResponse updateNotice(long noticeId, InsertNotice insertNotice) {
         //  公告是否存在
         Notice notice = noticeMapper.selectOne(new QueryWrapper<Notice>().eq("id", noticeId));
-        if(notice == null){
+        if (notice == null) {
             ExceptionThrowUtils.cast(CommonCode.INVALID_PARAM);
         }
 
@@ -197,10 +198,10 @@ public class NoticeServiceImpl implements NoticeService {
     public QueryResponse findById(long noticeId) {
         //  公告是否存在
         Notice notice = noticeMapper.selectOne(new QueryWrapper<Notice>().eq("id", noticeId));
-        if (notice == null){
+        if (notice == null) {
             ExceptionThrowUtils.cast(CommonCode.INVALID_PARAM);
         }
-        return new QueryResponse( CommonCode.SUCCESS, new QueryResult<>( Collections.singletonList( notice ), 1 ) );
+        return new QueryResponse(CommonCode.SUCCESS, new QueryResult<>(Collections.singletonList(notice), 1));
     }
 
     @Override
@@ -208,12 +209,12 @@ public class NoticeServiceImpl implements NoticeService {
     public CommonResponse switchTopNum(long noticeId) {
         //  公告是否存在
         Notice notice = noticeMapper.selectOne(new QueryWrapper<Notice>().eq("id", noticeId));
-        if (notice == null){
+        if (notice == null) {
             ExceptionThrowUtils.cast(CommonCode.INVALID_PARAM);
         }
-        notice.setTopNum( notice.getTopNum() == 0 ? 10 : 0 );
-        notice.setUpdateTime( new Date() );
-        this.noticeMapper.updateById( notice );
+        notice.setTopNum(notice.getTopNum() == 0 ? 10 : 0);
+        notice.setUpdateTime(new Date());
+        this.noticeMapper.updateById(notice);
         return CommonResponse.SUCCESS();
     }
 
