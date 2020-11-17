@@ -4,6 +4,7 @@ import com.yixuetang.api.resource.ResourceControllerApi;
 import com.yixuetang.entity.request.resource.InsertResource;
 import com.yixuetang.entity.resource.Resource;
 import com.yixuetang.entity.response.CommonResponse;
+import com.yixuetang.entity.response.QueryResponse;
 import com.yixuetang.resource.service.ResourceService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -36,5 +37,12 @@ public class ResourceController implements ResourceControllerApi {
                                        @RequestParam(required = false) Long parentResourceId,
                                        @RequestBody InsertResource resource) {
         return this.resourceService.createFolder( userId, parentResourceId, resource );
+    }
+
+    @Override
+    @GetMapping("courseId/{courseId}")
+    public QueryResponse findByCourseIdAndParentResourceId(@PathVariable Long courseId,
+                                                           @RequestParam(required = false) Long parentResourceId) {
+        return this.resourceService.findByCourseIdAndResourceId( courseId, parentResourceId );
     }
 }

@@ -3,6 +3,7 @@ package com.yixuetang.api.resource;
 import com.yixuetang.entity.request.resource.InsertResource;
 import com.yixuetang.entity.resource.Resource;
 import com.yixuetang.entity.response.CommonResponse;
+import com.yixuetang.entity.response.QueryResponse;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
@@ -35,5 +36,14 @@ public interface ResourceControllerApi {
                     paramType = "query", dataType = "long")
     })
     CommonResponse createFolder(Long userId, Long parentResourceId, InsertResource resource);
+
+    @ApiOperation("根据课程id和父级资源id查询资源列表")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "courseId", value = "课程id", required = true,
+                    paramType = "path", dataType = "long"),
+            @ApiImplicitParam(name = "parentResourceId", value = "父级资源id",
+                    paramType = "query", dataType = "long")
+    })
+    QueryResponse findByCourseIdAndParentResourceId(Long courseId, Long parentResourceId);
 
 }

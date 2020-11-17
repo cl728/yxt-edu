@@ -1,6 +1,8 @@
 package com.yixuetang.resource.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.yixuetang.course.mapper.CourseMapper;
+import com.yixuetang.entity.course.Course;
 import com.yixuetang.entity.request.resource.InsertResource;
 import com.yixuetang.entity.resource.Resource;
 import com.yixuetang.entity.response.CommonResponse;
@@ -45,6 +47,9 @@ public class ResourceServiceImpl implements ResourceService {
 
     @Autowired
     private ResourceMapper resourceMapper;
+
+    @Autowired
+    private CourseMapper courseMapper;
 
     // 支持的文件类型：.jpg .jpeg .png .mp4 .avi .doc .xls .pdf .ppt .txt
     private static final List<String> CONTENT_TYPES = Arrays.asList( "image/jpeg", "image/png", "video/mpeg4",
@@ -120,6 +125,27 @@ public class ResourceServiceImpl implements ResourceService {
 
         return new QueryResponse( CommonCode.SUCCESS,
                 new QueryResult<>( Collections.singletonList( insertResource ), 1 ) );
+    }
+
+    @Override
+    public QueryResponse findByCourseIdAndResourceId(Long courseId, Long parentResourceId) {
+
+        // courseId 或者 parentResourceId 不合法
+        if (this.courseMapper.selectOne( new QueryWrapper<Course>().eq( "id", courseId ).select( "id" ) ) == null ||
+                (ObjectUtils.isNotEmpty( parentResourceId )
+                        && ObjectUtils.notEqual( -1L, parentResourceId )
+                        && this.resourceMapper.selectOne(
+                        new QueryWrapper<Resource>().eq( "id", parentResourceId ).select( "id" ) ) == null)) {
+            ExceptionThrowUtils.cast( CommonCode.INVALID_PARAM );
+        }
+
+        if (ObjectUtils.isEmpty( parentResourceId )) {
+            parentResourceId = -1L;
+        }
+
+        List<Resource> resourceList = this.resourceMapper.findByCourseIdAndParentId( courseId, parentResourceId );
+
+        return new QueryResponse( CommonCode.SUCCESS, new QueryResult<>( resourceList, resourceList.size() ) );
     }
 
     private void saveToDatabase(Long userId, Long parentResourceId, Resource resource) {

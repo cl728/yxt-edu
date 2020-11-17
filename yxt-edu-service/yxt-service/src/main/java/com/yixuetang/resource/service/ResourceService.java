@@ -2,6 +2,7 @@ package com.yixuetang.resource.service;
 
 import com.yixuetang.entity.request.resource.InsertResource;
 import com.yixuetang.entity.response.CommonResponse;
+import com.yixuetang.entity.response.QueryResponse;
 import org.springframework.web.multipart.MultipartFile;
 
 /**
@@ -31,4 +32,13 @@ public interface ResourceService {
      * @return 响应结果实体类
      */
     CommonResponse createFolder(Long userId, Long parentResourceId, InsertResource resource);
+
+    /**
+     * 根据课程id和父级资源id查询资源列表
+     *
+     * @param courseId         课程id
+     * @param parentResourceId 父级资源id
+     * @return 响应结果实体类
+     */
+    QueryResponse findByCourseIdAndResourceId(Long courseId, Long parentResourceId);
 }
