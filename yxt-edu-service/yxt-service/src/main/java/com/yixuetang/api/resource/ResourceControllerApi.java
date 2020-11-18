@@ -1,5 +1,6 @@
 package com.yixuetang.api.resource;
 
+import com.yixuetang.entity.request.resource.InsertCourseResource;
 import com.yixuetang.entity.request.resource.InsertResource;
 import com.yixuetang.entity.response.CommonResponse;
 import com.yixuetang.entity.response.QueryResponse;
@@ -45,4 +46,6 @@ public interface ResourceControllerApi {
     })
     QueryResponse findByCourseIdAndParentResourceId(Long courseId, Long parentResourceId);
 
+    @ApiOperation("保存课程-资源记录")
+    CommonResponse saveCourseResource(InsertCourseResource courseResource);
 }

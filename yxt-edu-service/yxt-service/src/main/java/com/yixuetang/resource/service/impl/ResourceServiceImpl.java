@@ -3,6 +3,7 @@ package com.yixuetang.resource.service.impl;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.yixuetang.course.mapper.CourseMapper;
 import com.yixuetang.entity.course.Course;
+import com.yixuetang.entity.request.resource.InsertCourseResource;
 import com.yixuetang.entity.request.resource.InsertResource;
 import com.yixuetang.entity.resource.CourseResource;
 import com.yixuetang.entity.resource.Resource;
@@ -105,7 +106,7 @@ public class ResourceServiceImpl implements ResourceService {
         this.saveToDatabase( userId, parentResourceId, resource );
 
         return new QueryResponse( CommonCode.SUCCESS,
-                new QueryResult<>( Collections.singletonList( filePath ), 1 ) );
+                new QueryResult<>( Collections.singletonList( resource ), 1 ) );
 
     }
 
@@ -129,7 +130,7 @@ public class ResourceServiceImpl implements ResourceService {
         // 保存到资源表中
         this.saveToDatabase( userId, parentResourceId, insertResource );
         // 保存到课程-资源记录表中
-        this.courseResourceMapper.insert( CourseResource.builder().courseId( resource.getCourseId() ).resourceId( insertResource.getId() ).build() );
+        this.courseResourceMapper.insert( CourseResource.builder().id( null ).courseId( resource.getCourseId() ).resourceId( insertResource.getId() ).build() );
 
         return CommonResponse.SUCCESS();
     }
@@ -155,6 +156,13 @@ public class ResourceServiceImpl implements ResourceService {
         return new QueryResponse( CommonCode.SUCCESS, new QueryResult<>( resourceList, resourceList.size() ) );
     }
 
+    @Override
+    @Transactional
+    public CommonResponse saveCourseResource(InsertCourseResource courseResource) {
+        this.courseResourceMapper.insert( CourseResource.builder().id( null ).courseId( courseResource.getCourseId() ).resourceId( courseResource.getResourceId() ).build() );
+        return CommonResponse.SUCCESS();
+    }
+
     private void saveToDatabase(Long userId, Long parentResourceId, Resource resource) {
 
         this.resourceMapper.insert( resource );
@@ -163,7 +171,7 @@ public class ResourceServiceImpl implements ResourceService {
         this.resourceMapper.updateUserIdById( userId, resource.getId() );
 
         // 关联parentResourceId
-        if (ObjectUtils.isNotEmpty( parentResourceId )) {
+        if (ObjectUtils.isNotEmpty( parentResourceId ) && ObjectUtils.notEqual( -1L, parentResourceId )) {
             if (this.resourceMapper.selectOne( new QueryWrapper<Resource>().eq( "id", parentResourceId ).select( "id" ) ) == null) {
                 ExceptionThrowUtils.cast( ResourceCode.PARENT_RESOURCE_NOT_EXISTS );
             } else {

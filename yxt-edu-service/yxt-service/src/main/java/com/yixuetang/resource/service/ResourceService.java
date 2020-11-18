@@ -1,5 +1,6 @@
 package com.yixuetang.resource.service;
 
+import com.yixuetang.entity.request.resource.InsertCourseResource;
 import com.yixuetang.entity.request.resource.InsertResource;
 import com.yixuetang.entity.response.CommonResponse;
 import com.yixuetang.entity.response.QueryResponse;
@@ -41,4 +42,12 @@ public interface ResourceService {
      * @return 响应结果实体类
      */
     QueryResponse findByCourseIdAndResourceId(Long courseId, Long parentResourceId);
+
+    /**
+     * 保存课程-资源记录
+     *
+     * @param courseResource 课程-资源实体类
+     * @return 响应结果实体类
+     */
+    CommonResponse saveCourseResource(InsertCourseResource courseResource);
 }
