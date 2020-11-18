@@ -11,7 +11,7 @@ import io.swagger.annotations.ApiOperation;
 /**
  * @author Colin
  * @version 1.0.0
- * @description 课程模块下的作业api
+ * @description 作业模块api
  * @date 2020/11/11 16:46
  */
 @Api(value = "作业管理接口", description = "作业管理接口，提供作业的增、删、改、查")
@@ -44,7 +44,7 @@ public interface HomeworkControllerApi {
     })
     CommonResponse deleteHomework(long homeworkId, long courseId);
 
-    @ApiOperation("根据作业id查询作业信息")
+    @ApiOperation("根据作业id查询作业信息及提交情况")
     @ApiImplicitParam(name = "homeworkId", value = "作业id", required = true,
             paramType = "path", dataType = "long")
     QueryResponse findById(long homeworkId);

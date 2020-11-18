@@ -29,6 +29,7 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.CollectionUtils;
 
 import java.util.*;
 
@@ -230,10 +231,18 @@ public class HomeworkServiceImpl implements HomeworkService {
 
     @Override
     public QueryResponse findById(long homeworkId) {
-        //  公告是否存在
-        Homework homework = this.homeworkMapper.selectOne(new QueryWrapper<Homework>().eq("id", homeworkId));
+        //  作业是否存在
+        Homework homework = this.homeworkMapper.findById( homeworkId );
         if (homework == null){
             ExceptionThrowUtils.cast(CommonCode.INVALID_PARAM);
+        }
+        if (!CollectionUtils.isEmpty( homework.getStudentList() )) {
+            homework.getStudentList().forEach(
+                    student -> student.setHomeworkStudent( this.homeworkStudentMapper
+                            .selectOne(
+                                    new QueryWrapper<HomeworkStudent>()
+                                            .eq( "homework_id", homeworkId )
+                                            .eq( "student_id", student.getId() ) ) ) );
         }
         return new QueryResponse( CommonCode.SUCCESS, new QueryResult<>( Collections.singletonList( homework ), 1 ) );
 

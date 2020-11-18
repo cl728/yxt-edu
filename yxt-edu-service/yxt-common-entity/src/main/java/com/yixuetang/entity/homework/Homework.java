@@ -4,9 +4,11 @@ import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
+import com.yixuetang.entity.user.User;
 import lombok.Data;
 
 import java.util.Date;
+import java.util.List;
 
 /**
  * @author Colin
@@ -37,6 +39,9 @@ public class Homework {
     private Integer submitCount; // 已提交人数
 
     @TableField("total_score")
-    private Double totalScore; //
+    private Double totalScore; // 满分值
+
+    @TableField(exist = false)
+    private List<User> studentList; // 作业-学生 多对多
 
 }

@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.*;
 /**
  * @author Colin
  * @version 1.0.0
- * @description 课程模块下的作业控制层
+ * @description 作业模块控制层
  * @date 2020/11/11 16:51
  */
 @RestController
@@ -50,6 +50,5 @@ public class HomeworkController implements HomeworkControllerApi {
     public CommonResponse updateHomework(@PathVariable long homeworkId, @RequestBody InsertHomework insertHomework) {
         return this.homeworkService.updateHomework(homeworkId, insertHomework);
     }
-
 
 }
