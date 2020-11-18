@@ -65,4 +65,10 @@ public class ResourceController implements ResourceControllerApi {
     public QueryResponse findByResourceId(@PathVariable Long resourceId) {
         return this.resourceService.findByResourceId( resourceId );
     }
+
+    @Override
+    @GetMapping("ancestors/resourceId/{resourceId}")
+    public QueryResponse findAncestorsByResourceId(@PathVariable Long resourceId) {
+        return this.resourceService.findAncestorsByResourceId( resourceId );
+    }
 }

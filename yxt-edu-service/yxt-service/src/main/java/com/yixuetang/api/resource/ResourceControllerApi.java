@@ -60,4 +60,9 @@ public interface ResourceControllerApi {
     @ApiImplicitParam(name = "resourceId", value = "资源id", required = true,
             paramType = "path", dataType = "long")
     QueryResponse findByResourceId(Long resourceId);
+
+    @ApiOperation("根据资源id查找其祖宗资源实体列表")
+    @ApiImplicitParam(name = "resourceId", value = "资源id", required = true,
+            paramType = "path", dataType = "long")
+    QueryResponse findAncestorsByResourceId(Long resourceId);
 }

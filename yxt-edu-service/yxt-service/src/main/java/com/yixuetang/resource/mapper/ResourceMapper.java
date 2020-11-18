@@ -36,4 +36,14 @@ public interface ResourceMapper extends BaseMapper<Resource> {
                 "order by type, create_time" +
             "</script>")
     List<Resource> findByCourseIdAndParentId(@Param( "courseId" ) Long courseId, @Param( "parentResourceId" ) Long parentResourceId);
+
+    @Results(id = "ancestorsMap", value = {
+            @Result(column = "parent_resource_id", property = "parentResource",
+            one = @One(select = "com.yixuetang.resource.mapper.ResourceMapper.findParentByParentId", fetchType = FetchType.EAGER))
+    })
+    @Select( "select id, parent_resource_id, name from t_resource where id = #{resourceId}" )
+    Resource findAncestorsByResourceId(Long resourceId);
+
+    @Select("select id, name from t_resource where id = #{parentResourceId}")
+    Resource findParentByParentId(Long parentResourceId);
 }

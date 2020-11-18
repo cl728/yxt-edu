@@ -68,4 +68,12 @@ public interface ResourceService {
      * @return 响应结果实体类
      */
     QueryResponse findByResourceId(Long resourceId);
+
+    /**
+     * 根据资源id查找其祖宗资源实体列表
+     *
+     * @param resourceId 资源id
+     * @return 响应结果实体类
+     */
+    QueryResponse findAncestorsByResourceId(Long resourceId);
 }

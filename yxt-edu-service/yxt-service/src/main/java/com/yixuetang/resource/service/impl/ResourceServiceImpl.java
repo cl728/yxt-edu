@@ -26,13 +26,11 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.CollectionUtils;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletResponse;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 /**
  * @author Colin
@@ -58,9 +56,11 @@ public class ResourceServiceImpl implements ResourceService {
     @Autowired
     private CourseResourceMapper courseResourceMapper;
 
-    // 支持的文件类型：.jpg .jpeg .png .mp4 .avi .doc .xls .pdf .ppt .txt
+    // 支持的文件类型：.jpg .jpeg .png .mp4 .avi .doc .xls .pdf .ppt .pptx .xlsx .txt
     private static final List<String> CONTENT_TYPES = Arrays.asList( "image/jpeg", "image/png", "video/mpeg4", "video/mp4",
-            "video/avi", "application/msword", "application/x-xls", "application/pdf", "application/x-ppt", "application/vnd.ms-powerpoint", "text/plain" );
+            "video/avi", "application/msword", "application/x-xls", "application/pdf", "application/x-ppt", "application/vnd.ms-powerpoint",
+            "application/vnd.openxmlformats-officedocument.presentationml.presentation", "text/plain",
+            "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" );
 
     private static final Logger LOGGER = LoggerFactory.getLogger( ResourceServiceImpl.class );
 
@@ -181,6 +181,23 @@ public class ResourceServiceImpl implements ResourceService {
             ExceptionThrowUtils.cast( CommonCode.INVALID_PARAM );
         }
         return new QueryResponse( CommonCode.SUCCESS, new QueryResult<>( Collections.singletonList( resource ), 1 ) );
+    }
+
+    @Override
+    public QueryResponse findAncestorsByResourceId(Long resourceId) {
+
+        List<Resource> ancestors = new ArrayList<>();
+
+        Resource resource = this.resourceMapper.findAncestorsByResourceId( resourceId );
+
+        while (resource != null && resource.getParentResource() != null) {
+            ancestors.add( resource );
+            resource = this.resourceMapper.findAncestorsByResourceId( resource.getParentResource().getId() );
+        }
+
+        ancestors.add( resource );
+
+        return new QueryResponse( CommonCode.SUCCESS, new QueryResult<>( ancestors, ancestors.size() ) );
     }
 
     private void saveToDatabase(Long userId, Long parentResourceId, Resource resource) {
