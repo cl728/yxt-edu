@@ -358,6 +358,8 @@
                                     <el-row id="course-title" style="height: 30px">
                                         <el-col :span="12">
                                             <div class="homework-create-time" style="float: left">
+                                                <el-tag v-show="homework.topNum != 0" size="medium" type="danger">置顶
+                                                </el-tag>
                                                 <span style="padding-left: 30px;font-size: 15px;color: #A0A0A0"
                                                     v-text="homework.createTime">2020-11-09 22:17</span>
                                             </div>
@@ -369,6 +371,15 @@
                                                         更多操作 <i class="el-icon-more"></i>
                                                     </span>
                                                     <el-dropdown-menu slot="dropdown">
+                                                        <el-dropdown-item>
+                                                            <router-link @click="switchHomeworkTop(homework.id)"
+                                                                v-if="homework.topNum === 0">
+                                                                置顶
+                                                            </router-link>
+                                                            <router-link @click="switchHomeworkTop(homework.id)" v-else>
+                                                                取消置顶
+                                                            </router-link>
+                                                        </el-dropdown-item>
                                                         <el-dropdown-item>
                                                             <router-link @click="showEditHomeworkForm(homework.id)">编辑
                                                             </router-link>
@@ -395,7 +406,7 @@
                                             <el-row style="height: 45px">
                                                 <el-col :span="24">
                                                     <el-link :underline="false"
-                                                        style="font-size: 26px;float: left;padding-left: 30px"
+                                                        style="font-size: 26px;float: left;padding-left: 30px;margin-top: 10px;"
                                                         :href="user.isTeacher ? './homeworkReview.html?id=' + homework.id : ''">
                                                         <span style="font-weight: bold"
                                                             v-text="homework.title">范例_第一次作业</span>
@@ -404,7 +415,8 @@
                                             </el-row>
                                             <el-row style="height: 85px">
                                                 <el-col :span="24">
-                                                    <span style="float: left;padding-left: 30px;padding-top: 5px">
+                                                    <span
+                                                        style="float: left;padding-left: 30px;padding-top: 5px;margin-top: 10px;">
                                                         <span style="font-size: 15px;color: #707070"
                                                             v-html="homework.description">如题所述</span>
                                                     </span>
@@ -1455,7 +1467,8 @@
                                     <el-row id="course-title" style="height: 30px">
                                         <el-col :span="12">
                                             <div class="homework-create-time" style="float: left">
-                                                <el-tag v-show="notice.topNum != 0" size="medium" type="danger">置顶</el-tag>
+                                                <el-tag v-show="notice.topNum != 0" size="medium" type="danger">置顶
+                                                </el-tag>
                                                 <span
                                                     style="padding-left: 30px;font-size: 15px;color: #A0A0A0">发布人：<span
                                                         v-text="notice.course.teacher.realName">CurtisCheng</span></span>
@@ -1472,11 +1485,11 @@
                                                     </span>
                                                     <el-dropdown-menu slot="dropdown">
                                                         <el-dropdown-item>
-                                                            <router-link @click="switchTop(notice.id)"
+                                                            <router-link @click="switchNoticeTop(notice.id)"
                                                                 v-if="notice.topNum === 0">
                                                                 置顶
                                                             </router-link>
-                                                            <router-link @click="switchTop(notice.id)" v-else>
+                                                            <router-link @click="switchNoticeTop(notice.id)" v-else>
                                                                 取消置顶
                                                             </router-link>
                                                         </el-dropdown-item>
@@ -1894,11 +1907,23 @@
                     }
                 });
             },
-            switchTop(noticeId) {
+            switchNoticeTop(noticeId) {
                 yxt.http.put("/notice/topNum/noticeId/" + noticeId).then(({ data }) => {
                     if (data.success) {
                         this.$message.success(data.message);
                         this.getNoticeData();
+                    } else {
+                        this.$message.error(data.message);
+                    }
+                }).catch(() => {
+                    this.$message.error("服务器繁忙，请稍候再试！")
+                })
+            },
+            switchHomeworkTop(homeworkId) {
+                yxt.http.put("/homework/topNum/homeworkId/" + homeworkId).then(({ data }) => {
+                    if (data.success) {
+                        this.$message.success(data.message);
+                        this.getHomeworkData();
                     } else {
                         this.$message.error(data.message);
                     }
@@ -1966,18 +1991,24 @@
                 })
             },
             getResourceData(courseId, parentResourceId) {
+                // 如果请求同一目录下的文件（查询所有文件除外），则不作任何操作
+                if (this.parentResourceId === parentResourceId && parentResourceId != -1) { 
+                    return;
+                }
                 yxt.http.get("resource/courseId/" + courseId + "?parentResourceId=" + parentResourceId).then(({ data }) => {
                     if (data.success) {
                         this.resourceList = data.queryResult.data;
                         this.parentResourceId = parentResourceId;
-                        /* if (parentResourceId != -1) {
-                            // 发送请求，查询某个资源的祖宗资源列表
-                            this.getResourceAncestors(courseId, parentResourceId);
-                            this.breadcrumb = '<button type="button" class="el-button el-button--text" onclick="getResourceData(' + yxt.getUrlParam("id") + ', ' + -1 + ')">所有文件</button>';
-                            this.resourceAncestors.forEach(resource => {
-                                this.breadcrumb += ' <i class="el-icon-arrow-right"></i> <button type="button" class="el-button el-button--text" onclick="getResourceData(' + this.course.id + ', ' + resource.id + ')">' + resource.name + '</button>';
+                        // 更新面包屑导航信息
+                        this.breadcrumb = '<button type="button" class="el-button el-button--text" onclick="getResourceData(' + yxt.getUrlParam("id") + ', ' + -1 + ')">所有文件</button>';
+                        if (parentResourceId != -1) {
+                            yxt.http.get("resource/ancestors/resourceId/" + parentResourceId).then(({data}) => {
+                                let ancestors = data.queryResult.data.reverse();
+                                ancestors.forEach(resource => {
+                                    this.breadcrumb += ' <i class="el-icon-arrow-right"></i> <button type="button" class="el-button el-button--text" onclick="getResourceData(' + this.course.id + ', ' + resource.id + ')">' + resource.name + '</button>'
+                                })
                             })
-                        } */
+                        }
                     } else {
                         this.$message.error(data.message);
                     }
@@ -2004,22 +2035,28 @@
                     case 'ppt':
                         return "https://www.ketangpai.com/Public/Common/img/fileicon/file_ext_big_ppt.png";
                         break;
+                    case 'pptx':
+                        return "https://www.ketangpai.com/Public/Common/img/fileicon/file_ext_big_pptx.png";
+                        break;
                     case 'mp4':
-                        return "./images/video-icon.png";
+                        return "https://www.ketangpai.com/Public/Common/img/fileicon/file_ext_big_mp4.png";
                         break;
                     case 'pdf':
-                        return "https://www.ketangpai.com/Public/Common/img/fileicon/file_ext_big_pdf.png"
+                        return "https://www.ketangpai.com/Public/Common/img/fileicon/file_ext_big_pdf.png";
+                        break;
+                    case 'xlsx':
+                        return "https://www.ketangpai.com/Public/Common/img/fileicon/file_ext_big_xlsx.png";
                         break;
                     default:
-                        return "https://www.ketangpai.com/Public/Common/img/fileicon/file_ext_big_folder.png"
+                        return "https://www.ketangpai.com/Public/Common/img/fileicon/file_ext_big_folder.png";
                         break;
                 }
             },
             downloadOrGetResourceData(resourceId, type, name) {
                 if (type === 0) { // 文件类型是目录，获取其子级资源
                     this.getResourceData(this.course.id, resourceId);
-                    // 更新面包屑导航信息
-                    this.breadcrumb += ' <i class="el-icon-arrow-right"></i> <button type="button" class="el-button el-button--text" onclick="getResourceData(' + this.course.id + ', ' + resourceId + ')">' + name + '</button>'
+                    /* // 更新面包屑导航信息
+                    this.breadcrumb += ' <i class="el-icon-arrow-right"></i> <button type="button" class="el-button el-button--text" onclick="getResourceData(' + this.course.id + ', ' + resourceId + ')">' + name + '</button>' */
                     this.parentResourceId = resourceId;
                 } else if (type === 1) { // 文件类型是文件，请求下载接口
                     yxt.http.get("resource/download/resourceId/" + resourceId, {
@@ -2103,7 +2140,9 @@
             beforeResourceUpload(file) {
                 const fileTypes = ["image/jpeg", "image/png", "video/mpeg4", "video/mp4",
                     "video/avi", "application/msword", "application/x-xls", "application/pdf",
-                    "application/x-ppt", "application/vnd.ms-powerpoint", "text/plain"];
+                    "application/x-ppt", "application/vnd.ms-powerpoint", "text/plain",
+                    "application/vnd.openxmlformats-officedocument.presentationml.presentation",
+                    "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"];
                 const isValidType = fileTypes.indexOf(file.type) != -1;
 
                 if (!isValidType) {
