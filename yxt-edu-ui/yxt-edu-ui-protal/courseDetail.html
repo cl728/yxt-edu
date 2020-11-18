@@ -395,7 +395,8 @@
                                             <el-row style="height: 45px">
                                                 <el-col :span="24">
                                                     <el-link :underline="false"
-                                                        style="font-size: 26px;float: left;padding-left: 30px">
+                                                        style="font-size: 26px;float: left;padding-left: 30px"
+                                                        :href="user.isTeacher ? './homeworkReview.html?id=' + homework.id : ''">
                                                         <span style="font-weight: bold"
                                                             v-text="homework.title">范例_第一次作业</span>
                                                     </el-link>
@@ -1454,7 +1455,7 @@
                                     <el-row id="course-title" style="height: 30px">
                                         <el-col :span="12">
                                             <div class="homework-create-time" style="float: left">
-                                                <el-tag v-show="notice.topNum != 0" size="medium">置顶</el-tag>
+                                                <el-tag v-show="notice.topNum != 0" size="medium" type="danger">置顶</el-tag>
                                                 <span
                                                     style="padding-left: 30px;font-size: 15px;color: #A0A0A0">发布人：<span
                                                         v-text="notice.course.teacher.realName">CurtisCheng</span></span>
@@ -1746,7 +1747,8 @@
             inputHomework(formName) {
                 this.$refs[formName].validate((valid) => {
                     if (valid) {
-                        this.homeworkInputForm.deadline = this.formatDateTime();
+                        let t = this.homeworkInputForm.deadline;
+                        this.homeworkInputForm.deadline = this.formatDateTime(t);
                         yxt.http.post("/homework/courseId/" + this.course.id + "/" + this.user.id, this.homeworkInputForm).then(({ data }) => {
                             if (data.success) {
                                 this.$message.success(data.message);
@@ -1807,6 +1809,8 @@
                 this.homework_edit = true;
                 this.$refs[formName].validate((valid) => {
                     if (valid) {
+                        let t = this.homeworkEditForm.deadline;
+                        this.homeworkEditForm.deadline = this.formatDateTime(t);
                         yxt.http.put("/homework/info/homeworkId/" + this.homeworkEditForm.id, this.homeworkEditForm).then(({ data }) => {
                             if (data.success) {
                                 this.$message.success(data.message);
@@ -2108,8 +2112,7 @@
                 }
                 return true;
             },
-            formatDateTime() {
-                let t = this.homeworkInputForm.deadline;
+            formatDateTime(t) {
                 return t.getFullYear() + "-" + (t.getMonth() + 1) + "-" + t.getDate() + " " + t.getHours() + ":" + t.getMinutes() + ":" + t.getSeconds();
             },
         },
