@@ -69,7 +69,9 @@ public class HomeworkServiceImpl implements HomeworkService {
             ExceptionThrowUtils.cast(CommonCode.INVALID_PARAM);
         }
 
-        List<Homework> homeworkList = this.homeworkMapper.selectList(new QueryWrapper<Homework>().eq("course_id", courseId));
+        List<Homework> homeworkList = this.homeworkMapper.selectList(new QueryWrapper<Homework>()
+                .eq("course_id", courseId)
+                .orderByDesc( "top_num" ));
 
         List<HomeworkResp> homeworkRespList = new ArrayList<>(homeworkList.size());
 

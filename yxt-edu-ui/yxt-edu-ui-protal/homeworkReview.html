@@ -45,8 +45,8 @@
                     </el-col>
                     <!-- 菜单功能 -->
                     <el-col :span="16">
-                        <el-menu :default-active="activeIndex" mode="horizontal" @select="handleSelect">
-                            <el-menu-item index="1" class="header-text">课堂</el-menu-item>
+                        <el-menu mode="horizontal" @select="handleSelect">
+                            <el-menu-item index="1" class="header-text" @click="location.href = './homePage.html'">课堂</el-menu-item>
                             <el-menu-item index="2" class="header-text">精品课程</el-menu-item>
                             <el-menu-item index="3" class="header-text">本校课程</el-menu-item>
                             <el-menu-item index="4" class="header-text">我的精品</el-menu-item>
@@ -81,73 +81,49 @@
                 <div style="border: 1px solid #c8c8c8;width: 1020px;margin: auto">
                     <!-- 作业头部 -->
                     <div style="border-bottom: 1px solid #c8c8c8;width: 960px;height: 80px;padding: 30px">
-                        <h2 style="text-align: left;margin: 0px 0px 25px 0px">范例_第一次作业</h2>
+                        <h2 style="text-align: left;margin: 0px 0px 25px 0px" v-text="homework.title">范例_第一次作业</h2>
                         <div>
                             <div style="float: left;text-align: left;background-color: #f2f2f2">
                                 <div style="padding: 5px 20px 5px 20px">截止至
-                                    <span>2020-11-07 22:17</span>
+                                    <span v-text="homework.deadline">2020-11-07 22:17</span>
                                 </div>
                             </div>
                             <div style="float: right">
-                                <el-input v-model="input" name="input"  suffix-icon="el-icon-search" placeholder="学号，姓名"></el-input>
+                                <el-input v-model="pageData.search" suffix-icon="el-icon-search" placeholder="学号，姓名">
+                                </el-input>
                             </div>
                         </div>
                     </div>
                     <!-- 作业列表 -->
-                    <div style="border: 1px  #c8c8c8;width: 960px;padding: 30px">
-                        <div>
-                            <el-table
-                                    ref="multipleTable"
-                                    :data="tableData"
-                                    tooltip-effect="dark"
-                                    style="width: 100%"
-                                    :cell-style="nameStyle"
-                                    :default-sort = "{prop: 'score', order: 'descending'}"
-                                    @selection-change="handleSelectionChange">
-                                <el-table-column
-                                        type="selection"
-                                        width="55">
-                                </el-table-column>
-                                <el-table-column
-                                        prop="tsNo"
-                                        label="学号"
-                                        sortable
-                                        width="160">
-                                </el-table-column>
-                                <el-table-column
-                                        prop="name"
-                                        label="姓名"
-                                        sortable
-                                        width="160">
-                                </el-table-column>
-                                <el-table-column
-                                        prop="score"
-                                        label="成绩"
-                                        sortable
-                                        width="120">
-                                </el-table-column>
-                                <el-table-column
-                                        label="提交日期"
-                                        prop="submitTime"
-                                        align="center"
-                                        sortable
-                                        width="160">
-                                    <template slot-scope="scope">{{ scope.row.submitTime }}</template>
-                                </el-table-column>
-                                <el-table-column
-                                        prop="reviewTimes"
-                                        label="批阅次数"
-                                        align="center"
-                                        sortable
-                                        show-overflow-tooltip>
-                                </el-table-column>
-                                <el-table-column
-                                        width="120">
-                                    <el-link type="primary" slot-scope="scope" v-if="scope.row.submitTime=='-'">催交</el-link>
-                                    <el-link type="primary" v-else>进入批阅</el-link>
-                                </el-table-column>
-                            </el-table>
-                        </div>
+                    <div style="border: 1px  #c8c8c8;width: 960px;height: auto; padding: 30px">
+                        <el-table ref="multipleTable" :data="homeworkStudentList" tooltip-effect="dark"
+                            style="width: 100%" :cell-style="nameStyle" style="height: auto;"
+                            :default-sort="{prop: 'tsNo', order: 'ascending'}">
+                            <el-table-column prop="tsNo" label="学号" sortable width="160">
+                            </el-table-column>
+                            <el-table-column prop="realName" label="姓名" sortable width="160">
+                            </el-table-column>
+                            <el-table-column prop="score" :formatter="formatScore" label="成绩" sortable width="120">
+                            </el-table-column>
+                            <el-table-column label="提交日期" prop="homeworkStudent.submitTime" align="center" sortable
+                                width="160" :formatter="formatSubmitTime">
+                            </el-table-column>
+                            <el-table-column prop="homeworkStudent.correctCount" label="批阅次数" align="center"
+                                :formatter="formatCorrectCount" sortable show-overflow-tooltip>
+                            </el-table-column>
+                            <el-table-column width="120">
+                                <el-link type="primary" slot-scope="scope" v-if="scope.row.homeworkStudent.status===0">
+                                    催交
+                                </el-link>
+                                <el-link type="primary" v-else>进入批阅</el-link>
+                            </el-table-column>
+                        </el-table>
+                        <el-row>
+                            <el-pagination @size-change="pageSizeChange" @current-change="currentChange"
+                                :current-page="pageData.currentPage" :page-sizes="[5, 10, 15, 20]"
+                                :page-size="pageData.pageSize" layout="total, sizes, prev, pager, next, jumper"
+                                :total="pageData.pageTotal" style="float: left; margin-top: 25px"></el-pagination>
+                        </el-row>
                     </div>
                 </div>
             </el-main>
@@ -181,50 +157,37 @@
     new Vue({
         el: '#app',
         data: {
-            activeIndex: '1',
             user: {
                 id: -1
             },
-            input: "",
-            course: {},
-            password: "",
-            tableData: [{
-                tsNo: "20170390524",
-                name: '郑咏昌',
-                score: "99"+"/100",
-                submitTime: '2020-11-15 17:32',
-                reviewTimes: '1'
-            }, {
-                tsNo: "20170390506",
-                name: '庄灿林',
-                score: "100"+"/100",
-                submitTime: '2020-11-15 17:11',
-                reviewTimes: '1'
-            }, {
-                tsNo: "201703905xx",
-                name: '范俊然',
-                score: "未批"+"/100",
-                submitTime: '2020-11-15 17:48',
-                reviewTimes: '2'
-            },{
-                tsNo: "201703905xy",
-                name: '戴晓东',
-                score: "未交",
-                submitTime: '-',
-                reviewTimes: '-'
-            }],
-            multipleSelection: [],
+            homeworkStudentList: [],
+            pageData: {
+                currentPage: 1,
+                pageSize: 10,
+                pageTotal: 4,
+                search: ""
+            },
+            homework: {},
         },
-        methods: {nameStyle(column){
-                if (column.columnIndex === 2 ) {
+        methods: {
+            nameStyle(column) {
+                if (column.columnIndex === 2) {
                     return "font-weight: bold";
                 }
             },
-            handleSelectionChange(val) {
-                this.multipleSelection = val;
-            },
             handleSelect(key, keyPath) {
                 console.log(key, keyPath);
+            },
+            verify() {
+                yxt.http.get("/auth/verify/2").then(({ data }) => {
+                    if (data.success) {
+                        this.user = data.queryResult.data[0];
+                    } else {
+                        location.href = "index.html"
+                    }
+                }).catch(() => {
+                    location.href = "index.html"
+                });
             },
             logout() {
                 yxt.http.delete("/auth/logout/2").then(({ data }) => {
@@ -237,68 +200,66 @@
                     this.$message.error("服务器繁忙，请稍候再试！");
                 })
             },
-            getCourseData() {
-                yxt.http.get("/courses/userId/" + this.user.id).then(({ data }) => {
+            getHomeworkData() {
+                yxt.http.get("homework/homeworkId/" + yxt.getUrlParam("id")).then(({ data }) => {
                     if (data.success) {
-                        let courseList = data.queryResult.data;
-                        this.topCourseList = courseList.filter(course => course.topNum > 0 && !course.isFiled);
-                        this.otherCourseList = courseList.filter(course => course.topNum === 0 && !course.isFiled);
-                        this.filedCourseList = courseList.filter(course => course.isFiled);
-                    } else {
-                        this.$message.error(data.message);
+                        this.homework = data.queryResult.data[0];
                     }
-                }).catch(() => {
-                    this.$message.error("服务器繁忙！")
                 })
+            },
+            getHomeworkStudentData() {
+                yxt.http.get("users/homeworkId/" + yxt.getUrlParam("id") + "/"
+                    + this.pageData.currentPage + "/"
+                    + this.pageData.pageSize + "?search="
+                    + this.pageData.search)
+                    .then(({ data }) => {
+                        if (data.success) {
+                            this.homeworkStudentList = data.queryResult.data;
+                            this.pageData.pageTotal = data.queryResult.total;
+                        }
+                    })
+            },
+            formatScore(row) {
+                let status = row.homeworkStudent.status;
+                let totalScore = this.homework.totalScore;
+                switch (status) {
+                    case 0:
+                        return "未交";
+                        break;
+                    case 1:
+                        return "未批/" + totalScore;
+                        break;
+                    case 2:
+                        return row.homeworkStudent.score + "/" + totalScore;
+                        break;
+                }
+            },
+            formatSubmitTime(row) {
+                return row.homeworkStudent.status === 0 ? "-" : row.homeworkStudent.submitTime
+            },
+            formatCorrectCount(row) {
+                return row.homeworkStudent.status === 0 ? "-" : row.homeworkStudent.correctCount
+            },
+            pageSizeChange(pageSize) {
+                this.pageData.pageSize = pageSize;
+            },
+            currentChange(clickPage) {
+                this.pageData.currentPage = clickPage;
             },
         },
         created() {
-            yxt.http.get("/auth/verify/2").then(({ data }) => {
-                if (data.success) {
-                    this.user = data.queryResult.data[0];
-                    this.getCourseData();
-                } else {
-                    location.href = "index.html"
-                }
-            }).catch(() => {
-                location.href = "index.html"
-            });
+            this.verify();
+            this.getHomeworkData();
+            this.getHomeworkStudentData();
         },
-        computed: {
-            topCourseListRows() {
-                const topCourseListRows = [];
-                this.topCourseList.forEach((topCourse, index) => {
-                    const row = Math.floor(index / 5);
-                    if (!topCourseListRows[row]) {
-                        topCourseListRows[row] = [];
-                    }
-                    topCourseListRows[row].push(topCourse);
-                })
-                return topCourseListRows;
-            },
-            otherCourseListRows() {
-                const otherCourseListRows = [];
-                this.otherCourseList.forEach((otherCourse, index) => {
-                    const row = Math.floor(index / 5);
-                    if (!otherCourseListRows[row]) {
-                        otherCourseListRows[row] = [];
-                    }
-                    otherCourseListRows[row].push(otherCourse);
-                })
-                return otherCourseListRows;
-            },
-            filedCourseListRows() {
-                const filedCourseListRows = [];
-                this.filedCourseList.forEach((filedCourse, index) => {
-                    const row = Math.floor(index / 2);
-                    if (!filedCourseListRows[row]) {
-                        filedCourseListRows[row] = [];
-                    }
-                    filedCourseListRows[row].push(filedCourse);
-                })
-                return filedCourseListRows;
-            }
-        },
+        watch: {
+			pageData: {
+				deep: true,
+				handler() {
+					this.getHomeworkStudentData();
+				}
+			}
+		},
     })
 </script>
 
