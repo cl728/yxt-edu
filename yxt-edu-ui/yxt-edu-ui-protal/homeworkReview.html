@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdn.bootcss.com/element-ui/2.13.2/theme-chalk/index.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="css/yxt.css">
+    <style>
+        .el-main {
+            padding: 20px;
+        }
+
+        .el-card__header {
+            padding: 0;
+            border-bottom: 1px solid #EBEEF5;
+            box-sizing: border-box;
+        }
+
+        .el-card__body {
+            padding: 0;
+        }
+    </style>
+    <title>益学堂-简单好用的互动课堂管理工具</title>
+</head>
+
+<body>
+    <div id="app">
+        <el-container>
+            <!-- 头部 -->
+            <el-header>
+                <!-- 导航栏：logo、菜单功能、头像下拉菜单 -->
+                <el-row>
+                    <!-- logo -->
+                    <el-col :span="4">
+                        <!-- <el-image style="margin-top: 10px;" src="./images/logo_blue.png" fit="contain"></el-image> -->
+                        <el-image>
+                            <div slot="error" class="image-slot">
+                                <div class="header-logo">LOGO</div>
+                                <!-- <el-image src="./images/logo.png" style="width: 192px; height: 48px; margin: 10px;">
+                                </el-image> -->
+                            </div>
+                        </el-image>
+                    </el-col>
+                    <!-- 菜单功能 -->
+                    <el-col :span="16">
+                        <el-menu :default-active="activeIndex" mode="horizontal" @select="handleSelect">
+                            <el-menu-item index="1" class="header-text">课堂</el-menu-item>
+                            <el-menu-item index="2" class="header-text">精品课程</el-menu-item>
+                            <el-menu-item index="3" class="header-text">本校课程</el-menu-item>
+                            <el-menu-item index="4" class="header-text">我的精品</el-menu-item>
+                        </el-menu>
+                    </el-col>
+                    <!-- 头像下拉菜单 -->
+                    <el-col :span="4">
+                        <el-menu class="el-menu-demo" mode="horizontal">
+                            <el-menu-item>
+                                <i class="el-icon-bell"></i>
+                                <el-badge is-dot class="item"></el-badge>
+                            </el-menu-item>
+                            <el-submenu>
+                                <template slot="title">
+                                    <span v-text="user.username" style="color: black; margin: 20px 10px;">用户名</span>
+                                    <el-avatar size="large" :src="user.avatar">
+                                    </el-avatar>
+                                </template>
+                                <el-menu-item @click="location.href = 'user/setting.html' "><i
+                                        class="el-icon-setting"></i> 个人设置</el-menu-item>
+                                <el-menu-item @click="logout()"><i class="fa fa-sign-out"
+                                        style="margin-left: 6px; margin-right: 8px;"></i> <span>退出账户</span>
+                                </el-menu-item>
+                            </el-submenu>
+                        </el-menu>
+                    </el-col>
+                </el-row>
+            </el-header>
+            <!-- 中间 -->
+            <el-main style="margin-top: 40px">
+                <!-- 外边框 -->
+                <div style="border: 1px solid #c8c8c8;width: 1020px;margin: auto">
+                    <!-- 作业头部 -->
+                    <div style="border-bottom: 1px solid #c8c8c8;width: 960px;height: 80px;padding: 30px">
+                        <h2 style="text-align: left;margin: 0px 0px 25px 0px">范例_第一次作业</h2>
+                        <div>
+                            <div style="float: left;text-align: left;background-color: #f2f2f2">
+                                <div style="padding: 5px 20px 5px 20px">截止至
+                                    <span>2020-11-07 22:17</span>
+                                </div>
+                            </div>
+                            <div style="float: right">
+                                <el-input v-model="input" name="input"  suffix-icon="el-icon-search" placeholder="学号，姓名"></el-input>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- 作业列表 -->
+                    <div style="border: 1px  #c8c8c8;width: 960px;padding: 30px">
+                        <div>
+                            <el-table
+                                    ref="multipleTable"
+                                    :data="tableData"
+                                    tooltip-effect="dark"
+                                    style="width: 100%"
+                                    :cell-style="nameStyle"
+                                    :default-sort = "{prop: 'score', order: 'descending'}"
+                                    @selection-change="handleSelectionChange">
+                                <el-table-column
+                                        type="selection"
+                                        width="55">
+                                </el-table-column>
+                                <el-table-column
+                                        prop="tsNo"
+                                        label="学号"
+                                        sortable
+                                        width="160">
+                                </el-table-column>
+                                <el-table-column
+                                        prop="name"
+                                        label="姓名"
+                                        sortable
+                                        width="160">
+                                </el-table-column>
+                                <el-table-column
+                                        prop="score"
+                                        label="成绩"
+                                        sortable
+                                        width="120">
+                                </el-table-column>
+                                <el-table-column
+                                        label="提交日期"
+                                        prop="submitTime"
+                                        align="center"
+                                        sortable
+                                        width="160">
+                                    <template slot-scope="scope">{{ scope.row.submitTime }}</template>
+                                </el-table-column>
+                                <el-table-column
+                                        prop="reviewTimes"
+                                        label="批阅次数"
+                                        align="center"
+                                        sortable
+                                        show-overflow-tooltip>
+                                </el-table-column>
+                                <el-table-column
+                                        width="120">
+                                    <el-link type="primary" slot-scope="scope" v-if="scope.row.submitTime=='-'">催交</el-link>
+                                    <el-link type="primary" v-else>进入批阅</el-link>
+                                </el-table-column>
+                            </el-table>
+                        </div>
+                    </div>
+                </div>
+            </el-main>
+            <!-- 底部 -->
+            <el-footer>
+                <el-row type="flex" justify="center">
+                    <el-col :span="8"></el-col>
+                    <el-col :span="8" push="1">
+                        <el-menu mode="horizontal">
+                            <el-menu-item>关于我们</el-menu-item>
+                            <el-menu-item>联系我们</el-menu-item>
+                            <el-menu-item>服务条款</el-menu-item>
+                            <el-menu-item>浏览器下载</el-menu-item>
+                            <el-menu-item>更新动态</el-menu-item>
+                        </el-menu>
+                    </el-col>
+                    <el-col :span="8"></el-col>
+                </el-row>
+                <span class="foot-text">Copyright © 2020 yixuetang.com All Rights Reserved. </span>
+            </el-footer>
+        </el-container>
+    </div>
+</body>
+<script src="https://cdn.bootcss.com/vue/2.6.11/vue.min.js"></script>
+<script src="https://cdn.bootcss.com/axios/0.19.2/axios.min.js"></script>
+<script src="https://cdn.bootcss.com/element-ui/2.13.2/index.js"></script>
+<script src="./js/common.js"></script>
+<script src="./js/md5.js"></script>
+
+<script>
+    new Vue({
+        el: '#app',
+        data: {
+            activeIndex: '1',
+            user: {
+                id: -1
+            },
+            input: "",
+            course: {},
+            password: "",
+            tableData: [{
+                tsNo: "20170390524",
+                name: '郑咏昌',
+                score: "99"+"/100",
+                submitTime: '2020-11-15 17:32',
+                reviewTimes: '1'
+            }, {
+                tsNo: "20170390506",
+                name: '庄灿林',
+                score: "100"+"/100",
+                submitTime: '2020-11-15 17:11',
+                reviewTimes: '1'
+            }, {
+                tsNo: "201703905xx",
+                name: '范俊然',
+                score: "未批"+"/100",
+                submitTime: '2020-11-15 17:48',
+                reviewTimes: '2'
+            },{
+                tsNo: "201703905xy",
+                name: '戴晓东',
+                score: "未交",
+                submitTime: '-',
+                reviewTimes: '-'
+            }],
+            multipleSelection: [],
+        },
+        methods: {nameStyle(column){
+                if (column.columnIndex === 2 ) {
+                    return "font-weight: bold";
+                }
+            },
+            handleSelectionChange(val) {
+                this.multipleSelection = val;
+            },
+            handleSelect(key, keyPath) {
+                console.log(key, keyPath);
+            },
+            logout() {
+                yxt.http.delete("/auth/logout/2").then(({ data }) => {
+                    if (data.success) {
+                        location.href = "login.html"
+                    } else {
+                        this.$message.error("服务器繁忙，请稍候再试！");
+                    }
+                }).catch(() => {
+                    this.$message.error("服务器繁忙，请稍候再试！");
+                })
+            },
+            getCourseData() {
+                yxt.http.get("/courses/userId/" + this.user.id).then(({ data }) => {
+                    if (data.success) {
+                        let courseList = data.queryResult.data;
+                        this.topCourseList = courseList.filter(course => course.topNum > 0 && !course.isFiled);
+                        this.otherCourseList = courseList.filter(course => course.topNum === 0 && !course.isFiled);
+                        this.filedCourseList = courseList.filter(course => course.isFiled);
+                    } else {
+                        this.$message.error(data.message);
+                    }
+                }).catch(() => {
+                    this.$message.error("服务器繁忙！")
+                })
+            },
+        },
+        created() {
+            yxt.http.get("/auth/verify/2").then(({ data }) => {
+                if (data.success) {
+                    this.user = data.queryResult.data[0];
+                    this.getCourseData();
+                } else {
+                    location.href = "index.html"
+                }
+            }).catch(() => {
+                location.href = "index.html"
+            });
+        },
+        computed: {
+            topCourseListRows() {
+                const topCourseListRows = [];
+                this.topCourseList.forEach((topCourse, index) => {
+                    const row = Math.floor(index / 5);
+                    if (!topCourseListRows[row]) {
+                        topCourseListRows[row] = [];
+                    }
+                    topCourseListRows[row].push(topCourse);
+                })
+                return topCourseListRows;
+            },
+            otherCourseListRows() {
+                const otherCourseListRows = [];
+                this.otherCourseList.forEach((otherCourse, index) => {
+                    const row = Math.floor(index / 5);
+                    if (!otherCourseListRows[row]) {
+                        otherCourseListRows[row] = [];
+                    }
+                    otherCourseListRows[row].push(otherCourse);
+                })
+                return otherCourseListRows;
+            },
+            filedCourseListRows() {
+                const filedCourseListRows = [];
+                this.filedCourseList.forEach((filedCourse, index) => {
+                    const row = Math.floor(index / 2);
+                    if (!filedCourseListRows[row]) {
+                        filedCourseListRows[row] = [];
+                    }
+                    filedCourseListRows[row].push(filedCourse);
+                })
+                return filedCourseListRows;
+            }
+        },
+    })
+</script>
+
+</html>
