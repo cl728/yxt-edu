@@ -2015,7 +2015,7 @@
                 if (type === 0) { // 文件类型是目录，获取其子级资源
                     this.getResourceData(this.course.id, resourceId);
                     // 更新面包屑导航信息
-                    // this.breadcrumb += ' <i class="el-icon-arrow-right"></i> <button type="button" class="el-button el-button--text" onclick="getResourceData(' + this.course.id + ', ' + resourceId + ')">' + name + '</button>'
+                    this.breadcrumb += ' <i class="el-icon-arrow-right"></i> <button type="button" class="el-button el-button--text" onclick="getResourceData(' + this.course.id + ', ' + resourceId + ')">' + name + '</button>'
                     this.parentResourceId = resourceId;
                 } else if (type === 1) { // 文件类型是文件，请求下载接口
                     yxt.http.get("resource/download/resourceId/" + resourceId, {
