@@ -12,6 +12,9 @@
         #course-resources-card>.el-card__body {
             padding: 0;
         }
+        #resource-upload-btn > .el-upload {
+            display: block;
+        }
     </style>
 </head>
 
@@ -466,9 +469,13 @@
                     <div id="course-resources" v-if="activeIndex2=='2'" style="margin-top: 30px">
                         <div v-if="user.isTeacher">
                             <el-row>
-                                <el-button type="primary" plain style="float: left"><i class="el-icon-upload"></i> 上传资源
-                                </el-button>
-                                <el-button type="primary" plain style="float: left"
+                                <el-upload id="resource-upload-btn" action="#" :show-file-list="false"
+                                    :before-upload="beforeResourceUpload" :http-request="uploadResource">
+                                    <el-button type="primary" plain style="float: left"><i class="el-icon-upload"></i>
+                                        上传资源
+                                    </el-button>
+                                </el-upload>
+                                <el-button type="primary" plain style="float: left; margin-left: 8px;"
                                     @click="createFolderFormVisible = true"><i class="el-icon-plus"></i> 新建文件夹
                                 </el-button>
                                 <!-- 创建文件夹表单 -->
@@ -494,7 +501,7 @@
                         </div>
                         <div class="course-resources-box">
                             <el-card class="box-card" id="course-resources-card"
-                                style="margin-top: 20px;width: 1184px;border-radius: 6px;border-width: 2px;padding: 0;">
+                                style="margin-top: 20px;width: 1184px;height: auto; border-radius: 6px;border-width: 2px;padding: 0;">
                                 <div style="width: 1144px">
                                     <el-container>
                                         <el-header style="background-color:#F1F3F4; width: 1200px;">
@@ -509,7 +516,7 @@
                                         <!-- 资源列表 -->
                                         <el-main>
                                             <el-row type="flex" justify="space-start" :gutter="20" style="margin: 40px;"
-                                                v-for="(row, index) of resourceListRows" :key="index">
+                                                v-for="(row, index) of resourceListRows" :key="index" v-show="resourceListRows.length > 0">
                                                 <el-col :span="3" style="margin-right: 25px;"
                                                     v-for="(resource, innerindex) in row" :key="resource.id">
                                                     <el-button style="height: 150px; width: 129px; padding: 12px 0;"
@@ -528,20 +535,11 @@
                                                     </el-button>
                                                 </el-col>
                                             </el-row>
+                                            <el-row v-show="resourceListRows.length === 0">
+                                                <p style="text-align: center; font-size: 15px; color: black; line-height: 160px;">该目录下暂无文件</p>
+                                            </el-row>
                                         </el-main>
                                     </el-container>
-                                    <!-- <span style="font-size: xx-large;width: 1144px">资源文件上传</span>
-                                    <div id="resources-upload" style="margin-top: 30px">
-                                        <el-upload style="width: 1144px" class="upload-demo" ref="upload"
-                                            action="https://jsonplaceholder.typicode.com/posts/"
-                                            :on-preview="handlePreview" :on-remove="handleRemove" :file-list="fileList"
-                                            :auto-upload="false">
-                                            <el-button slot="trigger" size="small" type="primary">选取文件</el-button>
-                                            <el-button style="margin-left: 10px;" size="small" type="success"
-                                                @click="submitUpload">上传到服务器</el-button>
-                                            <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过500kb</div>
-                                        </el-upload>
-                                    </div> -->
                                 </div>
                             </el-card>
                         </div>
@@ -1903,15 +1901,6 @@
             handleChange(value) {
                 console.log(value);
             },
-            submitUpload() {
-                this.$refs.upload.submit();
-            },
-            handleRemove(file, fileList) {
-                console.log(file, fileList);
-            },
-            handlePreview(file) {
-                console.log(file);
-            },
             handleSelect(key, keyPath) {
                 console.log(key, keyPath);
             },
@@ -2010,6 +1999,9 @@
                     case 'mp4':
                         return "./images/video-icon.png";
                         break;
+                    case 'pdf':
+                        return "https://www.ketangpai.com/Public/Common/img/fileicon/file_ext_big_pdf.png"
+                        break;
                     default:
                         return "https://www.ketangpai.com/Public/Common/img/fileicon/file_ext_big_folder.png"
                         break;
@@ -2044,6 +2036,48 @@
                         })
                     }
                 });
+            },
+            uploadResource(f) {
+                let formdata = new FormData()
+                formdata.append('file', f.file)
+                yxt.http({
+                    url: '/resource/upload/userId/' + this.user.id + "?parentResourceId=" + this.parentResourceId,
+                    method: 'post',
+                    data: formdata,
+                    headers: { 'Content-Type': 'multipart/form-data' }
+                }).then(({ data }) => {
+                    if (data.success) {
+                        const courseResource = {
+                            courseId: this.course.id,
+                            resourceId: data.queryResult.data[0].id
+                        }
+                        yxt.http.post("/resource/courseResource", courseResource).then(({ data }) => {
+                            if (data.success) {
+                                this.$message.success(data.message);
+                                this.getResourceData(this.course.id, this.parentResourceId);
+                            } else {
+                                this.$message.error(data.message);
+                            }
+                        })
+                    } else {
+                        this.$message.error(data.message);
+                    }
+                }).catch((() => {
+                    this.$message.error("服务器繁忙，请稍候再试！");
+                }));
+            },
+            // 上传资源前的过滤
+            beforeResourceUpload(file) {
+                const fileTypes = ["image/jpeg", "image/png", "video/mpeg4", "video/mp4",
+                    "video/avi", "application/msword", "application/x-xls", "application/pdf",
+                    "application/x-ppt", "application/vnd.ms-powerpoint", "text/plain"];
+                const isValidType = fileTypes.indexOf(file.type) != -1;
+
+                if (!isValidType) {
+                    this.$message.error('暂不支持该文件类型！');
+                    return false;
+                }
+                return true;
             },
             formatDateTime() {
                 let t = this.homeworkInputForm.deadline;
