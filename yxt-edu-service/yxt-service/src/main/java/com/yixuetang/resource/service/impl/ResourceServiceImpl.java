@@ -28,11 +28,11 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.http.HttpServletResponse;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
-import java.util.stream.Collectors;
 
 /**
  * @author Colin
@@ -98,6 +98,7 @@ public class ResourceServiceImpl implements ResourceService {
                 .id( null )
                 .type( 1 )
                 .ext( ext )
+                .contentType( contentType )
                 .name( originalFilename )
                 .location( filePath )
                 .createTime( new Date() )
@@ -123,6 +124,7 @@ public class ResourceServiceImpl implements ResourceService {
                 .id( null )
                 .type( 0 )
                 .ext( null )
+                .contentType( null )
                 .name( resource.getName() )
                 .location( null )
                 .createTime( new Date() )
@@ -160,6 +162,16 @@ public class ResourceServiceImpl implements ResourceService {
     @Transactional
     public CommonResponse saveCourseResource(InsertCourseResource courseResource) {
         this.courseResourceMapper.insert( CourseResource.builder().id( null ).courseId( courseResource.getCourseId() ).resourceId( courseResource.getResourceId() ).build() );
+        return CommonResponse.SUCCESS();
+    }
+
+    @Override
+    public CommonResponse download(Long resourceId, HttpServletResponse response) {
+        Resource resource = this.resourceMapper.selectById( resourceId );
+        if (resource == null) {
+            ExceptionThrowUtils.cast( CommonCode.INVALID_PARAM );
+        }
+        resourceUtils.download( response, resource );
         return CommonResponse.SUCCESS();
     }
 

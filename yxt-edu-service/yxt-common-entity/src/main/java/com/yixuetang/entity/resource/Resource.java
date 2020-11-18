@@ -36,7 +36,10 @@ public class Resource {
 
     private String name;    // 文件名称
 
-    private String location;    // 文件存储路径，若为类型为目录则存储路径为空
+    private String location;    // 文件存储路径，若类型为目录则存储路径为空
+
+    @TableField("content_type")
+    private String contentType; // 文件内容类型，若类型为目录则文件内容类型为空
 
     @TableField("create_time")
     private Date createTime;    // 目录创建/文件上传时间

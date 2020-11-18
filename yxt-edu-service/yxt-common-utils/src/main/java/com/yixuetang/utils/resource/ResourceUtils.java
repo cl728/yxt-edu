@@ -1,7 +1,10 @@
 package com.yixuetang.utils.resource;
 
 import com.github.tobato.fastdfs.domain.StorePath;
+import com.github.tobato.fastdfs.proto.storage.DownloadByteArray;
 import com.github.tobato.fastdfs.service.FastFileStorageClient;
+import com.yixuetang.entity.resource.Resource;
+import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -9,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 /**
@@ -39,4 +43,34 @@ public class ResourceUtils {
         }
     }
 
+    public void download(HttpServletResponse response, Resource resource) {
+        String filePath = resource.getLocation();
+        StorePath storePath = StorePath.praseFromUrl( filePath );
+
+        DownloadByteArray downloadByteArray = new DownloadByteArray();
+        byte[] data = this.storageClient.downloadFile( storePath.getGroup(), storePath.getPath(), downloadByteArray );
+
+        try {
+
+            response.reset();
+
+            // 跨域设置
+            response.addHeader( "Access-Control-Allow-Origin", "http://www.yixuetang.com" );
+            response.addHeader( "Access-Control-Allow-Methods", "GET, POST, PUT, DELETE" );
+            response.addHeader( "Access-Control-Allow-Credentials", "true" );
+
+            // inline在浏览器中直接显示，不提示用户下载
+            // attachment弹出对话框，提示用户进行下载保存本地
+            // 默认为inline方式
+            response.setHeader( "Content-Disposition", "attachment;filename=" + resource.getName() );
+
+            response.addHeader( "Content-Length", "" + data.length );
+            response.setContentType( resource.getContentType() + ";charset=UTF-8" );
+
+            IOUtils.write( data, response.getOutputStream() );
+
+        } catch (Exception ex) {
+            LOGGER.error( "下载文件响应客户端发生异常！异常原因：{}", ex );
+        }
+    }
 }

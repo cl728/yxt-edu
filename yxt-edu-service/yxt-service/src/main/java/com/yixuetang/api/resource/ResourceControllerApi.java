@@ -10,13 +10,15 @@ import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.http.HttpServletResponse;
+
 /**
  * @author Colin
  * @version 1.0.0
  * @description 文件上传接口
  * @date 2020/11/11 9:33
  */
-@Api(value = "资源模块接口", description = "资源模块接口，提供图片、视频等资源的上传、下载")
+@Api(value = "资源模块接口", description = "资源模块接口，提供资源的上传、下载")
 public interface ResourceControllerApi {
 
     @ApiOperation("上传文件")
@@ -27,6 +29,11 @@ public interface ResourceControllerApi {
                     paramType = "query", dataType = "long")
     })
     CommonResponse upload(MultipartFile file, Long userId, Long parentResourceId);
+
+    @ApiOperation("下载文件")
+    @ApiImplicitParam(name = "resourceId", value = "资源id", required = true,
+            paramType = "path", dataType = "long")
+    void download(Long resourceId, HttpServletResponse response);
 
     @ApiOperation("创建文件夹")
     @ApiImplicitParams({

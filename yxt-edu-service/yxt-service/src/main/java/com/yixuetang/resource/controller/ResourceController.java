@@ -10,6 +10,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.http.HttpServletResponse;
+
 /**
  * @author Colin
  * @version 1.0.0
@@ -29,6 +31,12 @@ public class ResourceController implements ResourceControllerApi {
                                  @PathVariable Long userId,
                                  @RequestParam(required = false) Long parentResourceId) {
         return this.resourceService.upload( file, userId, parentResourceId );
+    }
+
+    @Override
+    @GetMapping("download/resourceId/{resourceId}")
+    public void download(@PathVariable Long resourceId, HttpServletResponse response) {
+        this.resourceService.download( resourceId, response );
     }
 
     @Override

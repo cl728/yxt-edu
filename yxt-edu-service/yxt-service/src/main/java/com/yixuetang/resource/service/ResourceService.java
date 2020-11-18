@@ -6,6 +6,8 @@ import com.yixuetang.entity.response.CommonResponse;
 import com.yixuetang.entity.response.QueryResponse;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.http.HttpServletResponse;
+
 /**
  * @author Colin
  * @version 1.0.0
@@ -50,4 +52,13 @@ public interface ResourceService {
      * @return 响应结果实体类
      */
     CommonResponse saveCourseResource(InsertCourseResource courseResource);
+
+    /**
+     * 下载资源
+     *
+     * @param resourceId 资源id
+     * @param response   Response
+     * @return 响应结果实体类
+     */
+    CommonResponse download(Long resourceId, HttpServletResponse response);
 }
