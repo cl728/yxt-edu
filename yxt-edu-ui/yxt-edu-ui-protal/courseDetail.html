@@ -12,7 +12,8 @@
         #course-resources-card>.el-card__body {
             padding: 0;
         }
-        #resource-upload-btn > .el-upload {
+
+        #resource-upload-btn>.el-upload {
             display: block;
         }
     </style>
@@ -516,7 +517,8 @@
                                         <!-- 资源列表 -->
                                         <el-main>
                                             <el-row type="flex" justify="space-start" :gutter="20" style="margin: 40px;"
-                                                v-for="(row, index) of resourceListRows" :key="index" v-show="resourceListRows.length > 0">
+                                                v-for="(row, index) of resourceListRows" :key="index"
+                                                v-show="resourceListRows.length > 0">
                                                 <el-col :span="3" style="margin-right: 25px;"
                                                     v-for="(resource, innerindex) in row" :key="resource.id">
                                                     <el-button style="height: 150px; width: 129px; padding: 12px 0;"
@@ -536,7 +538,9 @@
                                                 </el-col>
                                             </el-row>
                                             <el-row v-show="resourceListRows.length === 0">
-                                                <p style="text-align: center; font-size: 15px; color: black; line-height: 160px;">该目录下暂无文件</p>
+                                                <p
+                                                    style="text-align: center; font-size: 15px; color: black; line-height: 160px;">
+                                                    该目录下暂无文件</p>
                                             </el-row>
                                         </el-main>
                                     </el-container>
@@ -2011,13 +2015,38 @@
                 if (type === 0) { // 文件类型是目录，获取其子级资源
                     this.getResourceData(this.course.id, resourceId);
                     // 更新面包屑导航信息
-                    this.breadcrumb += ' <i class="el-icon-arrow-right"></i> <button type="button" class="el-button el-button--text" onclick="getResourceData(' + this.course.id + ', ' + resourceId + ')">' + name + '</button>'
+                    // this.breadcrumb += ' <i class="el-icon-arrow-right"></i> <button type="button" class="el-button el-button--text" onclick="getResourceData(' + this.course.id + ', ' + resourceId + ')">' + name + '</button>'
                     this.parentResourceId = resourceId;
                 } else if (type === 1) { // 文件类型是文件，请求下载接口
-                    this.$message.success("下载成功！")
+                    yxt.http.get("resource/download/resourceId/" + resourceId, {
+                        responseType: 'blob'
+                    }).then(resp => {
+                        yxt.http.get("resource/resourceId/" + resourceId)
+                            .then(({ data }) => {
+                                if (data.success) {
+                                    let fileName = data.queryResult.data[0].name;
+                                    this.download(resp.data, fileName);
+                                } else {
+                                    this.$message.error(data.message);
+                                }
+                            })
+                            .catch(() => {
+                                this.$message.error("服务器繁忙，请稍候再试！")
+                            })
+                    }).catch("服务器繁忙，请稍候再试！")
                 } else {
                     this.$message.error("服务器繁忙，请稍候再试！")
                 }
+            },
+            download(data, fileName) {
+                let url = window.URL.createObjectURL(data)
+                let link = document.createElement('a')
+                link.style.display = 'none'
+                link.href = url
+                link.download = fileName // 设置文件名
+                document.body.appendChild(link)
+                link.click()
+                window.URL.revokeObjectURL(link.href);
             },
             createFolder(formName) {
                 this.$refs[formName].validate((valid) => {

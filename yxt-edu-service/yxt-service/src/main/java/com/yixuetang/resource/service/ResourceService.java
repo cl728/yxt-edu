@@ -58,7 +58,14 @@ public interface ResourceService {
      *
      * @param resourceId 资源id
      * @param response   Response
+     */
+    void download(Long resourceId, HttpServletResponse response);
+
+    /**
+     * 根据资源id查找资源实体类
+     *
+     * @param resourceId 资源id
      * @return 响应结果实体类
      */
-    CommonResponse download(Long resourceId, HttpServletResponse response);
+    QueryResponse findByResourceId(Long resourceId);
 }

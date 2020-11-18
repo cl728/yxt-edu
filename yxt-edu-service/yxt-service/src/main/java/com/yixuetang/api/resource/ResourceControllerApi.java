@@ -55,4 +55,9 @@ public interface ResourceControllerApi {
 
     @ApiOperation("保存课程-资源记录")
     CommonResponse saveCourseResource(InsertCourseResource courseResource);
+
+    @ApiOperation("根据资源id查找资源实体类")
+    @ApiImplicitParam(name = "resourceId", value = "资源id", required = true,
+            paramType = "path", dataType = "long")
+    QueryResponse findByResourceId(Long resourceId);
 }

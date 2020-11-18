@@ -59,4 +59,10 @@ public class ResourceController implements ResourceControllerApi {
     public CommonResponse saveCourseResource(@RequestBody InsertCourseResource courseResource) {
         return this.resourceService.saveCourseResource( courseResource );
     }
+
+    @Override
+    @GetMapping("resourceId/{resourceId}")
+    public QueryResponse findByResourceId(@PathVariable Long resourceId) {
+        return this.resourceService.findByResourceId( resourceId );
+    }
 }

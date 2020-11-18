@@ -166,13 +166,21 @@ public class ResourceServiceImpl implements ResourceService {
     }
 
     @Override
-    public CommonResponse download(Long resourceId, HttpServletResponse response) {
+    public void download(Long resourceId, HttpServletResponse response) {
         Resource resource = this.resourceMapper.selectById( resourceId );
         if (resource == null) {
             ExceptionThrowUtils.cast( CommonCode.INVALID_PARAM );
         }
         resourceUtils.download( response, resource );
-        return CommonResponse.SUCCESS();
+    }
+
+    @Override
+    public QueryResponse findByResourceId(Long resourceId) {
+        Resource resource = this.resourceMapper.selectOne( new QueryWrapper<Resource>().eq( "id", resourceId ).select( "name" ) );
+        if (resource == null) {
+            ExceptionThrowUtils.cast( CommonCode.INVALID_PARAM );
+        }
+        return new QueryResponse( CommonCode.SUCCESS, new QueryResult<>( Collections.singletonList( resource ), 1 ) );
     }
 
     private void saveToDatabase(Long userId, Long parentResourceId, Resource resource) {
