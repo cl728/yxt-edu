@@ -55,4 +55,9 @@ public interface HomeworkControllerApi {
                     paramType = "path", dataType = "long")
     })
     CommonResponse updateHomework(long homeworkId, InsertHomework insertHomework);
+
+    @ApiOperation( "根据作业id切换置顶字段" )
+    @ApiImplicitParam(name = "homeworkId", value = "作业id", required = true,
+            paramType = "path", dataType = "long")
+    CommonResponse switchTop(long homeworkId);
 }

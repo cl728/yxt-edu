@@ -41,6 +41,9 @@ public class Homework {
     @TableField("total_score")
     private Double totalScore; // 满分值
 
+    @TableField("top_num")
+    private Integer topNum; // 置顶字段，0代表不置顶
+
     @TableField(exist = false)
     private List<User> studentList; // 作业-学生 多对多
 

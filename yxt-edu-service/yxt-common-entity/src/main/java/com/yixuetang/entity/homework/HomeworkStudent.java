@@ -39,6 +39,6 @@ public class HomeworkStudent {
     private Integer status; // 作业状态 0待完成 1待批改 2已批改 3被打回
 
     @TableField("correct_count")
-    private Integer correctCont; // 教师批阅次数
+    private Integer correctCount; // 教师批阅次数
 
 }

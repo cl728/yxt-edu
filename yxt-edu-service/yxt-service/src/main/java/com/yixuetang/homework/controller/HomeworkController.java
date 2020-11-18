@@ -51,4 +51,10 @@ public class HomeworkController implements HomeworkControllerApi {
         return this.homeworkService.updateHomework(homeworkId, insertHomework);
     }
 
+    @Override
+    @PutMapping("topNum/homeworkId/{homeworkId}")
+    public CommonResponse switchTop(@PathVariable long homeworkId) {
+        return this.homeworkService.switchTopNum( homeworkId );
+    }
+
 }

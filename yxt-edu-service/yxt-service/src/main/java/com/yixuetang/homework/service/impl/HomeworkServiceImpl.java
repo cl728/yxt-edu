@@ -1,6 +1,5 @@
 package com.yixuetang.homework.service.impl;
 
-import com.baomidou.mybatisplus.core.conditions.Wrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.yixuetang.course.mapper.CourseMapper;
 import com.yixuetang.course.mapper.ScMapper;
@@ -13,7 +12,6 @@ import com.yixuetang.entity.response.CommonResponse;
 import com.yixuetang.entity.response.QueryResponse;
 import com.yixuetang.entity.response.code.CommonCode;
 import com.yixuetang.entity.response.code.homework.HomeworkCode;
-import com.yixuetang.entity.response.code.notice.NoticeCode;
 import com.yixuetang.entity.response.result.HomeworkResp;
 import com.yixuetang.entity.response.result.QueryResult;
 import com.yixuetang.entity.user.User;
@@ -29,7 +27,6 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.util.CollectionUtils;
 
 import java.util.*;
 
@@ -227,6 +224,18 @@ public class HomeworkServiceImpl implements HomeworkService {
         homework.setTotalScore(insertHomework.getTotalScore());
         this.homeworkMapper.updateById(homework);
         return new CommonResponse(CommonCode.SUCCESS);
+    }
+
+    @Override
+    public CommonResponse switchTopNum(long homeworkId) {
+        //  作业是否存在
+        Homework homework = this.homeworkMapper.selectById( homeworkId );
+        if (homework == null) {
+            ExceptionThrowUtils.cast(CommonCode.INVALID_PARAM);
+        }
+        homework.setTopNum(homework.getTopNum() == 0 ? 10 : 0);
+        this.homeworkMapper.updateById(homework);
+        return CommonResponse.SUCCESS();
     }
 
     @Override

@@ -57,6 +57,7 @@ public interface NoticeService {
 
     /**
      * 根据公告id切换置顶字段
+     *
      * @param noticeId 课程公告Id
      * @return 通用响应实体类
      */

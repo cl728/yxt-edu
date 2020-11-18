@@ -34,8 +34,8 @@ public interface HomeworkService {
     /**
      * 根据作业id删除作业
      *
-     * @param homeworkId    作业id
-     * @param courseId      课程id
+     * @param homeworkId 作业id
+     * @param courseId   课程id
      * @return
      */
     CommonResponse deleteByHomeworkId(long homeworkId, long courseId);
@@ -49,11 +49,19 @@ public interface HomeworkService {
     QueryResponse findById(long homeworkId);
 
     /**
-     *  教师编辑作业
+     * 教师编辑作业
      *
-     * @param homeworkId        作业id
-     * @param insertHomework    编辑作业实体类
+     * @param homeworkId     作业id
+     * @param insertHomework 编辑作业实体类
      * @return
      */
     CommonResponse updateHomework(long homeworkId, InsertHomework insertHomework);
+
+    /**
+     * 根据作业id切换置顶字段
+     *
+     * @param homeworkId 作业id
+     * @return 通用响应实体类
+     */
+    CommonResponse switchTopNum(long homeworkId);
 }
