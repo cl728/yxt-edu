@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.yixuetang.course.mapper.CourseMapper;
 import com.yixuetang.entity.course.Course;
 import com.yixuetang.entity.request.resource.InsertResource;
+import com.yixuetang.entity.resource.CourseResource;
 import com.yixuetang.entity.resource.Resource;
 import com.yixuetang.entity.response.CommonResponse;
 import com.yixuetang.entity.response.QueryResponse;
@@ -11,6 +12,7 @@ import com.yixuetang.entity.response.code.CommonCode;
 import com.yixuetang.entity.response.code.resource.ResourceCode;
 import com.yixuetang.entity.response.result.QueryResult;
 import com.yixuetang.entity.user.User;
+import com.yixuetang.resource.mapper.CourseResourceMapper;
 import com.yixuetang.resource.mapper.ResourceMapper;
 import com.yixuetang.resource.service.ResourceService;
 import com.yixuetang.user.mapper.UserMapper;
@@ -29,6 +31,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * @author Colin
@@ -51,9 +54,12 @@ public class ResourceServiceImpl implements ResourceService {
     @Autowired
     private CourseMapper courseMapper;
 
+    @Autowired
+    private CourseResourceMapper courseResourceMapper;
+
     // 支持的文件类型：.jpg .jpeg .png .mp4 .avi .doc .xls .pdf .ppt .txt
-    private static final List<String> CONTENT_TYPES = Arrays.asList( "image/jpeg", "image/png", "video/mpeg4",
-            "video/avi", "application/msword", "application/x-xls", "application/pdf", "application/x-ppt", "text/plain" );
+    private static final List<String> CONTENT_TYPES = Arrays.asList( "image/jpeg", "image/png", "video/mpeg4", "video/mp4",
+            "video/avi", "application/msword", "application/x-xls", "application/pdf", "application/x-ppt", "application/vnd.ms-powerpoint", "text/plain" );
 
     private static final Logger LOGGER = LoggerFactory.getLogger( ResourceServiceImpl.class );
 
@@ -122,9 +128,10 @@ public class ResourceServiceImpl implements ResourceService {
                 .updateTime( new Date() ).build();
         // 保存到资源表中
         this.saveToDatabase( userId, parentResourceId, insertResource );
+        // 保存到课程-资源记录表中
+        this.courseResourceMapper.insert( CourseResource.builder().courseId( resource.getCourseId() ).resourceId( insertResource.getId() ).build() );
 
-        return new QueryResponse( CommonCode.SUCCESS,
-                new QueryResult<>( Collections.singletonList( insertResource ), 1 ) );
+        return CommonResponse.SUCCESS();
     }
 
     @Override

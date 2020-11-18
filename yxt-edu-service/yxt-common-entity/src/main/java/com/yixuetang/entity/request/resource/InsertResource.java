@@ -15,4 +15,7 @@ public class InsertResource {
     @ApiModelProperty(name = "文件夹名称", dataType = "String")
     private String name;
 
+    @ApiModelProperty(name = "课程id", dataType = "long")
+    private Long courseId;
+
 }

@@ -2,10 +2,8 @@ package com.yixuetang.resource.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.yixuetang.entity.resource.Resource;
-import org.apache.ibatis.annotations.Mapper;
-import org.apache.ibatis.annotations.Param;
-import org.apache.ibatis.annotations.Select;
-import org.apache.ibatis.annotations.Update;
+import org.apache.ibatis.annotations.*;
+import org.apache.ibatis.mapping.FetchType;
 
 import java.util.List;
 
@@ -25,7 +23,7 @@ public interface ResourceMapper extends BaseMapper<Resource> {
     void updateParentResourceIdById(@Param("parentResourceId") Long parentResourceId, @Param("id") Long id);
 
     @Select("<script>" +
-                "select id, type, ext, name, location, update_time from t_resource " +
+                "select id, type, ext, name, location, create_time from t_resource " +
                     "<where>" +
                         " and id in (select resource_id from t_cr where course_id = #{courseId})" +
                             "<if test='parentResourceId != -1'>" +
@@ -35,7 +33,7 @@ public interface ResourceMapper extends BaseMapper<Resource> {
                                 "and parent_resource_id is null" +
                             "</if>" +
                     "</where>" +
-                "order by type desc, update_time desc" +
+                "order by type, create_time" +
             "</script>")
     List<Resource> findByCourseIdAndParentId(@Param( "courseId" ) Long courseId, @Param( "parentResourceId" ) Long parentResourceId);
 }

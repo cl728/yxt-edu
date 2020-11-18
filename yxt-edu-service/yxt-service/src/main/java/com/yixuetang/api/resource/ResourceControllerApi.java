@@ -1,7 +1,6 @@
 package com.yixuetang.api.resource;
 
 import com.yixuetang.entity.request.resource.InsertResource;
-import com.yixuetang.entity.resource.Resource;
 import com.yixuetang.entity.response.CommonResponse;
 import com.yixuetang.entity.response.QueryResponse;
 import io.swagger.annotations.Api;

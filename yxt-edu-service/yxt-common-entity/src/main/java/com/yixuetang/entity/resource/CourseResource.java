@@ -5,7 +5,10 @@ import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.yixuetang.entity.course.Course;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 /**
  * @author Colin
@@ -15,6 +18,9 @@ import lombok.Data;
  */
 @TableName("t_cr")
 @Data
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class CourseResource {
 
     @TableId(type = IdType.AUTO)
