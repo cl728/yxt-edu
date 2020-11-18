@@ -13,12 +13,4 @@ import org.apache.ibatis.mapping.FetchType;
  */
 @Mapper
 public interface HomeworkMapper extends BaseMapper<Homework> {
-
-    @Select("select id, title, description, deadline, total_score from t_homework where id = #{id}")
-    @Results(id = "homeworkMap", value = {
-            @Result(column = "id", property = "studentList",
-                    many = @Many(select = "com.yixuetang.user.mapper.UserMapper.findByHomeworkId", fetchType = FetchType.LAZY))
-    })
-    Homework findById(Long id);
-
 }

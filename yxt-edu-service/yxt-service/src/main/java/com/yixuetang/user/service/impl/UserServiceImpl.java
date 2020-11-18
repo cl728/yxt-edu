@@ -8,6 +8,8 @@ import com.yixuetang.course.mapper.ScMapper;
 import com.yixuetang.entity.auth.UserInfo;
 import com.yixuetang.entity.course.Course;
 import com.yixuetang.entity.course.StudentCourse;
+import com.yixuetang.entity.homework.Homework;
+import com.yixuetang.entity.homework.HomeworkStudent;
 import com.yixuetang.entity.request.auth.LoginUser;
 import com.yixuetang.entity.request.user.*;
 import com.yixuetang.entity.response.CommonResponse;
@@ -19,6 +21,8 @@ import com.yixuetang.entity.response.result.UserResp;
 import com.yixuetang.entity.user.Role;
 import com.yixuetang.entity.user.School;
 import com.yixuetang.entity.user.User;
+import com.yixuetang.homework.mapper.HomeworkMapper;
+import com.yixuetang.homework.mapper.HomeworkStudentMapper;
 import com.yixuetang.user.mapper.RoleMapper;
 import com.yixuetang.user.mapper.SchoolMapper;
 import com.yixuetang.user.mapper.UserMapper;
@@ -36,6 +40,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.CollectionUtils;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -80,6 +85,10 @@ public class UserServiceImpl implements UserService {
     private CourseMapper courseMapper;
     @Autowired
     private JwtConfig config;
+    @Autowired
+    private HomeworkMapper homeworkMapper;
+    @Autowired
+    private HomeworkStudentMapper homeworkStudentMapper;
 
     @Override
     public QueryResponse findOneUser(long id) {
@@ -521,5 +530,56 @@ public class UserServiceImpl implements UserService {
                                 ? ids.size() // 如果搜索字段为空，则 total 为总的课程成员
                                 : filterUsers.size() ) ); // 否则为过滤后的成员
 
+    }
+
+    @Override
+    public QueryResponse findPageByHomeworkId(long homeworkId, long currentPage, long pageSize, String search) {
+        // homeworkId 不合法
+        Homework homework = this.homeworkMapper.selectById( homeworkId );
+        if (homework == null) {
+            ExceptionThrowUtils.cast( CommonCode.INVALID_PARAM );
+        }
+
+        QueryWrapper<HomeworkStudent> queryWrapper = new QueryWrapper<HomeworkStudent>().eq( "homework_id", homeworkId );
+        List<Long> ids = this.homeworkStudentMapper.selectList( queryWrapper
+                .select( "student_id" ) )
+                .stream()
+                .map( HomeworkStudent::getStudentId )
+                .collect( Collectors.toList() );
+
+        // 如果 search 字段不为空，先在 User 总表里查询出符合条件的 User 列表，再将其中不是该次作业成员的 User 过滤掉
+        // 得到的 filterUsers 即为符合搜索条件且为该次作业的成员列表
+        List<User> filterUsers = new ArrayList<>();
+        if (StringUtils.isNoneBlank( search )) {
+            QueryWrapper<User> userQueryWrapper =
+                    new QueryWrapper<User>()
+                            .like( "real_name", search )
+                            .or()
+                            .like( "ts_no", search );
+            filterUsers = this.userMapper
+                    .selectList( userQueryWrapper )
+                    .stream()
+                    .filter( user -> ids.contains( user.getId() ) )
+                    .collect( Collectors.toList() );
+            search = "%" + search + "%";
+        }
+
+        // 查询该次作业下的学生
+        List<User> studentList = this.userMapper.findPageByHomeworkId( new Page<>( currentPage, pageSize ), homeworkId, search );
+
+        if (!CollectionUtils.isEmpty( studentList )) {
+            studentList.forEach(
+                    student -> student.setHomeworkStudent( this.homeworkStudentMapper
+                            .selectOne(
+                                    new QueryWrapper<HomeworkStudent>()
+                                            .eq( "homework_id", homeworkId )
+                                            .eq( "student_id", student.getId() ) ) ) );
+        }
+
+        return new QueryResponse( CommonCode.SUCCESS,
+                new QueryResult<>( studentList,
+                        StringUtils.isBlank( search )
+                                ? ids.size() // 如果搜索字段为空，则 total 为总的作业成员
+                                : filterUsers.size() ) ); // 否则为过滤后的成员
     }
 }

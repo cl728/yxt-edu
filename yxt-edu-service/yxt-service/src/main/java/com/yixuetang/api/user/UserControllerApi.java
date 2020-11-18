@@ -97,7 +97,7 @@ public interface UserControllerApi {
     @ApiImplicitParam(name = "userId", value = "用户id", required = true, paramType = "path", dataType = "long")
     CommonResponse delById(long userId);
 
-    @ApiOperation("分页查询某门课程下的成员")
+    @ApiOperation("分页条件查询某门课程下的成员")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "courseId", value = "课程id", required = true,
                     paramType = "path", dataType = "long"),
@@ -109,4 +109,18 @@ public interface UserControllerApi {
                     paramType = "query", dataType = "String")
     })
     QueryResponse findPageByCourseId(long courseId, long currentPage, long pageSize, String search);
+
+    @ApiOperation("分页条件查询某次作业下的成员")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "homeworkId", value = "作业id", required = true,
+                    paramType = "path", dataType = "long"),
+            @ApiImplicitParam(name = "currentPage", value = "当前页码数", required = true,
+                    paramType = "path", dataType = "long"),
+            @ApiImplicitParam(name = "pageSize", value = "每页显示条数", required = true,
+                    paramType = "path", dataType = "long"),
+            @ApiImplicitParam(name = "search", value = "搜索字段（学号、姓名）",
+                    paramType = "query", dataType = "String")
+    })
+    QueryResponse findPageByHomeworkId(long homeworkId, long currentPage, long pageSize, String search);
+
 }

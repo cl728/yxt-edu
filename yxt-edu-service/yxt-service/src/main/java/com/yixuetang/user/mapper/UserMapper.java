@@ -111,6 +111,16 @@ public interface UserMapper extends BaseMapper<User> {
             "</script>" )
     List<User> findPageByIds(@Param("page") Page<User> page, @Param("ids") List<Long> ids, @Param( "search" ) String search);
 
-    @Select("select id, ts_no, real_name from t_user where id in (select student_id from t_hs where homework_id = #{homeworkId})")
-    List<User> findByHomeworkId(Long homeworkId);
+    @Select( "<script>" +
+                "select id, ts_no, real_name from t_user " +
+                    "<where>" +
+                        " and id in (select student_id from t_hs where homework_id = #{homeworkId})" +
+                        "<if test='search != null and search.length() > 0'>" +
+                            "and real_name like #{search} or ts_no like #{search}" +
+                        "</if>" +
+                    "</where>" +
+            "</script>" )
+    List<User> findPageByHomeworkId(@Param("page") Page<User> page,
+                                    @Param("homeworkId") long homeworkId,
+                                    @Param( "search" ) String search);
 }

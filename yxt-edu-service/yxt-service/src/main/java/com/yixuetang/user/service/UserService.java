@@ -133,7 +133,7 @@ public interface UserService {
     CommonResponse updateAvatar(long id, String avatar, HttpServletRequest request, HttpServletResponse response);
 
     /**
-     * 分页查询某门课程下的成员
+     * 分页条件查询某门课程下的成员
      *
      * @param courseId    课程id
      * @param currentPage 当前页码数
@@ -142,4 +142,15 @@ public interface UserService {
      * @return 响应结果实体类
      */
     QueryResponse findPageByCourseId(long courseId, long currentPage, long pageSize, String search);
+
+    /**
+     * 分页条件查询某次作业下的成员
+     *
+     * @param homeworkId  作业id
+     * @param currentPage 当前页码数
+     * @param pageSize    每页显示条数
+     * @param search      搜索字段（学号、姓名）
+     * @return 响应结果实体类
+     */
+    QueryResponse findPageByHomeworkId(long homeworkId, long currentPage, long pageSize, String search);
 }

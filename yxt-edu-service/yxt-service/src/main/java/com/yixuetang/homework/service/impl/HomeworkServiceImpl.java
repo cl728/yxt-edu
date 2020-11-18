@@ -232,17 +232,9 @@ public class HomeworkServiceImpl implements HomeworkService {
     @Override
     public QueryResponse findById(long homeworkId) {
         //  作业是否存在
-        Homework homework = this.homeworkMapper.findById( homeworkId );
+        Homework homework = this.homeworkMapper.selectById( homeworkId );
         if (homework == null){
             ExceptionThrowUtils.cast(CommonCode.INVALID_PARAM);
-        }
-        if (!CollectionUtils.isEmpty( homework.getStudentList() )) {
-            homework.getStudentList().forEach(
-                    student -> student.setHomeworkStudent( this.homeworkStudentMapper
-                            .selectOne(
-                                    new QueryWrapper<HomeworkStudent>()
-                                            .eq( "homework_id", homeworkId )
-                                            .eq( "student_id", student.getId() ) ) ) );
         }
         return new QueryResponse( CommonCode.SUCCESS, new QueryResult<>( Collections.singletonList( homework ), 1 ) );
 
