@@ -254,11 +254,141 @@
 							</el-radio-group>
 						</div>
 						<el-divider></el-divider>
-						<el-container>
+
+						<el-container v-show="activeName == 4 ||activeName == 5||activeName == 6">
 							<el-main>
 								<div style="text-align: center;color: darkgrey;">
 									暂无记录 ！
+
 								</div>
+							</el-main>
+						</el-container>
+
+						<!--总成绩-->
+						<el-container v-show="activeName == 1">
+							<el-main>
+								<el-row>
+									<el-col :span="6" >
+										<el-button icon="el-icon-setting" type="text" @click="dialogVisible = true">设置成绩权重</el-button>
+										<el-dialog title="设置成绩权重" :visible.sync="dialogVisible" width="30%" :before-close="handleClose">
+											期末成绩权重：<el-input v-model="finalWeight" placeholder="请输入内容" @blur="isNiceWeight"><template slot="append">%</template></el-input>
+											作业成绩权重：<el-input v-model="hwWeight" placeholder="请输入内容" @blur="isNiceWeight"><template slot="append">%</template></el-input>
+											平时成绩权重：<el-input v-model="UsualWeight" placeholder="请输入内容" @blur="isNiceWeight"><template slot="append">%</template></el-input>
+											测试成绩权重：<el-input v-model="testWeight" placeholder="请输入内容" @blur="isNiceWeight"><template slot="append">%</template></el-input>
+											<span style="color: red;">{{weightMsg}}</span>
+											<span slot="footer" class="dialog-footer">
+											    <el-button @click="dialogVisible = false">取 消</el-button>
+											    <el-button type="primary" @click="dialogVisible = false" :disabled="weightMsg != ''">确 定</el-button>
+											  </span>
+										</el-dialog>
+									</el-col>
+									<el-col :span="6" :offset="12">
+										<el-input placeholder="学号,姓名" suffix-icon="el-icon-search" v-model="search5">
+										</el-input>
+									</el-col>
+								</el-row>
+								<el-table :data="totalScore" style="width: 100%" max-height="1000" stripe="true">
+									<el-table-column fixed prop="sno,studentName" label="全部成员" width="200">
+										<template slot-scope="scope">
+											{{scope.row.sno}} &nbsp; <span style="font-weight: 500;color: black;">{{scope.row.studentName}}</span>
+										</template>
+									</el-table-column>
+									<el-table-column prop="hw" label="作业" width="150" >
+
+									</el-table-column>
+									<el-table-column prop="test" label="测试" width="150" >
+
+									</el-table-column>
+									<el-table-column prop="usualScore" label="平时成绩" width="150" >
+
+									</el-table-column>
+									<el-table-column prop="finalScore" label="期末成绩成绩" width="150" >
+
+									</el-table-column>
+									<el-table-column prop="finalScore,test,usualScore,hw" label="最终成绩" width="150" >
+										<template slot-scope="scope">
+											{{(scope.row.finalScore * finalWeight  +
+											scope.row.test * testWeight  +
+											scope.row.usualScore * UsualWeight +
+											scope.row.hw * hwWeight) * 0.01.toFixed(2)}}
+										</template>
+									</el-table-column>
+								</el-table>
+							</el-main>
+						</el-container>
+
+
+						<!--作业成绩-->
+						<el-container v-show="activeName == 2">
+							<el-main>
+								<el-row>
+									<el-col :span="6" :offset="18">
+										<el-input placeholder="学号,姓名" suffix-icon="el-icon-search" v-model="search2">
+										</el-input>
+									</el-col>
+								</el-row>
+								<el-table :data="hwScore" style="width: 100%" max-height="1000" stripe="true">
+									<el-table-column fixed prop="sno,studentName" label="全部成员" width="200">
+										<template slot-scope="scope">
+											{{scope.row.sno}} &nbsp; <span style="font-weight: 500;color: black;">{{scope.row.studentName}}</span>
+										</template>
+									</el-table-column>
+									<el-table-column prop="hw" :label="item" width="150" v-for="(item,index) in hwTitle" :key=index>
+										<template slot-scope="scope">
+											<span v-if="scope.row.hw[index].status > 0" style="font-weight: 1000;">{{scope.row.hw[index].score}}</span>
+											<span v-else style="color: red;">未交</span>
+											<span>&nbsp; /{{scope.row.hw[index].totalScore}}</span>
+										</template>
+									</el-table-column>
+								</el-table>
+							</el-main>
+						</el-container>
+
+						<!--测试成绩-->
+						<el-container v-show="activeName == 3">
+							<el-main>
+								<el-row>
+									<el-col :span="6" :offset="18">
+										<el-input placeholder="学号,姓名" suffix-icon="el-icon-search" v-model="search3">
+										</el-input>
+									</el-col>
+								</el-row>
+								<el-table :data="testScore" style="width: 100%" max-height="1000" stripe="true">
+									<el-table-column fixed prop="sno,studentName" label="全部成员" width="200">
+										<template slot-scope="scope">
+											{{scope.row.sno}} &nbsp; <span style="font-weight: 500;color: black;">{{scope.row.studentName}}</span>
+										</template>
+									</el-table-column>
+									<el-table-column prop="test" :label="item" width="150" v-for="(item,index) in testTitle" :key=index>
+										<template slot-scope="scope">
+											<span v-if="scope.row.test[index].status > 0" style="font-weight: 1000;">{{scope.row.test[index].score}}</span>
+											<span v-else style="color: red;">未交</span>
+											<span>&nbsp; /{{scope.row.test[index].totalScore}}</span>
+										</template>
+									</el-table-column>
+								</el-table>
+							</el-main>
+						</el-container>
+
+
+						<!--期末成绩-->
+						<el-container v-show="activeName == 7">
+							<el-main>
+								<el-row>
+									<el-col :span="6" :offset="18">
+										<el-input placeholder="学号,姓名" suffix-icon="el-icon-search" v-model="search4">
+										</el-input>
+									</el-col>
+								</el-row>
+								<el-table :data="finalGradeData" style="width: 100%" max-height="1000" stripe="true">
+									<el-table-column fixed prop="sno,studentName" label="全部成员" width="200">
+										<template slot-scope="scope">
+											{{scope.row.sno}} &nbsp; <span style="font-weight: 500;color: black;">{{scope.row.studentName}}</span>
+										</template>
+									</el-table-column>
+									<el-table-column prop="finalGrade" label="期末成绩" width="150" >
+									</el-table-column>
+								</el-table>
 							</el-main>
 						</el-container>
 					</div>
@@ -319,7 +449,124 @@
 				pageSize: 20,
 				pageTotal: 200,
 				search: ""
-			}
+			},
+			temp:[],
+
+			//作业成绩模块数据
+			search2: '',
+			hwTitle:[],
+			hwScore: [{
+				sno:'12370393456',
+				studentName: '王小虎',
+				hw:[
+					{
+						title:'第一次作业',
+						score:96,
+						totalScore:100,
+						status:1
+					},{
+						title:'第二次作业',
+						score:1,
+						totalScore:23,
+						status:0
+					}
+				]
+
+			},{
+				sno:'20170390413',
+				studentName: '王虎',
+				hw:[
+					{
+						title:'第一次作业',
+						score:1,
+						totalScore:23,
+						status:0
+					},{
+						title:'第二次作业',
+						score:1,
+						totalScore:23,
+						status:0
+					}
+				]
+
+			}] ,
+
+			//测试成绩模块数据
+			search3: '',
+			testTitle:[],
+			testScore: [{
+				sno:'12370393456',
+				studentName: '王小虎',
+				test:[
+					{
+						title:'第一次测试',
+						score:96,
+						totalScore:100,
+						status:1
+					},{
+						title:'第二次测试',
+						score:1,
+						totalScore:23,
+						status:0
+					}
+				]
+
+			},{
+				sno:'20170390413',
+				studentName: '王虎',
+				test:[
+					{
+						title:'第一次测试',
+						score:1,
+						totalScore:23,
+						status:0
+					},{
+						title:'第二次测试',
+						score:1,
+						totalScore:23,
+						status:0
+					}
+				]
+
+			}] ,
+
+			//期末成绩模块数据
+			search4:'',
+			finalGradeData:[{
+				sno:'12370393456',
+				studentName: '王小虎',
+				finalGrade:86
+			},{
+				sno:'20170390413',
+				studentName: '王虎',
+				finalGrade:92
+			}],
+
+			//总成绩模块数据
+			//权重
+			hwWeight:10,
+			testWeight:10,
+			UsualWeight:10,
+			finalWeight:70,
+			dialogVisible:false,
+			weightMsg:'',
+			search5:'', //搜索
+			totalScore:[{
+				sno:'12370393456',
+				studentName: '王小虎',
+				hw:86,    //作业平均成绩
+				test:89,   //测试平均成绩
+				usualScore:12,   //平时成绩
+				finalScore:45    //期末成绩
+			},{
+				sno:'20170390413',
+				studentName: '王虎',
+				hw:86,
+				test:89,
+				usualScore:12,
+				finalScore:45
+			}]
+
 		},
 		methods: {
 			handleSelectFirst(key, keyPath) {
@@ -390,11 +637,57 @@
 					location.href = "../index.html";
 				});
 			},
+
+			handleClose(done) {
+				this.$confirm('确认关闭？')
+						.then(_ => {
+							done();
+						})
+						.catch(_ => {});
+			},
+			isNiceWeight(){
+				var hwWeight = parseInt(this.hwWeight);
+				var testWeight = parseInt(this.testWeight);
+				var finalWeight = parseInt(this.finalWeight);
+				var UsualWeight = parseInt(this.UsualWeight);
+				if((hwWeight+testWeight+finalWeight+UsualWeight)>100){
+					this.weightMsg = "总权重超过100，请重新分配";
+				}else if((hwWeight+testWeight+finalWeight+UsualWeight)<100){
+					this.weightMsg = "总权重小于100，请重新分配";
+				}else{
+					this.weightMsg = "";
+				}
+			},
+
+			//作业成绩表标题数据初始化
+			initHwTitle(){
+				//将hwScore里的作业标题title，赋值到hwTitie ，前提是hwScore已经更新了数据，所以更新hwScore之后记得执行这段代码
+				this.hwTitle = this.temp;
+				for(let i = 0 ; i < this.hwScore[0].hw.length ; i++ ){
+					this.hwTitle.push(this.hwScore[0].hw[i].title);
+				}
+				this.temp = [];
+			},
+			//测试成绩表标题数据初始化
+			initTestTitle(){
+				//将testScore里的作业标题title，赋值到testTitie ，前提是testScore已经更新了数据，所以更新testScore之后记得执行这段代码
+				this.testTitle = this.temp;
+				for(let i = 0 ; i < this.testScore[0].test.length ; i++ ){
+					this.testTitle.push(this.testScore[0].test[i].title);
+				}
+				this.temp = [];
+			},
+
 		},
 		created() {
 			this.verify();
 			this.getCourseMemberData();
 			this.getCourseData();
+
+			//testScore和hwScore更新之后记得执行下面这两个方法
+			this.initHwTitle();
+			this.initTestTitle();
+
 		},
 		watch: {
 			pageData: {
