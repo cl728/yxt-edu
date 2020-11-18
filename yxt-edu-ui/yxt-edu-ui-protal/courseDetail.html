@@ -468,8 +468,28 @@
                             <el-row>
                                 <el-button type="primary" plain style="float: left"><i class="el-icon-upload"></i> 上传资源
                                 </el-button>
-                                <el-button type="primary" plain style="float: left"><i class="el-icon-plus"></i> 新建文件夹
+                                <el-button type="primary" plain style="float: left"
+                                    @click="createFolderFormVisible = true"><i class="el-icon-plus"></i> 新建文件夹
                                 </el-button>
+                                <!-- 创建文件夹表单 -->
+                                <el-dialog title="创建文件夹" :visible.sync="createFolderFormVisible" destroy-on-close
+                                    @close="createFolderForm = {}" center width="30%">
+                                    <el-form :model="createFolderForm" ref="folderCreateForm" :rules="createFolderRule"
+                                        hide-required-asterisk="true">
+                                        <el-form-item prop="name">
+                                            <el-input v-model="createFolderForm.name" autocomplete="off"
+                                                prefix-icon="el-icon-folder-add" placeholder="请输入文件夹名称" clearable>
+                                            </el-input>
+                                        </el-form-item>
+                                    </el-form>
+                                    <div slot="footer">
+                                        <el-row>
+                                            <el-button type="primary" @click="createFolder('folderCreateForm')"
+                                                style="display: block; width: 100%;">确定
+                                            </el-button>
+                                        </el-row>
+                                    </div>
+                                </el-dialog>
                             </el-row>
                         </div>
                         <div class="course-resources-box">
@@ -478,92 +498,32 @@
                                 <div style="width: 1144px">
                                     <el-container>
                                         <el-header style="background-color:#F1F3F4; width: 1200px;">
-                                            <span style="float: left;">
-                                                <el-button type="text" style="color: #3b3d45;">所有文件</el-button> <i
-                                                    class="el-icon-arrow-right"></i>
-                                                <el-button type="text" style="color: #3b3d45;">实验</el-button> <i
-                                                    class="el-icon-arrow-right"></i>
+                                            <span style="float: left;" v-html="breadcrumb">
+                                                <el-button type="text" style="color: #3b3d45;">所有文件</el-button>
+                                                <i class="el-icon-arrow-right"></i>
+                                                <el-button type="text" style="color: #3b3d45;">实验</el-button>
+                                                <i class="el-icon-arrow-right"></i>
                                                 <el-button type="text">实验一</el-button>
                                             </span>
                                         </el-header>
-                                        <!-- 文件列表 -->
+                                        <!-- 资源列表 -->
                                         <el-main>
-                                            <el-row type="flex" justify="space-start" :gutter="20"
-                                                style="margin: 40px;">
-                                                <el-col :span="3" style="margin-right: 20px;">
-                                                    <el-button style="height: 150px; width: 129px; padding: 12px 0;">
+                                            <el-row type="flex" justify="space-start" :gutter="20" style="margin: 40px;"
+                                                v-for="(row, index) of resourceListRows" :key="index">
+                                                <el-col :span="3" style="margin-right: 25px;"
+                                                    v-for="(resource, innerindex) in row" :key="resource.id">
+                                                    <el-button style="height: 150px; width: 129px; padding: 12px 0;"
+                                                        @click="downloadOrGetResourceData(resource.id, resource.type, resource.name)">
                                                         <el-row style="margin-bottom: 15px;">
-                                                            <img src="https://www.ketangpai.com/Public/Common/img/fileicon/file_ext_big_folder.png"
-                                                                alt="" srcset="" style="height: 48px; width: 48px;">
-                                                        </el-row>
-                                                        <el-row>
-                                                            <span style="font-size: 10px;">实验</span>
-                                                        </el-row>
-                                                    </el-button>
-                                                </el-col>
-                                                <el-col :span="3" style="margin-right: 20px;">
-                                                    <el-button style="height: 150px; width: 129px; padding: 12px 0;">
-                                                        <el-row style="margin-bottom: 15px;">
-                                                            <img src="https://www.ketangpai.com/Public/Common/img/fileicon/file_ext_big_folder.png"
-                                                                alt="" srcset="" style="height: 48px; width: 48px;">
-                                                        </el-row>
-                                                        <el-row>
-                                                            <span style="font-size: 10px;">实验</span>
-                                                        </el-row>
-                                                    </el-button>
-                                                </el-col>
-                                                <el-col :span="3" style="margin-right: 20px;">
-                                                    <el-button style="height: 150px; width: 129px; padding: 12px 0;">
-                                                        <el-row style="margin-bottom: 15px;">
-                                                            <img src="https://www.ketangpai.com/Public/Common/img/fileicon/file_ext_big_doc.png"
-                                                                alt="" srcset="" style="height: 48px; width: 48px;">
-                                                        </el-row>
-                                                        <el-row>
-                                                            <span style="font-size: 10px;">第一次实验指导书.doc</span>
-                                                        </el-row>
-                                                    </el-button>
-                                                </el-col>
-                                                <el-col :span="3" style="margin-right: 20px;">
-                                                    <el-button style="height: 150px; width: 129px; padding: 12px 0;">
-                                                        <el-row style="margin-bottom: 15px;">
-                                                            <img src="https://www.ketangpai.com/Public/Common/img/fileicon/file_ext_big_ppt.png"
-                                                                alt="" srcset="" style="height: 48px; width: 48px;">
-                                                        </el-row>
-                                                        <el-row>
-                                                            <span style="font-size: 10px;">第3章 总线.pptx</span>
-                                                        </el-row>
-                                                    </el-button>
-                                                </el-col>
-                                                <el-col :span="3" style="margin-right: 20px;">
-                                                    <el-button style="height: 150px; width: 129px; padding: 12px 0;">
-                                                        <el-row style="margin-bottom: 15px;">
-                                                            <img src="./images/video-icon.png" alt="" srcset=""
+                                                            <img :src="getResourceSrc(resource.ext)" alt="" srcset=""
                                                                 style="height: 48px; width: 48px;">
                                                         </el-row>
                                                         <el-row>
-                                                            <span style="font-size: 10px;">实验设备安装方法.mp4</span>
-                                                        </el-row>
-                                                    </el-button>
-                                                </el-col>
-                                                <el-col :span="3" style="margin-right: 20px;">
-                                                    <el-button style="height: 150px; width: 129px; padding: 12px 0;">
-                                                        <el-row style="margin-bottom: 15px;">
-                                                            <img src="https://www.ketangpai.com/Public/Common/img/fileicon/file_ext_big_jpg.png" alt="" srcset=""
-                                                                style="height: 48px; width: 48px;">
-                                                        </el-row>
-                                                        <el-row>
-                                                            <span style="font-size: 10px;">实验图片一.jpg</span>
-                                                        </el-row>
-                                                    </el-button>
-                                                </el-col>
-                                                <el-col :span="3" style="margin-right: 20px;">
-                                                    <el-button style="height: 150px; width: 129px; padding: 12px 0;">
-                                                        <el-row style="margin-bottom: 15px;">
-                                                            <img src="https://www.ketangpai.com/Public/Common/img/fileicon/file_ext_big_png.png" alt="" srcset=""
-                                                                style="height: 48px; width: 48px;">
-                                                        </el-row>
-                                                        <el-row>
-                                                            <span style="font-size: 10px;">实验图片一.png</span>
+                                                            <el-tooltip :content="resource.name" placement="bottom"
+                                                                effect="light">
+                                                                <span style="font-size: 10px;"
+                                                                    v-text="resource.name.length > 7 ? resource.name.substring(0, 7) + '...': resource.name">实验</span>
+                                                            </el-tooltip>
                                                         </el-row>
                                                     </el-button>
                                                 </el-col>
@@ -1653,8 +1613,9 @@
                 scount: 1,
                 ccode: "wwqwer",
                 cpic: "https://assets.ketangpai.com/theme/student/min/22.png",
-                cname: "数据结构"
+                cname: "数据结构",
             },
+            breadcrumb: '<button type="button" class="el-button el-button--text" onclick="getResourceData(' + yxt.getUrlParam("id") + ', ' + -1 + ')">所有文件</button>',
             homework: {
                 id: 0,
                 courseId: 0,
@@ -1680,6 +1641,7 @@
                 title: "",
                 content: "",
             },
+            createFolderForm: {},
             updateCourseForm: {
                 clazz: "",
                 cname: "",
@@ -1756,6 +1718,9 @@
                 title: [{ required: true, message: '请输入公告标题', trigger: 'blur' }],
                 content: [{ required: true, message: '请输入公告内容', trigger: 'blur' }],
             },
+            createFolderRule: {
+                name: [{ required: true, message: '请输入文件夹名称', trigger: 'blur' }],
+            },
             homework_input: false,
             homework_edit: false,
             cname: "",
@@ -1764,12 +1729,16 @@
             notice_input: false,
             notice_edit: false,
             dialogUpdateCourseFormVisible: false,
+            createFolderFormVisible: false,
             formLabelWidth: '120px',
             fileList: [{ name: 'food.jpeg', url: 'https://fuss10.elemecdn.com/3/63/4e7f3a15429bfda99bce42a18cdd1jpeg.jpeg?imageMogr2/thumbnail/360x360/format/webp/quality/100' }, { name: 'food2.jpeg', url: 'https://fuss10.elemecdn.com/3/63/4e7f3a15429bfda99bce42a18cdd1jpeg.jpeg?imageMogr2/thumbnail/360x360/format/webp/quality/100' }],
             homeworkList: [],
             noticeList: [],
             delNoticeVisible: false,
-            delHomeworkVisible: false
+            delHomeworkVisible: false,
+            resourceList: [],
+            resourceAncestors: [],
+            parentResourceId: -1
         },
         methods: {
             inputHomework(formName) {
@@ -1999,14 +1968,106 @@
                     }
                 })
             },
+            getResourceData(courseId, parentResourceId) {
+                yxt.http.get("resource/courseId/" + courseId + "?parentResourceId=" + parentResourceId).then(({ data }) => {
+                    if (data.success) {
+                        this.resourceList = data.queryResult.data;
+                        this.parentResourceId = parentResourceId;
+                        /* if (parentResourceId != -1) {
+                            // 发送请求，查询某个资源的祖宗资源列表
+                            this.getResourceAncestors(courseId, parentResourceId);
+                            this.breadcrumb = '<button type="button" class="el-button el-button--text" onclick="getResourceData(' + yxt.getUrlParam("id") + ', ' + -1 + ')">所有文件</button>';
+                            this.resourceAncestors.forEach(resource => {
+                                this.breadcrumb += ' <i class="el-icon-arrow-right"></i> <button type="button" class="el-button el-button--text" onclick="getResourceData(' + this.course.id + ', ' + resource.id + ')">' + resource.name + '</button>';
+                            })
+                        } */
+                    } else {
+                        this.$message.error(data.message);
+                    }
+                }).catch(() => {
+                    this.$message.error("服务器繁忙，请稍候再次刷新页面！")
+                })
+            },
+            getResourceAncestors(courseId, resourceId) {
+                this.resourceAncestors = [
+                    { id: 6, name: "测试文件夹", parentId: null }
+                ]
+            },
+            getResourceSrc(ext) {
+                switch (ext) {
+                    case 'jpg':
+                        return "https://www.ketangpai.com/Public/Common/img/fileicon/file_ext_big_jpg.png";
+                        break;
+                    case 'png':
+                        return "https://www.ketangpai.com/Public/Common/img/fileicon/file_ext_big_png.png";
+                        break;
+                    case 'doc':
+                        return "https://www.ketangpai.com/Public/Common/img/fileicon/file_ext_big_doc.png";
+                        break;
+                    case 'ppt':
+                        return "https://www.ketangpai.com/Public/Common/img/fileicon/file_ext_big_ppt.png";
+                        break;
+                    case 'mp4':
+                        return "./images/video-icon.png";
+                        break;
+                    default:
+                        return "https://www.ketangpai.com/Public/Common/img/fileicon/file_ext_big_folder.png"
+                        break;
+                }
+            },
+            downloadOrGetResourceData(resourceId, type, name) {
+                if (type === 0) { // 文件类型是目录，获取其子级资源
+                    this.getResourceData(this.course.id, resourceId);
+                    // 更新面包屑导航信息
+                    this.breadcrumb += ' <i class="el-icon-arrow-right"></i> <button type="button" class="el-button el-button--text" onclick="getResourceData(' + this.course.id + ', ' + resourceId + ')">' + name + '</button>'
+                    this.parentResourceId = resourceId;
+                } else if (type === 1) { // 文件类型是文件，请求下载接口
+                    this.$message.success("下载成功！")
+                } else {
+                    this.$message.error("服务器繁忙，请稍候再试！")
+                }
+            },
+            createFolder(formName) {
+                this.$refs[formName].validate((valid) => {
+                    if (valid) {
+                        this.createFolderForm.courseId = this.course.id;
+                        yxt.http.post("resource/folder/userId/" + this.user.id + "?parentResourceId=" + this.parentResourceId, this.createFolderForm).then(({ data }) => {
+                            if (data.success) {
+                                this.createFolderFormVisible = false;
+                                this.$message.success(data.message);
+                                this.getResourceData(this.course.id, this.parentResourceId);
+                            } else {
+                                this.$message.error(data.message);
+                            }
+                        }).catch(() => {
+                            this.$message.error("服务器繁忙，请稍候再试！")
+                        })
+                    }
+                });
+            },
             formatDateTime() {
                 let t = this.homeworkInputForm.deadline;
                 return t.getFullYear() + "-" + (t.getMonth() + 1) + "-" + t.getDate() + " " + t.getHours() + ":" + t.getMinutes() + ":" + t.getSeconds();
-            }
+            },
         },
         created() {
             this.verify();
             this.getNoticeData();
+            this.getResourceData(yxt.getUrlParam("id"), -1);
+            window.getResourceData = this.getResourceData;
+        },
+        computed: {
+            resourceListRows() {
+                const resourceListRows = [];
+                this.resourceList.forEach((resource, index) => {
+                    const row = Math.floor(index / 7);
+                    if (!resourceListRows[row]) {
+                        resourceListRows[row] = [];
+                    }
+                    resourceListRows[row].push(resource);
+                })
+                return resourceListRows;
+            }
         },
     })
 </script>
