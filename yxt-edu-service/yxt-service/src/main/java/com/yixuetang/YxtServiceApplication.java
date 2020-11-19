@@ -4,6 +4,10 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
+import org.springframework.data.redis.connection.RedisConnectionFactory;
+import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.serializer.GenericJackson2JsonRedisSerializer;
+import org.springframework.data.redis.serializer.StringRedisSerializer;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import org.springframework.web.filter.CorsFilter;
@@ -50,5 +54,24 @@ public class YxtServiceApplication {
 
         // 3.返回新的CorsFilter.
         return new CorsFilter( configSource );
+    }
+
+    /**
+     * 配置 redisTemplate
+     */
+    @Bean(name = "template")
+    public RedisTemplate<String, Object> template(RedisConnectionFactory factory) {
+        RedisTemplate<String, Object> template = new RedisTemplate<>();
+        template.setConnectionFactory( factory );
+        // key 采用 String 的序列化方式
+        template.setKeySerializer( new StringRedisSerializer() );
+        // hash 的 key 也采用 String 的序列化方式
+        template.setHashKeySerializer( new StringRedisSerializer() );
+        // value 序列化方式采用 jackson
+        template.setValueSerializer( new GenericJackson2JsonRedisSerializer() );
+        // hash 的 value 序列化方式采用 jackson
+        template.setHashValueSerializer( new GenericJackson2JsonRedisSerializer() );
+        template.afterPropertiesSet();
+        return template;
     }
 }

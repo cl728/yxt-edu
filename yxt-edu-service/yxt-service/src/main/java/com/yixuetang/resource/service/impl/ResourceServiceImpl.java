@@ -24,6 +24,8 @@ import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.core.ZSetOperations;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
@@ -31,6 +33,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletResponse;
 import java.util.*;
+import java.util.concurrent.TimeUnit;
 
 /**
  * @author Colin
@@ -55,6 +58,11 @@ public class ResourceServiceImpl implements ResourceService {
 
     @Autowired
     private CourseResourceMapper courseResourceMapper;
+
+    @javax.annotation.Resource(name = "template")
+    private RedisTemplate<String, Object> template;
+
+    private final String ANCESTORS_KEY_PREFIX = "resource:ancestors:id:";
 
     // 支持的文件类型：.jpg .jpeg .png .mp4 .avi .doc .xls .pdf .ppt .pptx .xlsx .txt
     private static final List<String> CONTENT_TYPES = Arrays.asList( "image/jpeg", "image/png", "video/mpeg4", "video/mp4",
@@ -188,14 +196,42 @@ public class ResourceServiceImpl implements ResourceService {
 
         List<Resource> ancestors = new ArrayList<>();
 
-        Resource resource = this.resourceMapper.findAncestorsByResourceId( resourceId );
+        // 先从 redis 查询
+        Set<ZSetOperations.TypedTuple<Object>> typedTuples =
+                template.opsForZSet()
+                        .rangeWithScores( ANCESTORS_KEY_PREFIX + resourceId, 0, -1 );
+        if (CollectionUtils.isEmpty( typedTuples )) { // redis 没有记录，则从数据库查询
 
-        while (resource != null && resource.getParentResource() != null) {
+            Resource resource = this.resourceMapper.findAncestorsByResourceId( resourceId );
+
+            while (resource != null && resource.getParentResource() != null) {
+                ancestors.add( resource );
+                resource = this.resourceMapper
+                        .findAncestorsByResourceId( resource.getParentResource().getId() );
+            }
+
             ancestors.add( resource );
-            resource = this.resourceMapper.findAncestorsByResourceId( resource.getParentResource().getId() );
-        }
 
-        ancestors.add( resource );
+            // 将查询到的结果存入 redis
+            ancestors.forEach(
+                    resource1 ->
+                            this.template.opsForZSet()
+                                    .add( ANCESTORS_KEY_PREFIX + resourceId,
+                                            resource1.getName(), resource1.getId().doubleValue() ) );
+
+            // 设置过期时间 - 10天
+            this.template.expire( String.valueOf( resourceId ), 10L, TimeUnit.DAYS );
+
+        } else { // redis 有记录，将其结果取出，并放置到 ancestors 中
+
+            typedTuples.forEach(
+                    tuple -> ancestors.add(
+                                    Resource.builder()
+                                            .id( Objects.requireNonNull( tuple.getScore() ).longValue() )
+                                            .name( (String) tuple.getValue() )
+                                            .build() )
+            );
+        }
 
         return new QueryResponse( CommonCode.SUCCESS, new QueryResult<>( ancestors, ancestors.size() ) );
     }
