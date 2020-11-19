@@ -208,22 +208,28 @@
                                 <div id="course-statics">
                                     <el-row
                                         style="padding-left: 160px;padding-right: 50px;height: 200px;color: white;padding-top: 40px">
-                                        <el-col :span="8">
+                                        <el-col :span="6">
                                             <ul style="list-style: none">
-                                                <li style="font-size: 48px">1</li>
+                                                <li style="font-size: 48px" v-text="homeworkCount">1</li>
                                                 <li style="font-size: 14px">发布作业</li>
                                             </ul>
                                         </el-col>
-                                        <el-col :span="8">
+                                        <el-col :span="6">
                                             <ul style="list-style: none">
-                                                <li style="font-size: 48px">3</li>
+                                                <li style="font-size: 48px" v-text="resourceCount">3</li>
                                                 <li style="font-size: 14px">发布资料</li>
                                             </ul>
                                         </el-col>
-                                        <el-col :span="8">
+                                        <el-col :span="6">
                                             <ul style="list-style: none">
-                                                <li style="font-size: 48px">2</li>
+                                                <li style="font-size: 48px" v-text="examCount">2</li>
                                                 <li style="font-size: 14px">发布考试</li>
+                                            </ul>
+                                        </el-col>
+                                        <el-col :span="6">
+                                            <ul style="list-style: none">
+                                                <li style="font-size: 48px" v-text="noticeCount">2</li>
+                                                <li style="font-size: 14px">发布公告</li>
                                             </ul>
                                         </el-col>
                                     </el-row>
@@ -1760,6 +1766,10 @@
             createFolderRule: {
                 name: [{ required: true, message: '请输入文件夹名称', trigger: 'blur' }],
             },
+            homeworkCount: 1,
+            resourceCount: 2,
+            examCount: 4,
+            noticeCount: 3,
             homework_input: false,
             homework_edit: false,
             cname: "",
@@ -2003,6 +2013,7 @@
                 yxt.http.get("homework/courseId/" + yxt.getUrlParam("id") + "/" + this.user.id).then(({ data }) => {
                     if (data.success) {
                         this.homeworkList = data.queryResult.data;
+                        this.homeworkCount = data.queryResult.total;
                     }
                 })
             },
@@ -2010,6 +2021,7 @@
                 yxt.http.get("notice/courseId/" + yxt.getUrlParam("id")).then(({ data }) => {
                     if (data.success) {
                         this.noticeList = data.queryResult.data;
+                        this.noticeCount = data.queryResult.total;
                     }
                 })
             },
@@ -2021,6 +2033,7 @@
                 yxt.http.get("resource/courseId/" + courseId + "?parentResourceId=" + parentResourceId).then(({ data }) => {
                     if (data.success) {
                         this.resourceList = data.queryResult.data;
+                        this.resourceCount = data.queryResult.total;
                         this.parentResourceId = parentResourceId;
                         // 更新面包屑导航信息
                         this.breadcrumb = '<button type="button" class="el-button el-button--text" onclick="getResourceData(' + yxt.getUrlParam("id") + ', ' + -1 + ')">所有文件</button>';

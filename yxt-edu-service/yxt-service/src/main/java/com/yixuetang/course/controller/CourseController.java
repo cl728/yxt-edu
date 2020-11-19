@@ -34,7 +34,7 @@ public class CourseController implements CourseControllerApi {
     @Override
     @GetMapping("info/id/{courseId}")
     public QueryResponse findById(@PathVariable long courseId) {
-        return this.courseService.findById( courseId );
+        return this.courseService.findById(courseId);
     }
 
     @Override
@@ -95,7 +95,7 @@ public class CourseController implements CourseControllerApi {
     @Override
     @DeleteMapping("admin/id/{courseId}")
     public CommonResponse delById(@PathVariable long courseId) {
-        return this.courseService.delById( courseId );
+        return this.courseService.delById(courseId);
     }
 
 }
