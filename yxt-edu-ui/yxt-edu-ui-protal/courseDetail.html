@@ -354,6 +354,7 @@
                         <div id="course-homework-box">
                             <div id="course-homework-card" style="width: 1224px; margin-top: 30px">
                                 <el-card class="box-card" v-for="(homework, index) in homeworkList"
+                                    v-show="homeworkList.length > 0"
                                     style="margin-top: 20px;width: 1184px;height: 220px;border-radius: 6px;border-width: 2px">
                                     <el-row id="course-title" style="height: 30px">
                                         <el-col :span="12">
@@ -385,7 +386,7 @@
                                                             </router-link>
                                                         </el-dropdown-item>
                                                         <!-- <el-dropdown-item>保存到...</el-dropdown-item> -->
-                                                        <el-popover placement="top" width="160"
+                                                        <!-- <el-popover placement="top" width="160"
                                                             v-model="delHomeworkVisible">
                                                             <p>确认要删除此作业吗？</p>
                                                             <div style="text-align: right; margin: 0">
@@ -395,7 +396,13 @@
                                                                     @click="deleteHomework(homework.id)">确定</el-button>
                                                             </div>
                                                             <el-dropdown-item slot="reference">删除</el-dropdown-item>
-                                                        </el-popover>
+                                                        </el-popover> -->
+                                                        <el-popconfirm confirmButtonText="确认" cancelButtonText="取消"
+                                                            confirmButtonType="danger" cancelButtonType="success"
+                                                            placement="top" @onConfirm="deleteHomework(homework.id)"
+                                                            title="确认要删除此作业吗？">
+                                                            <el-dropdown-item slot="reference">删除</el-dropdown-item>
+                                                        </el-popconfirm>
                                                     </el-dropdown-menu>
                                                 </el-dropdown>
                                             </div>
@@ -475,6 +482,15 @@
                                                 </span>
                                             </el-col>
                                         </el-row>
+                                    </el-row>
+                                </el-card>
+
+                                <el-card class="box-card" v-show="homeworkList.length === 0"
+                                    style="margin-top: 20px;width: 1184px;height: 220px;border-radius: 6px;border-width: 2px">
+                                    <el-row>
+                                        <p
+                                            style="text-align: center; font-size: 15px; color: black; line-height: 160px;">
+                                            该课程暂无作业</p>
                                     </el-row>
                                 </el-card>
                             </div>
@@ -1497,7 +1513,7 @@
                                                             <router-link @click="showEditNoticeForm(notice.id)">编辑
                                                             </router-link>
                                                         </el-dropdown-item>
-                                                        <el-popover placement="top" width="160"
+                                                        <!-- <el-popover placement="top" width="160"
                                                             v-model="delNoticeVisible">
                                                             <p>确认要删除此公告吗？</p>
                                                             <div style="text-align: right; margin: 0">
@@ -1507,7 +1523,13 @@
                                                                     @click="deleteNotice(notice.id)">确定</el-button>
                                                             </div>
                                                             <el-dropdown-item slot="reference">删除</el-dropdown-item>
-                                                        </el-popover>
+                                                        </el-popover> -->
+                                                        <el-popconfirm confirmButtonText="确认" cancelButtonText="取消"
+                                                            confirmButtonType="danger" cancelButtonType="success"
+                                                            placement="top" @onConfirm="deleteNotice(notice.id)"
+                                                            title="确认要删除此公告吗？">
+                                                            <el-dropdown-item slot="reference">删除</el-dropdown-item>
+                                                        </el-popconfirm>
                                                     </el-dropdown-menu>
                                                 </el-dropdown>
                                             </div>
@@ -1577,7 +1599,8 @@
 </body>
 <script src="https://cdn.bootcss.com/vue/2.6.11/vue.min.js"></script>
 <script src="https://cdn.bootcss.com/axios/0.19.2/axios.min.js"></script>
-<script src="https://cdn.bootcss.com/element-ui/2.13.2/index.js"></script>
+<!-- <script src="https://cdn.bootcss.com/element-ui/2.13.2/index.js"></script> -->
+<script src="./js/index.js"></script>
 <script src="js/md5.js"></script>
 <script src="js/common.js"></script>
 <script>
@@ -1992,7 +2015,7 @@
             },
             getResourceData(courseId, parentResourceId) {
                 // 如果请求同一目录下的文件（查询所有文件除外），则不作任何操作
-                if (this.parentResourceId === parentResourceId && parentResourceId != -1) { 
+                if (this.parentResourceId === parentResourceId && parentResourceId != -1) {
                     return;
                 }
                 yxt.http.get("resource/courseId/" + courseId + "?parentResourceId=" + parentResourceId).then(({ data }) => {
@@ -2002,7 +2025,7 @@
                         // 更新面包屑导航信息
                         this.breadcrumb = '<button type="button" class="el-button el-button--text" onclick="getResourceData(' + yxt.getUrlParam("id") + ', ' + -1 + ')">所有文件</button>';
                         if (parentResourceId != -1) {
-                            yxt.http.get("resource/ancestors/resourceId/" + parentResourceId).then(({data}) => {
+                            yxt.http.get("resource/ancestors/resourceId/" + parentResourceId).then(({ data }) => {
                                 let ancestors = data.queryResult.data.reverse();
                                 ancestors.forEach(resource => {
                                     this.breadcrumb += ' <i class="el-icon-arrow-right"></i> <button type="button" class="el-button el-button--text" onclick="getResourceData(' + this.course.id + ', ' + resource.id + ')">' + resource.name + '</button>'
@@ -2015,11 +2038,6 @@
                 }).catch(() => {
                     this.$message.error("服务器繁忙，请稍候再次刷新页面！")
                 })
-            },
-            getResourceAncestors(courseId, resourceId) {
-                this.resourceAncestors = [
-                    { id: 6, name: "测试文件夹", parentId: null }
-                ]
             },
             getResourceSrc(ext) {
                 switch (ext) {
@@ -2047,6 +2065,9 @@
                     case 'xlsx':
                         return "https://www.ketangpai.com/Public/Common/img/fileicon/file_ext_big_xlsx.png";
                         break;
+                    case 'txt':
+                        return "https://www.ketangpai.com/Public/Common/img/fileicon/file_ext_big_txt.png";
+                        break;
                     default:
                         return "https://www.ketangpai.com/Public/Common/img/fileicon/file_ext_big_folder.png";
                         break;
@@ -2055,8 +2076,6 @@
             downloadOrGetResourceData(resourceId, type, name) {
                 if (type === 0) { // 文件类型是目录，获取其子级资源
                     this.getResourceData(this.course.id, resourceId);
-                    /* // 更新面包屑导航信息
-                    this.breadcrumb += ' <i class="el-icon-arrow-right"></i> <button type="button" class="el-button el-button--text" onclick="getResourceData(' + this.course.id + ', ' + resourceId + ')">' + name + '</button>' */
                     this.parentResourceId = resourceId;
                 } else if (type === 1) { // 文件类型是文件，请求下载接口
                     yxt.http.get("resource/download/resourceId/" + resourceId, {
