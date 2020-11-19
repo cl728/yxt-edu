@@ -473,19 +473,13 @@ public class UserServiceImpl implements UserService {
             ExceptionThrowUtils.cast( CommonCode.INVALID_PARAM );
         }
 
-        // 查询该门课程下的成员（包括教师和学生）
-        // 1. 查询该门课程的教师
-        Long id = course.getTeacher().getId();
-
-        // 2. 查询选修了该门课程的学生
+        // 查询该门课程下的学生
         QueryWrapper<StudentCourse> queryWrapper = new QueryWrapper<StudentCourse>().eq( "course_id", courseId );
         List<Long> ids = this.scMapper.selectList( queryWrapper
                 .select( "student_id" ) )
                 .stream()
                 .map( StudentCourse::getStudentId )
                 .collect( Collectors.toList() );
-
-        ids.add( id );
 
         List<User> filterUsers = new ArrayList<>();
         // 如果 search 字段不为空，先在 User 总表里查询出符合条件的 User 列表，再将其中不是该门课程成员的 User 过滤掉
@@ -512,13 +506,11 @@ public class UserServiceImpl implements UserService {
 
             BeanUtils.copyProperties( user, userResp );
 
-            if (user.getRole().getId() == 3) {
-                userResp.setClazz( course.getClazz() );
-                userResp.setJoinTime( this.scMapper.selectOne( new QueryWrapper<StudentCourse>()
-                        .eq( "course_id", course.getId() )
-                        .eq( "student_id", user.getId() )
-                        .select( "join_time" ) ).getJoinTime() );
-            }
+            userResp.setClazz( course.getClazz() );
+            userResp.setJoinTime( this.scMapper.selectOne( new QueryWrapper<StudentCourse>()
+                    .eq( "course_id", course.getId() )
+                    .eq( "student_id", user.getId() )
+                    .select( "join_time" ) ).getJoinTime() );
 
             userRespList.add( userResp );
 
