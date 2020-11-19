@@ -199,7 +199,7 @@ public class ResourceServiceImpl implements ResourceService {
         // 先从 redis 查询
         Set<ZSetOperations.TypedTuple<Object>> typedTuples =
                 template.opsForZSet()
-                        .rangeWithScores( ANCESTORS_KEY_PREFIX + resourceId, 0, -1 );
+                        .reverseRangeWithScores( ANCESTORS_KEY_PREFIX + resourceId, 0, -1 );
         if (CollectionUtils.isEmpty( typedTuples )) { // redis 没有记录，则从数据库查询
 
             Resource resource = this.resourceMapper.findAncestorsByResourceId( resourceId );
@@ -220,7 +220,7 @@ public class ResourceServiceImpl implements ResourceService {
                                             resource1.getName(), resource1.getId().doubleValue() ) );
 
             // 设置过期时间 - 10天
-            this.template.expire( String.valueOf( resourceId ), 10L, TimeUnit.DAYS );
+            this.template.expire( ANCESTORS_KEY_PREFIX + resourceId, 10L, TimeUnit.DAYS );
 
         } else { // redis 有记录，将其结果取出，并放置到 ancestors 中
 
