@@ -1933,8 +1933,8 @@
             switchNoticeTop(noticeId) {
                 yxt.http.put("/notice/topNum/noticeId/" + noticeId).then(({ data }) => {
                     if (data.success) {
-                        this.$message.success(data.message);
                         this.getNoticeData();
+                        this.$message.success(data.message);
                     } else {
                         this.$message.error(data.message);
                     }
@@ -1945,8 +1945,8 @@
             switchHomeworkTop(homeworkId) {
                 yxt.http.put("/homework/topNum/homeworkId/" + homeworkId).then(({ data }) => {
                     if (data.success) {
-                        this.$message.success(data.message);
                         this.getHomeworkData();
+                        this.$message.success(data.message);
                     } else {
                         this.$message.error(data.message);
                     }
@@ -2015,9 +2015,9 @@
             },
             getResourceData(courseId, parentResourceId) {
                 // 如果请求同一目录下的文件（查询所有文件除外），则不作任何操作
-                if (this.parentResourceId === parentResourceId && parentResourceId != -1) {
+                /* if (this.parentResourceId === parentResourceId && parentResourceId != -1) {
                     return;
-                }
+                } */
                 yxt.http.get("resource/courseId/" + courseId + "?parentResourceId=" + parentResourceId).then(({ data }) => {
                     if (data.success) {
                         this.resourceList = data.queryResult.data;
