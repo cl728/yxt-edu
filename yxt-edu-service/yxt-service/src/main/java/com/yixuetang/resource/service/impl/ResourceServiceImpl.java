@@ -68,7 +68,7 @@ public class ResourceServiceImpl implements ResourceService {
     private static final List<String> CONTENT_TYPES = Arrays.asList( "image/jpeg", "image/png", "video/mpeg4", "video/mp4",
             "video/avi", "application/msword", "application/x-xls", "application/pdf", "application/x-ppt", "application/vnd.ms-powerpoint",
             "application/vnd.openxmlformats-officedocument.presentationml.presentation", "text/plain",
-            "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" );
+            "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", "application/x-zip-compressed" );
 
     private static final Logger LOGGER = LoggerFactory.getLogger( ResourceServiceImpl.class );
 
@@ -226,10 +226,10 @@ public class ResourceServiceImpl implements ResourceService {
 
             typedTuples.forEach(
                     tuple -> ancestors.add(
-                                    Resource.builder()
-                                            .id( Objects.requireNonNull( tuple.getScore() ).longValue() )
-                                            .name( (String) tuple.getValue() )
-                                            .build() )
+                            Resource.builder()
+                                    .id( Objects.requireNonNull( tuple.getScore() ).longValue() )
+                                    .name( (String) tuple.getValue() )
+                                    .build() )
             );
         }
 

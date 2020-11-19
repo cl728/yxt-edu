@@ -2081,6 +2081,9 @@
                     case 'txt':
                         return "https://www.ketangpai.com/Public/Common/img/fileicon/file_ext_big_txt.png";
                         break;
+                    case 'zip':
+                        return "https://www.ketangpai.com/Public/Common/img/fileicon/file_ext_big_zip.png";
+                        break;
                     default:
                         return "https://www.ketangpai.com/Public/Common/img/fileicon/file_ext_big_folder.png";
                         break;
@@ -2174,7 +2177,8 @@
                     "video/avi", "application/msword", "application/x-xls", "application/pdf",
                     "application/x-ppt", "application/vnd.ms-powerpoint", "text/plain",
                     "application/vnd.openxmlformats-officedocument.presentationml.presentation",
-                    "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"];
+                    "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+                    "application/x-zip-compressed"];
                 const isValidType = fileTypes.indexOf(file.type) != -1;
 
                 if (!isValidType) {
