@@ -6,13 +6,14 @@ import com.yixuetang.course.mapper.ScMapper;
 import com.yixuetang.entity.course.Course;
 import com.yixuetang.entity.homework.Homework;
 import com.yixuetang.entity.homework.HomeworkStudent;
-import com.yixuetang.entity.notice.Notice;
 import com.yixuetang.entity.request.homework.InsertHomework;
 import com.yixuetang.entity.response.CommonResponse;
 import com.yixuetang.entity.response.QueryResponse;
 import com.yixuetang.entity.response.code.CommonCode;
+import com.yixuetang.entity.response.code.course.CourseCode;
 import com.yixuetang.entity.response.code.homework.HomeworkCode;
 import com.yixuetang.entity.response.result.HomeworkResp;
+import com.yixuetang.entity.response.result.HomeworkScoreResp;
 import com.yixuetang.entity.response.result.QueryResult;
 import com.yixuetang.entity.user.User;
 import com.yixuetang.homework.mapper.HomeworkMapper;
@@ -71,7 +72,7 @@ public class HomeworkServiceImpl implements HomeworkService {
 
         List<Homework> homeworkList = this.homeworkMapper.selectList(new QueryWrapper<Homework>()
                 .eq("course_id", courseId)
-                .orderByDesc( "top_num" ));
+                .orderByDesc("top_num"));
 
         List<HomeworkResp> homeworkRespList = new ArrayList<>(homeworkList.size());
 
@@ -167,11 +168,11 @@ public class HomeworkServiceImpl implements HomeworkService {
     }
 
     @Override
-    public CommonResponse deleteByHomeworkId(long homeworkId , long courseId) {
+    public CommonResponse deleteByHomeworkId(long homeworkId, long courseId) {
         //  根据作业id查询作业
         Homework homework = this.homeworkMapper.selectById(homeworkId);
         //  查询不到作业
-        if (homework == null){
+        if (homework == null) {
             return new CommonResponse(HomeworkCode.HOMEWORK_NOT_EXIST);
         }
         //  验证课程id
@@ -191,7 +192,7 @@ public class HomeworkServiceImpl implements HomeworkService {
         //  根据作业id查询作业
         Homework homework = this.homeworkMapper.selectById(homeworkId);
         //  判断作业是否存在
-        if (homework == null){
+        if (homework == null) {
             return new CommonResponse(HomeworkCode.HOMEWORK_NOT_EXIST);
         }
         //  判断作业标题是否为空
@@ -231,7 +232,7 @@ public class HomeworkServiceImpl implements HomeworkService {
     @Override
     public CommonResponse switchTopNum(long homeworkId) {
         //  作业是否存在
-        Homework homework = this.homeworkMapper.selectById( homeworkId );
+        Homework homework = this.homeworkMapper.selectById(homeworkId);
         if (homework == null) {
             ExceptionThrowUtils.cast(CommonCode.INVALID_PARAM);
         }
@@ -241,13 +242,76 @@ public class HomeworkServiceImpl implements HomeworkService {
     }
 
     @Override
+    public QueryResponse findScoresByCourseId(long courseId, long teacherId) {
+
+        // 1. 根据课程id查询出已有课程信息
+        Course course = this.courseMapper.findById(courseId);
+        if (course == null) {
+            //找不到此课程
+            return new QueryResponse(CourseCode.COURSE_NOT_FOUND, null);
+        }
+
+        // 2. 判断该用户是否为该课程的授课教师
+        if (course.getTeacher().getId() != teacherId) {
+            //查询失败，该用户不是该课程的授课老师！
+            return new QueryResponse(CourseCode.FIND_COURSE_SCORES_FAIL_COURSE_NOT_BELONGS_TO_THIS_TEACHER, null);
+        }
+
+        // 3. 查询该课程下的所有作业信息列表
+        List<Homework> homeworkList = this.homeworkMapper.selectList(new QueryWrapper<Homework>().eq("course_id", courseId));
+
+        // 4. 查询每一次作业下的学生成绩信息列表
+        List<List<HomeworkScoreResp>> homeworkScoreRespAllList = new ArrayList<>();
+        for (Homework homework : homeworkList) {
+            List<HomeworkStudent> homeworkStudentList = this.homeworkStudentMapper.selectList(new QueryWrapper<HomeworkStudent>().eq("homework_id", homework.getId()));
+            List<HomeworkScoreResp> homeworkScoreRespList = new ArrayList<>();
+            for (HomeworkStudent homeworkStudent : homeworkStudentList) {
+                //依次获取HomeworkStudent，然后复制属性到HomeworkScoreResp，并设置学号、头像、标题和总分值
+                HomeworkScoreResp homeworkScoreResp = new HomeworkScoreResp();
+                BeanUtils.copyProperties(homeworkStudent, homeworkScoreResp);
+                User student = this.userMapper.findById(homeworkStudent.getStudentId());
+                homeworkScoreResp.setTsNo(student.getTsNo());
+                homeworkScoreResp.setAvatar(student.getAvatar());
+                homeworkScoreResp.setTitle(homework.getTitle());
+                homeworkScoreResp.setTotalScore(homework.getTotalScore());
+                homeworkScoreRespList.add(homeworkScoreResp);
+            }
+            homeworkScoreRespAllList.add(homeworkScoreRespList);
+        }
+
+        // 5. 把数据封装到map里
+        Map<Long, List<HomeworkScoreResp>> homeworkScoreRespMap = new HashMap<>();
+        for (List<HomeworkScoreResp> homeworkScoreRespList : homeworkScoreRespAllList) {
+            for (HomeworkScoreResp homeworkScoreResp : homeworkScoreRespList) {
+                //首先创建只包含key（studentId）的map
+                homeworkScoreRespMap.put(homeworkScoreResp.getStudentId(), new ArrayList<>());
+            }
+        }
+
+        // 6. 根据studentId把map中对应key的value（homeworkScoreResp的ArrayList）逐次添加
+        for (List<HomeworkScoreResp> homeworkScoreRespList : homeworkScoreRespAllList) {
+            for (HomeworkScoreResp homeworkScoreResp : homeworkScoreRespList) {
+                List<HomeworkScoreResp> homeworkScoreRespList1 = homeworkScoreRespMap.get(homeworkScoreResp.getStudentId());
+                homeworkScoreRespList1.add(homeworkScoreResp);
+                homeworkScoreRespMap.put(homeworkScoreResp.getStudentId(), homeworkScoreRespList1);
+            }
+        }
+
+        // 7. 为了返回List类型的QueryResult，把map用一个list封装起来
+        List<Map<Long, List<HomeworkScoreResp>>> mapList = new ArrayList<>();
+        mapList.add(homeworkScoreRespMap);
+
+        return new QueryResponse(CommonCode.SUCCESS, new QueryResult<>(mapList, mapList.size()));
+    }
+
+    @Override
     public QueryResponse findById(long homeworkId) {
         //  作业是否存在
-        Homework homework = this.homeworkMapper.selectById( homeworkId );
-        if (homework == null){
+        Homework homework = this.homeworkMapper.selectById(homeworkId);
+        if (homework == null) {
             ExceptionThrowUtils.cast(CommonCode.INVALID_PARAM);
         }
-        return new QueryResponse( CommonCode.SUCCESS, new QueryResult<>( Collections.singletonList( homework ), 1 ) );
+        return new QueryResponse(CommonCode.SUCCESS, new QueryResult<>(Collections.singletonList(homework), 1));
 
     }
 

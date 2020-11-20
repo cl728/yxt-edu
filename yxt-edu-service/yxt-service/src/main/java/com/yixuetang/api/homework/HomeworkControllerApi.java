@@ -17,6 +17,15 @@ import io.swagger.annotations.ApiOperation;
 @Api(value = "作业管理接口", description = "作业管理接口，提供作业的增、删、改、查")
 public interface HomeworkControllerApi {
 
+    @ApiOperation("查询某门课程下的全部作业成绩信息")
+    @ApiImplicitParams(value = {
+            @ApiImplicitParam(name = "courseId", value = "课程id", required = true,
+                    paramType = "path", dataType = "long"),
+            @ApiImplicitParam(name = "teacherId", value = "教师id", required = true,
+                    paramType = "path", dataType = "long")
+    })
+    QueryResponse findScoresByCourseId(long courseId, long teacherId);
+
     @ApiOperation("查询某门课程下的作业")
     @ApiImplicitParams(value = {
             @ApiImplicitParam(name = "courseId", value = "课程id", required = true,
@@ -56,7 +65,7 @@ public interface HomeworkControllerApi {
     })
     CommonResponse updateHomework(long homeworkId, InsertHomework insertHomework);
 
-    @ApiOperation( "根据作业id切换置顶字段" )
+    @ApiOperation("根据作业id切换置顶字段")
     @ApiImplicitParam(name = "homeworkId", value = "作业id", required = true,
             paramType = "path", dataType = "long")
     CommonResponse switchTop(long homeworkId);

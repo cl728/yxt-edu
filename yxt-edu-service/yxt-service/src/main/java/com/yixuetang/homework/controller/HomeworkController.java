@@ -22,6 +22,12 @@ public class HomeworkController implements HomeworkControllerApi {
     private HomeworkService homeworkService;
 
     @Override
+    @GetMapping("scores/courseId/{courseId}/{teacherId}")
+    public QueryResponse findScoresByCourseId(@PathVariable long courseId, @PathVariable long teacherId) {
+        return this.homeworkService.findScoresByCourseId(courseId, teacherId);
+    }
+
+    @Override
     @GetMapping("courseId/{courseId}/{userId}")
     public QueryResponse findByCourseId(@PathVariable long courseId, @PathVariable long userId) {
         return this.homeworkService.findByCourseId(courseId, userId);
@@ -35,14 +41,14 @@ public class HomeworkController implements HomeworkControllerApi {
 
     @Override
     @DeleteMapping("id/{homeworkId}/{courseId}")
-    public CommonResponse deleteHomework(@PathVariable long homeworkId,  @PathVariable long courseId) {
+    public CommonResponse deleteHomework(@PathVariable long homeworkId, @PathVariable long courseId) {
         return this.homeworkService.deleteByHomeworkId(homeworkId, courseId);
     }
 
     @Override
     @GetMapping("homeworkId/{homeworkId}")
     public QueryResponse findById(@PathVariable long homeworkId) {
-        return this.homeworkService.findById( homeworkId );
+        return this.homeworkService.findById(homeworkId);
     }
 
     @Override
@@ -54,7 +60,7 @@ public class HomeworkController implements HomeworkControllerApi {
     @Override
     @PutMapping("topNum/homeworkId/{homeworkId}")
     public CommonResponse switchTop(@PathVariable long homeworkId) {
-        return this.homeworkService.switchTopNum( homeworkId );
+        return this.homeworkService.switchTopNum(homeworkId);
     }
 
 }

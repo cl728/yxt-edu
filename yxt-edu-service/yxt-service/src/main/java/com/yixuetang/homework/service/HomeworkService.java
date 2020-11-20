@@ -36,7 +36,7 @@ public interface HomeworkService {
      *
      * @param homeworkId 作业id
      * @param courseId   课程id
-     * @return
+     * @return 通用响应实体类
      */
     CommonResponse deleteByHomeworkId(long homeworkId, long courseId);
 
@@ -53,7 +53,7 @@ public interface HomeworkService {
      *
      * @param homeworkId     作业id
      * @param insertHomework 编辑作业实体类
-     * @return
+     * @return 通用响应实体类
      */
     CommonResponse updateHomework(long homeworkId, InsertHomework insertHomework);
 
@@ -64,4 +64,13 @@ public interface HomeworkService {
      * @return 通用响应实体类
      */
     CommonResponse switchTopNum(long homeworkId);
+
+    /**
+     * 根据课程id查询该门课程下的全部作业成绩信息
+     *
+     * @param courseId  课程id
+     * @param teacherId 教师id
+     * @return 带结果集的响应实体类
+     */
+    QueryResponse findScoresByCourseId(long courseId, long teacherId);
 }
