@@ -254,11 +254,12 @@
                         </el-menu>
                     </div>
                     <div id="course-homework" v-if="activeIndex2=='1'" style="margin-top: 30px">
+                        <!-- 发布作业按钮 -->
                         <div id="course-homework-menubar" v-if="user.isTeacher">
                             <el-row>
                                 <el-col :span="12">
-                                    <el-button @click="homework_input=true" :disabled="homework_input" type="primary"
-                                        plain style="float: left">发布个人作业</el-button>
+                                    <el-button @click="showInputHomeworkForm" :disabled="homeworkFormVisible"
+                                        type="primary" plain style="float: left">发布个人作业</el-button>
                                 </el-col>
                                 <el-col :span="12">
                                     <div id="homework-manage" style="float:right;">
@@ -276,89 +277,9 @@
                                 </el-col>
                             </el-row>
                         </div>
-                        <!-- 发布作业表单 -->
-                        <div id="homework-input" style="margin-top: 30px" v-if="homework_input === true">
-                            <el-card class="box-card"
-                                style="margin-top: 30px;width: 1184px;height: 400px;border-radius: 6px;border-width: 2px">
-                                <el-form :model="homeworkInputForm" :rules="inputHomeworkRule" ref="inputHomeworkForm">
-                                    <el-form-item prop="title">
-                                        <el-input placeholder="作业名称" v-model="homeworkInputForm.title" clearable>
-                                        </el-input>
-                                    </el-form-item>
-                                    <el-form-item>
-                                        <el-input type="textarea" :rows="6" id="mytextarea" placeholder="作业简介，作业格式等要求"
-                                            v-model="homeworkInputForm.description" maxlength="1000" show-word-limit>
-                                        </el-input>
-                                    </el-form-item>
-                                    <el-form-item prop="deadline">
-                                        <div class="block" style="float: left">
-                                            <span class="demonstration">截止日期：</span>
-                                            <el-date-picker v-model="homeworkInputForm.deadline" type="datetime"
-                                                placeholder="选择日期时间" align="right" :picker-options="pickerOptions">
-                                            </el-date-picker>
-                                        </div>
-                                    </el-form-item>
-                                    <el-form-item prop="totalScore">
-                                        <div class="block" style="float: left;">
-                                            <span class="demonstration">满&ensp;分&ensp;值：</span>
-                                            <el-input-number v-model="homeworkInputForm.totalScore"
-                                                @change="handleChange" :min="1" :step="0.5" :max="100" label="分值">
-                                            </el-input-number>
-                                        </div>
-                                    </el-form-item>
-                                    <el-form-item>
-                                        <div id="homework-button" style="float: right;">
-                                            <el-button type="primary" plain @click="homework_input=false">取消</el-button>
-                                            <el-button type="primary" @click="inputHomework('inputHomeworkForm')">确定
-                                            </el-button>
-                                        </div>
-                                    </el-form-item>
-                                </el-form>
-                            </el-card>
-                        </div>
-                        <!-- 编辑作业表单 -->
-                        <div id="homework-edit" style="margin-top: 30px" v-if="homework_edit === true">
-                            <el-card class="box-card"
-                                style="margin-top: 30px;width: 1184px;height: 400px;border-radius: 6px;border-width: 2px">
-                                <el-form :model="homeworkEditForm" :rules="editHomeworkRule" ref="editHomeworkForm">
-                                    <el-form-item prop="title">
-                                        <el-input placeholder="作业名称" v-model="homeworkEditForm.title" clearable>
-                                        </el-input>
-                                    </el-form-item>
-                                    <el-form-item>
-                                        <el-input type="textarea" :rows="6" id="mytextarea" placeholder="作业简介，作业格式等要求"
-                                            v-model="homeworkEditForm.description" maxlength="1000" show-word-limit>
-                                        </el-input>
-                                    </el-form-item>
-                                    <el-form-item prop="deadline">
-                                        <div class="block" style="float: left">
-                                            <span class="demonstration">截止日期：</span>
-                                            <el-date-picker v-model="homeworkEditForm.deadline" type="datetime"
-                                                placeholder="选择日期时间" align="right" :picker-options="pickerOptions">
-                                            </el-date-picker>
-                                        </div>
-                                    </el-form-item>
-                                    <el-form-item prop="totalScore">
-                                        <div class="block" style="float: left;">
-                                            <span class="demonstration">满&ensp;分&ensp;值：</span>
-                                            <el-input-number v-model="homeworkEditForm.totalScore"
-                                                @change="handleChange" :min="1" :step="0.5" :max="100" label="分值">
-                                            </el-input-number>
-                                        </div>
-                                    </el-form-item>
-                                    <el-form-item>
-                                        <div id="homework-button" style="float: right;">
-                                            <el-button type="primary" plain @click="homework_edit=false">取消</el-button>
-                                            <el-button type="primary" @click="editHomework('editHomeworkForm')">确定
-                                            </el-button>
-                                        </div>
-                                    </el-form-item>
-                                </el-form>
-                            </el-card>
-                        </div>
                         <!-- 作业列表 -->
                         <div id="course-homework-box">
-                            <div id="course-homework-card" style="width: 1224px; margin-top: 30px">
+                            <div id="course-homework-card" style="width: 1224px;margin-top: 30px">
                                 <el-card class="box-card" v-for="(homework, index) in homeworkList"
                                     v-show="homeworkList.length > 0"
                                     style="margin-top: 20px;width: 1184px;height: 220px;border-radius: 6px;border-width: 2px">
@@ -431,7 +352,7 @@
                                                     <span
                                                         style="float: left;padding-left: 30px;padding-top: 5px;margin-top: 10px;">
                                                         <span style="font-size: 15px;color: #707070"
-                                                            v-html="homework.description">如题所述</span>
+                                                            v-text="getSimpleText(homework.description)">如题所述</span>
                                                     </span>
                                                 </el-col>
                                             </el-row>
@@ -1421,68 +1342,15 @@
                     </div>
                     <div id="course-notice" v-if="activeIndex2=='4'">
                         <div id="course-notice-box">
+                            <!-- 发布公告按钮 -->
                             <div id="notice-teacher" v-if="user.isTeacher">
                                 <div id="notice-menubar"
                                     style="margin-top: 30px;padding-bottom: 30px;padding-left: 30px">
-                                    <el-button type="primary" style="float: left" @click="notice_input = true"
-                                        :disabled="notice_input">发布公告</el-button>
-                                </div>
-                                <!-- 发布公告表单 -->
-                                <div id="notice-input" style="margin-top: 30px" v-if="notice_input===true">
-                                    <el-card class="box-card"
-                                        style="margin-top: 30px;width: 1184px;height: 306px;border-radius: 6px;border-width: 2px">
-                                        <el-form :model="noticeInputForm" :rules="inputNoticeRule"
-                                            ref="inputNoticeForm">
-                                            <el-form-item prop="title">
-                                                <el-input placeholder="请输入公告标题" v-model="noticeInputForm.title"
-                                                    clearable>
-                                                </el-input>
-                                            </el-form-item>
-                                            <el-form-item prop="content">
-                                                <el-input style="padding-top: 20px" type="textarea" :rows="6"
-                                                    placeholder="请输入公告具体内容" v-model="noticeInputForm.content"
-                                                    maxlength="1000" show-word-limit>
-                                                </el-input>
-                                            </el-form-item>
-                                            <el-form-item>
-                                                <div id="notice-button" style="float: right;padding-top: 10px">
-                                                    <el-button type="primary" plain @click="notice_input=false">取消
-                                                    </el-button>
-                                                    <el-button type="primary" @click="inputNotice('inputNoticeForm')">确定
-                                                    </el-button>
-                                                </div>
-                                            </el-form-item>
-                                        </el-form>
-                                    </el-card>
-                                </div>
-                                <!-- 编辑公告表单 -->
-                                <div id="notice-edit" style="margin-top: 30px" v-if="notice_edit===true">
-                                    <el-card class="box-card"
-                                        style="margin-top: 30px;width: 1184px;height: 306px;border-radius: 6px;border-width: 2px">
-                                        <el-form :model="noticeEditForm" :rules="editNoticeRule" ref="editNoticeForm">
-                                            <el-form-item prop="title">
-                                                <el-input placeholder="请输入公告标题" v-model="noticeEditForm.title"
-                                                    clearable>
-                                                </el-input>
-                                            </el-form-item>
-                                            <el-form-item prop="content">
-                                                <el-input style="padding-top: 20px" type="textarea" :rows="6"
-                                                    placeholder="请输入公告具体内容" v-model="noticeEditForm.content"
-                                                    maxlength="1000" show-word-limit>
-                                                </el-input>
-                                            </el-form-item>
-                                            <el-form-item>
-                                                <div id="notice-button" style="float: right;padding-top: 10px">
-                                                    <el-button type="primary" plain @click="notice_edit=false">取消
-                                                    </el-button>
-                                                    <el-button type="primary" @click="editNotice('editNoticeForm')">确定
-                                                    </el-button>
-                                                </div>
-                                            </el-form-item>
-                                        </el-form>
-                                    </el-card>
+                                    <el-button type="primary" style="float: left" @click="showInputNoticeForm"
+                                        :disabled="noticeFormVisible">发布公告</el-button>
                                 </div>
                             </div>
+                            <!-- 公告列表 -->
                             <div id="notice-cards" style="margin-top: 30px">
                                 <el-card class="box-card" v-for="(notice, index) in noticeList" :key="index"
                                     style="margin-top: 20px;width: 1184px;height: 220px;border-radius: 6px;border-width: 2px">
@@ -1555,7 +1423,7 @@
                                                 <el-col :span="24">
                                                     <span style="float: left;padding-left: 30px;padding-top: 5px">
                                                         <span style="font-size: 15px;color: #707070"
-                                                            v-html="notice.content">如题所述</span>
+                                                            v-text="getSimpleText(notice.content)">如题所述</span>
                                                     </span>
                                                 </el-col>
                                             </el-row>
@@ -1583,6 +1451,67 @@
             </el-container>
         </el-container>
 
+        <!-- 发布/编辑作业表单 -->
+        <el-dialog :title="isEditHomework ? '编辑' + '作业' : '发布' + '作业'" :visible.sync="homeworkFormVisible"
+            @opened="initHomeworkEditor()" @closed="destroyHomeworkEditor">
+            <el-form :model="homeworkForm" :rules="homeworkRule" ref="inputOrEditHomeworkForm">
+                <el-form-item prop="title">
+                    <el-input placeholder="作业名称" v-model="homeworkForm.title" clearable>
+                    </el-input>
+                </el-form-item>
+                <el-form-item>
+                    <div id="homeworkEditor"></div>
+                </el-form-item>
+                <el-form-item prop="deadline">
+                    <div class="block" style="float: left">
+                        <span class="demonstration">截止日期：</span>
+                        <el-date-picker v-model="homeworkForm.deadline" type="datetime" placeholder="选择日期时间"
+                            align="right" :picker-options="pickerOptions">
+                        </el-date-picker>
+                    </div>
+                </el-form-item>
+                <el-form-item prop="totalScore">
+                    <div class="block" style="float: left;">
+                        <span class="demonstration">满&ensp;分&ensp;值：</span>
+                        <el-input-number v-model="homeworkForm.totalScore" @change="handleChange" :min="1" :step="0.5"
+                            :max="100" label="分值">
+                        </el-input-number>
+                    </div>
+                </el-form-item>
+                <el-form-item>
+                    <div id="homework-button" style="float: right;">
+                        <el-button type="primary" plain @click="homeworkFormVisible=false">取消</el-button>
+                        <el-button type="primary"
+                            @click="isEditHomework ? editHomework('inputOrEditHomeworkForm') : inputHomework('inputOrEditHomeworkForm')">
+                            确定
+                        </el-button>
+                    </div>
+                </el-form-item>
+            </el-form>
+        </el-dialog>
+
+        <!-- 发布/编辑公告表单 -->
+        <el-dialog :title="isEditNotice ? '编辑' + '公告' : '发布' + '公告'" :visible.sync="noticeFormVisible"
+            @opened="initNoticeEditor()" @closed="destroyNoticeEditor()">
+            <el-form :model="noticeForm" :rules="noticeRule" ref="inputOrEditNoticeForm">
+                <el-form-item prop="title">
+                    <el-input placeholder="请输入公告标题" v-model="noticeForm.title" clearable>
+                    </el-input>
+                </el-form-item>
+                <el-form-item>
+                    <div id="noticeEditor"></div>
+                </el-form-item>
+                <el-form-item>
+                    <div id="notice-button" style="float: right;padding-top: 10px">
+                        <el-button type="primary" plain @click="noticeFormVisible = false">取消
+                        </el-button>
+                        <el-button type="primary" @click="isEditNotice ? editNotice('inputOrEditNoticeForm') : inputNotice('inputOrEditNoticeForm')">确定
+                        </el-button>
+                    </div>
+                </el-form-item>
+            </el-form>
+        </el-dialog>
+
         <!-- 底部 -->
         <el-footer style="padding-top: 50px">
             <el-row type="flex" justify="center">
@@ -1609,6 +1538,8 @@
 <script src="./js/index.js"></script>
 <script src="js/md5.js"></script>
 <script src="js/common.js"></script>
+<script src="https://cdn.bootcss.com/jquery/3.2.1/jquery.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/wangeditor@4.5.0/dist/wangEditor.min.js"></script>
 <script>
     new Vue({
         el: '#app',
@@ -1661,28 +1592,21 @@
                 cname: "数据结构",
             },
             breadcrumb: '<button type="button" class="el-button el-button--text" onclick="getResourceData(' + yxt.getUrlParam("id") + ', ' + -1 + ')">所有文件</button>',
-            homework: {
-                id: 0,
-                courseId: 0,
+            homeworkList: [],
+            homeworkEditor: null,
+            homeworkDeadline: null, // 记录用户编辑作业时是否修改了 deadline
+            homeworkForm: {
                 title: "",
                 description: "",
-                createTime: "",
-                deadline: "new Date()",
-                submitCount: 0,
-                totalScore: 0,
+                deadline: null,
+                totalScore: 100,
             },
-            homeworkInputForm: {
-                title: "",
-                description: "",
-                deadline: new Date(),
-                totalScore: 0,
-            },
-            homeworkEditForm: {},
-            noticeInputForm: {
-                title: "",
-                content: "",
-            },
-            noticeEditForm: {
+            homeworkFormVisible: false,
+            isEditHomework: false,
+            noticeEditor: null,
+            isEditNotice: false,
+            noticeFormVisible: false,
+            noticeForm: {
                 title: "",
                 content: "",
             },
@@ -1745,23 +1669,13 @@
                     }
                 }]
             },
-            inputHomeworkRule: {
+            homeworkRule: {
                 title: [{ required: true, message: '请输入作业名称', trigger: 'blur' }],
                 deadline: [{ required: true, message: '请输入截止日期', trigger: 'blur' }],
                 totalScore: [{ required: true, message: '请输入满分值', trigger: 'blur' }],
             },
-            editHomeworkRule: {
-                title: [{ required: true, message: '请输入作业名称', trigger: 'blur' }],
-                deadline: [{ required: true, message: '请输入截止日期', trigger: 'blur' }],
-                totalScore: [{ required: true, message: '请输入满分值', trigger: 'blur' }],
-            },
-            inputNoticeRule: {
+            noticeRule: {
                 title: [{ required: true, message: '请输入公告标题', trigger: 'blur' }],
-                content: [{ required: true, message: '请输入公告内容', trigger: 'blur' }],
-            },
-            editNoticeRule: {
-                title: [{ required: true, message: '请输入公告标题', trigger: 'blur' }],
-                content: [{ required: true, message: '请输入公告内容', trigger: 'blur' }],
             },
             createFolderRule: {
                 name: [{ required: true, message: '请输入文件夹名称', trigger: 'blur' }],
@@ -1770,8 +1684,6 @@
             resourceCount: 2,
             examCount: 4,
             noticeCount: 3,
-            homework_input: false,
-            homework_edit: false,
             cname: "",
             isProgressVisable: false,
             progressPercent: 0,
@@ -1780,8 +1692,6 @@
             dialogUpdateCourseFormVisible: false,
             createFolderFormVisible: false,
             formLabelWidth: '120px',
-            fileList: [{ name: 'food.jpeg', url: 'https://fuss10.elemecdn.com/3/63/4e7f3a15429bfda99bce42a18cdd1jpeg.jpeg?imageMogr2/thumbnail/360x360/format/webp/quality/100' }, { name: 'food2.jpeg', url: 'https://fuss10.elemecdn.com/3/63/4e7f3a15429bfda99bce42a18cdd1jpeg.jpeg?imageMogr2/thumbnail/360x360/format/webp/quality/100' }],
-            homeworkList: [],
             noticeList: [],
             delNoticeVisible: false,
             delHomeworkVisible: false,
@@ -1790,23 +1700,76 @@
             parentResourceId: -1
         },
         methods: {
+            initHomeworkEditor() {
+                const editor = new wangEditor(`#homeworkEditor`)
+                // 配置 onchange 回调函数，将数据同步到 vue 中
+                editor.config.onchange = (newHtml) => {
+                    this.homeworkForm.description = newHtml
+                }
+                // 配置 placeholder
+                editor.config.placeholder = '作业简介，作业格式等要求'
+                // 配置 server 上传图片接口地址
+                editor.config.uploadImgServer = 'http://api.yixuetang.com/api/resource/upload/editor/userId/' + this.user.id
+                // 配置上传文件参数名
+                editor.config.uploadFileName = 'file';
+                // 创建编辑器
+                editor.create()
+                this.homeworkEditor = editor
+
+                // 如果是编辑已发布的作业，需要回显数据
+                if (this.isEditHomework) {
+                    this.homeworkEditor.txt.html(this.homeworkForm.description);
+                }
+            },
+            initNoticeEditor() {
+                const editor = new wangEditor(`#noticeEditor`)
+                // 配置 onchange 回调函数，将数据同步到 vue 中
+                editor.config.onchange = (newHtml) => {
+                    this.noticeForm.content = newHtml
+                }
+                // 配置 placeholder
+                editor.config.placeholder = '请编辑公告内容'
+                // 配置 server 上传图片接口地址
+                editor.config.uploadImgServer = 'http://api.yixuetang.com/api/resource/upload/editor/userId/' + this.user.id
+                // 配置上传文件参数名
+                editor.config.uploadFileName = 'file';
+                // 创建编辑器
+                editor.create()
+                this.noticeEditor = editor
+
+                // 如果是编辑已发布的公告，需要回显数据
+                if (this.isEditNotice) {
+                    this.noticeEditor.txt.html(this.noticeForm.content);
+                }
+            },
+            destroyHomeworkEditor() {
+                // 调用销毁 API 对当前编辑器实例进行销毁
+                this.homeworkEditor.destroy()
+                this.homeworkEditor = null
+            },
+            destroyNoticeEditor() {
+                // 调用销毁 API 对当前编辑器实例进行销毁
+                this.noticeEditor.destroy()
+                this.noticeEditor = null
+            },
             inputHomework(formName) {
                 this.$refs[formName].validate((valid) => {
                     if (valid) {
-                        let t = this.homeworkInputForm.deadline;
-                        this.homeworkInputForm.deadline = this.formatDateTime(t);
-                        yxt.http.post("/homework/courseId/" + this.course.id + "/" + this.user.id, this.homeworkInputForm).then(({ data }) => {
+                        let t = this.homeworkForm.deadline;
+                        this.homeworkForm.deadline = this.formatDateTime(t);
+                        yxt.http.post("/homework/courseId/" + this.course.id + "/" + this.user.id, this.homeworkForm).then(({ data }) => {
                             if (data.success) {
                                 this.$message.success(data.message);
                                 this.getHomeworkData();
                             } else {
                                 this.$message.error(data.message);
                             }
-                            this.homework_input = false;
-                            this.homeworkInputForm = {};
+                            this.homeworkFormVisible = false;
+                            this.homeworkForm = {};
                         }).catch(() => {
                             this.$message.error("服务器繁忙，请稍后再试！");
-                            this.homework_input = false;
+                            this.homeworkFormVisible = false;
+                            this.homeworkForm = {};
                         })
                     }
                 });
@@ -1815,27 +1778,39 @@
                 this.notice_input = true;
                 this.$refs[formName].validate((valid) => {
                     if (valid) {
-                        yxt.http.post("/notice/courseId/" + this.course.id + "/" + this.user.id, this.noticeInputForm).then(({ data }) => {
+                        yxt.http.post("/notice/courseId/" + this.course.id + "/" + this.user.id, this.noticeForm).then(({ data }) => {
                             if (data.success) {
                                 this.$message.success(data.message);
                                 this.getNoticeData();
                             } else {
                                 this.$message.error(data.message);
                             }
-                            this.notice_input = false;
-                            this.noticeInputForm = {};
+                            this.noticeFormVisible = false;
+                            this.noticeForm = {};
                         }).catch(() => {
                             this.$message.error("服务器繁忙，请稍后再试！");
-                            this.notice_input = false;
+                            this.noticeFormVisible = false;
+                            this.noticeForm = {};
                         })
                     }
                 });
             },
+            showInputHomeworkForm() {
+                this.homeworkFormVisible = true
+                this.isEditHomework = false
+                this.homeworkForm = {}
+            },
+            showInputNoticeForm() {
+                this.noticeFormVisible = true
+                this.isEditNotice = false
+                this.noticeForm = {}
+            },
             showEditNoticeForm(noticeId) {
                 yxt.http.get("/notice/noticeId/" + noticeId).then(({ data }) => {
                     if (data.success) {
-                        this.noticeEditForm = data.queryResult.data[0];
-                        this.notice_edit = true;
+                        this.noticeForm = data.queryResult.data[0];
+                        this.noticeFormVisible = true;
+                        this.isEditNotice = true;
                     } else {
                         this.$message.error(data.message);
                     }
@@ -1844,51 +1819,59 @@
             showEditHomeworkForm(homeworkId) {
                 yxt.http.get("/homework/homeworkId/" + homeworkId).then(({ data }) => {
                     if (data.success) {
-                        this.homeworkEditForm = data.queryResult.data[0];
-                        this.homework_edit = true;
+                        this.homeworkForm = data.queryResult.data[0];
+                        this.homeworkFormVisible = true;
+                        this.homeworkDeadline = this.homeworkForm.deadline;
+                        this.isEditHomework = true;
                     } else {
                         this.$message.error(data.message);
                     }
                 })
             },
             editHomework(formName) {
-                this.homework_edit = true;
                 this.$refs[formName].validate((valid) => {
                     if (valid) {
-                        let t = this.homeworkEditForm.deadline;
-                        this.homeworkEditForm.deadline = this.formatDateTime(t);
-                        yxt.http.put("/homework/info/homeworkId/" + this.homeworkEditForm.id, this.homeworkEditForm).then(({ data }) => {
+                        let t = this.homeworkForm.deadline;
+                        if (this.homeworkDeadline != t) {
+                            this.homeworkForm.deadline = this.formatDateTime(t);
+                        }
+                        yxt.http.put("/homework/info/homeworkId/" + this.homeworkForm.id, this.homeworkForm).then(({ data }) => {
                             if (data.success) {
                                 this.$message.success(data.message);
                                 this.getHomeworkData();
                             } else {
                                 this.$message.error(data.message);
                             }
-                            this.homework_edit = false;
-                            this.homeworkEditForm = {};
+                            this.isEditHomework = false;
+                            this.homeworkFormVisible = false;
+                            this.homeworkForm = {};
                         }).catch(() => {
                             this.$message.error("服务器繁忙，请稍后再试！");
-                            this.homework_edit = false;
+                            this.isEditHomework = false;
+                            this.homeworkFormVisible = false;
+                            this.homeworkForm = {};
                         })
                     }
                 });
             },
             editNotice(formName) {
-                this.notice_edit = true;
                 this.$refs[formName].validate((valid) => {
                     if (valid) {
-                        yxt.http.put("/notice/info/noticeId/" + this.noticeEditForm.id, this.noticeEditForm).then(({ data }) => {
+                        yxt.http.put("/notice/info/noticeId/" + this.noticeForm.id, this.noticeForm).then(({ data }) => {
                             if (data.success) {
                                 this.$message.success(data.message);
                                 this.getNoticeData();
                             } else {
                                 this.$message.error(data.message);
                             }
-                            this.notice_edit = false;
-                            this.noticeEditForm = {};
+                            this.isEditNotice = false;
+                            this.noticeFormVisible = false;
+                            this.noticeForm = {};
                         }).catch(() => {
                             this.$message.error("服务器繁忙，请稍后再试！");
-                            this.notice_edit = false;
+                            this.isEditNotice = false;
+                            this.noticeFormVisible = false;
+                            this.noticeForm = {};
                         })
                     }
                 });
@@ -2190,6 +2173,10 @@
             formatDateTime(t) {
                 return t.getFullYear() + "-" + (t.getMonth() + 1) + "-" + t.getDate() + " " + t.getHours() + ":" + t.getMinutes() + ":" + t.getSeconds();
             },
+            getSimpleText(html) {
+                let re1 = new RegExp("<.+?>", "g"); // 匹配 html 标签的正则表达式，"g"是搜索匹配多个符合的内容
+                return html.replace(re1, '');
+            }
         },
         created() {
             this.verify();
