@@ -270,6 +270,7 @@ public class HomeworkServiceImpl implements HomeworkService {
                 HomeworkScoreResp homeworkScoreResp = new HomeworkScoreResp();
                 BeanUtils.copyProperties(homeworkStudent, homeworkScoreResp);
                 User student = this.userMapper.findById(homeworkStudent.getStudentId());
+                homeworkScoreResp.setRealName(student.getRealName());
                 homeworkScoreResp.setTsNo(student.getTsNo());
                 homeworkScoreResp.setAvatar(student.getAvatar());
                 homeworkScoreResp.setTitle(homework.getTitle());

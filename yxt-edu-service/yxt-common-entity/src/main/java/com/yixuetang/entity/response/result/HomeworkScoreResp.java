@@ -14,6 +14,7 @@ import lombok.EqualsAndHashCode;
 @EqualsAndHashCode(callSuper = true)
 public class HomeworkScoreResp extends HomeworkStudent {
 
+    private String realName; //学生姓名
     private String avatar;  // 头像
     private String tsNo;    // 学号
     private String title;   // 作业标题
