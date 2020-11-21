@@ -3,14 +3,19 @@ package com.yixuetang.resource.controller;
 import com.yixuetang.api.resource.ResourceControllerApi;
 import com.yixuetang.entity.request.resource.InsertCourseResource;
 import com.yixuetang.entity.request.resource.InsertResource;
+import com.yixuetang.entity.resource.Resource;
 import com.yixuetang.entity.response.CommonResponse;
 import com.yixuetang.entity.response.QueryResponse;
+import com.yixuetang.entity.response.UploadResponse;
 import com.yixuetang.resource.service.ResourceService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletResponse;
+import java.util.Collections;
+import java.util.List;
 
 /**
  * @author Colin
@@ -31,6 +36,24 @@ public class ResourceController implements ResourceControllerApi {
                                  @PathVariable Long userId,
                                  @RequestParam(required = false) Long parentResourceId) {
         return this.resourceService.upload( file, userId, parentResourceId );
+    }
+
+    @Override
+    @PostMapping("upload/editor/userId/{userId}")
+    public UploadResponse upload(MultipartFile file, @PathVariable Long userId) {
+        QueryResponse queryResponse = (QueryResponse) this.resourceService.upload( file, userId, null );
+
+        @SuppressWarnings("unchecked")
+        List<Resource> data = queryResponse.getQueryResult().getData();
+
+        return UploadResponse.builder()
+                .errno( queryResponse.isSuccess() ? 0 : 1 )
+                .data( Collections.singletonList(
+                        CollectionUtils.isEmpty( data )
+                                ? null
+                                : data.get( 0 ).getLocation()
+                ) )
+                .build();
     }
 
     @Override

@@ -4,6 +4,7 @@ import com.yixuetang.entity.request.resource.InsertCourseResource;
 import com.yixuetang.entity.request.resource.InsertResource;
 import com.yixuetang.entity.response.CommonResponse;
 import com.yixuetang.entity.response.QueryResponse;
+import com.yixuetang.entity.response.UploadResponse;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
@@ -29,6 +30,11 @@ public interface ResourceControllerApi {
                     paramType = "query", dataType = "long")
     })
     CommonResponse upload(MultipartFile file, Long userId, Long parentResourceId);
+
+    @ApiOperation( "使用 wangEditor 上传文件" )
+    @ApiImplicitParam(name = "userId", value = "用户id", required = true,
+            paramType = "path", dataType = "long")
+    UploadResponse upload(MultipartFile file, Long userId);
 
     @ApiOperation("下载文件")
     @ApiImplicitParam(name = "resourceId", value = "资源id", required = true,
