@@ -340,20 +340,25 @@
 										</el-input>
 									</el-col>
 								</el-row>
-								<el-table :data="hwScore" style="width: 100%" max-height="1000" stripe="true">
-									<el-table-column fixed prop="sno,studentName" label="全部成员" width="200">
+								<el-table :data="computedHwScore" style="width: 100%" max-height="1000" stripe="true">
+									<el-table-column fixed prop="tsNo, realName" label="全部成员" width="200"
+										align="center">
 										<template slot-scope="scope">
-											{{scope.row.sno}} &nbsp; <span
-												style="font-weight: 500;color: black;">{{scope.row.studentName}}</span>
+											{{scope.row.tsNo}} &nbsp; <span
+												style="font-weight: 500;color: black;">{{scope.row.realName}}</span>
 										</template>
 									</el-table-column>
-									<el-table-column prop="hw" :label="item" width="150" v-for="(item,index) in hwTitle"
-										:key=index>
+									<el-table-column prop="hw" :label="item" width="150" align="center"
+										v-for="(item, index) in hwTitle" :key=index>
 										<template slot-scope="scope">
-											<span v-if="scope.row.hw[index].status > 0"
-												style="font-weight: 1000;">{{scope.row.hw[index].score}}</span>
-											<span v-else style="color: red;">未交</span>
-											<span>&nbsp; /{{scope.row.hw[index].totalScore}}</span>
+											<span v-show="scope.row.hw[index].status === 0"
+												style="color: red;">未交</span>
+											<span
+												v-show="scope.row.hw[index].status === 1">未批/{{scope.row.hw[index].totalScore}}</span>
+											<span v-show="scope.row.hw[index].status === 2"
+												style="font-weight: 1000;">{{scope.row.hw[index].score}}
+												<span>&nbsp; /{{scope.row.hw[index].totalScore}}</span>
+											</span>
 										</template>
 									</el-table-column>
 								</el-table>
@@ -471,46 +476,19 @@
 				search: ""
 			},
 			temp: [],
-
+			homeworkScoresData: {
+				"1": [
+					{ "id": 5, "tsNo": "20170390506", "realName": "Colin", title: "题目1", "score": null, "totalScore": 100, status: 1 },
+					{ "id": 6, "tsNo": "20170390506", "realName": "Colin", title: "题目2", "score": null, "totalScore": 100, status: 1 },
+					{ "id": 7, "tsNo": "20170390506", "realName": "Colin", title: "题目3", "score": null, "totalScore": 100, status: 1 }],
+				"2": [
+					{ "id": 5, "tsNo": "201703905xx", "realName": "Curtis", title: "题目1", "score": null, "totalScore": 100, status: 1 },
+					{ "id": 6, "tsNo": "201703905xx", "realName": "Curtis", title: "题目2", "score": null, "totalScore": 100, status: 1 },
+					{ "id": 7, "tsNo": "201703905xx", "realName": "Curtis", title: "题目3", "score": null, "totalScore": 100, status: 1 }],
+			},
 			//作业成绩模块数据
 			search2: '',
-			hwTitle: [],
-			hwScore: [{
-				sno: '12370393456',
-				studentName: '王小虎',
-				hw: [
-					{
-						title: '第一次作业',
-						score: 96,
-						totalScore: 100,
-						status: 1
-					}, {
-						title: '第二次作业',
-						score: 1,
-						totalScore: 23,
-						status: 0
-					}
-				]
-
-			}, {
-				sno: '20170390413',
-				studentName: '王虎',
-				hw: [
-					{
-						title: '第一次作业',
-						score: 1,
-						totalScore: 23,
-						status: 0
-					}, {
-						title: '第二次作业',
-						score: 1,
-						totalScore: 23,
-						status: 0
-					}
-				]
-
-			}],
-
+			
 			//测试成绩模块数据
 			search3: '',
 			testTitle: [],
@@ -651,6 +629,7 @@
 				yxt.http.get("/auth/verify/2").then(({ data }) => {
 					if (data.success) {
 						this.user = data.queryResult.data[0];
+						this.getHomeworkScoresData();
 					} else {
 						location.href = "../index.html"
 					}
@@ -680,15 +659,6 @@
 				}
 			},
 
-			//作业成绩表标题数据初始化
-			initHwTitle() {
-				//将hwScore里的作业标题title，赋值到hwTitie ，前提是hwScore已经更新了数据，所以更新hwScore之后记得执行这段代码
-				this.hwTitle = this.temp;
-				for (let i = 0; i < this.hwScore[0].hw.length; i++) {
-					this.hwTitle.push(this.hwScore[0].hw[i].title);
-				}
-				this.temp = [];
-			},
 			//测试成绩表标题数据初始化
 			initTestTitle() {
 				//将testScore里的作业标题title，赋值到testTitie ，前提是testScore已经更新了数据，所以更新testScore之后记得执行这段代码
@@ -699,14 +669,19 @@
 				this.temp = [];
 			},
 
+			getHomeworkScoresData() {
+				yxt.http.get("homework/scores/courseId/" + yxt.getUrlParam("courseId") + "/" + this.user.id).then(({data}) => {
+					this.homeworkScoresData = data.queryResult.data[0]
+				})
+			}
+
 		},
 		created() {
 			this.verify();
 			this.getCourseMemberData();
 			this.getCourseData();
 
-			//testScore和hwScore更新之后记得执行下面这两个方法
-			this.initHwTitle();
+			//testScore更新之后记得执行这个方法
 			this.initTestTitle();
 
 		},
@@ -716,6 +691,43 @@
 				handler() {
 					this.getCourseMemberData();
 				}
+			}
+		},
+		computed: {
+			computedHwScore() {
+				let returnVal = []
+				for (let userId in this.homeworkScoresData) {
+					let singleUserData = {
+						tsNo: "",
+						realName: "",
+						hw: []
+					}
+					let singleUserHomeworkScore = this.homeworkScoresData[userId];
+					for (let val of singleUserHomeworkScore) {
+						let singleHomeworkData = {}
+						for (let key in val) {
+							if (key === 'title') {
+								singleHomeworkData.title = val[key]
+							} else if (key === 'score') {
+								singleHomeworkData.score = val[key]
+							} else if (key === 'totalScore') {
+								singleHomeworkData.totalScore = val[key]
+							} else if (key === 'status') {
+								singleHomeworkData.status = val[key]
+							} else if (key === 'realName') {
+								singleUserData.realName = val[key]
+							} else if (key === 'tsNo') {
+								singleUserData.tsNo = val[key]
+							}
+						}
+						singleUserData.hw.push(singleHomeworkData)
+					}
+					returnVal.push(singleUserData)
+				}
+
+				this.hwTitle = returnVal[0].hw.map(hw => hw.title)
+
+				return returnVal;
 			}
 		},
 	})
