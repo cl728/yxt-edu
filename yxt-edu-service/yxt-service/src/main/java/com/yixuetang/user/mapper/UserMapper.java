@@ -28,6 +28,10 @@ public interface UserMapper extends BaseMapper<User> {
     @Select("select * from t_user where id = #{id}")
     User findById(long id);
 
+    @ResultMap("userMap")
+    @Select("select id, role_id, avatar, real_name from t_user where id = #{id}")
+    User findCommentUserById(long id);
+
     /**
      * 查询所有用户
      *

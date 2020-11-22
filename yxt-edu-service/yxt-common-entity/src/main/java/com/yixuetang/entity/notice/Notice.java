@@ -5,9 +5,11 @@ import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.yixuetang.entity.course.Course;
+import com.yixuetang.entity.user.User;
 import lombok.Data;
 
 import java.util.Date;
+import java.util.List;
 
 /**
  * @author Colin
@@ -40,4 +42,14 @@ public class Notice {
 
     @TableField(exist = false)
     private Long views;  // 已读人数
+
+    @TableField(exist = false)
+    private Long commentCount;  // 评论条数
+
+    @TableField(exist = false)
+    private List<User> readUsers;   // 已读用户列表
+
+    @TableField(exist = false)
+    private List<User> unreadUsers; // 未读用户列表
+
 }

@@ -1,0 +1,49 @@
+package com.yixuetang.comment.mapper;
+
+import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.yixuetang.entity.comment.Comment;
+import org.apache.ibatis.annotations.*;
+import org.apache.ibatis.mapping.FetchType;
+
+import java.util.List;
+
+/**
+ * @author Colin
+ * @version 1.0.0
+ * @description TODO
+ * @date 2020/11/20 20:32
+ */
+@Mapper
+public interface CommentMapper extends BaseMapper<Comment> {
+
+    @Select("select count(*) from t_comment where notice_id = #{noticeId}")
+    long findCommentCountByNoticeId(long noticeId);
+
+    @Results(id = "commentMap", value = {
+            @Result(id = true, column = "id", property = "id"),
+            @Result(column = "create_time", property = "createTime"),
+            @Result(column = "user_id", property = "user",
+                    one = @One(select = "com.yixuetang.user.mapper.UserMapper.findCommentUserById", fetchType = FetchType.EAGER)),
+            /*@Result(column = "parent_comment_id", property = "parentComment",
+                    one = @One(select = "com.yixuetang.comment.mapper.CommentMapper.findParentCommentById", fetchType = FetchType.EAGER)),*/
+            @Result(column = "id", property = "childComments",
+                    many = @Many(select = "com.yixuetang.comment.mapper.CommentMapper.findChildCommentsById", fetchType = FetchType.LAZY))
+    })
+    @Select("select id, content, create_time, user_id, parent_comment_id from t_comment " +
+            " where notice_id = #{noticeId} and parent_comment_id is null " +
+            " order by create_time")
+    List<Comment> findTopCommentsByNoticeId(long noticeId);
+/*
+    @Results({
+            @Result(column = "user_id", property = "user",
+                    one = @One(select = "com.yixuetang.user.mapper.UserMapper.findCommentUserById", fetchType = FetchType.EAGER))
+    })
+    @Select("select id, user_id from t_comment where id = #{id}")
+    Comment findParentCommentById(long id);*/
+
+    @ResultMap("commentMap")
+    @Select("select t1.id, t1.content, t1.create_time, t1.user_id, t1.parent_comment_id " +
+            " from t_comment t1, t_comment t2 " +
+            " where t1.parent_comment_id = t2.id and t2.id = #{id}")
+    List<Comment> findChildCommentsById(long id);
+}
