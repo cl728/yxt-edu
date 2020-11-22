@@ -13,7 +13,7 @@ import lombok.Data;
  * @date 2020/11/11 16:32
  */
 @Data
-@TableName("t_nu")
+@TableName("t_notice_user")
 public class NoticeUser {
 
     @TableId(type = IdType.AUTO)

@@ -15,7 +15,7 @@ import java.util.Date;
  * @date 2020/11/10 19:07
  */
 @Data
-@TableName("t_hs")
+@TableName("t_homework_student")
 public class HomeworkStudent {
 
     @TableId(type = IdType.AUTO)

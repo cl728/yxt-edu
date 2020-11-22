@@ -16,7 +16,7 @@ import lombok.NoArgsConstructor;
  * @description 课程-资源实体类
  * @date 2020/11/17 16:10
  */
-@TableName("t_cr")
+@TableName("t_course_resource")
 @Data
 @Builder
 @NoArgsConstructor

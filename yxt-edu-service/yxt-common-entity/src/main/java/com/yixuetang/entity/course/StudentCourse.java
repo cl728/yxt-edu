@@ -23,7 +23,7 @@ import java.util.Date;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@TableName("t_sc")
+@TableName("t_student_course")
 public class StudentCourse {
 
     @TableId(type = IdType.AUTO)
