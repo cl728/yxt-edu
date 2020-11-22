@@ -18,14 +18,14 @@ import java.util.List;
 @Mapper
 public interface NoticeUserMapper extends BaseMapper<NoticeUser> {
 
-    @Select("select count(user_id) from t_nu where notice_id = #{noticeId} and view = true")
+    @Select("select count(user_id) from t_notice_user where notice_id = #{noticeId} and view = true")
     long findViewsByNoticeId(@Param("noticeId") long noticeId);
 
     @Select( "select id, avatar, real_name, ts_no from t_user where id in " +
-            "(select user_id from t_nu where notice_id = #{noticeId} and view = true)" )
+            "(select user_id from t_notice_user where notice_id = #{noticeId} and view = true)" )
     List<User> findReadUsersByNoticeId(long noticeId);
 
     @Select( "select id, avatar, real_name, ts_no from t_user where id in " +
-            "(select user_id from t_nu where notice_id = #{noticeId} and view = false)" )
+            "(select user_id from t_notice_user where notice_id = #{noticeId} and view = false)" )
     List<User> findUnreadUsersByNoticeId(long noticeId);
 }

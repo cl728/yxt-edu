@@ -25,7 +25,7 @@ public interface ResourceMapper extends BaseMapper<Resource> {
     @Select("<script>" +
                 "select id, type, ext, name, location, create_time from t_resource " +
                     "<where>" +
-                        " and id in (select resource_id from t_cr where course_id = #{courseId})" +
+                        " and id in (select resource_id from t_course_resource where course_id = #{courseId})" +
                             "<if test='parentResourceId != -1'>" +
                                 "and parent_resource_id = #{parentResourceId}" +
                             "</if>" +

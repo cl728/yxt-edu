@@ -23,7 +23,7 @@ public interface ScMapper extends BaseMapper<StudentCourse> {
      * @param courseId  课程主键id
      * @return 操作影响行数
      */
-    @Select("select count(*) from t_sc where student_id = #{studentId} and course_id = #{courseId}")
+    @Select("select count(*) from t_student_course where student_id = #{studentId} and course_id = #{courseId}")
     int selectByStudentIdAndCourseId(@Param("studentId") Long studentId, @Param("courseId") Long courseId);
 
 
@@ -34,7 +34,7 @@ public interface ScMapper extends BaseMapper<StudentCourse> {
      * @param courseId  课程主键id
      * @return 操作影响行数
      */
-    @Update("update t_sc set top_num=#{topNum} where student_id = #{studentId} and course_id = #{courseId}")
+    @Update("update t_student_course set top_num=#{topNum} where student_id = #{studentId} and course_id = #{courseId}")
     void updateTopNumByStudentIdAndCourseId(@Param("topNum") int topNum, @Param("studentId") Long studentId, @Param("courseId") Long courseId);
 
     @Select("SELECT MAX(top_num) FROM t_sc WHERE student_id=#{studentId}")
@@ -47,9 +47,9 @@ public interface ScMapper extends BaseMapper<StudentCourse> {
             @Result(column = "student_id", property = "user",
                     one = @One(select = "com.yixuetang.user.mapper.UserMapper.findById", fetchType = FetchType.EAGER))
     })
-    @Select("select * from t_sc where student_id=#{userId} order by top_num desc")
+    @Select("select * from t_student_course where student_id=#{userId} order by top_num desc")
     List<StudentCourse> findByUserId(long userId);
 
-    @Select("select student_id from t_sc where course_id = #{courseId}")
+    @Select("select student_id from t_student_course where course_id = #{courseId}")
     List<Long> findStudentIdByCourseId(Long courseId);
 }
