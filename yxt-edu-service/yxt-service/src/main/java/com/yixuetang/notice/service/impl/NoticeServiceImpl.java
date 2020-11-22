@@ -197,7 +197,7 @@ public class NoticeServiceImpl implements NoticeService {
     @Override
     public QueryResponse findById(long noticeId) {
         //  公告是否存在
-        Notice notice = noticeMapper.selectOne(new QueryWrapper<Notice>().eq("id", noticeId));
+        Notice notice = noticeMapper.findById( noticeId );
         if (notice == null) {
             ExceptionThrowUtils.cast(CommonCode.INVALID_PARAM);
         }
