@@ -1,5 +1,7 @@
 package com.yixuetang.comment.service;
 
+import com.yixuetang.entity.request.comment.PostComment;
+import com.yixuetang.entity.response.CommonResponse;
 import com.yixuetang.entity.response.QueryResponse;
 
 /**
@@ -17,4 +19,13 @@ public interface CommentService {
      * @return 响应结果实体类
      */
     QueryResponse findTopCommentsByNoticeId(long noticeId);
+
+    /**
+     * 在某一公告下发布评论
+     *
+     * @param noticeId 公告id
+     * @param userId   用户id
+     * @return
+     */
+    CommonResponse postCommentToNotice(long noticeId, long userId, PostComment postComment);
 }

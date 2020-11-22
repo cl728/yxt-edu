@@ -10,11 +10,13 @@ import com.yixuetang.entity.response.code.ResponseCode;
  */
 public enum NoticeCode implements ResponseCode {
 
-    INSERT_NOTICE_FAIL_COURSE_NOT_BELONGS_TO_THIS_TEACHER(false, 80000, "新增公告失败，当前教师不是此课程原授课教师！"),
+    NOTICE_NOT_FOUND(false, 80000, "找不到公告"),
 
-    INSERT_NOTICE_FAIL_TITLE_IS_NULL(false, 80001, "新增公告失败，公告标题不能为空！"),
+    INSERT_NOTICE_FAIL_COURSE_NOT_BELONGS_TO_THIS_TEACHER(false, 80001, "新增公告失败，当前教师不是此课程原授课教师！"),
 
-    INSERT_NOTICE_FAIL_CONTENT_IS_NULL(false, 80002, "新增公告失败，公告内容不能为空！");
+    INSERT_NOTICE_FAIL_TITLE_IS_NULL(false, 80002, "新增公告失败，公告标题不能为空！"),
+
+    INSERT_NOTICE_FAIL_CONTENT_IS_NULL(false, 80003, "新增公告失败，公告内容不能为空！");
 
     private boolean success;
     private int code;

@@ -22,7 +22,7 @@ public interface NoticeControllerApi {
             @ApiImplicitParam(name = "courseId", value = "课程id", required = true,
                     paramType = "path", dataType = "long"),
     })
-    QueryResponse FindNotices(long courseId);
+    QueryResponse findNotices(long courseId);
 
     @ApiOperation("新增公告")
     @ApiImplicitParams(value = {
@@ -35,20 +35,20 @@ public interface NoticeControllerApi {
 
     @ApiOperation("删除公告")
     @ApiImplicitParam(name = "noticeId", value = "公告id", required = true,
-                    paramType = "path", dataType = "long")
+            paramType = "path", dataType = "long")
     CommonResponse deleteNotice(long noticeId);
 
     @ApiOperation("编辑公告")
     @ApiImplicitParam(name = "noticeId", value = "公告id", required = true,
             paramType = "path", dataType = "long")
-    CommonResponse updateNotice(long noticeId,InsertNotice insertNotice);
+    CommonResponse updateNotice(long noticeId, InsertNotice insertNotice);
 
     @ApiOperation("根据公告id查询公告信息")
     @ApiImplicitParam(name = "noticeId", value = "公告id", required = true,
             paramType = "path", dataType = "long")
     QueryResponse findById(long noticeId);
 
-    @ApiOperation( "根据公告id切换置顶字段" )
+    @ApiOperation("根据公告id切换置顶字段")
     @ApiImplicitParam(name = "noticeId", value = "公告id", required = true,
             paramType = "path", dataType = "long")
     CommonResponse switchTop(long noticeId);

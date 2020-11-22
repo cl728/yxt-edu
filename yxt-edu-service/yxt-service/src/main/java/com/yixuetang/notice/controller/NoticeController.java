@@ -23,7 +23,7 @@ public class NoticeController implements NoticeControllerApi {
 
     @Override
     @GetMapping("courseId/{courseId}")
-    public QueryResponse FindNotices(@PathVariable long courseId) {
+    public QueryResponse findNotices(@PathVariable long courseId) {
         return this.noticeService.findNotices(courseId);
     }
 
@@ -41,20 +41,20 @@ public class NoticeController implements NoticeControllerApi {
 
     @Override
     @PutMapping("info/noticeId/{noticeId}")
-    public CommonResponse updateNotice(@PathVariable long noticeId,@RequestBody InsertNotice insertNotice) {
-        return this.noticeService.updateNotice(noticeId,insertNotice);
+    public CommonResponse updateNotice(@PathVariable long noticeId, @RequestBody InsertNotice insertNotice) {
+        return this.noticeService.updateNotice(noticeId, insertNotice);
     }
 
     @Override
     @GetMapping("noticeId/{noticeId}")
     public QueryResponse findById(@PathVariable long noticeId) {
-        return this.noticeService.findById( noticeId );
+        return this.noticeService.findById(noticeId);
     }
 
     @Override
     @PutMapping("topNum/noticeId/{noticeId}")
     public CommonResponse switchTop(@PathVariable long noticeId) {
-        return this.noticeService.switchTopNum( noticeId );
+        return this.noticeService.switchTopNum(noticeId);
     }
 
 }

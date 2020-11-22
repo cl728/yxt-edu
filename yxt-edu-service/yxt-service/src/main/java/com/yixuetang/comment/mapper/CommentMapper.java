@@ -21,11 +21,14 @@ public interface CommentMapper extends BaseMapper<Comment> {
 
     @Results(id = "commentMap", value = {
             @Result(id = true, column = "id", property = "id"),
+            @Result(column = "content", property = "content"),
             @Result(column = "create_time", property = "createTime"),
             @Result(column = "user_id", property = "user",
                     one = @One(select = "com.yixuetang.user.mapper.UserMapper.findCommentUserById", fetchType = FetchType.EAGER)),
-            /*@Result(column = "parent_comment_id", property = "parentComment",
-                    one = @One(select = "com.yixuetang.comment.mapper.CommentMapper.findParentCommentById", fetchType = FetchType.EAGER)),*/
+            @Result(column = "notice_id", property = "notice",
+                    one = @One(select = "com.yixuetang.notice.mapper.NoticeMapper.findById", fetchType = FetchType.EAGER)),
+            @Result(column = "parent_comment_id", property = "parentComment",
+                    one = @One(select = "com.yixuetang.comment.mapper.CommentMapper.findParentCommentById", fetchType = FetchType.EAGER)),
             @Result(column = "id", property = "childComments",
                     many = @Many(select = "com.yixuetang.comment.mapper.CommentMapper.findChildCommentsById", fetchType = FetchType.LAZY))
     })
@@ -33,17 +36,17 @@ public interface CommentMapper extends BaseMapper<Comment> {
             " where notice_id = #{noticeId} and parent_comment_id is null " +
             " order by create_time")
     List<Comment> findTopCommentsByNoticeId(long noticeId);
-/*
-    @Results({
-            @Result(column = "user_id", property = "user",
-                    one = @One(select = "com.yixuetang.user.mapper.UserMapper.findCommentUserById", fetchType = FetchType.EAGER))
-    })
-    @Select("select id, user_id from t_comment where id = #{id}")
-    Comment findParentCommentById(long id);*/
+
+    @ResultMap("commentMap")
+    @Select("select * from t_comment where id = #{parentCommentId}")
+    Comment findParentCommentById(@Param("parentCommentId") long parentCommentId);
 
     @ResultMap("commentMap")
     @Select("select t1.id, t1.content, t1.create_time, t1.user_id, t1.parent_comment_id " +
             " from t_comment t1, t_comment t2 " +
             " where t1.parent_comment_id = t2.id and t2.id = #{id}")
     List<Comment> findChildCommentsById(long id);
+
+    @Insert("insert into t_comment(notice_id,user_id,content,parent_comment_id,create_time) values(#{comment.notice.id},#{comment.user.id},#{comment.content},#{comment.parentComment.id},#{comment.createTime})")
+    void save(@Param("comment") Comment comment);
 }

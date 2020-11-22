@@ -2,12 +2,11 @@ package com.yixuetang.comment.controller;
 
 import com.yixuetang.api.comment.CommentControllerApi;
 import com.yixuetang.comment.service.CommentService;
+import com.yixuetang.entity.request.comment.PostComment;
+import com.yixuetang.entity.response.CommonResponse;
 import com.yixuetang.entity.response.QueryResponse;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 /**
  * @author Colin
@@ -23,9 +22,15 @@ public class CommentController implements CommentControllerApi {
     private CommentService commentService;
 
     @Override
+    @PostMapping("/noticeId/{noticeId}/userId/{userId}")
+    public CommonResponse postCommentToNotice(@PathVariable long noticeId, @PathVariable long userId, @RequestBody PostComment postComment) {
+        return this.commentService.postCommentToNotice(noticeId, userId, postComment);
+    }
+
+    @Override
     @GetMapping("topComments/noticeId/{noticeId}")
     public QueryResponse findTopCommentsByNoticeId(@PathVariable long noticeId) {
-        return this.commentService.findTopCommentsByNoticeId( noticeId );
+        return this.commentService.findTopCommentsByNoticeId(noticeId);
     }
 
 }
