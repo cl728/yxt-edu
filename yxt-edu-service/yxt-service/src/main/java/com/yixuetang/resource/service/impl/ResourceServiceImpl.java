@@ -3,6 +3,8 @@ package com.yixuetang.resource.service.impl;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.yixuetang.course.mapper.CourseMapper;
 import com.yixuetang.entity.course.Course;
+import com.yixuetang.entity.homework.Homework;
+import com.yixuetang.entity.homework.HomeworkResource;
 import com.yixuetang.entity.request.resource.InsertCourseResource;
 import com.yixuetang.entity.request.resource.InsertResource;
 import com.yixuetang.entity.resource.CourseResource;
@@ -13,6 +15,8 @@ import com.yixuetang.entity.response.code.CommonCode;
 import com.yixuetang.entity.response.code.resource.ResourceCode;
 import com.yixuetang.entity.response.result.QueryResult;
 import com.yixuetang.entity.user.User;
+import com.yixuetang.homework.mapper.HomeworkMapper;
+import com.yixuetang.homework.mapper.HomeworkResourceMapper;
 import com.yixuetang.resource.mapper.CourseResourceMapper;
 import com.yixuetang.resource.mapper.ResourceMapper;
 import com.yixuetang.resource.service.ResourceService;
@@ -58,6 +62,12 @@ public class ResourceServiceImpl implements ResourceService {
 
     @Autowired
     private CourseResourceMapper courseResourceMapper;
+
+    @Autowired
+    private HomeworkMapper homeworkMapper;
+
+    @Autowired
+    private HomeworkResourceMapper homeworkResourceMapper;
 
     @javax.annotation.Resource(name = "template")
     private RedisTemplate<String, Object> template;
@@ -234,6 +244,36 @@ public class ResourceServiceImpl implements ResourceService {
         }
 
         return new QueryResponse( CommonCode.SUCCESS, new QueryResult<>( ancestors, ancestors.size() ) );
+    }
+
+    @Override
+    public QueryResponse findHomework(Long studentId, long homeworkId) {
+        // 学生id不合法
+        User user = userMapper.findById(studentId);
+        if(user == null || user.getRole().getId() != 3){
+            ExceptionThrowUtils.cast(CommonCode.INVALID_PARAM);
+        }
+        // 作业id不合法
+        if (this.homeworkMapper.selectOne( new QueryWrapper<Homework>().eq( "id", homeworkId ).select( "id" ) ) == null) {
+            ExceptionThrowUtils.cast( CommonCode.INVALID_PARAM );
+        }
+
+        //查询学生提交的作业-资源记录 是否为空
+        List<HomeworkResource> homeworkResources = homeworkResourceMapper.selectList(new QueryWrapper<HomeworkResource>().eq("student_id", studentId).eq("homework_id", homeworkId));
+        if(homeworkResources.size() <= 0){
+            return new QueryResponse(ResourceCode.HOMEWORK_RESOURCE_NOT_EXISTS,null);
+        }
+
+        //获取资源id
+        List<Long> resourceIds = new ArrayList<>();
+        for (HomeworkResource homeworkResource : homeworkResources) {
+            resourceIds.add(homeworkResource.getResourceId());
+        }
+
+        //根据学生作业-资源记录的资源id查询资源
+        List<Resource> resources = resourceMapper.selectList(new QueryWrapper<Resource>().in("id",resourceIds));
+
+        return new QueryResponse(CommonCode.SUCCESS,new QueryResult(resources,resources.size()));
     }
 
     private void saveToDatabase(Long userId, Long parentResourceId, Resource resource) {

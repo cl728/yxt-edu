@@ -94,4 +94,10 @@ public class ResourceController implements ResourceControllerApi {
     public QueryResponse findAncestorsByResourceId(@PathVariable Long resourceId) {
         return this.resourceService.findAncestorsByResourceId( resourceId );
     }
+
+    @Override
+    @GetMapping("homeworkId/{homeworkId}/studentId/{studentId}")
+    public QueryResponse findHomework(@PathVariable Long studentId, @PathVariable long homeworkId) {
+        return resourceService.findHomework(studentId,homeworkId);
+    }
 }

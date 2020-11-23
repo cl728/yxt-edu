@@ -71,4 +71,13 @@ public interface ResourceControllerApi {
     @ApiImplicitParam(name = "resourceId", value = "资源id", required = true,
             paramType = "path", dataType = "long")
     QueryResponse findAncestorsByResourceId(Long resourceId);
+
+    @ApiOperation("教师查询某个学生在某个课程上传的作业")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "studentId", value = "学生id", required = true,
+                    paramType = "path", dataType = "long"),
+            @ApiImplicitParam(name = "homeworkId", value = "作业id",required = true,
+                    paramType = "path", dataType = "long")
+    })
+    QueryResponse findHomework(Long studentId,long homeworkId);
 }

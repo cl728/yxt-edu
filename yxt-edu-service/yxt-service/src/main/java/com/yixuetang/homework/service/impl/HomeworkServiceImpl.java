@@ -331,7 +331,7 @@ public class HomeworkServiceImpl implements HomeworkService {
         }
         //学生是否存在
         User user = userMapper.findById(studentId);
-        if(user.getRole().getId() != 3){
+        if(user == null || user.getRole().getId() != 3){
             ExceptionThrowUtils.cast(CommonCode.INVALID_PARAM);
         }
         //resourceIds是否为空

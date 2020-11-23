@@ -76,4 +76,12 @@ public interface ResourceService {
      * @return 响应结果实体类
      */
     QueryResponse findAncestorsByResourceId(Long resourceId);
+
+    /**
+     * 教师查询某个学生在某个课程上传的作业
+     * @param studentId 学生id
+     * @param homeworkId  作业id
+     * @return 响应结果实体类
+     */
+    QueryResponse findHomework(Long studentId, long homeworkId);
 }
