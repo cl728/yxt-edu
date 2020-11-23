@@ -118,7 +118,7 @@ public interface UserMapper extends BaseMapper<User> {
     @Select( "<script>" +
                 "select id, ts_no, real_name from t_user " +
                     "<where>" +
-                        " and id in (select student_id from t_hs where homework_id = #{homeworkId})" +
+                        " and id in (select student_id from t_homework_student where homework_id = #{homeworkId})" +
                         "<if test='search != null and search.length() > 0'>" +
                             "and real_name like #{search} or ts_no like #{search}" +
                         "</if>" +
