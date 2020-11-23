@@ -348,7 +348,7 @@
 												style="font-weight: 500;color: black;">{{scope.row.realName}}</span>
 										</template>
 									</el-table-column>
-									<el-table-column prop="hw" :label="item" width="150" align="center"
+									<el-table-column prop="hw" :label="item.length > 5 ? item.substring(0, 5) + '...' : item" width="150" align="center"
 										v-for="(item, index) in hwTitle" :key=index>
 										<template slot-scope="scope">
 											<span v-show="scope.row.hw[index].status === 0"
@@ -706,18 +706,10 @@
 					for (let val of singleUserHomeworkScore) {
 						let singleHomeworkData = {}
 						for (let key in val) {
-							if (key === 'title') {
-								singleHomeworkData.title = val[key]
-							} else if (key === 'score') {
-								singleHomeworkData.score = val[key]
-							} else if (key === 'totalScore') {
-								singleHomeworkData.totalScore = val[key]
-							} else if (key === 'status') {
-								singleHomeworkData.status = val[key]
-							} else if (key === 'realName') {
-								singleUserData.realName = val[key]
-							} else if (key === 'tsNo') {
-								singleUserData.tsNo = val[key]
+							if (key === 'realName' || key === 'tsNo') {
+								singleUserData[key] = val[key];
+							} else {
+								singleHomeworkData[key] = val[key]
 							}
 						}
 						singleUserData.hw.push(singleHomeworkData)

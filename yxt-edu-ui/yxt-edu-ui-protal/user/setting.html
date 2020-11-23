@@ -5,6 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="https://cdn.bootcss.com/element-ui/2.13.2/theme-chalk/index.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css">
     <link rel="stylesheet" href="../css/yxt.css">
     <title>个人设置</title>
 </head>
@@ -48,9 +49,12 @@
                                     <el-avatar size="large" :src="user.avatar">
                                     </el-avatar>
                                 </template>
-                                <el-menu-item @click="location.href = 'setting.html' "><i class="el-icon-setting"></i>
-                                    个人设置</el-menu-item>
-                                <el-menu-item @click="logout()"><i class="el-icon-s-unfold"></i> 退出账户</el-menu-item>
+                                <el-menu-item><i class="el-icon-setting"></i>个人设置</el-menu-item>
+                                <el-menu-item @click="location.href = 'message.html' "><i class="el-icon-position"></i>
+                                    消息中心</el-menu-item>
+                                <el-menu-item @click="logout()"><i class="fa fa-sign-out"
+                                        style="margin-left: 6px; margin-right: 9px;"></i> <span>退出账户</span>
+                                </el-menu-item>
                             </el-submenu>
                         </el-menu>
                     </el-col>
