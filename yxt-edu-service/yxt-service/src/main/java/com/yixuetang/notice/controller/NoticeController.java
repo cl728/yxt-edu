@@ -57,4 +57,10 @@ public class NoticeController implements NoticeControllerApi {
         return this.noticeService.switchTopNum(noticeId);
     }
 
+    @Override
+    @PutMapping("noticeId/{noticeId}/userId/{userId}")
+    public CommonResponse updateReadStatus(@PathVariable long noticeId, @PathVariable long userId) {
+        return this.noticeService.updateReadStatus(noticeId, userId);
+    }
+
 }

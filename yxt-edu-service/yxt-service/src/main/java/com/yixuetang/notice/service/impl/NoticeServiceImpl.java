@@ -218,4 +218,21 @@ public class NoticeServiceImpl implements NoticeService {
         return CommonResponse.SUCCESS();
     }
 
+    @Override
+    public CommonResponse updateReadStatus(long noticeId, long userId) {
+        Notice notice = noticeMapper.selectOne(new QueryWrapper<Notice>().eq("id", noticeId));
+        NoticeUser noticeUser = this.noticeUserMapper.selectOne(new QueryWrapper<NoticeUser>().eq("notice_id", noticeId).eq("user_id", userId));
+        //  公告是否存在
+        if (notice == null) {
+            ExceptionThrowUtils.cast(CommonCode.INVALID_PARAM);
+        }
+
+        //  判断公告view字段是否已改, 若为false则改为true
+        if ( !noticeUser.getView() ){
+            noticeUser.setView( !noticeUser.getView() );
+            noticeUserMapper.updateById(noticeUser);
+        }
+        return CommonResponse.SUCCESS();
+    }
+
 }
