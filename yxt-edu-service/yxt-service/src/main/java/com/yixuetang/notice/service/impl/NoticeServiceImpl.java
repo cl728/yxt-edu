@@ -119,16 +119,16 @@ public class NoticeServiceImpl implements NoticeService {
     @Override
     @Transactional
     public CommonResponse deleteNotice(long noticeId) {
-        //  公告是否存在
+        // 1. 公告是否存在
         Notice notice = noticeMapper.selectOne(new QueryWrapper<Notice>().eq("id", noticeId));
         if (notice == null) {
             ExceptionThrowUtils.cast(CommonCode.INVALID_PARAM);
         }
 
-        //删除公告与用户表的记录
+        // 2.删除公告与用户表的记录
         noticeUserMapper.delete(new QueryWrapper<NoticeUser>().eq("notice_id", noticeId));
 
-        //删除公告
+        // 3.删除公告
         noticeMapper.delete(new QueryWrapper<Notice>().eq("id", noticeId));
 
         return new CommonResponse(CommonCode.SUCCESS);
@@ -197,7 +197,7 @@ public class NoticeServiceImpl implements NoticeService {
     @Override
     public QueryResponse findById(long noticeId) {
         //  公告是否存在
-        Notice notice = noticeMapper.findById( noticeId );
+        Notice notice = noticeMapper.findById(noticeId);
         if (notice == null) {
             ExceptionThrowUtils.cast(CommonCode.INVALID_PARAM);
         }

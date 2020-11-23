@@ -16,7 +16,7 @@ public interface CommentService {
      * 查询某一公告下的顶级评论列表
      *
      * @param noticeId 公告id
-     * @return 响应结果实体类
+     * @return 响带结果集的应结果实体类
      */
     QueryResponse findTopCommentsByNoticeId(long noticeId);
 
@@ -25,7 +25,15 @@ public interface CommentService {
      *
      * @param noticeId 公告id
      * @param userId   用户id
-     * @return
+     * @return 响应结果实体类
      */
     CommonResponse postCommentToNotice(long noticeId, long userId, PostComment postComment);
+
+    /**
+     * 在某一公告下删除评论
+     *
+     * @param commentId 评论id
+     * @return 响应结果实体类
+     */
+    CommonResponse deleteCommentFromNotice(long commentId);
 }

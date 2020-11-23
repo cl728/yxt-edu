@@ -9,6 +9,7 @@ import com.yixuetang.entity.request.comment.PostComment;
 import com.yixuetang.entity.response.CommonResponse;
 import com.yixuetang.entity.response.QueryResponse;
 import com.yixuetang.entity.response.code.CommonCode;
+import com.yixuetang.entity.response.code.comment.CommentCode;
 import com.yixuetang.entity.response.code.notice.NoticeCode;
 import com.yixuetang.entity.response.code.user.UserCode;
 import com.yixuetang.entity.response.result.QueryResult;
@@ -74,21 +75,21 @@ public class CommentServiceImpl implements CommentService {
             ExceptionThrowUtils.cast(CommonCode.INVALID_PARAM);
         }
 
-        // 0. 根据公告id查询出已有的公告信息
+        // 2. 根据公告id查询出已有的公告信息
         Notice notice = this.noticeMapper.findById(noticeId);
         if (notice == null) {
             //找不到公告
             return new CommonResponse(NoticeCode.NOTICE_NOT_FOUND);
         }
 
-        // 0. 根据用户id查询出已有的用户信息
+        // 3. 根据用户id查询出已有的用户信息
         User user = this.userMapper.findById(userId);
         if (user == null) {
             //找不到用户
             return new CommonResponse(UserCode.USER_NOT_FOUND);
         }
 
-        // 0. 发布评论
+        // 4. 发布评论
         Comment comment = new Comment();
         comment.setContent(postComment.getContent());
         comment.setParentComment(this.commentMapper.findParentCommentById(postComment.getParentCommentId()));
@@ -98,6 +99,36 @@ public class CommentServiceImpl implements CommentService {
         this.commentMapper.save(comment);
 
         return CommonResponse.SUCCESS();
+    }
+
+    /**
+     * 在某一公告下删除评论
+     *
+     * @param commentId 评论id
+     * @return 响应结果实体类
+     */
+    @Transactional
+    @Override
+    public CommonResponse deleteCommentFromNotice(long commentId) {
+
+        // 1. 根据评论id查询出已有的评论信息
+        Comment comment = this.commentMapper.findById(commentId);
+        if (comment == null) {
+            //找不到该评论
+            return new CommonResponse(CommentCode.COMMENT_NOT_FOUND);
+        }
+
+        // 0. 判断该评论是否存在子评论
+        List<Comment> childComments = comment.getChildComments();
+        if (!CollectionUtils.isEmpty(childComments)) {
+            // 0. 先删除子评论
+            childComments.forEach(childComment -> this.deleteCommentFromNotice(childComment.getId()));
+        }
+
+        // 2. 再根据评论id删除此评论
+        this.commentMapper.deleteById(commentId);
+
+        return new CommonResponse(CommonCode.SUCCESS);
     }
 
     private List<Comment> eachComment(List<Comment> comments) {

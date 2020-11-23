@@ -37,7 +37,10 @@ public interface CommentMapper extends BaseMapper<Comment> {
             " order by create_time")
     List<Comment> findTopCommentsByNoticeId(long noticeId);
 
-    @ResultMap("commentMap")
+    @Results({
+            @Result(column = "user_id", property = "user",
+                    one = @One(select = "com.yixuetang.user.mapper.UserMapper.findCommentUserById", fetchType = FetchType.EAGER))
+    })
     @Select("select * from t_comment where id = #{parentCommentId}")
     Comment findParentCommentById(@Param("parentCommentId") long parentCommentId);
 
@@ -49,4 +52,8 @@ public interface CommentMapper extends BaseMapper<Comment> {
 
     @Insert("insert into t_comment(notice_id,user_id,content,parent_comment_id,create_time) values(#{comment.notice.id},#{comment.user.id},#{comment.content},#{comment.parentComment.id},#{comment.createTime})")
     void save(@Param("comment") Comment comment);
+
+    @ResultMap("commentMap")
+    @Select("select * from t_comment where id = #{id}")
+    Comment findById(@Param("id") long id);
 }

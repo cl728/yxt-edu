@@ -22,6 +22,12 @@ public class CommentController implements CommentControllerApi {
     private CommentService commentService;
 
     @Override
+    @DeleteMapping("/admin/id/{commentId}")
+    public CommonResponse deleteCommentFromNotice(@PathVariable long commentId) {
+        return this.commentService.deleteCommentFromNotice(commentId);
+    }
+
+    @Override
     @PostMapping("/noticeId/{noticeId}/userId/{userId}")
     public CommonResponse postCommentToNotice(@PathVariable long noticeId, @PathVariable long userId, @RequestBody PostComment postComment) {
         return this.commentService.postCommentToNotice(noticeId, userId, postComment);
