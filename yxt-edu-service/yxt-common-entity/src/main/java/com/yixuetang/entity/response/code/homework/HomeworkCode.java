@@ -26,7 +26,9 @@ public enum HomeworkCode implements ResponseCode {
 
     UPDATE_HOMEWORK_FAIL_TITLE_IS_NULL(false, 70007, "作业题目不能为空！"),
 
-    UPDATE_HOMEWORK_FAIL_DESCRIPTION_IS_NULL(false, 70007, "作业题目不能为空！");
+    UPDATE_HOMEWORK_FAIL_DESCRIPTION_IS_NULL(false, 70007, "作业题目不能为空！"),
+
+    STUDENT_HOMEWORK_NOT_EXIST(false, 70008, "学生-作业记录不存在！");
 
     private boolean success;
     private int code;

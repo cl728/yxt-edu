@@ -4,6 +4,8 @@ import com.yixuetang.entity.request.homework.InsertHomework;
 import com.yixuetang.entity.response.CommonResponse;
 import com.yixuetang.entity.response.QueryResponse;
 
+import java.util.List;
+
 /**
  * @author Colin
  * @version 1.0.0
@@ -73,4 +75,14 @@ public interface HomeworkService {
      * @return 带结果集的响应实体类
      */
     QueryResponse findScoresByCourseId(long courseId, long teacherId);
+
+    /**
+     * 学生提交作业
+     * @param homeworkId  作业id
+     * @param studentId   学生id
+     * @param resourceIds  资源id
+     * @return 通用响应实体类
+     */
+    CommonResponse submitHomework(long homeworkId, long studentId, List<Long> resourceIds);
+
 }

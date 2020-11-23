@@ -8,6 +8,8 @@ import com.yixuetang.homework.service.HomeworkService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 /**
  * @author Colin
  * @version 1.0.0
@@ -61,6 +63,12 @@ public class HomeworkController implements HomeworkControllerApi {
     @PutMapping("topNum/homeworkId/{homeworkId}")
     public CommonResponse switchTop(@PathVariable long homeworkId) {
         return this.homeworkService.switchTopNum(homeworkId);
+    }
+
+    @Override
+    @PostMapping("homeworkId/{homeworkId}/studentId/{studentId}")
+    public CommonResponse submitHomework(@PathVariable long homeworkId, @PathVariable long studentId, @RequestBody List<Long> resourceIds) {
+        return homeworkService.submitHomework(homeworkId,studentId,resourceIds);
     }
 
 }

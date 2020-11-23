@@ -8,6 +8,8 @@ import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 
+import java.util.List;
+
 /**
  * @author Colin
  * @version 1.0.0
@@ -69,4 +71,13 @@ public interface HomeworkControllerApi {
     @ApiImplicitParam(name = "homeworkId", value = "作业id", required = true,
             paramType = "path", dataType = "long")
     CommonResponse switchTop(long homeworkId);
+
+    @ApiOperation("学生提交作业")
+    @ApiImplicitParams(value = {
+            @ApiImplicitParam(name = "homeworkId", value = "作业id", required = true,
+                    paramType = "path", dataType = "long"),
+            @ApiImplicitParam(name = "studentId", value = "学生id", required = true,
+                    paramType = "path", dataType = "long"),
+    })
+    CommonResponse submitHomework(long homeworkId, long studentId, List<Long> resourceIds);
 }

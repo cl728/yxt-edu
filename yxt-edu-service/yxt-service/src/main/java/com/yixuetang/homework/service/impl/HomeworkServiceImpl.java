@@ -3,8 +3,10 @@ package com.yixuetang.homework.service.impl;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.yixuetang.course.mapper.CourseMapper;
 import com.yixuetang.course.mapper.ScMapper;
+import com.yixuetang.entity.auth.UserInfo;
 import com.yixuetang.entity.course.Course;
 import com.yixuetang.entity.homework.Homework;
+import com.yixuetang.entity.homework.HomeworkResource;
 import com.yixuetang.entity.homework.HomeworkStudent;
 import com.yixuetang.entity.request.homework.InsertHomework;
 import com.yixuetang.entity.response.CommonResponse;
@@ -17,6 +19,7 @@ import com.yixuetang.entity.response.result.HomeworkScoreResp;
 import com.yixuetang.entity.response.result.QueryResult;
 import com.yixuetang.entity.user.User;
 import com.yixuetang.homework.mapper.HomeworkMapper;
+import com.yixuetang.homework.mapper.HomeworkResourceMapper;
 import com.yixuetang.homework.mapper.HomeworkStudentMapper;
 import com.yixuetang.homework.service.HomeworkService;
 import com.yixuetang.user.mapper.UserMapper;
@@ -54,6 +57,9 @@ public class HomeworkServiceImpl implements HomeworkService {
 
     @Autowired
     private ScMapper scMapper;
+
+    @Autowired
+    private HomeworkResourceMapper homeworkResourceMapper;
 
     @Override
     public QueryResponse findByCourseId(long courseId, long userId) {
@@ -315,6 +321,51 @@ public class HomeworkServiceImpl implements HomeworkService {
         return new QueryResponse(CommonCode.SUCCESS, new QueryResult<>(Collections.singletonList(homework), 1));
 
     }
+
+    @Override
+    public CommonResponse submitHomework(long homeworkId, long studentId, List<Long> resourceIds) {
+        //判断作业是否存在
+        Homework homework = homeworkMapper.selectOne(new QueryWrapper<Homework>().eq("id", homeworkId));
+        if(homework == null){
+            ExceptionThrowUtils.cast(CommonCode.INVALID_PARAM);
+        }
+        //学生是否存在
+        User user = userMapper.findById(studentId);
+        if(user.getRole().getId() != 3){
+            ExceptionThrowUtils.cast(CommonCode.INVALID_PARAM);
+        }
+        //resourceIds是否为空
+        if(resourceIds == null){
+            ExceptionThrowUtils.cast(CommonCode.INVALID_PARAM);
+        }
+
+        //HomeworkStudent记录是否存在
+        HomeworkStudent homeworkStudent = homeworkStudentMapper.selectOne(new QueryWrapper<HomeworkStudent>().eq("homework_id", homeworkId).eq("student_id", studentId));
+        if(homeworkStudent == null){
+            return new CommonResponse(HomeworkCode.STUDENT_HOMEWORK_NOT_EXIST);
+        }
+
+        //修改 t_homework_student 记录的相关字段（submit_time, update_time, status）
+        Date date = new Date();
+        if(homeworkStudent.getSubmitTime() == null){
+            homeworkStudent.setSubmitTime(date);
+        }
+        homeworkStudent.setUpdateTime(date);
+        homeworkStudent.setStatus(homeworkStudent.getStatus()+1);
+        homeworkStudentMapper.updateById(homeworkStudent);
+
+        //在 t_homework_resource 里新增相关记录
+        for (Long resourceId : resourceIds) {
+            HomeworkResource homeworkResource  = new HomeworkResource();
+            homeworkResource.setHomeworkId(homeworkId);
+            homeworkResource.setStudentId(studentId);
+            homeworkResource.setResourceId(resourceId);
+            homeworkResourceMapper.insert(homeworkResource);
+        }
+
+        return new CommonResponse(CommonCode.SUCCESS);
+    }
+
 
     private Integer getCount(int countType, long courseId) {
         return this.homeworkStudentMapper
