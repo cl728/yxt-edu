@@ -2,6 +2,7 @@ package com.yixuetang.message.service;
 
 import com.yixuetang.entity.message.UserMessageSetting;
 import com.yixuetang.entity.response.CommonResponse;
+import com.yixuetang.entity.response.QueryResponse;
 
 /**
  * @author Colin
@@ -20,4 +21,11 @@ public interface MessageService {
      */
     CommonResponse updateMessageSetting(Long userId, UserMessageSetting setting);
 
+    /**
+     * 查询某个用户的消息提醒设置
+     *
+     * @param userId 用户id
+     * @return 响应结果实体类
+     */
+    QueryResponse findByUserId(Long userId);
 }
