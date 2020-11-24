@@ -58,9 +58,12 @@
                                     <el-avatar size="large" :src="user.avatar">
                                     </el-avatar>
                                 </template>
-                                <el-menu-item @click="location.href = 'user/setting.html' "><i
-                                        class="el-icon-setting"></i> 个人设置</el-menu-item>
-                                <el-menu-item @click="logout()"><i class="el-icon-s-unfold"></i> 退出账户</el-menu-item>
+                                <el-menu-item @click="location.href = 'user/setting.html' "><i class="el-icon-setting"></i>个人设置</el-menu-item>
+                                <el-menu-item @click="location.href = 'user/message.html' "><i class="el-icon-position"></i>
+                                    消息中心</el-menu-item>
+                                <el-menu-item @click="logout()"><i class="fa fa-sign-out"
+                                        style="margin-left: 6px; margin-right: 9px;"></i> <span>退出账户</span>
+                                </el-menu-item>
                             </el-submenu>
                         </el-menu>
                     </el-col>
@@ -1505,7 +1508,9 @@
                     <div id="notice-button" style="float: right;padding-top: 10px">
                         <el-button type="primary" plain @click="noticeFormVisible = false">取消
                         </el-button>
-                        <el-button type="primary" @click="isEditNotice ? editNotice('inputOrEditNoticeForm') : inputNotice('inputOrEditNoticeForm')">确定
+                        <el-button type="primary"
+                            @click="isEditNotice ? editNotice('inputOrEditNoticeForm') : inputNotice('inputOrEditNoticeForm')">
+                            确定
                         </el-button>
                     </div>
                 </el-form-item>
@@ -1706,6 +1711,30 @@
                 editor.config.onchange = (newHtml) => {
                     this.homeworkForm.description = newHtml
                 }
+                // 配置菜单
+                editor.config.menus = [
+                    'bold',
+                    'underline',
+                    'italic',
+                    'strikeThrough',
+                    'quote',
+                    'foreColor',
+                    'backColor',
+                    'fontSize',
+                    'fontName',
+                    'justify',
+                    'code',
+                    'image',
+                    'video',
+                    'indent',
+                    'lineHeight',
+                    'link',
+                    'list',
+                    'emoticon',
+                    'table',
+                    'undo',
+                    'redo'
+                ]
                 // 配置 placeholder
                 editor.config.placeholder = '作业简介，作业格式等要求'
                 // 配置 server 上传图片接口地址
@@ -1727,6 +1756,30 @@
                 editor.config.onchange = (newHtml) => {
                     this.noticeForm.content = newHtml
                 }
+                // 配置菜单
+                editor.config.menus = [
+                    'bold',
+                    'underline',
+                    'italic',
+                    'strikeThrough',
+                    'quote',
+                    'foreColor',
+                    'backColor',
+                    'fontSize',
+                    'fontName',
+                    'justify',
+                    'code',
+                    'image',
+                    'video',
+                    'indent',
+                    'lineHeight',
+                    'link',
+                    'list',
+                    'emoticon',
+                    'table',
+                    'undo',
+                    'redo',
+                ]
                 // 配置 placeholder
                 editor.config.placeholder = '请编辑公告内容'
                 // 配置 server 上传图片接口地址
