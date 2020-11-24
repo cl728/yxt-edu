@@ -30,7 +30,13 @@ public class MessageController implements MessageControllerApi {
 
     @Override
     @GetMapping("setting/userId/{userId}")
-    public QueryResponse findByUserId(@PathVariable Long userId) {
-        return this.messageService.findByUserId( userId );
+    public QueryResponse findMessageSettingByUserId(@PathVariable Long userId) {
+        return this.messageService.findMessageSettingByUserId( userId );
+    }
+
+    @Override
+    @GetMapping("userId/{userId}")
+    public QueryResponse findMessageListByUserId(@PathVariable Long userId) {
+        return this.messageService.findMessageListByUserId( userId );
     }
 }

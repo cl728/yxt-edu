@@ -24,6 +24,11 @@ public interface MessageControllerApi {
     @ApiOperation("查询某个用户的消息提醒设置")
     @ApiImplicitParam(name = "userId", value = "用户id", required = true,
             paramType = "path", dataType = "long")
-    QueryResponse findByUserId(Long userId);
+    QueryResponse findMessageSettingByUserId(Long userId);
+
+    @ApiOperation("查询某个用户收到的通知")
+    @ApiImplicitParam(name = "userId", value = "用户id", required = true,
+            paramType = "path", dataType = "long")
+    QueryResponse findMessageListByUserId(Long userId);
 
 }

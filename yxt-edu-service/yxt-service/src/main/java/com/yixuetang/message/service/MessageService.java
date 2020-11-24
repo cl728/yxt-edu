@@ -27,5 +27,13 @@ public interface MessageService {
      * @param userId 用户id
      * @return 响应结果实体类
      */
-    QueryResponse findByUserId(Long userId);
+    QueryResponse findMessageSettingByUserId(Long userId);
+
+    /**
+     * 查询某个用户收到的通知
+     *
+     * @param userId 用户id
+     * @return 响应结果实体类
+     */
+    QueryResponse findMessageListByUserId(Long userId);
 }

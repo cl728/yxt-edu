@@ -1,12 +1,16 @@
 package com.yixuetang.message.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.yixuetang.entity.message.Message;
+import com.yixuetang.entity.message.UserMessage;
 import com.yixuetang.entity.message.UserMessageSetting;
 import com.yixuetang.entity.response.CommonResponse;
 import com.yixuetang.entity.response.QueryResponse;
 import com.yixuetang.entity.response.code.CommonCode;
 import com.yixuetang.entity.response.result.QueryResult;
 import com.yixuetang.entity.user.User;
+import com.yixuetang.message.mapper.MessageMapper;
+import com.yixuetang.message.mapper.UserMessageMapper;
 import com.yixuetang.message.mapper.UserMessageSettingMapper;
 import com.yixuetang.message.service.MessageService;
 import com.yixuetang.user.mapper.UserMapper;
@@ -16,7 +20,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.Collections;
+import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * @author Colin
@@ -32,6 +39,12 @@ public class MessageServiceImpl implements MessageService {
 
     @Autowired
     private UserMessageSettingMapper messageSettingMapper;
+
+    @Autowired
+    private UserMessageMapper userMessageMapper;
+
+    @Autowired
+    private MessageMapper messageMapper;
 
     @Override
     @Transactional
@@ -57,7 +70,7 @@ public class MessageServiceImpl implements MessageService {
 
     @Override
     @Transactional
-    public QueryResponse findByUserId(Long userId) {
+    public QueryResponse findMessageSettingByUserId(Long userId) {
 
         if (this.userMapper.selectOne(
                 new QueryWrapper<User>().eq( "id", userId ).select( "id" ) ) == null) {
@@ -78,5 +91,23 @@ public class MessageServiceImpl implements MessageService {
 
         return new QueryResponse( CommonCode.SUCCESS,
                 new QueryResult<>( Collections.singletonList( userMessageSetting ), 1 ) );
+    }
+
+    @Override
+    public QueryResponse findMessageListByUserId(Long userId) {
+        if (!ObjectUtils.allNotNull( userId,
+                this.userMapper.selectOne( new QueryWrapper<User>().eq( "id", userId ) ) )) {
+            ExceptionThrowUtils.cast( CommonCode.INVALID_PARAM );
+        }
+
+        List<Message> messageList = new ArrayList<>();
+        this.userMessageMapper
+                .selectList( new QueryWrapper<UserMessage>().eq( "receiver_id", userId ) )
+                .stream()
+                .map( UserMessage::getMessageId )
+                .collect( Collectors.toList() )
+                .forEach( messageId -> messageList.add( this.messageMapper.selectById( messageId ) ) );
+
+        return new QueryResponse( CommonCode.SUCCESS, new QueryResult<>( messageList, messageList.size() ) );
     }
 }
