@@ -71,4 +71,10 @@ public class HomeworkController implements HomeworkControllerApi {
         return homeworkService.submitHomework(homeworkId,studentId,resourceIds);
     }
 
+    @Override
+    @PutMapping("homeworkId/{homeworkId}/studentId/{studentId}")
+    public CommonResponse scoreHomework(@PathVariable long homeworkId, @PathVariable long studentId, @RequestBody double score) {
+        return homeworkService.scoreHomework(homeworkId, studentId, score);
+    }
+
 }

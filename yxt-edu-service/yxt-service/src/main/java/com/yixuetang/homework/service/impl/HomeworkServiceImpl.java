@@ -366,6 +366,24 @@ public class HomeworkServiceImpl implements HomeworkService {
         return new CommonResponse(CommonCode.SUCCESS);
     }
 
+    @Override
+    public CommonResponse scoreHomework(long homeworkId, long studentId, double score) {
+        //判断作业是否存在
+        Homework homework = homeworkMapper.selectOne(new QueryWrapper<Homework>().eq("id", homeworkId));
+        HomeworkStudent homeworkStudent = homeworkStudentMapper.selectOne(new QueryWrapper<HomeworkStudent>().eq("homework_id", homeworkId)
+                .eq("student_id", studentId));
+        if(homework == null){
+            ExceptionThrowUtils.cast(CommonCode.INVALID_PARAM);
+        }
+        //判断学生是否有该作业
+        if (homeworkStudent == null){
+            ExceptionThrowUtils.cast(CommonCode.INVALID_PARAM);
+        }
+        homeworkStudent.setScore(score);
+        homeworkStudentMapper.updateById(homeworkStudent);
+        return new CommonResponse(CommonCode.SUCCESS);
+    }
+
 
     private Integer getCount(int countType, long courseId) {
         return this.homeworkStudentMapper

@@ -3,6 +3,8 @@ package com.yixuetang.homework.service;
 import com.yixuetang.entity.request.homework.InsertHomework;
 import com.yixuetang.entity.response.CommonResponse;
 import com.yixuetang.entity.response.QueryResponse;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 
 import java.util.List;
 
@@ -85,4 +87,13 @@ public interface HomeworkService {
      */
     CommonResponse submitHomework(long homeworkId, long studentId, List<Long> resourceIds);
 
+    /**
+     *  学生作业评分
+     *
+     * @param homeworkId    作业id
+     * @param studentId     学生id
+     * @param score         作业评分分数
+     * @return
+     */
+    CommonResponse scoreHomework(long homeworkId, long studentId, double score);
 }

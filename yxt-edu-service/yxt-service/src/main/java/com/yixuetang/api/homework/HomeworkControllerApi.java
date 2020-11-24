@@ -80,4 +80,13 @@ public interface HomeworkControllerApi {
                     paramType = "path", dataType = "long"),
     })
     CommonResponse submitHomework(long homeworkId, long studentId, List<Long> resourceIds);
+
+    @ApiOperation("学生作业评分")
+    @ApiImplicitParams(value = {
+            @ApiImplicitParam(name = "homeworkId", value = "作业id", required = true,
+                    paramType = "path", dataType = "long"),
+            @ApiImplicitParam(name = "studentId", value = "学生id", required = true,
+                    paramType = "path", dataType = "long"),
+    })
+    CommonResponse scoreHomework(long homeworkId, long studentId, double score);
 }
