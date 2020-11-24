@@ -1,0 +1,680 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdn.bootcss.com/element-ui/2.13.2/theme-chalk/index.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="../css/yxt.css">
+    <title>消息中心</title>
+    <style>
+        #message-setting-divider {
+            margin: 15px 0 10px 0;
+        }
+
+        .el-divider--horizontal {
+            margin: 5px 0 5px 0;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="app">
+        <el-container>
+            <!-- 头部 -->
+            <el-header>
+                <!-- 导航栏：logo、菜单功能、头像下拉菜单 -->
+                <el-row>
+                    <!-- logo -->
+                    <el-col :span="4">
+                        <!-- <el-image style="margin-top: 10px;" src="./images/logo_blue.png" fit="contain"></el-image> -->
+                        <el-image>
+                            <div slot="error" class="image-slot">
+                                <div class="header-logo">LOGO</div>
+                            </div>
+                        </el-image>
+                    </el-col>
+                    <!-- 菜单功能 -->
+                    <el-col :span="16">
+                        <el-menu mode="horizontal">
+                            <el-menu-item index="1" class="header-text" @click="location.href = '../homePage.html'">课堂
+                            </el-menu-item>
+                            <el-menu-item index="2" class="header-text">精品课程</el-menu-item>
+                            <el-menu-item index="3" class="header-text">本校课程</el-menu-item>
+                            <el-menu-item index="4" class="header-text">我的精品</el-menu-item>
+                        </el-menu>
+                    </el-col>
+                    <!-- 头像下拉菜单 -->
+                    <el-col :span="4">
+                        <el-menu class="el-menu-demo" mode="horizontal">
+                            <el-menu-item>
+                                <i class="el-icon-bell"></i>
+                                <el-badge is-dot class="item"></el-badge>
+                            </el-menu-item>
+                            <el-submenu>
+                                <template slot="title">
+                                    <span v-text="user.username" style="color: black; margin: 20px 10px;">用户名</span>
+                                    <el-avatar size="large" :src="user.avatar">
+                                    </el-avatar>
+                                </template>
+                                <el-menu-item @click="location.href = 'setting.html' "><i class="el-icon-setting"></i>
+                                    个人设置</el-menu-item>
+                                <el-menu-item><i class="el-icon-position"></i> 消息中心</el-menu-item>
+                                <el-menu-item @click="logout()"><i class="fa fa-sign-out"
+                                        style="margin-left: 6px; margin-right: 9px;"></i> <span>退出账户</span>
+                                </el-menu-item>
+                            </el-submenu>
+                        </el-menu>
+                    </el-col>
+                </el-row>
+            </el-header>
+
+            <!-- 中间 -->
+            <el-container>
+                <!-- 左侧导航栏 -->
+                <el-aside width="300px">
+                    <div id="menu" style="padding-top: 150px">
+                        <el-menu default-active="1">
+                            <el-menu-item index="1" @click="show('isSystemMessageVisible')">
+                                <i class="el-icon-user"></i>
+                                <span slot="title">系统通知</span>
+                            </el-menu-item>
+                            <el-menu-item index="2" @click="show('isCourseMessageVisible')">
+                                <i class="el-icon-notebook-2"></i>
+                                <span slot="title">课程通知</span>
+                            </el-menu-item>
+                            <el-menu-item index="3" @click="show('isReplyMessageVisible')">
+                                <i class="fa fa-mail-forward" style="margin-left: 6px; margin-right: 9px;"></i>
+                                <span slot="title">回复我的</span>
+                            </el-menu-item>
+                            <el-menu-item index="4" @click="show('isVoteUpMessageVisible')">
+                                <i class="fa fa-thumbs-o-up" style="margin-left: 6px; margin-right: 9px;"></i>
+                                <span slot="title">收到的赞</span>
+                            </el-menu-item>
+                            <el-menu-item index="5" @click="show('isChatMessageVisible')">
+                                <i class="el-icon-chat-dot-round"></i>
+                                <span slot="title">我的私信</span>
+                            </el-menu-item>
+                            <el-menu-item index="6" @click="show('isMessageSettingVisible')">
+                                <i class="el-icon-setting"></i>
+                                <span slot="title">消息设置</span>
+                            </el-menu-item>
+                        </el-menu>
+                    </div>
+                </el-aside>
+                <!-- 中间 -->
+                <el-main>
+                    <div style="margin-left: 60px">
+                        <el-row>
+                            <el-col :span="3"></el-col>
+                            <el-col :span="14">
+                                <!-- 系统通知 -->
+                                <div v-show="visible.isSystemMessageVisible">
+                                    <el-card shadow="never"
+                                        style="margin-top: 100px;width: 1184px;height: auto; border-radius: 10px;border-width: 2px;padding: 0;">
+                                        <el-row>
+                                            <el-col :span="1.5">
+                                                系统通知
+                                            </el-col>
+                                        </el-row>
+                                    </el-card>
+                                    <!-- 系统通知列表 -->
+                                    <el-card shadow="hover" v-for="(systemMessage, index) in systemMessageList"
+                                        v-show="systemMessageList.length > 0"
+                                        style="margin-top: 10px;width: 1184px;height: auto; border-radius: 10px;border-width: 2px;padding: 0;">
+                                        <el-row style="float: left;">
+                                            <el-col>
+                                                <span style="color: #333; font-weight: 700;"
+                                                    v-text="systemMessage.title">系统通知标题</span>
+                                                <i class="el-icon-time" style="margin-left: 20px;"></i>
+                                                <span style="color: #999; font-size: small;"
+                                                    v-text="systemMessage.publishTime">2020年11月23日 16:31</span>
+                                            </el-col>
+                                        </el-row>
+                                        <el-row>
+                                            <el-col :span="24">
+                                                <span
+                                                    style="float: left;padding-left: 30px;padding-top: 5px;margin-top: 10px;">
+                                                    <span v-html="systemMessage.content"
+                                                        style="font-size: 15px;color: #707070">这是系统通知内容这是系统通知内容这是系统通知内容这是系统通知内容这是系统通知内容</span>
+                                                </span>
+                                            </el-col>
+                                        </el-row>
+                                    </el-card>
+                                    <el-card class="box-card" v-show="systemMessageList.length === 0" shadow="hover"
+                                        style="margin-top: 20px;width: 1184px;height: 220px;border-radius: 10px;border-width: 2px">
+                                        <el-row>
+                                            <p
+                                                style="text-align: center; font-size: 15px; color: black; line-height: 160px;">
+                                                暂无系统通知</p>
+                                        </el-row>
+                                    </el-card>
+                                </div>
+
+                                <!-- 课程通知 -->
+                                <div v-show="visible.isCourseMessageVisible">
+                                    <el-card shadow="never"
+                                        style="margin-top: 100px;width: 1184px;height: auto; border-radius: 10px;border-width: 2px;padding: 0;">
+                                        <el-row>
+                                            <el-col :span="1.5">
+                                                课程通知
+                                            </el-col>
+                                        </el-row>
+                                    </el-card>
+                                    <!-- 课程通知列表 -->
+                                    <el-card shadow="hover" v-for="(courseMessage, index) in courseMessageList"
+                                        style="margin-top: 10px;width: 1184px;height: auto; border-radius: 10px;border-width: 2px;padding: 0;">
+                                        <el-row style="float: left;">
+                                            <el-col>
+                                                <span style="color: #333; font-weight: 700;"
+                                                    v-text="courseMessage.title">课程通知标题</span>
+                                                <i class="el-icon-time" style="margin-left: 20px;"></i>
+                                                <span style="color: #999; font-size: small;"
+                                                    v-text="courseMessage.publishTime">2020年11月23日 16:31</span>
+                                            </el-col>
+                                        </el-row>
+                                        <el-row>
+                                            <el-col :span="24">
+                                                <span
+                                                    style="float: left;padding-left: 30px;padding-top: 5px;margin-top: 10px;">
+                                                    <span v-html="courseMessage.content"
+                                                        style="font-size: 15px;color: #707070">这是课程通知内容这是课程通知内容这是课程通知内容这是课程通知内容这是课程通知内容</span>
+                                                </span>
+                                            </el-col>
+                                        </el-row>
+                                    </el-card>
+                                    <el-card class="box-card" v-show="courseMessageList.length === 0" shadow="hover"
+                                        style="margin-top: 20px;width: 1184px;height: 220px;border-radius: 10px;border-width: 2px">
+                                        <el-row>
+                                            <p
+                                                style="text-align: center; font-size: 15px; color: black; line-height: 160px;">
+                                                暂无课程通知</p>
+                                        </el-row>
+                                    </el-card>
+                                </div>
+
+                                <!-- 回复我的 -->
+                                <div v-show="visible.isReplyMessageVisible">
+                                    <el-card shadow="never"
+                                        style="margin-top: 100px;width: 1184px;height: auto; border-radius: 10px;border-width: 2px;padding: 0;">
+                                        <el-row>
+                                            <el-col :span="1.5">
+                                                回复我的
+                                            </el-col>
+                                        </el-row>
+                                    </el-card>
+                                    <!-- 回复列表 -->
+                                    <el-card shadow="hover"
+                                        style="margin-top: 10px;width: 1184px;height: auto; border-radius: 10px;border-width: 2px;padding: 0;">
+                                        <!-- 第一个 -->
+                                        <div>
+                                            <el-row>
+                                                <el-col :span="1">
+                                                    <el-avatar size="small"
+                                                        src="http://www.pava.run/group1/M00/00/00/rBAABV-rZ9KAOAoyAAAnvyJPq-0893.jpg">
+                                                    </el-avatar>
+                                                </el-col>
+                                                <el-col :span="2.5" style="margin-top: 5px;">
+                                                    <span style="font-size: 14px; color: #222;">Colin</span>
+                                                    <span style="color: #999; font-size: small;">回复了我的评论：</span>
+                                                    <el-link type="info" :underline="false">我的评论内容</el-link>
+                                                </el-col>
+                                            </el-row>
+                                            <el-row>
+                                                <el-col :span="24">
+                                                    <span style="float: left;padding-left: 20px;margin-top: 3px;">
+                                                        <span style="font-size: 14px;color: #222">
+                                                            <el-link type="info" :underline="false">Colin回复的内容</el-link>
+                                                        </span>
+                                                    </span>
+                                                </el-col>
+                                            </el-row>
+                                            <el-row>
+                                                <el-col :span="24">
+                                                    <span
+                                                        style="float: left;padding-left: 20px; margin-top: 10px; margin-bottom: 5px;">
+                                                        <span style="font-size: 12px;color: #999">
+                                                            <i class="el-icon-date"></i> 2020-11-23 20:42
+                                                            <i class="fa fa-mail-forward"
+                                                                style="margin-left: 8px; margin-right: 1px;"></i>
+                                                            <el-button type="text"
+                                                                style="color: #999; font-size: 10px;">回复</el-button>
+                                                            <i class="fa fa-thumbs-o-up"
+                                                                style="margin-left: 8px; margin-right: 1px;"></i>
+                                                            <el-button type="text"
+                                                                style="color: #999; font-size: 10px;">点赞</el-button>
+                                                            <span>
+                                                                <i class="el-icon-delete"
+                                                                    style="margin-left: 4px; margin-right: 1px;"></i>
+                                                                <el-button type="text"
+                                                                    style="color: #999; font-size: 10px;">删除该通知
+                                                                </el-button>
+                                                            </span>
+                                                        </span>
+                                                    </span>
+                                                </el-col>
+                                            </el-row>
+                                            <el-divider></el-divider>
+                                        </div>
+                                        <!-- 中间 -->
+                                        <div v-for="num in 2">
+                                            <el-row style="margin-top: 20px;">
+                                                <el-col :span="1">
+                                                    <el-avatar size="small"
+                                                        src="http://www.pava.run/group1/M00/00/00/rBAABV-rZ9KAOAoyAAAnvyJPq-0893.jpg">
+                                                    </el-avatar>
+                                                </el-col>
+                                                <el-col :span="2.5" style="margin-top: 5px;">
+                                                    <span style="font-size: 14px; color: #222;">Colin</span>
+                                                    <span style="color: #999; font-size: small;">回复了我的评论：</span>
+                                                    <el-link type="info" :underline="false">我的评论内容</el-link>
+                                                </el-col>
+                                            </el-row>
+                                            <el-row>
+                                                <el-col :span="24">
+                                                    <span style="float: left;padding-left: 20px;margin-top: 3px;">
+                                                        <span style="font-size: 14px;color: #222">
+                                                            <el-link type="info" :underline="false">Colin回复的内容</el-link>
+                                                        </span>
+                                                    </span>
+                                                </el-col>
+                                            </el-row>
+                                            <el-row>
+                                                <el-col :span="24">
+                                                    <span
+                                                        style="float: left;padding-left: 20px; margin-top: 10px; margin-bottom: 10px;">
+                                                        <span style="font-size: 12px;color: #999">
+                                                            <i class="el-icon-date"></i> 2020-11-23 20:42
+                                                            <i class="fa fa-mail-forward"
+                                                                style="margin-left: 8px; margin-right: 1px;"></i>
+                                                            <el-button type="text"
+                                                                style="color: #999; font-size: 10px;">回复</el-button>
+                                                            <i class="fa fa-thumbs-o-up"
+                                                                style="margin-left: 8px; margin-right: 1px;"></i>
+                                                            <el-button type="text"
+                                                                style="color: #999; font-size: 10px;">点赞</el-button>
+                                                            <span>
+                                                                <i class="el-icon-delete"
+                                                                    style="margin-left: 4px; margin-right: 1px;"></i>
+                                                                <el-button type="text"
+                                                                    style="color: #999; font-size: 10px;">删除该通知
+                                                                </el-button>
+                                                            </span>
+                                                        </span>
+                                                    </span>
+                                                </el-col>
+                                            </el-row>
+                                            <el-divider></el-divider>
+                                        </div>
+                                        <!-- 最后一个 -->
+                                        <div>
+                                            <el-row style="margin-top: 20px;">
+                                                <el-col :span="1">
+                                                    <el-avatar size="small"
+                                                        src="http://www.pava.run/group1/M00/00/00/rBAABV-rZ9KAOAoyAAAnvyJPq-0893.jpg">
+                                                    </el-avatar>
+                                                </el-col>
+                                                <el-col :span="2.5" style="margin-top: 5px;">
+                                                    <span style="font-size: 14px; color: #222;">Colin</span>
+                                                    <span style="color: #999; font-size: small;">回复了我的评论：</span>
+                                                    <el-link type="info" :underline="false">我的评论内容</el-link>
+                                                </el-col>
+                                            </el-row>
+                                            <el-row>
+                                                <el-col :span="24">
+                                                    <span style="float: left;padding-left: 20px;margin-top: 3px;">
+                                                        <span style="font-size: 14px;color: #222">
+                                                            <el-link type="info" :underline="false">Colin回复的内容</el-link>
+                                                        </span>
+                                                    </span>
+                                                </el-col>
+                                            </el-row>
+                                            <el-row>
+                                                <el-col :span="24">
+                                                    <span
+                                                        style="float: left;padding-left: 20px; margin-top: 10px; margin-bottom: 10px;">
+                                                        <span style="font-size: 12px;color: #999">
+                                                            <i class="el-icon-date"></i> 2020-11-23 20:42
+                                                            <i class="fa fa-mail-forward"
+                                                                style="margin-left: 8px; margin-right: 1px;"></i>
+                                                            <el-button type="text"
+                                                                style="color: #999; font-size: 10px;">回复</el-button>
+                                                            <i class="fa fa-thumbs-o-up"
+                                                                style="margin-left: 8px; margin-right: 1px;"></i>
+                                                            <el-button type="text"
+                                                                style="color: #999; font-size: 10px;">点赞</el-button>
+                                                            <span>
+                                                                <el-button type="text" icon="el-icon-delete"
+                                                                    style="color: #999; font-size: 10px;">删除该通知
+                                                                </el-button>
+                                                            </span>
+                                                        </span>
+                                                    </span>
+                                                </el-col>
+                                            </el-row>
+                                        </div>
+                                    </el-card>
+                                </div>
+
+                                <!-- 收到的赞 -->
+                                <div v-show="visible.isVoteUpMessageVisible">
+                                    <el-card shadow="never"
+                                        style="margin-top: 100px;width: 1184px;height: auto; border-radius: 10px;border-width: 2px;padding: 0;">
+                                        <el-row>
+                                            <el-col :span="1.5">
+                                                收到的赞
+                                            </el-col>
+                                        </el-row>
+                                    </el-card>
+                                    <!-- 回复列表 -->
+                                    <el-card shadow="hover"
+                                        style="margin-top: 10px;width: 1184px;height: auto; border-radius: 10px;border-width: 2px;padding: 0;">
+                                        <!-- 第一个 -->
+                                        <div>
+                                            <el-row>
+                                                <el-col :span="1">
+                                                    <el-avatar size="small"
+                                                        src="http://www.pava.run/group1/M00/00/00/rBAABV-rZ9KAOAoyAAAnvyJPq-0893.jpg">
+                                                    </el-avatar>
+                                                </el-col>
+                                                <el-col :span="2.5" style="margin-top: 5px;">
+                                                    <span style="font-size: 14px; color: #222;">Colin</span>
+                                                    <span style="color: #999; font-size: small;">赞了我的评论：</span>
+                                                    <el-link type="info" :underline="false">我的评论内容</el-link>
+                                                </el-col>
+                                            </el-row>
+                                            <el-row>
+                                                <el-col :span="24">
+                                                    <span
+                                                        style="float: left;padding-left: 20px; margin-top: 10px; margin-bottom: 5px;">
+                                                        <span style="font-size: 12px;color: #999">
+                                                            <i class="el-icon-date"></i> 2020-11-23 20:42
+                                                            <span>
+                                                                <i class="el-icon-delete"
+                                                                    style="margin-left: 4px; margin-right: 1px;"></i>
+                                                                <el-button type="text"
+                                                                    style="color: #999; font-size: 10px;">删除该通知
+                                                                </el-button>
+                                                            </span>
+                                                        </span>
+                                                    </span>
+                                                </el-col>
+                                            </el-row>
+                                            <el-divider></el-divider>
+                                        </div>
+                                        <!-- 中间 -->
+                                        <div v-for="num in 2">
+                                            <el-row style="margin-top: 20px;">
+                                                <el-col :span="1">
+                                                    <el-avatar size="small"
+                                                        src="http://www.pava.run/group1/M00/00/00/rBAABV-rZ9KAOAoyAAAnvyJPq-0893.jpg">
+                                                    </el-avatar>
+                                                </el-col>
+                                                <el-col :span="2.5" style="margin-top: 5px;">
+                                                    <span style="font-size: 14px; color: #222;">Colin</span>
+                                                    <span style="color: #999; font-size: small;">赞了我的评论：</span>
+                                                    <el-link type="info" :underline="false">我的评论内容</el-link>
+                                                </el-col>
+                                            </el-row>
+                                            <el-row>
+                                                <el-col :span="24">
+                                                    <span
+                                                        style="float: left;padding-left: 20px; margin-top: 10px; margin-bottom: 10px;">
+                                                        <span style="font-size: 12px;color: #999">
+                                                            <i class="el-icon-date"></i> 2020-11-23 20:42
+                                                            <span>
+                                                                <i class="el-icon-delete"
+                                                                    style="margin-left: 4px; margin-right: 1px;"></i>
+                                                                <el-button type="text"
+                                                                    style="color: #999; font-size: 10px;">删除该通知
+                                                                </el-button>
+                                                            </span>
+                                                        </span>
+                                                    </span>
+                                                </el-col>
+                                            </el-row>
+                                            <el-divider></el-divider>
+                                        </div>
+                                        <!-- 最后一个 -->
+                                        <div>
+                                            <el-row style="margin-top: 20px;">
+                                                <el-col :span="1">
+                                                    <el-avatar size="small"
+                                                        src="http://www.pava.run/group1/M00/00/00/rBAABV-rZ9KAOAoyAAAnvyJPq-0893.jpg">
+                                                    </el-avatar>
+                                                </el-col>
+                                                <el-col :span="2.5" style="margin-top: 5px;">
+                                                    <span style="font-size: 14px; color: #222;">Colin</span>
+                                                    <span style="color: #999; font-size: small;">回复了我的评论：</span>
+                                                    <el-link type="info" :underline="false">我的评论内容</el-link>
+                                                </el-col>
+                                            </el-row>
+                                            <el-row>
+                                                <el-col :span="24">
+                                                    <span
+                                                        style="float: left;padding-left: 20px; margin-top: 10px; margin-bottom: 10px;">
+                                                        <span style="font-size: 12px;color: #999">
+                                                            <i class="el-icon-date"></i> 2020-11-23 20:42
+                                                            <span>
+                                                                <el-button type="text" icon="el-icon-delete"
+                                                                    style="color: #999; font-size: 10px;">删除该通知
+                                                                </el-button>
+                                                            </span>
+                                                        </span>
+                                                    </span>
+                                                </el-col>
+                                            </el-row>
+                                        </div>
+                                    </el-card>
+                                </div>
+
+                                <!-- 我的私信 -->
+
+                                <!-- 消息设置 -->
+                                <div v-show="visible.isMessageSettingVisible">
+                                    <el-card shadow="never"
+                                        style="margin-top: 100px;width: 1184px;height: auto; border-radius: 10px;border-width: 2px;padding: 0;">
+                                        <el-row>
+                                            <el-col :span="1.5">
+                                                消息设置
+                                            </el-col>
+                                        </el-row>
+                                    </el-card>
+                                    <!-- 消息提醒 -->
+                                    <el-card shadow="hover"
+                                        style="margin-top: 10px;width: 1184px;height: auto; border-radius: 10px;border-width: 2px;padding: 0;">
+                                        <el-row>
+                                            <el-col :span="7.5">
+                                                消息提醒 <span
+                                                    style="color: #999; font-size: small;">（关闭后，所有消息将不再进行提醒）</span>
+                                            </el-col>
+                                        </el-row>
+                                        <el-row style="margin-top: 10px;">
+                                            <el-col :span="7.5">
+                                                <el-radio-group v-model="messageSetting.allRemind">
+                                                    <el-radio :label=true>开启</el-radio>
+                                                    <el-radio :label=false>关闭</el-radio>
+                                                </el-radio-group>
+                                            </el-col>
+                                        </el-row>
+                                    </el-card>
+                                    <!-- 回复我的、收到点赞 -->
+                                    <el-card shadow="hover"
+                                        style="margin-top: 10px;width: 1184px;height: auto; border-radius: 10px;border-width: 2px;padding: 0;">
+                                        <el-row>
+                                            <el-col :span="7.5">
+                                                回复我的消息提醒 <span
+                                                    style="color: #999; font-size: small;">（关闭后，收到回复将不进行提醒）</span>
+                                            </el-col>
+                                        </el-row>
+                                        <el-row style="margin-top: 10px;">
+                                            <el-col :span="7.5">
+                                                <el-radio-group v-model="messageSetting.reply"
+                                                    :disabled="!messageSetting.allRemind">
+                                                    <el-radio :label=true>开启</el-radio>
+                                                    <el-radio :label=false>关闭</el-radio>
+                                                </el-radio-group>
+                                            </el-col>
+                                        </el-row>
+                                        <el-divider id="message-setting-divider"></el-divider>
+                                        <el-row>
+                                            <el-col :span="7.5">
+                                                收到的赞消息提醒 <span
+                                                    style="color: #999; font-size: small;">（关闭后，收到点赞将不进行提醒）</span>
+                                            </el-col>
+                                        </el-row>
+                                        <el-row style="margin-top: 10px;">
+                                            <el-col :span="7.5">
+                                                <el-radio-group v-model="messageSetting.voteUp"
+                                                    :disabled="!messageSetting.allRemind">
+                                                    <el-radio :label=true>开启</el-radio>
+                                                    <el-radio :label=false>关闭</el-radio>
+                                                </el-radio-group>
+                                            </el-col>
+                                        </el-row>
+                                    </el-card>
+                                    <!-- 我的私信 -->
+                                    <el-card shadow="hover"
+                                        style="margin-top: 10px;width: 1184px;height: auto; border-radius: 10px;border-width: 2px;padding: 0;">
+                                        <el-row>
+                                            <el-col :span="7.5">
+                                                我的私信消息提醒 <span
+                                                    style="color: #999; font-size: small;">（关闭后，收到私信将不进行提醒）</span>
+                                            </el-col>
+                                        </el-row>
+                                        <el-row style="margin-top: 10px;">
+                                            <el-col :span="7.5">
+                                                <el-radio-group v-model="messageSetting.chat"
+                                                    :disabled="!messageSetting.allRemind">
+                                                    <el-radio :label=true>开启</el-radio>
+                                                    <el-radio :label=false>关闭</el-radio>
+                                                </el-radio-group>
+                                            </el-col>
+                                        </el-row>
+                                    </el-card>
+                                </div>
+
+                            </el-col>
+                            <el-col :span="7"></el-col>
+                        </el-row>
+                    </div>
+                </el-main>
+            </el-container>
+        </el-container>
+
+        <!-- 底部 -->
+        <el-footer style="padding-top: 50px">
+            <el-row type="flex" justify="center">
+                <el-col :span="8"></el-col>
+                <el-col :span="8" push="1">
+                    <el-menu mode="horizontal">
+                        <el-menu-item>关于我们</el-menu-item>
+                        <el-menu-item>联系我们</el-menu-item>
+                        <el-menu-item>服务条款</el-menu-item>
+                        <el-menu-item>浏览器下载</el-menu-item>
+                        <el-menu-item>更新动态</el-menu-item>
+                    </el-menu>
+                </el-col>
+                <el-col :span="8"></el-col>
+            </el-row>
+            <span class="foot-text">Copyright © 2020 yixuetang.com all Rights Reserved. </span>
+        </el-footer>
+        </el-container>
+    </div>
+</body>
+<script src="https://cdn.bootcss.com/vue/2.6.11/vue.min.js"></script>
+<script src="https://cdn.bootcss.com/axios/0.19.2/axios.min.js"></script>
+<script src="https://cdn.bootcss.com/element-ui/2.13.2/index.js"></script>
+<script src="../js/common.js"></script>
+
+<script>
+    new Vue({
+        el: '#app',
+        data: {
+            user: {},
+            visible: {
+                isSystemMessageVisible: true,
+                isMessageSettingVisible: false,
+                isCourseMessageVisible: false,
+                isReplyMessageVisible: false,
+                isVoteUpMessageVisible: false,
+                isChatMessageVisible: false
+            },
+            systemMessageList: [],
+            courseMessageList: [],
+            messageSetting: {
+                allRemind: true,
+                reply: true,
+                voteUp: true,
+                chat: true
+            },
+        },
+        methods: {
+            verify() {
+                yxt.http.get("/auth/verify/2").then(({ data }) => {
+                    if (data.success) {
+                        this.user = data.queryResult.data[0];
+                        this.getUserMessageSetting();
+                        this.getMessageData();
+                    } else {
+                        location.href = "../index.html"
+                    }
+                }).catch(() => {
+                    location.href = "../index.html";
+                });
+            },
+            logout() {
+                yxt.http.delete("/auth/logout/2").then(({ data }) => {
+                    if (data.success) {
+                        location.href = "../login.html"
+                    } else {
+                        this.$message.error("服务器繁忙，请稍候再试！");
+                    }
+                }).catch(() => {
+                    this.$message.error("服务器繁忙，请稍候再试！");
+                })
+            },
+            getUserMessageSetting() {
+                yxt.http.get("message/setting/userId/" + this.user.id).then(({ data }) => {
+                    this.messageSetting = data.queryResult.data[0];
+                })
+            },
+            updateUserMessageSetting() {
+                yxt.http.put("message/setting/userId/" + this.user.id, this.messageSetting).then(({ data }) => {
+                    if (!data.success) {
+                        this.$message.error(data.message);
+                    }
+                }).catch(() => {
+                    this.$message.error("服务器繁忙，请稍候再试！");
+                })
+            },
+            getMessageData() {
+                yxt.http.get("message/userId/" + this.user.id).then(({ data }) => {
+                    if (data.success) {
+                        this.systemMessageList = data.queryResult.data.filter(message => message.messageType === 0);
+                        this.courseMessageList = data.queryResult.data.filter(message => message.messageType === 1);
+                    }
+                })
+            },
+            show(key) {
+                for (let k in this.visible) {
+                    this.visible[k] = k === key;
+                }
+            }
+        },
+        created() {
+            this.verify();
+        },
+        watch: {
+            messageSetting: {
+                deep: true,
+                handler() {
+                    this.updateUserMessageSetting();
+                },
+            },
+        },
+    })
+</script>
+
+</html>
