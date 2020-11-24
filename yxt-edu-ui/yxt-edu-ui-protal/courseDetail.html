@@ -1417,7 +1417,7 @@
                                             <el-row style="height: 75px">
                                                 <el-col :span="24">
                                                     <el-link :underline="false"
-                                                        style="font-size: 26px;float: left;padding-left: 30px;padding-top: 30px">
+                                                        style="font-size: 26px;float: left;padding-left: 30px;padding-top: 30px" @click="location.href = 'noticeDetail.html?id=' + notice.id">
                                                         <span v-text="notice.title">范例_公告一</span>
                                                     </el-link>
                                                 </el-col>
