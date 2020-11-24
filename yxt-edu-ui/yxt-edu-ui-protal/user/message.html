@@ -77,12 +77,12 @@
                     <div id="menu" style="padding-top: 150px">
                         <el-menu default-active="1">
                             <el-menu-item index="1" @click="show('isSystemMessageVisible')">
-                                <i class="el-icon-user"></i>
+                                <i class="el-icon-message-solid"></i>
                                 <span slot="title">系统通知</span>
                             </el-menu-item>
                             <el-menu-item index="2" @click="show('isCourseMessageVisible')">
                                 <i class="el-icon-notebook-2"></i>
-                                <span slot="title">课程通知</span>
+                                <span slot="title">课程相关</span>
                             </el-menu-item>
                             <el-menu-item index="3" @click="show('isReplyMessageVisible')">
                                 <i class="fa fa-mail-forward" style="margin-left: 6px; margin-right: 9px;"></i>
@@ -152,45 +152,145 @@
                                     </el-card>
                                 </div>
 
-                                <!-- 课程通知 -->
+                                <!-- 课程相关 -->
                                 <div v-show="visible.isCourseMessageVisible">
                                     <el-card shadow="never"
                                         style="margin-top: 100px;width: 1184px;height: auto; border-radius: 10px;border-width: 2px;padding: 0;">
                                         <el-row>
                                             <el-col :span="1.5">
-                                                课程通知
+                                                课程相关
                                             </el-col>
                                         </el-row>
                                     </el-card>
-                                    <!-- 课程通知列表 -->
-                                    <el-card shadow="hover" v-for="(courseMessage, index) in courseMessageList"
+                                    <!-- 课程相关列表 -->
+                                    <el-card shadow="hover"
                                         style="margin-top: 10px;width: 1184px;height: auto; border-radius: 10px;border-width: 2px;padding: 0;">
-                                        <el-row style="float: left;">
-                                            <el-col>
-                                                <span style="color: #333; font-weight: 700;"
-                                                    v-text="courseMessage.title">课程通知标题</span>
-                                                <i class="el-icon-time" style="margin-left: 20px;"></i>
-                                                <span style="color: #999; font-size: small;"
-                                                    v-text="courseMessage.publishTime">2020年11月23日 16:31</span>
-                                            </el-col>
-                                        </el-row>
-                                        <el-row>
-                                            <el-col :span="24">
-                                                <span
-                                                    style="float: left;padding-left: 30px;padding-top: 5px;margin-top: 10px;">
-                                                    <span v-html="courseMessage.content"
-                                                        style="font-size: 15px;color: #707070">这是课程通知内容这是课程通知内容这是课程通知内容这是课程通知内容这是课程通知内容</span>
-                                                </span>
-                                            </el-col>
-                                        </el-row>
-                                    </el-card>
-                                    <el-card class="box-card" v-show="courseMessageList.length === 0" shadow="hover"
-                                        style="margin-top: 20px;width: 1184px;height: 220px;border-radius: 10px;border-width: 2px">
-                                        <el-row>
-                                            <p
-                                                style="text-align: center; font-size: 15px; color: black; line-height: 160px;">
-                                                暂无课程通知</p>
-                                        </el-row>
+                                        <!-- 第一个 -->
+                                        <div>
+                                            <el-row>
+                                                <el-col :span="1">
+                                                    <el-avatar size="small"
+                                                        src="http://www.pava.run/group1/M00/00/00/rBAABV-rZ9KAOAoyAAAnvyJPq-0893.jpg">
+                                                    </el-avatar>
+                                                </el-col>
+                                                <el-col :span="2.5" style="margin-top: 5px;">
+                                                    <span style="font-size: 14px; color: #222;">Colin</span>
+                                                    <span style="color: #999; font-size: small;">发布了新作业：</span>
+                                                    <el-link type="info" :underline="false">新作业标题</el-link>
+                                                </el-col>
+                                            </el-row>
+                                            <el-row>
+                                                <el-col :span="24">
+                                                    <span
+                                                        style="float: left;padding-left: 20px; margin-top: 10px; margin-bottom: 5px;">
+                                                        <span style="font-size: 12px;color: #999">
+                                                            <i class="el-icon-date"></i> 2020-11-23 20:42
+                                                            <span>
+                                                                <i class="el-icon-delete"
+                                                                    style="margin-left: 4px; margin-right: 1px;"></i>
+                                                                <el-button type="text"
+                                                                    style="color: #999; font-size: 10px;">删除该通知
+                                                                </el-button>
+                                                            </span>
+                                                        </span>
+                                                    </span>
+                                                </el-col>
+                                            </el-row>
+                                            <el-divider></el-divider>
+                                        </div>
+                                        <!-- 中间 -->
+                                        <div>
+                                            <el-row style="margin-top: 20px;">
+                                                <el-col :span="1">
+                                                    <el-avatar size="small"
+                                                        src="http://www.pava.run/group1/M00/00/00/rBAABV-rZ9KAOAoyAAAnvyJPq-0893.jpg">
+                                                    </el-avatar>
+                                                </el-col>
+                                                <el-col :span="2.5" style="margin-top: 5px;">
+                                                    <span style="font-size: 14px; color: #222;">Colin</span>
+                                                    <span style="color: #999; font-size: small;">上传了新资源：</span>
+                                                    <el-link type="info" :underline="false">新资源名称</el-link>
+                                                </el-col>
+                                            </el-row>
+                                            <el-row>
+                                                <el-col :span="24">
+                                                    <span
+                                                        style="float: left;padding-left: 20px; margin-top: 10px; margin-bottom: 10px;">
+                                                        <span style="font-size: 12px;color: #999">
+                                                            <i class="el-icon-date"></i> 2020-11-23 20:42
+                                                            <span>
+                                                                <i class="el-icon-delete"
+                                                                    style="margin-left: 4px; margin-right: 1px;"></i>
+                                                                <el-button type="text"
+                                                                    style="color: #999; font-size: 10px;">删除该通知
+                                                                </el-button>
+                                                            </span>
+                                                        </span>
+                                                    </span>
+                                                </el-col>
+                                            </el-row>
+                                            <el-divider></el-divider>
+                                            <el-row style="margin-top: 20px;">
+                                                <el-col :span="1">
+                                                    <el-avatar size="small"
+                                                        src="http://www.pava.run/group1/M00/00/00/rBAABV-rZ9KAOAoyAAAnvyJPq-0893.jpg">
+                                                    </el-avatar>
+                                                </el-col>
+                                                <el-col :span="2.5" style="margin-top: 5px;">
+                                                    <span style="font-size: 14px; color: #222;">Colin</span>
+                                                    <span style="color: #999; font-size: small;">发布了新测试：</span>
+                                                    <el-link type="info" :underline="false">新测试名称</el-link>
+                                                </el-col>
+                                            </el-row>
+                                            <el-row>
+                                                <el-col :span="24">
+                                                    <span
+                                                        style="float: left;padding-left: 20px; margin-top: 10px; margin-bottom: 10px;">
+                                                        <span style="font-size: 12px;color: #999">
+                                                            <i class="el-icon-date"></i> 2020-11-23 20:42
+                                                            <span>
+                                                                <i class="el-icon-delete"
+                                                                    style="margin-left: 4px; margin-right: 1px;"></i>
+                                                                <el-button type="text"
+                                                                    style="color: #999; font-size: 10px;">删除该通知
+                                                                </el-button>
+                                                            </span>
+                                                        </span>
+                                                    </span>
+                                                </el-col>
+                                            </el-row>
+                                            <el-divider></el-divider>
+                                        </div>
+                                        <!-- 最后一个 -->
+                                        <div>
+                                            <el-row style="margin-top: 20px;">
+                                                <el-col :span="1">
+                                                    <el-avatar size="small"
+                                                        src="http://www.pava.run/group1/M00/00/00/rBAABV-rZ9KAOAoyAAAnvyJPq-0893.jpg">
+                                                    </el-avatar>
+                                                </el-col>
+                                                <el-col :span="2.5" style="margin-top: 5px;">
+                                                    <span style="font-size: 14px; color: #222;">Colin</span>
+                                                    <span style="color: #999; font-size: small;">发布了新公告：</span>
+                                                    <el-link type="info" :underline="false">新公告标题</el-link>
+                                                </el-col>
+                                            </el-row>
+                                            <el-row>
+                                                <el-col :span="24">
+                                                    <span
+                                                        style="float: left;padding-left: 20px; margin-top: 10px; margin-bottom: 10px;">
+                                                        <span style="font-size: 12px;color: #999">
+                                                            <i class="el-icon-date"></i> 2020-11-23 20:42
+                                                            <span>
+                                                                <el-button type="text" icon="el-icon-delete"
+                                                                    style="color: #999; font-size: 10px;">删除该通知
+                                                                </el-button>
+                                                            </span>
+                                                        </span>
+                                                    </span>
+                                                </el-col>
+                                            </el-row>
+                                        </div>
                                     </el-card>
                                 </div>
 
@@ -367,7 +467,7 @@
                                             </el-col>
                                         </el-row>
                                     </el-card>
-                                    <!-- 回复列表 -->
+                                    <!-- 收到的赞列表 -->
                                     <el-card shadow="hover"
                                         style="margin-top: 10px;width: 1184px;height: auto; border-radius: 10px;border-width: 2px;padding: 0;">
                                         <!-- 第一个 -->
@@ -446,7 +546,7 @@
                                                 </el-col>
                                                 <el-col :span="2.5" style="margin-top: 5px;">
                                                     <span style="font-size: 14px; color: #222;">Colin</span>
-                                                    <span style="color: #999; font-size: small;">回复了我的评论：</span>
+                                                    <span style="color: #999; font-size: small;">赞了我的评论：</span>
                                                     <el-link type="info" :underline="false">我的评论内容</el-link>
                                                 </el-col>
                                             </el-row>
@@ -499,9 +599,25 @@
                                             </el-col>
                                         </el-row>
                                     </el-card>
-                                    <!-- 回复我的、收到点赞 -->
+                                    <!-- 课程相关、回复我的、收到点赞 -->
                                     <el-card shadow="hover"
                                         style="margin-top: 10px;width: 1184px;height: auto; border-radius: 10px;border-width: 2px;padding: 0;">
+                                        <el-row>
+                                            <el-col :span="7.5">
+                                                课程相关消息提醒 <span
+                                                    style="color: #999; font-size: small;">（关闭后，课程相关将不进行提醒）</span>
+                                            </el-col>
+                                        </el-row>
+                                        <el-row style="margin-top: 10px;">
+                                            <el-col :span="7.5">
+                                                <el-radio-group v-model="messageSetting.course"
+                                                    :disabled="!messageSetting.allRemind">
+                                                    <el-radio :label=true>开启</el-radio>
+                                                    <el-radio :label=false>关闭</el-radio>
+                                                </el-radio-group>
+                                            </el-col>
+                                        </el-row>
+                                        <el-divider id="message-setting-divider"></el-divider>
                                         <el-row>
                                             <el-col :span="7.5">
                                                 回复我的消息提醒 <span
@@ -605,6 +721,7 @@
             courseMessageList: [],
             messageSetting: {
                 allRemind: true,
+                course: true,
                 reply: true,
                 voteUp: true,
                 chat: true

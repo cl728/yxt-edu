@@ -47,6 +47,16 @@
       <el-submenu index="3">
         <template slot="title">
           <i
+            class="el-icon-message-solid"
+            :style="{ color: aside.aside_icon_color }"
+          ></i>
+          <span>通知管理</span>
+        </template>
+        <el-menu-item index="/messages">通知列表</el-menu-item>
+      </el-submenu>
+      <el-submenu index="4">
+        <template slot="title">
+          <i
             class="el-icon-suitcase"
             :style="{ color: aside.aside_icon_color }"
           ></i>

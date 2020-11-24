@@ -88,6 +88,15 @@ const routes = [{
   },
 },
 {
+  path: '/messages',
+  name: 'messages',
+  component: resolve => require(['@/views/messages/Messages.vue'], resolve),
+  meta: {
+    title: '通知管理',
+    loginState: true,
+  },
+},
+{
   path: '/module/editor',
   name: 'editor',
   component: resolve => require(['@/views/module/Editor.vue'], resolve),
