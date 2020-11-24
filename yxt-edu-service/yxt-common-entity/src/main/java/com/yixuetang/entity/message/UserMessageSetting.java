@@ -35,6 +35,10 @@ public class UserMessageSetting {
     @ApiModelProperty(value = "是否接收消息提醒", required = true, dataType = "boolean")
     private Boolean allRemind;    // 是否接收消息提醒，true 是 false 不是，默认为 true
 
+    @TableField("course")
+    @ApiModelProperty(value = "是否接收课程相关消息提醒", required = true, dataType = "boolean")
+    private Boolean course;    // 是否接收课程相关消息提醒，true 是 false 不是，默认为 true
+
     @ApiModelProperty(value = "是否接收回复我的消息提醒", required = true, dataType = "boolean")
     private Boolean reply;  // 是否接收回复我的消息提醒，true 是 false 不是，默认为 true
 

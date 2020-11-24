@@ -1,6 +1,7 @@
 package com.yixuetang.message.service;
 
 import com.yixuetang.entity.message.UserMessageSetting;
+import com.yixuetang.entity.request.message.QueryPageRequestMessage;
 import com.yixuetang.entity.response.CommonResponse;
 import com.yixuetang.entity.response.QueryResponse;
 
@@ -36,4 +37,14 @@ public interface MessageService {
      * @return 响应结果实体类
      */
     QueryResponse findMessageListByUserId(Long userId);
+
+    /**
+     * 分页查询系统通知
+     *
+     * @param currentPage             当前页码数
+     * @param pageSize                每页显示条数
+     * @param queryPageRequestMessage 分页查询条件实体类
+     * @return 响应结果实体类
+     */
+    QueryResponse findMessageListByPage(long currentPage, long pageSize, QueryPageRequestMessage queryPageRequestMessage);
 }

@@ -100,33 +100,9 @@ public class UserServiceImpl implements UserService {
     @Override
     public QueryResponse findByPage(long currentPage, long pageSize, QueryPageRequestUser queryPageRequestUser) {
         QueryWrapper<User> queryWrapper = new QueryWrapper<>();
-        if (StringUtils.isNoneBlank( queryPageRequestUser.getRoleName() )) {
-            Role role = this.roleMapper.selectOne( new QueryWrapper<Role>().eq( "r_name", queryPageRequestUser.getRoleName() ) );
-            if (role != null) {
-                queryPageRequestUser.setRoleId( role.getId() );
-                queryWrapper.eq( "role_id", role.getId() );
-            }
-        }
-        if (StringUtils.equals( "男", queryPageRequestUser.getGender() ) ||
-                StringUtils.equals( "女", queryPageRequestUser.getGender() )) {
-            queryWrapper.eq( "gender", queryPageRequestUser.getGender() );
-        }
-        if (StringUtils.isNoneBlank( queryPageRequestUser.getUsername() )) {
-            queryPageRequestUser.setUsername( "%" + queryPageRequestUser.getUsername() + "%" );
-            queryWrapper.like( "username", queryPageRequestUser.getUsername() );
-        }
-        if (StringUtils.isNoneBlank( queryPageRequestUser.getRealName() )) {
-            queryPageRequestUser.setRealName( "%" + queryPageRequestUser.getRealName() + "%" );
-            queryWrapper.like( "real_name", queryPageRequestUser.getRealName() );
-        }
-        if (StringUtils.isNoneBlank( queryPageRequestUser.getEmail() )) {
-            queryPageRequestUser.setEmail( "%" + queryPageRequestUser.getEmail() + "%" );
-            queryWrapper.like( "email", queryPageRequestUser.getEmail() );
-        }
-        if (StringUtils.isNoneBlank( queryPageRequestUser.getPhone() )) {
-            queryPageRequestUser.setPhone( "%" + queryPageRequestUser.getPhone() + "%" );
-            queryWrapper.like( "phone", queryPageRequestUser.getPhone() );
-        }
+
+        this.screen( queryPageRequestUser, queryWrapper );
+
         List<User> users = this.userMapper.findByPage( new Page<>( currentPage, pageSize ), queryPageRequestUser );
         return new QueryResponse( CommonCode.SUCCESS, new QueryResult<>( users, this.userMapper.selectCount( queryWrapper ) ) );
     }
@@ -573,5 +549,35 @@ public class UserServiceImpl implements UserService {
                         StringUtils.isBlank( search )
                                 ? ids.size() // 如果搜索字段为空，则 total 为总的作业成员
                                 : filterUsers.size() ) ); // 否则为过滤后的成员
+    }
+
+    private void screen(QueryPageRequestUser queryPageRequestUser, QueryWrapper<User> queryWrapper) {
+        if (StringUtils.isNoneBlank( queryPageRequestUser.getRoleName() )) {
+            Role role = this.roleMapper.selectOne( new QueryWrapper<Role>().eq( "r_name", queryPageRequestUser.getRoleName() ) );
+            if (role != null) {
+                queryPageRequestUser.setRoleId( role.getId() );
+                queryWrapper.eq( "role_id", role.getId() );
+            }
+        }
+        if (StringUtils.equals( "男", queryPageRequestUser.getGender() ) ||
+                StringUtils.equals( "女", queryPageRequestUser.getGender() )) {
+            queryWrapper.eq( "gender", queryPageRequestUser.getGender() );
+        }
+        if (StringUtils.isNoneBlank( queryPageRequestUser.getUsername() )) {
+            queryPageRequestUser.setUsername( "%" + queryPageRequestUser.getUsername() + "%" );
+            queryWrapper.like( "username", queryPageRequestUser.getUsername() );
+        }
+        if (StringUtils.isNoneBlank( queryPageRequestUser.getRealName() )) {
+            queryPageRequestUser.setRealName( "%" + queryPageRequestUser.getRealName() + "%" );
+            queryWrapper.like( "real_name", queryPageRequestUser.getRealName() );
+        }
+        if (StringUtils.isNoneBlank( queryPageRequestUser.getEmail() )) {
+            queryPageRequestUser.setEmail( "%" + queryPageRequestUser.getEmail() + "%" );
+            queryWrapper.like( "email", queryPageRequestUser.getEmail() );
+        }
+        if (StringUtils.isNoneBlank( queryPageRequestUser.getPhone() )) {
+            queryPageRequestUser.setPhone( "%" + queryPageRequestUser.getPhone() + "%" );
+            queryWrapper.like( "phone", queryPageRequestUser.getPhone() );
+        }
     }
 }

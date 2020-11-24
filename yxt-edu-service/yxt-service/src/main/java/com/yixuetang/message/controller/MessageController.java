@@ -2,6 +2,7 @@ package com.yixuetang.message.controller;
 
 import com.yixuetang.api.message.MessageControllerApi;
 import com.yixuetang.entity.message.UserMessageSetting;
+import com.yixuetang.entity.request.message.QueryPageRequestMessage;
 import com.yixuetang.entity.response.CommonResponse;
 import com.yixuetang.entity.response.QueryResponse;
 import com.yixuetang.message.service.MessageService;
@@ -38,5 +39,13 @@ public class MessageController implements MessageControllerApi {
     @GetMapping("userId/{userId}")
     public QueryResponse findMessageListByUserId(@PathVariable Long userId) {
         return this.messageService.findMessageListByUserId( userId );
+    }
+
+    @Override
+    @GetMapping("page/{currentPage}/{pageSize}")
+    public QueryResponse findMessageListByPage(@PathVariable long currentPage,
+                                               @PathVariable long pageSize,
+                                               QueryPageRequestMessage queryPageRequestMessage) {
+        return this.messageService.findMessageListByPage( currentPage, pageSize, queryPageRequestMessage );
     }
 }

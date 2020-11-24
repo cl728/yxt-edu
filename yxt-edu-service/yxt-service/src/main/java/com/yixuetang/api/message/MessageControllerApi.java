@@ -1,10 +1,12 @@
 package com.yixuetang.api.message;
 
 import com.yixuetang.entity.message.UserMessageSetting;
+import com.yixuetang.entity.request.message.QueryPageRequestMessage;
 import com.yixuetang.entity.response.CommonResponse;
 import com.yixuetang.entity.response.QueryResponse;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 
 /**
@@ -31,4 +33,12 @@ public interface MessageControllerApi {
             paramType = "path", dataType = "long")
     QueryResponse findMessageListByUserId(Long userId);
 
+    @ApiOperation("分页查询系统通知")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "currentPage", value = "当前页码数", required = true,
+                    paramType = "path", dataType = "long"),
+            @ApiImplicitParam(name = "pageSize", value = "每页显示条数", required = true,
+                    paramType = "path", dataType = "long")
+    })
+    QueryResponse findMessageListByPage(long currentPage, long pageSize, QueryPageRequestMessage queryPageRequestMessage);
 }
