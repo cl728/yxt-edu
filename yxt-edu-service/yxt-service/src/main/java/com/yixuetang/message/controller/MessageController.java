@@ -1,6 +1,7 @@
 package com.yixuetang.message.controller;
 
 import com.yixuetang.api.message.MessageControllerApi;
+import com.yixuetang.entity.message.Message;
 import com.yixuetang.entity.message.UserMessageSetting;
 import com.yixuetang.entity.request.message.QueryPageRequestMessage;
 import com.yixuetang.entity.response.CommonResponse;
@@ -53,5 +54,11 @@ public class MessageController implements MessageControllerApi {
     @GetMapping("info/messageId/{messageId}")
     public QueryResponse findMessageById(@PathVariable long messageId) {
         return this.messageService.findMessageById( messageId );
+    }
+
+    @Override
+    @PostMapping("admin/adminId/{adminId}")
+    public CommonResponse inputMessage(@PathVariable long adminId, @RequestBody Message message) {
+        return this.messageService.inputMessage( adminId, message );
     }
 }

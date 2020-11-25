@@ -10,7 +10,6 @@ import com.yixuetang.entity.response.CommonResponse;
 import com.yixuetang.entity.response.QueryResponse;
 import com.yixuetang.entity.response.code.CommonCode;
 import com.yixuetang.entity.response.result.QueryResult;
-import com.yixuetang.entity.user.Role;
 import com.yixuetang.entity.user.User;
 import com.yixuetang.message.mapper.MessageMapper;
 import com.yixuetang.message.mapper.UserMessageMapper;
@@ -23,10 +22,10 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.util.CollectionUtils;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -144,6 +143,27 @@ public class MessageServiceImpl implements MessageService {
         return new QueryResponse( CommonCode.SUCCESS,
                 new QueryResult<>( Collections.singletonList(
                         this.messageMapper.selectById( messageId ) ), 1 ) );
+    }
+
+    @Override
+    public CommonResponse inputMessage(long adminId, Message message) {
+
+        if (ObjectUtils.isEmpty( message )) {
+            ExceptionThrowUtils.cast( CommonCode.INVALID_PARAM );
+        }
+
+        // 判断通知的接收者类型
+        int receiverType = message.getReceiverType();
+
+        Message insertMessage = Message.builder().id( null ).publisherId( adminId )
+                .title( message.getTitle() ).content( message.getContent() ).receiverType( receiverType )
+                .status( Boolean.FALSE ).publishTime( new Date() ).updateTime( new Date() )
+                .receiverId( receiverType == 0 ? 0L : message.getReceiverId() ).build();
+
+        this.messageMapper.insert( insertMessage );
+
+        return CommonResponse.SUCCESS();
+
     }
 
     private void screen(QueryPageRequestMessage queryPageRequestMessage, QueryWrapper<Message> queryWrapper) {

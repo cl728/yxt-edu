@@ -1,5 +1,6 @@
 package com.yixuetang.api.message;
 
+import com.yixuetang.entity.message.Message;
 import com.yixuetang.entity.message.UserMessageSetting;
 import com.yixuetang.entity.request.message.QueryPageRequestMessage;
 import com.yixuetang.entity.response.CommonResponse;
@@ -46,4 +47,9 @@ public interface MessageControllerApi {
     @ApiImplicitParam(name = "messageId", value = "通知id", required = true,
             paramType = "path", dataType = "long")
     QueryResponse findMessageById(long messageId);
+
+    @ApiOperation("管理员发布系统通知")
+    @ApiImplicitParam(name = "adminId", value = "发布通知的管理员id", required = true,
+            paramType = "path", dataType = "long")
+    CommonResponse inputMessage(long adminId, Message message);
 }

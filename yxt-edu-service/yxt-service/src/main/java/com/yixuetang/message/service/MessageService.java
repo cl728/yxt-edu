@@ -1,5 +1,6 @@
 package com.yixuetang.message.service;
 
+import com.yixuetang.entity.message.Message;
 import com.yixuetang.entity.message.UserMessageSetting;
 import com.yixuetang.entity.request.message.QueryPageRequestMessage;
 import com.yixuetang.entity.response.CommonResponse;
@@ -55,4 +56,13 @@ public interface MessageService {
      * @return 响应结果实体类
      */
     QueryResponse findMessageById(long messageId);
+
+    /**
+     * 管理员发布系统通知
+     *
+     * @param adminId 发布通知的管理员id
+     * @param message 通知实体类
+     * @return 响应结果实体类
+     */
+    CommonResponse inputMessage(long adminId, Message message);
 }
