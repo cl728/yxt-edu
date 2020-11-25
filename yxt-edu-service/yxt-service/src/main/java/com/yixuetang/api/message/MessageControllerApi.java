@@ -41,4 +41,9 @@ public interface MessageControllerApi {
                     paramType = "path", dataType = "long")
     })
     QueryResponse findMessageListByPage(long currentPage, long pageSize, QueryPageRequestMessage queryPageRequestMessage);
+
+    @ApiOperation("查询某个通知的详情")
+    @ApiImplicitParam(name = "messageId", value = "通知id", required = true,
+            paramType = "path", dataType = "long")
+    QueryResponse findMessageById(long messageId);
 }

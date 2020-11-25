@@ -47,4 +47,12 @@ public interface MessageService {
      * @return 响应结果实体类
      */
     QueryResponse findMessageListByPage(long currentPage, long pageSize, QueryPageRequestMessage queryPageRequestMessage);
+
+    /**
+     * 查询某个通知的详情
+     *
+     * @param messageId 通知id
+     * @return 响应结果实体类
+     */
+    QueryResponse findMessageById(long messageId);
 }

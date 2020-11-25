@@ -48,4 +48,10 @@ public class MessageController implements MessageControllerApi {
                                                QueryPageRequestMessage queryPageRequestMessage) {
         return this.messageService.findMessageListByPage( currentPage, pageSize, queryPageRequestMessage );
     }
+
+    @Override
+    @GetMapping("info/messageId/{messageId}")
+    public QueryResponse findMessageById(@PathVariable long messageId) {
+        return this.messageService.findMessageById( messageId );
+    }
 }

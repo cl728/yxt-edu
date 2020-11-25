@@ -23,6 +23,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.CollectionUtils;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -136,6 +137,13 @@ public class MessageServiceImpl implements MessageService {
         } );
 
         return new QueryResponse( CommonCode.SUCCESS, new QueryResult<>( messageList, this.messageMapper.selectCount( queryWrapper ) ) );
+    }
+
+    @Override
+    public QueryResponse findMessageById(long messageId) {
+        return new QueryResponse( CommonCode.SUCCESS,
+                new QueryResult<>( Collections.singletonList(
+                        this.messageMapper.selectById( messageId ) ), 1 ) );
     }
 
     private void screen(QueryPageRequestMessage queryPageRequestMessage, QueryWrapper<Message> queryWrapper) {
