@@ -3,6 +3,7 @@ package com.yixuetang.message.service.impl;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.yixuetang.entity.message.EventRemind;
 import com.yixuetang.entity.message.Message;
 import com.yixuetang.entity.message.UserMessage;
 import com.yixuetang.entity.message.UserMessageSetting;
@@ -11,8 +12,10 @@ import com.yixuetang.entity.response.CommonResponse;
 import com.yixuetang.entity.response.QueryResponse;
 import com.yixuetang.entity.response.code.CommonCode;
 import com.yixuetang.entity.response.result.QueryResult;
+import com.yixuetang.entity.response.result.UnreadCountResp;
 import com.yixuetang.entity.user.User;
 import com.yixuetang.message.mapper.MessageMapper;
+import com.yixuetang.message.mapper.RemindMapper;
 import com.yixuetang.message.mapper.UserMessageMapper;
 import com.yixuetang.message.mapper.UserMessageSettingMapper;
 import com.yixuetang.message.service.MessageService;
@@ -50,6 +53,9 @@ public class MessageServiceImpl implements MessageService {
 
     @Autowired
     private MessageMapper messageMapper;
+
+    @Autowired
+    private RemindMapper remindMapper;
 
     @Override
     @Transactional
@@ -196,6 +202,22 @@ public class MessageServiceImpl implements MessageService {
         return CommonResponse.SUCCESS();
     }
 
+    @Override
+    public QueryResponse findUnreadCountByUserId(long userId) {
+        UnreadCountResp unreadCountResp = UnreadCountResp.builder()
+                .systemMessageCount( this.userMessageMapper.selectCount(
+                        new QueryWrapper<UserMessage>()
+                                .eq( "receiver_id", userId )
+                                .eq( "status", Boolean.FALSE ) ) )
+                .courseMessageCount( this.getEventRemindCount( userId, 0 ) )
+                .replayMessageCount( this.getEventRemindCount( userId, 1 ) )
+                .voteUpMessageCount( this.getEventRemindCount( userId, 2 ) )
+                .chatMessageCount( this.getEventRemindCount( userId, 3 ) )
+                .build();
+        return new QueryResponse( CommonCode.SUCCESS,
+                new QueryResult<>( Collections.singletonList( unreadCountResp ), 1 ) );
+    }
+
     private void screen(QueryPageRequestMessage queryPageRequestMessage, QueryWrapper<Message> queryWrapper) {
         String receiverType = queryPageRequestMessage.getReceiverType();
         if (StringUtils.isNoneBlank( receiverType )) {
@@ -218,5 +240,13 @@ public class MessageServiceImpl implements MessageService {
             queryPageRequestMessage.setTitle( "%" + title + "%" );
             queryWrapper.like( "title", queryPageRequestMessage.getTitle() );
         }
+    }
+
+    private int getEventRemindCount(long userId, int remindType) {
+        return this.remindMapper.selectCount(
+                new QueryWrapper<EventRemind>()
+                        .eq( "receiver_id", userId )
+                        .eq( "status", Boolean.FALSE )
+                        .eq( "remind_type", remindType ) );
     }
 }

@@ -75,4 +75,12 @@ public interface MessageService {
      * @return 响应结果实体类
      */
     CommonResponse editMessage(long adminId, long messageId, Message message);
+
+    /**
+     * 查询用户未读的系统通知或事件提醒数量
+     *
+     * @param userId 用户id
+     * @return 响应结果实体类
+     */
+    QueryResponse findUnreadCountByUserId(long userId);
 }

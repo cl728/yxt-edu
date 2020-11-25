@@ -61,4 +61,9 @@ public interface MessageControllerApi {
                     paramType = "path", dataType = "long")
     })
     CommonResponse editMessage(long adminId, long messageId, Message message);
+
+    @ApiOperation("查询用户未读的系统通知或事件提醒数量")
+    @ApiImplicitParam(name = "userId", value = "用户id", required = true,
+            paramType = "path", dataType = "long")
+    QueryResponse findUnreadCountByUserId(long userId);
 }

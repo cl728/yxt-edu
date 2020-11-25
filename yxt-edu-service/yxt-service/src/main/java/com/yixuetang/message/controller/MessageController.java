@@ -69,4 +69,10 @@ public class MessageController implements MessageControllerApi {
                                       @RequestBody Message message) {
         return this.messageService.editMessage( adminId, messageId, message );
     }
+
+    @Override
+    @GetMapping("unreadCount/userId/{userId}")
+    public QueryResponse findUnreadCountByUserId(@PathVariable long userId) {
+        return this.messageService.findUnreadCountByUserId( userId );
+    }
 }
