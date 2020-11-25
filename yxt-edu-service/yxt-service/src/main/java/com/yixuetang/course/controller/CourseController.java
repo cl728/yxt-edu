@@ -98,4 +98,10 @@ public class CourseController implements CourseControllerApi {
         return this.courseService.delById(courseId);
     }
 
+    @Override
+    @PutMapping("code/courseId/{courseId}")
+    public CommonResponse resetCourseCode(@PathVariable long courseId) {
+        return courseService.resetCourseCode(courseId);
+    }
+
 }

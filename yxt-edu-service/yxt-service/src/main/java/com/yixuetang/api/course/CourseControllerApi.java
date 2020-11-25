@@ -104,4 +104,9 @@ public interface CourseControllerApi {
     @ApiImplicitParam(name = "courseId", value = "课程id", required = true,
             paramType = "path", dataType = "long")
     CommonResponse delById(long courseId);
+
+    @ApiOperation("重置加课码")
+    @ApiImplicitParam(name = "courseId", value = "课程id", required = true,
+            paramType = "path", dataType = "long")
+    CommonResponse resetCourseCode(long courseId);
 }
