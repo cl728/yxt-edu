@@ -113,7 +113,16 @@ public class MessageServiceImpl implements MessageService {
                 .stream()
                 .map( UserMessage::getMessageId )
                 .collect( Collectors.toList() )
-                .forEach( messageId -> messageList.add( this.messageMapper.selectById( messageId ) ) );
+                .forEach( messageId -> {
+                    messageList.add( this.messageMapper.selectById( messageId ) );
+                    // 查询后，将未读的通知列表状态设置为已读
+                    UserMessage userMessage = this.userMessageMapper.selectOne(
+                            new QueryWrapper<UserMessage>().eq( "message_id", messageId ).eq( "receiver_id", userId ) );
+                    if (!userMessage.getStatus()) {
+                        userMessage.setStatus( Boolean.TRUE );
+                        this.userMessageMapper.updateById( userMessage );
+                    }
+                } );
 
         return new QueryResponse( CommonCode.SUCCESS, new QueryResult<>( messageList, messageList.size() ) );
     }
