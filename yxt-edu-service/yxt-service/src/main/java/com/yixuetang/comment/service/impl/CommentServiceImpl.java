@@ -118,14 +118,14 @@ public class CommentServiceImpl implements CommentService {
             return new CommonResponse(CommentCode.COMMENT_NOT_FOUND);
         }
 
-        // 0. 判断该评论是否存在子评论
+        // 2. 判断该评论是否存在子评论
         List<Comment> childComments = comment.getChildComments();
         if (!CollectionUtils.isEmpty(childComments)) {
-            // 0. 先删除子评论
+            // 先删除子评论
             childComments.forEach(childComment -> this.deleteCommentFromNotice(childComment.getId()));
         }
 
-        // 2. 再根据评论id删除此评论
+        // 3. 再根据评论id删除此评论
         this.commentMapper.deleteById(commentId);
 
         return new CommonResponse(CommonCode.SUCCESS);
