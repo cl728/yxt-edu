@@ -187,7 +187,8 @@ public class ResourceServiceImpl implements ResourceService {
 
         // 发送异步事件提醒，告知学生教师发布了新资源
         this.amqpUtils.sendCourseRemind( courseResource.getTeacherId(), courseResource.getCourseId(),
-                courseResource.getResourceId(), "资源", "发布" );
+                courseResource.getResourceId(), "资源", "发布",
+                "http://www.yixuetang.com/courseDetail.html?id=" + courseResource.getCourseId() );
 
         return CommonResponse.SUCCESS();
     }

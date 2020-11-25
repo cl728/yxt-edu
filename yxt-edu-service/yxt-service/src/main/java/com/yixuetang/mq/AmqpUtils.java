@@ -26,16 +26,16 @@ public class AmqpUtils {
     private static final Logger LOGGER = LoggerFactory.getLogger( AmqpUtils.class );
 
     public void sendCourseRemind(long teacherId, long courseId, long sourceId,
-                                 String sourceName, String sourceType) {
+                                 String sourceName, String action, String url) {
         EventRemind eventRemind = EventRemind.builder().id( null )
                 .remindType( 0 ) // 与课程相关，remindType 为 0
                 .senderId( teacherId ) // 发送者为教师
                 .courseId( courseId ) // 与之关联的课程
                 .receiverId( null ) // 接收者为该课程下的学生，需要在执行异步发送逻辑时查出，此处设置为 null
                 .sourceId( sourceId ) // 事件源id
-                .sourceType( sourceType )   // 事件源类型
+                .action( action )   // 动作类型
                 .sourceName( sourceName )   // 事件源名称
-                .url( "http://www.yixuetang.com/courseDetail.html?id=" + courseId ) // 事件所发生的地点链接
+                .url( url ) // 事件所发生的地点链接
                 .status( Boolean.FALSE )  // 是否已读，默认为 false
                 .remindTime( new Date() )  // 提醒时间
                 .build();

@@ -118,7 +118,8 @@ public class NoticeServiceImpl implements NoticeService {
         }
 
         // 发送异步事件提醒，告知学生教师发布了新公告
-        this.amqpUtils.sendCourseRemind( teacherId, courseId, notice.getId(), "公告", "发布" );
+        this.amqpUtils.sendCourseRemind( teacherId, courseId, notice.getId(), "公告", "发布",
+                "http://www.yixuetang.com/courseDetail.html?id=" + courseId );
 
         return new CommonResponse( CommonCode.SUCCESS );
     }

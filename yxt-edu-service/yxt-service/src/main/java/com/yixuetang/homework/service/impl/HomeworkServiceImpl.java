@@ -174,7 +174,8 @@ public class HomeworkServiceImpl implements HomeworkService {
         }
 
         // 10. 发送异步事件提醒，告知学生老师发布了新作业
-        this.amqpUtils.sendCourseRemind( teacherId, courseId, homework.getId(),"作业", "发布" );
+        this.amqpUtils.sendCourseRemind( teacherId, courseId, homework.getId(),"作业",
+                "发布", "http://www.yixuetang.com/courseDetail.html?id=" + courseId );
 
         return new CommonResponse( CommonCode.SUCCESS );
     }

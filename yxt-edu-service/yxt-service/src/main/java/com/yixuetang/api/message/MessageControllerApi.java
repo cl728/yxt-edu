@@ -71,4 +71,9 @@ public interface MessageControllerApi {
     @ApiImplicitParam(name = "userId", value = "用户id", required = true,
             paramType = "path", dataType = "long")
     QueryResponse findUnreadCountByUserId(long userId);
+
+    @ApiOperation("查询用户收到的事件提醒")
+    @ApiImplicitParam(name = "userId", value = "用户id", required = true,
+            paramType = "path", dataType = "long")
+    QueryResponse findEventRemindListByUserId(long userId);
 }

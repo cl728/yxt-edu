@@ -88,7 +88,15 @@ public interface MessageService {
      * 管理员删除系统通知
      *
      * @param messageId 被删除的通知id
-     * @return 相应结果实体类
+     * @return 响应结果实体类
      */
     CommonResponse deleteMessageById(Long messageId);
+
+    /**
+     * 查询用户收到的事件提醒
+     *
+     * @param userId 用户id
+     * @return 响应结果实体类
+     */
+    QueryResponse findEventRemindListByUserId(long userId);
 }
