@@ -8,6 +8,7 @@ import org.springframework.data.redis.connection.RedisConnectionFactory;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.serializer.GenericJackson2JsonRedisSerializer;
 import org.springframework.data.redis.serializer.StringRedisSerializer;
+import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import org.springframework.web.filter.CorsFilter;
@@ -18,6 +19,7 @@ import org.springframework.web.filter.CorsFilter;
  * @description 益学堂服务启动程序
  * @date 2020/10/23 13:17
  */
+@EnableScheduling // 打开定时任务注解
 @SpringBootApplication
 public class YxtServiceApplication {
 
