@@ -4,7 +4,10 @@ import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.util.Date;
 
@@ -15,6 +18,9 @@ import java.util.Date;
  * @date 2020/11/25 12:48
  */
 @Data
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
 @TableName("t_remind")
 public class EventRemind {
 
@@ -27,11 +33,17 @@ public class EventRemind {
     @TableField("sender_id")
     private Long senderId;      // 操作者id，即由谁引起的事件提醒
 
+    @TableField("course_id")
+    private Long courseId;      // 事件可能关联的课程id
+
     @TableField("receiver_id")
     private Long receiverId;    // 接收者id
 
     @TableField("source_id")
     private Long sourceId;      // 事件源id，如评论id，作业id等
+
+    @TableField("source_name")
+    private String sourceName;  // 事件源名称，如作业、公告等
 
     @TableField("source_type")
     private String sourceType;  // 事件源类型，如回复、点赞、发布等

@@ -26,6 +26,11 @@ spring:
   redis:
     host: ENC(xGJHqtnNQ7QY0/Zmn7J3JVevS8FrsCLX)
     password: ENC(UBm3TeLHwCHy3FZXXk4ffZtulNrEz5zT)
+  rabbitmq:
+    host: ENC(xGJHqtnNQ7QY0/Zmn7J3JVevS8FrsCLX)
+    virtual-host: ENC(8BOFhAqpKlMTfMZBhNt9jmSPbJ9l0BTX)
+    username: ENC(9dxk6qB/542INQ8tzSpNPQ==)
+    password: ENC(uwAz1pnfvuveDSU3M5jwRq9YANqCN92+)
 fdfs:
   so-timeout: 1501 # 超时时间
   connect-timeout: 601 # 连接超时时间

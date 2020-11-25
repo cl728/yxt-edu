@@ -18,4 +18,7 @@ public class InsertCourseResource {
     @ApiModelProperty(name = "资源id", dataType = "long")
     private Long resourceId;
 
+    @ApiModelProperty(name = "教师id", dataType = "long")
+    private Long teacherId;
+
 }

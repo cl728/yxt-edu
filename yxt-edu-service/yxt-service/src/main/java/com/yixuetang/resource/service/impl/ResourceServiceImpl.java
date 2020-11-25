@@ -17,6 +17,7 @@ import com.yixuetang.entity.response.result.QueryResult;
 import com.yixuetang.entity.user.User;
 import com.yixuetang.homework.mapper.HomeworkMapper;
 import com.yixuetang.homework.mapper.HomeworkResourceMapper;
+import com.yixuetang.mq.AmqpUtils;
 import com.yixuetang.resource.mapper.CourseResourceMapper;
 import com.yixuetang.resource.mapper.ResourceMapper;
 import com.yixuetang.resource.service.ResourceService;
@@ -71,6 +72,9 @@ public class ResourceServiceImpl implements ResourceService {
 
     @javax.annotation.Resource(name = "template")
     private RedisTemplate<String, Object> template;
+
+    @Autowired
+    private AmqpUtils amqpUtils;
 
     private final String ANCESTORS_KEY_PREFIX = "resource:ancestors:id:";
 
@@ -180,6 +184,11 @@ public class ResourceServiceImpl implements ResourceService {
     @Transactional
     public CommonResponse saveCourseResource(InsertCourseResource courseResource) {
         this.courseResourceMapper.insert( CourseResource.builder().id( null ).courseId( courseResource.getCourseId() ).resourceId( courseResource.getResourceId() ).build() );
+
+        // 发送异步事件提醒，告知学生教师发布了新资源
+        this.amqpUtils.sendCourseRemind( courseResource.getTeacherId(), courseResource.getCourseId(),
+                courseResource.getResourceId(), "资源", "发布" );
+
         return CommonResponse.SUCCESS();
     }
 
@@ -249,9 +258,9 @@ public class ResourceServiceImpl implements ResourceService {
     @Override
     public QueryResponse findHomework(Long studentId, long homeworkId) {
         // 学生id不合法
-        User user = userMapper.findById(studentId);
-        if(user == null || user.getRole().getId() != 3){
-            ExceptionThrowUtils.cast(CommonCode.INVALID_PARAM);
+        User user = userMapper.findById( studentId );
+        if (user == null || user.getRole().getId() != 3) {
+            ExceptionThrowUtils.cast( CommonCode.INVALID_PARAM );
         }
         // 作业id不合法
         if (this.homeworkMapper.selectOne( new QueryWrapper<Homework>().eq( "id", homeworkId ).select( "id" ) ) == null) {
@@ -259,38 +268,38 @@ public class ResourceServiceImpl implements ResourceService {
         }
 
         //查询学生提交的作业-资源记录 是否为空
-        List<HomeworkResource> homeworkResources = homeworkResourceMapper.selectList(new QueryWrapper<HomeworkResource>().eq("student_id", studentId).eq("homework_id", homeworkId));
-        if(homeworkResources.size() <= 0){
-            return new QueryResponse(ResourceCode.HOMEWORK_RESOURCE_NOT_EXISTS,null);
+        List<HomeworkResource> homeworkResources = homeworkResourceMapper.selectList( new QueryWrapper<HomeworkResource>().eq( "student_id", studentId ).eq( "homework_id", homeworkId ) );
+        if (homeworkResources.size() <= 0) {
+            return new QueryResponse( ResourceCode.HOMEWORK_RESOURCE_NOT_EXISTS, null );
         }
 
         //获取资源id
         List<Long> resourceIds = new ArrayList<>();
         for (HomeworkResource homeworkResource : homeworkResources) {
-            resourceIds.add(homeworkResource.getResourceId());
+            resourceIds.add( homeworkResource.getResourceId() );
         }
 
         //根据学生作业-资源记录的资源id查询资源
-        List<Resource> resources = resourceMapper.selectList(new QueryWrapper<Resource>().in("id",resourceIds));
+        List<Resource> resources = resourceMapper.selectList( new QueryWrapper<Resource>().in( "id", resourceIds ) );
 
-        return new QueryResponse(CommonCode.SUCCESS,new QueryResult(resources,resources.size()));
+        return new QueryResponse( CommonCode.SUCCESS, new QueryResult( resources, resources.size() ) );
     }
 
     @Override
     public CommonResponse renameResource(long resourceId, String name) {
         //  判断资源是否存在
-        Resource resource = resourceMapper.selectById(resourceId);
-        if (resource == null){
-            ExceptionThrowUtils.cast(ResourceCode.RESOURCE_NOT_EXISTS);
+        Resource resource = resourceMapper.selectById( resourceId );
+        if (resource == null) {
+            ExceptionThrowUtils.cast( ResourceCode.RESOURCE_NOT_EXISTS );
         }
         //  判断输入资源名称是否为空
-        if (!StringUtils.isNoneBlank(name)){
-            ExceptionThrowUtils.cast(ResourceCode.RESOURCE_NAME_CAN_NOT_BE_EMPTY);
+        if (!StringUtils.isNoneBlank( name )) {
+            ExceptionThrowUtils.cast( ResourceCode.RESOURCE_NAME_CAN_NOT_BE_EMPTY );
         }
-        resource.setName(name);
-        resource.setUpdateTime(new Date());
-        resourceMapper.updateById(resource);
-        return new CommonResponse(CommonCode.SUCCESS);
+        resource.setName( name );
+        resource.setUpdateTime( new Date() );
+        resourceMapper.updateById( resource );
+        return new CommonResponse( CommonCode.SUCCESS );
     }
 
     private void saveToDatabase(Long userId, Long parentResourceId, Resource resource) {
