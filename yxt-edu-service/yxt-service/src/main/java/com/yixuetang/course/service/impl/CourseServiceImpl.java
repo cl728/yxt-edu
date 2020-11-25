@@ -249,6 +249,20 @@ public class CourseServiceImpl implements CourseService {
 
     }
 
+    @Override
+    public CommonResponse resetCourseCode(long courseId) {
+        Course course = courseMapper.selectById(courseId);
+        //判断该id课程是否存在
+        if (course == null){
+            ExceptionThrowUtils.cast(CommonCode.INVALID_PARAM);
+        }
+        // 生成加课码
+        String cCode = GenCodeUtils.genRandomCode();
+        course.setCCode(cCode);
+        courseMapper.updateById(course);
+        return new CommonResponse(CommonCode.SUCCESS);
+    }
+
     @Transactional
     @Override
     public CommonResponse transferCourses(Long courseId, Long teacherId, TransferCourse transferCourse) {

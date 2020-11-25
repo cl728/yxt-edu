@@ -120,4 +120,12 @@ public interface CourseService {
      * @return 响应结果实体类
      */
     CommonResponse delById(long courseId);
+
+    /**
+     * 重置加课码
+     *
+     * @param courseId  课程id
+     * @return  响应结果实体类
+     */
+    CommonResponse resetCourseCode(long courseId);
 }
