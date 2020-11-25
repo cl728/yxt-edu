@@ -52,4 +52,13 @@ public interface MessageControllerApi {
     @ApiImplicitParam(name = "adminId", value = "发布通知的管理员id", required = true,
             paramType = "path", dataType = "long")
     CommonResponse inputMessage(long adminId, Message message);
+
+    @ApiOperation("管理员修改系统通知")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "adminId", value = "修改通知的管理员id", required = true,
+                    paramType = "path", dataType = "long"),
+            @ApiImplicitParam(name = "messageId", value = "被修改的通知id", required = true,
+                    paramType = "path", dataType = "long")
+    })
+    CommonResponse editMessage(long adminId, long messageId, Message message);
 }

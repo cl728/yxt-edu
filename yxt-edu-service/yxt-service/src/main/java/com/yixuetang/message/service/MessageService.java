@@ -65,4 +65,14 @@ public interface MessageService {
      * @return 响应结果实体类
      */
     CommonResponse inputMessage(long adminId, Message message);
+
+    /**
+     * 管理员修改系统通知
+     *
+     * @param adminId   修改通知的管理员id
+     * @param messageId 被修改的通知id
+     * @param message   通知实体类
+     * @return 响应结果实体类
+     */
+    CommonResponse editMessage(long adminId, long messageId, Message message);
 }

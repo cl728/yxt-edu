@@ -61,4 +61,12 @@ public class MessageController implements MessageControllerApi {
     public CommonResponse inputMessage(@PathVariable long adminId, @RequestBody Message message) {
         return this.messageService.inputMessage( adminId, message );
     }
+
+    @Override
+    @PutMapping("admin/adminId/{adminId}/messageId/{messageId}")
+    public CommonResponse editMessage(@PathVariable long adminId,
+                                      @PathVariable long messageId,
+                                      @RequestBody Message message) {
+        return this.messageService.editMessage( adminId, messageId, message );
+    }
 }

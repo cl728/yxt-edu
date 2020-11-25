@@ -1,6 +1,7 @@
 package com.yixuetang.message.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.yixuetang.entity.message.Message;
 import com.yixuetang.entity.message.UserMessage;
@@ -164,6 +165,26 @@ public class MessageServiceImpl implements MessageService {
 
         return CommonResponse.SUCCESS();
 
+    }
+
+    @Override
+    public CommonResponse editMessage(long adminId, long messageId, Message message) {
+
+        if (ObjectUtils.isEmpty( message )) {
+            ExceptionThrowUtils.cast( CommonCode.INVALID_PARAM );
+        }
+
+        Message updateMessage = this.messageMapper.selectById( messageId );
+
+        updateMessage.setUpdateTime( new Date() );
+
+        this.messageMapper.update( updateMessage,
+                new UpdateWrapper<Message>()
+                        .set( StringUtils.isNoneBlank( message.getTitle() ), "title", message.getTitle() )
+                        .set( StringUtils.isNoneBlank( message.getContent() ), "content", message.getContent() )
+                        .eq( "id", messageId ) );
+
+        return CommonResponse.SUCCESS();
     }
 
     private void screen(QueryPageRequestMessage queryPageRequestMessage, QueryWrapper<Message> queryWrapper) {
