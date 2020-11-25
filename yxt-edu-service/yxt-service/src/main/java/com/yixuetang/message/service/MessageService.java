@@ -83,4 +83,12 @@ public interface MessageService {
      * @return 响应结果实体类
      */
     QueryResponse findUnreadCountByUserId(long userId);
+
+    /**
+     * 管理员删除系统通知
+     *
+     * @param messageId 被删除的通知id
+     * @return 相应结果实体类
+     */
+    CommonResponse deleteMessageById(Long messageId);
 }
