@@ -97,6 +97,24 @@ const routes = [{
   },
 },
 {
+  path: '/messages/input',
+  name: 'inputMessage',
+  component: resolve => require(['@/views/messages/InputMessage.vue'], resolve),
+  meta: {
+    title: '发布通知',
+    loginState: true,
+  },
+},
+{
+  path: '/messages/edit/:messageId',
+  name: 'editMessage',
+  component: resolve => require(['@/views/messages/EditMessage.vue'], resolve),
+  meta: {
+    title: '编辑通知',
+    loginState: true,
+  },
+},
+{
   path: '/module/editor',
   name: 'editor',
   component: resolve => require(['@/views/module/Editor.vue'], resolve),

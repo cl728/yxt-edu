@@ -53,6 +53,7 @@
           <span>通知管理</span>
         </template>
         <el-menu-item index="/messages">通知列表</el-menu-item>
+        <el-menu-item index="/messages/input">发布通知</el-menu-item>
       </el-submenu>
       <el-submenu index="4">
         <template slot="title">
