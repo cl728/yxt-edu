@@ -84,4 +84,13 @@ public interface ResourceService {
      * @return 响应结果实体类
      */
     QueryResponse findHomework(Long studentId, long homeworkId);
+
+    /**
+     *  重命名资源
+     *
+     * @param resourceId    资源id
+     * @param name          资源名
+     * @return  响应结果实体类
+     */
+    CommonResponse renameResource(long resourceId, String name);
 }

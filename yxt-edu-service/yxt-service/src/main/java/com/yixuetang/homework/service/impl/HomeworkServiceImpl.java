@@ -377,9 +377,19 @@ public class HomeworkServiceImpl implements HomeworkService {
         }
         //判断学生是否有该作业
         if (homeworkStudent == null){
-            ExceptionThrowUtils.cast(CommonCode.INVALID_PARAM);
+            ExceptionThrowUtils.cast(HomeworkCode.STUDENT_HOMEWORK_NOT_EXIST);
         }
+        //判断评分分值是否超出范围
+        if (score < 0){
+            ExceptionThrowUtils.cast(HomeworkCode.THE_SCORE_CAN_NOT_BE_LOWER_THAN_ZERO);
+        }
+        if (score > homework.getTotalScore()){
+            ExceptionThrowUtils.cast(HomeworkCode.THE_SCORE_EXCEEDS_THE_MAXIMUM);
+        }
+
         homeworkStudent.setScore(score);
+        homeworkStudent.setStatus(2);
+        homeworkStudent.setCorrectCount(homeworkStudent.getCorrectCount() + 1);
         homeworkStudentMapper.updateById(homeworkStudent);
         return new CommonResponse(CommonCode.SUCCESS);
     }
