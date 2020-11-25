@@ -152,7 +152,7 @@
                                     </el-card>
                                     <!-- 系统通知列表 -->
                                     <el-card shadow="hover" v-for="(systemMessage, index) in systemMessageList"
-                                        v-show="systemMessageList.length > 0"
+                                        v-if="systemMessageList.length > 0"
                                         style="margin-top: 10px;width: 1184px;height: auto; border-radius: 10px;border-width: 2px;padding: 0;">
                                         <el-row style="float: left;">
                                             <el-col>
@@ -173,7 +173,7 @@
                                             </el-col>
                                         </el-row>
                                     </el-card>
-                                    <el-card class="box-card" v-show="systemMessageList.length === 0" shadow="hover"
+                                    <el-card class="box-card" v-if="systemMessageList.length === 0" shadow="hover"
                                         style="margin-top: 20px;width: 1184px;height: 220px;border-radius: 10px;border-width: 2px">
                                         <el-row>
                                             <p
@@ -194,7 +194,7 @@
                                         </el-row>
                                     </el-card>
                                     <!-- 课程相关列表 -->
-                                    <el-card shadow="hover"
+                                    <el-card shadow="hover" v-if="courseRemindList.length > 0"
                                         style="margin-top: 10px;width: 1184px;height: auto; border-radius: 10px;border-width: 2px;padding: 0;">
                                         <!-- 第一个 -->
                                         <div>
@@ -315,6 +315,14 @@
                                                 </el-col>
                                             </el-row>
                                         </div>
+                                    </el-card>
+                                    <el-card class="box-card" v-if="courseRemindList.length === 0" shadow="hover"
+                                        style="margin-top: 20px;width: 1184px;height: 220px;border-radius: 10px;border-width: 2px">
+                                        <el-row>
+                                            <p
+                                                style="text-align: center; font-size: 15px; color: black; line-height: 160px;">
+                                                暂无课程相关提醒</p>
+                                        </el-row>
                                     </el-card>
                                 </div>
 
