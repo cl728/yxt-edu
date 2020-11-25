@@ -100,4 +100,10 @@ public class ResourceController implements ResourceControllerApi {
     public QueryResponse findHomework(@PathVariable Long studentId, @PathVariable long homeworkId) {
         return resourceService.findHomework(studentId,homeworkId);
     }
+
+    @Override
+    @PutMapping("resourceId/{resourceId}")
+    public CommonResponse renameResource(@PathVariable long resourceId, @RequestBody String name) {
+        return resourceService.renameResource(resourceId, name);
+    }
 }

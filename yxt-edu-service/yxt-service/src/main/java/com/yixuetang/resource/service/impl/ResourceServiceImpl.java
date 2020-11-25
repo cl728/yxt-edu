@@ -276,6 +276,23 @@ public class ResourceServiceImpl implements ResourceService {
         return new QueryResponse(CommonCode.SUCCESS,new QueryResult(resources,resources.size()));
     }
 
+    @Override
+    public CommonResponse renameResource(long resourceId, String name) {
+        //  判断资源是否存在
+        Resource resource = resourceMapper.selectById(resourceId);
+        if (resource == null){
+            ExceptionThrowUtils.cast(ResourceCode.RESOURCE_NOT_EXISTS);
+        }
+        //  判断输入资源名称是否为空
+        if (!StringUtils.isNoneBlank(name)){
+            ExceptionThrowUtils.cast(ResourceCode.RESOURCE_NAME_CAN_NOT_BE_EMPTY);
+        }
+        resource.setName(name);
+        resource.setUpdateTime(new Date());
+        resourceMapper.updateById(resource);
+        return new CommonResponse(CommonCode.SUCCESS);
+    }
+
     private void saveToDatabase(Long userId, Long parentResourceId, Resource resource) {
 
         this.resourceMapper.insert( resource );

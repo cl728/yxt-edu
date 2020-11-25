@@ -28,7 +28,11 @@ public enum HomeworkCode implements ResponseCode {
 
     UPDATE_HOMEWORK_FAIL_DESCRIPTION_IS_NULL(false, 70007, "作业题目不能为空！"),
 
-    STUDENT_HOMEWORK_NOT_EXIST(false, 70008, "学生-作业记录不存在！");
+    STUDENT_HOMEWORK_NOT_EXIST(false, 70008, "学生-作业记录不存在！"),
+
+    THE_SCORE_CAN_NOT_BE_LOWER_THAN_ZERO(false, 70009, "评分不能低于0"),
+
+    THE_SCORE_EXCEEDS_THE_MAXIMUM(false, 70010, "评分超出最大分值");
 
     private boolean success;
     private int code;

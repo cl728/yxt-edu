@@ -80,4 +80,9 @@ public interface ResourceControllerApi {
                     paramType = "path", dataType = "long")
     })
     QueryResponse findHomework(Long studentId,long homeworkId);
+
+    @ApiOperation("修改资源名称")
+    @ApiImplicitParam(name = "resourceId", value = "资源id", required = true,
+            paramType = "path", dataType = "long")
+    CommonResponse renameResource(long resourceId, String name);
 }
