@@ -45,24 +45,55 @@
                             <el-menu-item index="4" class="header-text">我的精品</el-menu-item>
                         </el-menu>
                     </el-col>
-                    <!-- 头像下拉菜单 -->
-                    <el-col :span="4">
+                    <!-- 消息提醒 -->
+                    <el-col :span="1.5">
                         <el-menu class="el-menu-demo" mode="horizontal">
-                            <el-menu-item>
-                                <i class="el-icon-bell"></i>
-                                <el-badge is-dot class="item"></el-badge>
-                            </el-menu-item>
+                            <el-submenu>
+                                <template slot="title">
+                                    <i class="el-icon-bell"></i>
+                                    <el-badge v-show="totalUnreadCount != 0" :value="totalUnreadCount" :max="10"
+                                        class="item">
+                                </template>
+                                <el-menu-item><i class="el-icon-message-solid"></i> 系统通知 <el-badge
+                                        v-if="unreadMessageCount.systemMessageCount != 0"
+                                        :value="unreadMessageCount.systemMessageCount" class="item">
+                                </el-menu-item>
+                                <el-menu-item><i class="el-icon-notebook-2"></i> 课程相关 <el-badge
+                                        v-if="unreadMessageCount.courseMessageCount != 0"
+                                        :value="unreadMessageCount.courseMessageCount" class="item">
+                                </el-menu-item>
+                                <el-menu-item><i class="fa fa-mail-forward"
+                                        style="margin-left: 6px; margin-right: 10px;"></i>
+                                    回复我的 <el-badge v-if="unreadMessageCount.replyMessageCount != 0"
+                                        :value="unreadMessageCount.replyMessageCount" class="item">
+                                </el-menu-item>
+                                <el-menu-item><i class="fa fa-thumbs-o-up"
+                                        style="margin-left: 6px; margin-right: 12px;"></i> 收到的赞 <el-badge
+                                        v-if="unreadMessageCount.voteUpMessageCount != 0"
+                                        :value="unreadMessageCount.voteUpMessageCount" class="item">
+                                </el-menu-item>
+                                <el-menu-item><i class="el-icon-chat-dot-round"></i> 我的私信 <el-badge
+                                        v-if="unreadMessageCount.chatMessageCount != 0"
+                                        :value="unreadMessageCount.chatMessageCount" class="item">
+                                </el-menu-item>
+                            </el-submenu>
+                        </el-menu>
+                    </el-col>
+                    <!-- 头像下拉菜单 -->
+                    <el-col :span="2.5">
+                        <el-menu class="el-menu-demo" mode="horizontal">
                             <el-submenu>
                                 <template slot="title">
                                     <span v-text="user.username" style="color: black; margin: 20px 10px;">用户名</span>
                                     <el-avatar size="large" :src="user.avatar">
                                     </el-avatar>
                                 </template>
-                                <el-menu-item @click="location.href = 'setting.html' "><i class="el-icon-setting"></i>
-                                    个人设置</el-menu-item>
+                                <el-menu-item @click="location.href = 'user/setting.html' "><i
+                                        class="el-icon-setting"></i> 个人设置</el-menu-item>
                                 <el-menu-item><i class="el-icon-position"></i> 消息中心</el-menu-item>
                                 <el-menu-item @click="logout()"><i class="fa fa-sign-out"
-                                        style="margin-left: 6px; margin-right: 9px;"></i> <span>退出账户</span>
+                                        style="margin-left: 6px; margin-right: 9px;"></i>
+                                    <span>退出账户</span>
                                 </el-menu-item>
                             </el-submenu>
                         </el-menu>
@@ -169,14 +200,18 @@
                                         <div>
                                             <el-row>
                                                 <el-col :span="1">
-                                                    <el-avatar size="small"
-                                                        src="http://www.pava.run/group1/M00/00/00/rBAABV-rZ9KAOAoyAAAnvyJPq-0893.jpg">
+                                                    <el-avatar size="small" :src="courseRemindList[0].sender.avatar">
                                                     </el-avatar>
                                                 </el-col>
                                                 <el-col :span="2.5" style="margin-top: 5px;">
-                                                    <span style="font-size: 14px; color: #222;">Colin</span>
-                                                    <span style="color: #999; font-size: small;">发布了新作业：</span>
-                                                    <el-link type="info" :underline="false">新作业标题</el-link>
+                                                    <span style="font-size: 14px; color: #222;"
+                                                        v-text="courseRemindList[0].sender.username">Colin</span>
+                                                    <span style="color: #999; font-size: small;"> <span
+                                                            v-text="courseRemindList[0].action">发布</span>了新<span
+                                                            v-text="courseRemindList[0].sourceName">作业</span>：</span>
+                                                    <el-link type="info" :underline="false"
+                                                        :href="courseRemindList[0].url"
+                                                        v-text="courseRemindList[0].sourceContent">新作业标题</el-link>
                                                 </el-col>
                                             </el-row>
                                             <el-row>
@@ -184,11 +219,14 @@
                                                     <span
                                                         style="float: left;padding-left: 20px; margin-top: 10px; margin-bottom: 5px;">
                                                         <span style="font-size: 12px;color: #999">
-                                                            <i class="el-icon-date"></i> 2020-11-23 20:42
+                                                            <i class="el-icon-date"></i> <span
+                                                                v-text="courseRemindList[0].remindTime">2020-11-23
+                                                                20:42</span>
                                                             <span>
                                                                 <i class="el-icon-delete"
                                                                     style="margin-left: 4px; margin-right: 1px;"></i>
                                                                 <el-button type="text"
+                                                                    @click="deleteRemind(courseRemindList[0].id)"
                                                                     style="color: #999; font-size: 10px;">删除该通知
                                                                 </el-button>
                                                             </span>
@@ -199,17 +237,21 @@
                                             <el-divider></el-divider>
                                         </div>
                                         <!-- 中间 -->
-                                        <div>
+                                        <div v-for="(remind, index) in courseRemindList"
+                                            v-if="index > 0 && courseRemindList.length - 1 > index">
                                             <el-row style="margin-top: 20px;">
                                                 <el-col :span="1">
-                                                    <el-avatar size="small"
-                                                        src="http://www.pava.run/group1/M00/00/00/rBAABV-rZ9KAOAoyAAAnvyJPq-0893.jpg">
+                                                    <el-avatar size="small" :src="remind.sender.avatar">
                                                     </el-avatar>
                                                 </el-col>
                                                 <el-col :span="2.5" style="margin-top: 5px;">
-                                                    <span style="font-size: 14px; color: #222;">Colin</span>
-                                                    <span style="color: #999; font-size: small;">上传了新资源：</span>
-                                                    <el-link type="info" :underline="false">新资源名称</el-link>
+                                                    <span style="font-size: 14px; color: #222;"
+                                                        v-text="remind.sender.username">Colin</span>
+                                                    <span style="color: #999; font-size: small;"> <span
+                                                            v-text="remind.action">上传</span>了新<span
+                                                            v-text="remind.sourceName">资源</span>：</span>
+                                                    <el-link type="info" :underline="false" :href="remind.url"
+                                                        v-text="remind.sourceContent">新资源名称</el-link>
                                                 </el-col>
                                             </el-row>
                                             <el-row>
@@ -217,41 +259,12 @@
                                                     <span
                                                         style="float: left;padding-left: 20px; margin-top: 10px; margin-bottom: 10px;">
                                                         <span style="font-size: 12px;color: #999">
-                                                            <i class="el-icon-date"></i> 2020-11-23 20:42
+                                                            <i class="el-icon-date"></i> <span
+                                                                v-text="remind.remindTime">2020-11-23 20:42</span>
                                                             <span>
                                                                 <i class="el-icon-delete"
                                                                     style="margin-left: 4px; margin-right: 1px;"></i>
-                                                                <el-button type="text"
-                                                                    style="color: #999; font-size: 10px;">删除该通知
-                                                                </el-button>
-                                                            </span>
-                                                        </span>
-                                                    </span>
-                                                </el-col>
-                                            </el-row>
-                                            <el-divider></el-divider>
-                                            <el-row style="margin-top: 20px;">
-                                                <el-col :span="1">
-                                                    <el-avatar size="small"
-                                                        src="http://www.pava.run/group1/M00/00/00/rBAABV-rZ9KAOAoyAAAnvyJPq-0893.jpg">
-                                                    </el-avatar>
-                                                </el-col>
-                                                <el-col :span="2.5" style="margin-top: 5px;">
-                                                    <span style="font-size: 14px; color: #222;">Colin</span>
-                                                    <span style="color: #999; font-size: small;">发布了新测试：</span>
-                                                    <el-link type="info" :underline="false">新测试名称</el-link>
-                                                </el-col>
-                                            </el-row>
-                                            <el-row>
-                                                <el-col :span="24">
-                                                    <span
-                                                        style="float: left;padding-left: 20px; margin-top: 10px; margin-bottom: 10px;">
-                                                        <span style="font-size: 12px;color: #999">
-                                                            <i class="el-icon-date"></i> 2020-11-23 20:42
-                                                            <span>
-                                                                <i class="el-icon-delete"
-                                                                    style="margin-left: 4px; margin-right: 1px;"></i>
-                                                                <el-button type="text"
+                                                                <el-button type="text" @click="deleteRemind(remind.id)"
                                                                     style="color: #999; font-size: 10px;">删除该通知
                                                                 </el-button>
                                                             </span>
@@ -266,23 +279,34 @@
                                             <el-row style="margin-top: 20px;">
                                                 <el-col :span="1">
                                                     <el-avatar size="small"
-                                                        src="http://www.pava.run/group1/M00/00/00/rBAABV-rZ9KAOAoyAAAnvyJPq-0893.jpg">
+                                                        :src="courseRemindList[courseRemindList.length - 1].sender.avatar">
                                                     </el-avatar>
                                                 </el-col>
                                                 <el-col :span="2.5" style="margin-top: 5px;">
-                                                    <span style="font-size: 14px; color: #222;">Colin</span>
-                                                    <span style="color: #999; font-size: small;">发布了新公告：</span>
-                                                    <el-link type="info" :underline="false">新公告标题</el-link>
+                                                    <span style="font-size: 14px; color: #222;"
+                                                        v-text="courseRemindList[courseRemindList.length - 1].sender.username">Colin</span>
+                                                    <span style="color: #999; font-size: small;"> <span
+                                                            v-text="courseRemindList[courseRemindList.length - 1].action">发布</span>了新<span
+                                                            v-text="courseRemindList[courseRemindList.length - 1].sourceName">作业</span>：</span>
+                                                    <el-link type="info" :underline="false"
+                                                        :href="courseRemindList[courseRemindList.length - 1].url"
+                                                        v-text="courseRemindList[courseRemindList.length - 1].sourceContent">
+                                                        新作业标题</el-link>
                                                 </el-col>
                                             </el-row>
                                             <el-row>
                                                 <el-col :span="24">
                                                     <span
-                                                        style="float: left;padding-left: 20px; margin-top: 10px; margin-bottom: 10px;">
+                                                        style="float: left;padding-left: 20px; margin-top: 10px; margin-bottom: 5px;">
                                                         <span style="font-size: 12px;color: #999">
-                                                            <i class="el-icon-date"></i> 2020-11-23 20:42
+                                                            <i class="el-icon-date"></i> <span
+                                                                v-text="courseRemindList[courseRemindList.length - 1].remindTime">2020-11-23
+                                                                20:42</span>
                                                             <span>
-                                                                <el-button type="text" icon="el-icon-delete"
+                                                                <i class="el-icon-delete"
+                                                                    style="margin-left: 4px; margin-right: 1px;"></i>
+                                                                <el-button type="text"
+                                                                    @click="deleteRemind(courseRemindList[courseRemindList.length - 1].id)"
                                                                     style="color: #999; font-size: 10px;">删除该通知
                                                                 </el-button>
                                                             </span>
@@ -718,7 +742,9 @@
                 isChatMessageVisible: false
             },
             systemMessageList: [],
-            courseMessageList: [],
+            courseRemindList: [],
+            replyRemindList: [],
+            voteUpRemindList: [],
             messageSetting: {
                 allRemind: true,
                 course: true,
@@ -726,6 +752,7 @@
                 voteUp: true,
                 chat: true
             },
+            unreadMessageCount: {}
         },
         methods: {
             verify() {
@@ -734,6 +761,7 @@
                         this.user = data.queryResult.data[0];
                         this.getUserMessageSetting();
                         this.getMessageData();
+                        this.getRemindData();
                     } else {
                         location.href = "../index.html"
                     }
@@ -769,8 +797,19 @@
             getMessageData() {
                 yxt.http.get("message/userId/" + this.user.id).then(({ data }) => {
                     if (data.success) {
-                        this.systemMessageList = data.queryResult.data.filter(message => message.messageType === 0);
-                        this.courseMessageList = data.queryResult.data.filter(message => message.messageType === 1);
+                        this.systemMessageList = data.queryResult.data;
+                        this.getUnreadMessageCount();
+                    }
+                })
+            },
+            getRemindData() {
+                yxt.http.get("message/eventRemind/userId/" + this.user.id).then(({ data }) => {
+                    if (data.success) {
+                        let remindList = data.queryResult.data;
+                        remindList.forEach(remind => remind.remindTime = remind.remindTime.substring(0, 16));
+                        this.courseRemindList = remindList.filter(courseRemind => courseRemind.remindType === 0);
+                        this.replyRemindList = remindList.filter(replyRemind => replyRemind.remindType === 1);
+                        this.voteUpRemindList = remindList.filter(voteUpRemind => voteUpRemind.remindType === 2);
                     }
                 })
             },
@@ -778,6 +817,13 @@
                 for (let k in this.visible) {
                     this.visible[k] = k === key;
                 }
+            },
+            getUnreadMessageCount() {
+                yxt.http.get("message/unreadCount/userId/" + this.user.id).then(({ data }) => {
+                    if (data.success) {
+                        this.unreadMessageCount = data.queryResult.data[0];
+                    }
+                })
             }
         },
         created() {
@@ -790,6 +836,15 @@
                     this.updateUserMessageSetting();
                 },
             },
+        },
+        computed: {
+            totalUnreadCount() {
+                let totalCount = 0;
+                for (let key in this.unreadMessageCount) {
+                    totalCount += this.unreadMessageCount[key];
+                }
+                return totalCount;
+            }
         },
     })
 </script>

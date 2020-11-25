@@ -45,24 +45,59 @@
                             <el-menu-item index="4" class="header-text">我的精品</el-menu-item>
                         </el-menu>
                     </el-col>
-                    <!-- 头像下拉菜单 -->
-                    <el-col :span="4">
+                    <!-- 消息提醒 -->
+                    <el-col :span="1.5">
                         <el-menu class="el-menu-demo" mode="horizontal">
-                            <el-menu-item>
-                                <i class="el-icon-bell"></i>
-                                <el-badge is-dot class="item"></el-badge>
-                            </el-menu-item>
+                            <el-submenu>
+                                <template slot="title">
+                                    <i class="el-icon-bell"></i>
+                                    <el-badge v-show="totalUnreadCount != 0" :value="totalUnreadCount" :max="10"
+                                        class="item">
+                                </template>
+                                <el-menu-item @click="location.href = 'user/message.html' "><i
+                                        class="el-icon-message-solid"></i> 系统通知 <el-badge
+                                        v-if="unreadMessageCount.systemMessageCount != 0"
+                                        :value="unreadMessageCount.systemMessageCount" class="item">
+                                </el-menu-item>
+                                <el-menu-item @click="location.href = 'user/message.html' "><i
+                                        class="el-icon-notebook-2"></i> 课程相关 <el-badge
+                                        v-if="unreadMessageCount.courseMessageCount != 0"
+                                        :value="unreadMessageCount.courseMessageCount" class="item">
+                                </el-menu-item>
+                                <el-menu-item @click="location.href = 'user/message.html' "><i
+                                        class="fa fa-mail-forward" style="margin-left: 6px; margin-right: 10px;"></i>
+                                    回复我的 <el-badge v-if="unreadMessageCount.replyMessageCount != 0"
+                                        :value="unreadMessageCount.replyMessageCount" class="item">
+                                </el-menu-item>
+                                <el-menu-item @click="location.href = 'user/message.html' "><i class="fa fa-thumbs-o-up"
+                                        style="margin-left: 6px; margin-right: 12px;"></i> 收到的赞 <el-badge
+                                        v-if="unreadMessageCount.voteUpMessageCount != 0"
+                                        :value="unreadMessageCount.voteUpMessageCount" class="item">
+                                </el-menu-item>
+                                <el-menu-item @click="location.href = 'user/message.html' "><i
+                                        class="el-icon-chat-dot-round"></i> 我的私信 <el-badge
+                                        v-if="unreadMessageCount.chatMessageCount != 0"
+                                        :value="unreadMessageCount.chatMessageCount" class="item">
+                                </el-menu-item>
+                            </el-submenu>
+                        </el-menu>
+                    </el-col>
+                    <!-- 头像下拉菜单 -->
+                    <el-col :span="2.5">
+                        <el-menu class="el-menu-demo" mode="horizontal">
                             <el-submenu>
                                 <template slot="title">
                                     <span v-text="user.username" style="color: black; margin: 20px 10px;">用户名</span>
                                     <el-avatar size="large" :src="user.avatar">
                                     </el-avatar>
                                 </template>
-                                <el-menu-item @click="location.href = 'user/setting.html' "><i class="el-icon-setting"></i>个人设置</el-menu-item>
-                                <el-menu-item @click="location.href = 'user/message.html' "><i class="el-icon-position"></i>
-                                    消息中心</el-menu-item>
+                                <el-menu-item @click="location.href = 'user/setting.html' "><i
+                                        class="el-icon-setting"></i> 个人设置</el-menu-item>
+                                <el-menu-item @click="location.href = 'user/message.html' "><i
+                                        class="el-icon-position"></i> 消息中心</el-menu-item>
                                 <el-menu-item @click="logout()"><i class="fa fa-sign-out"
-                                        style="margin-left: 6px; margin-right: 9px;"></i> <span>退出账户</span>
+                                        style="margin-left: 6px; margin-right: 9px;"></i>
+                                    <span>退出账户</span>
                                 </el-menu-item>
                             </el-submenu>
                         </el-menu>
@@ -344,7 +379,7 @@
                                                 <el-col :span="24">
                                                     <el-link :underline="false"
                                                         style="font-size: 26px;float: left;padding-left: 30px;margin-top: 10px;"
-                                                        :href="user.isTeacher ? './homeworkReview.html?id=' + homework.id : ''">
+                                                        :href="user.isTeacher ? './homeworkReview.html?id=' + homework.id : 'submitHomework.html?id=' + homework.id">
                                                         <span style="font-weight: bold"
                                                             v-text="homework.title">范例_第一次作业</span>
                                                     </el-link>
@@ -1417,7 +1452,8 @@
                                             <el-row style="height: 75px">
                                                 <el-col :span="24">
                                                     <el-link :underline="false"
-                                                        style="font-size: 26px;float: left;padding-left: 30px;padding-top: 30px" @click="location.href = 'noticeDetail.html?id=' + notice.id">
+                                                        style="font-size: 26px;float: left;padding-left: 30px;padding-top: 30px"
+                                                        @click="location.href = 'noticeDetail.html?id=' + notice.id">
                                                         <span v-text="notice.title">范例_公告一</span>
                                                     </el-link>
                                                 </el-col>
@@ -1702,7 +1738,8 @@
             delHomeworkVisible: false,
             resourceList: [],
             resourceAncestors: [],
-            parentResourceId: -1
+            parentResourceId: -1,
+            unreadMessageCount: {}
         },
         methods: {
             initHomeworkEditor() {
@@ -2027,6 +2064,7 @@
                             })
                         });
                         this.getHomeworkData();
+                        this.getUnreadMessageCount();
                     } else {
                         location.href = "../index.html"
                     }
@@ -2062,10 +2100,6 @@
                 })
             },
             getResourceData(courseId, parentResourceId) {
-                // 如果请求同一目录下的文件（查询所有文件除外），则不作任何操作
-                /* if (this.parentResourceId === parentResourceId && parentResourceId != -1) {
-                    return;
-                } */
                 yxt.http.get("resource/courseId/" + courseId + "?parentResourceId=" + parentResourceId).then(({ data }) => {
                     if (data.success) {
                         this.resourceList = data.queryResult.data;
@@ -2189,6 +2223,7 @@
                 }).then(({ data }) => {
                     if (data.success) {
                         const courseResource = {
+                            teacherId: this.user.id,
                             courseId: this.course.id,
                             resourceId: data.queryResult.data[0].id
                         }
@@ -2229,6 +2264,13 @@
             getSimpleText(html) {
                 let re1 = new RegExp("<.+?>", "g"); // 匹配 html 标签的正则表达式，"g"是搜索匹配多个符合的内容
                 return html.replace(re1, '');
+            },
+            getUnreadMessageCount() {
+                yxt.http.get("message/unreadCount/userId/" + this.user.id).then(({ data }) => {
+                    if (data.success) {
+                        this.unreadMessageCount = data.queryResult.data[0];
+                    }
+                })
             }
         },
         created() {
@@ -2248,6 +2290,13 @@
                     resourceListRows[row].push(resource);
                 })
                 return resourceListRows;
+            },
+            totalUnreadCount() {
+                let totalCount = 0;
+                for (let key in this.unreadMessageCount) {
+                    totalCount += this.unreadMessageCount[key];
+                }
+                return totalCount;
             }
         },
     })

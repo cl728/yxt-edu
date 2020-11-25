@@ -52,13 +52,46 @@
                             <el-menu-item index="4" class="header-text">我的精品</el-menu-item>
                         </el-menu>
                     </el-col>
-                    <!-- 头像下拉菜单 -->
-                    <el-col :span="4">
+                    <!-- 消息提醒 -->
+                    <el-col :span="1.5">
                         <el-menu class="el-menu-demo" mode="horizontal">
-                            <el-menu-item>
-                                <i class="el-icon-bell"></i>
-                                <el-badge is-dot class="item"></el-badge>
-                            </el-menu-item>
+                            <el-submenu>
+                                <template slot="title">
+                                    <i class="el-icon-bell"></i>
+                                    <el-badge v-show="totalUnreadCount != 0" :value="totalUnreadCount" :max="10"
+                                        class="item">
+                                </template>
+                                <el-menu-item @click="location.href = 'user/message.html' "><i
+                                        class="el-icon-message-solid"></i> 系统通知 <el-badge
+                                        v-if="unreadMessageCount.systemMessageCount != 0"
+                                        :value="unreadMessageCount.systemMessageCount" class="item">
+                                </el-menu-item>
+                                <el-menu-item @click="location.href = 'user/message.html' "><i
+                                        class="el-icon-notebook-2"></i> 课程相关 <el-badge
+                                        v-if="unreadMessageCount.courseMessageCount != 0"
+                                        :value="unreadMessageCount.courseMessageCount" class="item">
+                                </el-menu-item>
+                                <el-menu-item @click="location.href = 'user/message.html' "><i
+                                        class="fa fa-mail-forward" style="margin-left: 6px; margin-right: 10px;"></i>
+                                    回复我的 <el-badge v-if="unreadMessageCount.replyMessageCount != 0"
+                                        :value="unreadMessageCount.replyMessageCount" class="item">
+                                </el-menu-item>
+                                <el-menu-item @click="location.href = 'user/message.html' "><i class="fa fa-thumbs-o-up"
+                                        style="margin-left: 6px; margin-right: 12px;"></i> 收到的赞 <el-badge
+                                        v-if="unreadMessageCount.voteUpMessageCount != 0"
+                                        :value="unreadMessageCount.voteUpMessageCount" class="item">
+                                </el-menu-item>
+                                <el-menu-item @click="location.href = 'user/message.html' "><i
+                                        class="el-icon-chat-dot-round"></i> 我的私信 <el-badge
+                                        v-if="unreadMessageCount.chatMessageCount != 0"
+                                        :value="unreadMessageCount.chatMessageCount" class="item">
+                                </el-menu-item>
+                            </el-submenu>
+                        </el-menu>
+                    </el-col>
+                    <!-- 头像下拉菜单 -->
+                    <el-col :span="2.5">
+                        <el-menu class="el-menu-demo" mode="horizontal">
                             <el-submenu>
                                 <template slot="title">
                                     <span v-text="user.username" style="color: black; margin: 20px 10px;">用户名</span>
@@ -70,7 +103,8 @@
                                 <el-menu-item @click="location.href = 'user/message.html' "><i
                                         class="el-icon-position"></i> 消息中心</el-menu-item>
                                 <el-menu-item @click="logout()"><i class="fa fa-sign-out"
-                                        style="margin-left: 6px; margin-right: 9px;"></i> <span>退出账户</span>
+                                        style="margin-left: 6px; margin-right: 9px;"></i>
+                                    <span>退出账户</span>
                                 </el-menu-item>
                             </el-submenu>
                         </el-menu>
@@ -569,7 +603,8 @@
                 email: ""
             },
             updateCourse: {},
-            updateCourseFormVisable: false
+            updateCourseFormVisable: false,
+            unreadMessageCount: {}
         },
         methods: {
             handleSelect(key, keyPath) {
@@ -756,12 +791,20 @@
                 let regEmail = /^[a-zA-Z0-9_-]+@[a-zA-Z0-9_-]+(\.[a-zA-Z0-9_-]+)+$/;
                 return regEmail.test(email);
             },
+            getUnreadMessageCount() {
+                yxt.http.get("message/unreadCount/userId/" + this.user.id).then(({ data }) => {
+                    if (data.success) {
+                        this.unreadMessageCount = data.queryResult.data[0];
+                    }
+                })
+            }
         },
         created() {
             yxt.http.get("/auth/verify/2").then(({ data }) => {
                 if (data.success) {
                     this.user = data.queryResult.data[0];
                     this.getCourseData();
+                    this.getUnreadMessageCount();
                 } else {
                     location.href = "index.html"
                 }
@@ -802,6 +845,13 @@
                     filedCourseListRows[row].push(filedCourse);
                 })
                 return filedCourseListRows;
+            },
+            totalUnreadCount() {
+                let totalCount = 0;
+                for (let key in this.unreadMessageCount) {
+                    totalCount += this.unreadMessageCount[key];
+                }
+                return totalCount;
             }
         },
     })
