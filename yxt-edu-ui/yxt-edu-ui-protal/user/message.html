@@ -275,7 +275,7 @@
                                             <el-divider></el-divider>
                                         </div>
                                         <!-- 最后一个 -->
-                                        <div>
+                                        <div v-if="courseRemindList.length > 1">
                                             <el-row style="margin-top: 20px;">
                                                 <el-col :span="1">
                                                     <el-avatar size="small"
@@ -343,21 +343,24 @@
                                         <div>
                                             <el-row>
                                                 <el-col :span="1">
-                                                    <el-avatar size="small"
-                                                        src="http://www.pava.run/group1/M00/00/00/rBAABV-rZ9KAOAoyAAAnvyJPq-0893.jpg">
+                                                    <el-avatar size="small" :src="replyRemindList[0].sender.avatar">
                                                     </el-avatar>
                                                 </el-col>
                                                 <el-col :span="2.5" style="margin-top: 5px;">
-                                                    <span style="font-size: 14px; color: #222;">Colin</span>
+                                                    <span style="font-size: 14px; color: #222;"
+                                                        v-text="replyRemindList[0].sender.username">Colin</span>
                                                     <span style="color: #999; font-size: small;">回复了我的评论：</span>
-                                                    <el-link type="info" :underline="false">我的评论内容</el-link>
+                                                    <el-link type="info" :underline="false"
+                                                        v-text="replyRemindList[0].targetContent">我的评论内容</el-link>
                                                 </el-col>
                                             </el-row>
                                             <el-row>
                                                 <el-col :span="24">
                                                     <span style="float: left;padding-left: 20px;margin-top: 3px;">
                                                         <span style="font-size: 14px;color: #222">
-                                                            <el-link type="info" :underline="false">Colin回复的内容</el-link>
+                                                            <el-link type="info" :underline="false"
+                                                                v-text="replyRemindList[0].sourceContent">Colin回复的内容
+                                                            </el-link>
                                                         </span>
                                                     </span>
                                                 </el-col>
@@ -390,24 +393,27 @@
                                             <el-divider></el-divider>
                                         </div>
                                         <!-- 中间 -->
-                                        <div v-for="num in 2">
+                                        <div v-for="(replyRemind, index) in replyRemindList"
+                                            v-if="index > 0 && replyRemindList.length - 1 > index">
                                             <el-row style="margin-top: 20px;">
                                                 <el-col :span="1">
-                                                    <el-avatar size="small"
-                                                        src="http://www.pava.run/group1/M00/00/00/rBAABV-rZ9KAOAoyAAAnvyJPq-0893.jpg">
+                                                    <el-avatar size="small" :src="replyRemind.sender.avatar">
                                                     </el-avatar>
                                                 </el-col>
                                                 <el-col :span="2.5" style="margin-top: 5px;">
-                                                    <span style="font-size: 14px; color: #222;">Colin</span>
+                                                    <span style="font-size: 14px; color: #222;"
+                                                        v-text="replyRemind.sender.username">Colin</span>
                                                     <span style="color: #999; font-size: small;">回复了我的评论：</span>
-                                                    <el-link type="info" :underline="false">我的评论内容</el-link>
+                                                    <el-link type="info" :underline="false"
+                                                        v-text="replyRemind.targetContent">我的评论内容</el-link>
                                                 </el-col>
                                             </el-row>
                                             <el-row>
                                                 <el-col :span="24">
                                                     <span style="float: left;padding-left: 20px;margin-top: 3px;">
                                                         <span style="font-size: 14px;color: #222">
-                                                            <el-link type="info" :underline="false">Colin回复的内容</el-link>
+                                                            <el-link type="info" :underline="false"
+                                                                v-text="replyRemind.sourceContent">Colin回复的内容</el-link>
                                                         </span>
                                                     </span>
                                                 </el-col>
@@ -440,24 +446,29 @@
                                             <el-divider></el-divider>
                                         </div>
                                         <!-- 最后一个 -->
-                                        <div>
+                                        <div v-if="replyRemindList.length > 1">
                                             <el-row style="margin-top: 20px;">
                                                 <el-col :span="1">
                                                     <el-avatar size="small"
-                                                        src="http://www.pava.run/group1/M00/00/00/rBAABV-rZ9KAOAoyAAAnvyJPq-0893.jpg">
+                                                        :src="replyRemindList[replyRemindList.length - 1].sender.avatar">
                                                     </el-avatar>
                                                 </el-col>
                                                 <el-col :span="2.5" style="margin-top: 5px;">
-                                                    <span style="font-size: 14px; color: #222;">Colin</span>
+                                                    <span style="font-size: 14px; color: #222;"
+                                                        v-text="replyRemindList[replyRemindList.length - 1].sender.username">Colin</span>
                                                     <span style="color: #999; font-size: small;">回复了我的评论：</span>
-                                                    <el-link type="info" :underline="false">我的评论内容</el-link>
+                                                    <el-link type="info" :underline="false"
+                                                        v-text="replyRemindList[replyRemindList.length - 1].targetContent">
+                                                        我的评论内容</el-link>
                                                 </el-col>
                                             </el-row>
                                             <el-row>
                                                 <el-col :span="24">
                                                     <span style="float: left;padding-left: 20px;margin-top: 3px;">
                                                         <span style="font-size: 14px;color: #222">
-                                                            <el-link type="info" :underline="false">Colin回复的内容</el-link>
+                                                            <el-link type="info" :underline="false"
+                                                                v-text="replyRemindList[replyRemindList.length - 1].sourceContent">
+                                                                Colin回复的内容</el-link>
                                                         </span>
                                                     </span>
                                                 </el-col>
@@ -751,7 +762,11 @@
             },
             systemMessageList: [],
             courseRemindList: [],
-            replyRemindList: [],
+            replyRemindList: [
+                {
+                    sender: {}
+                }
+            ],
             voteUpRemindList: [],
             messageSetting: {
                 allRemind: true,
