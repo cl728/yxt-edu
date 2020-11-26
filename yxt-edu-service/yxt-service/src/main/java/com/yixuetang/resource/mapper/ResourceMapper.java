@@ -23,27 +23,45 @@ public interface ResourceMapper extends BaseMapper<Resource> {
     void updateParentResourceIdById(@Param("parentResourceId") Long parentResourceId, @Param("id") Long id);
 
     @Select("<script>" +
-                "select id, type, ext, name, location, create_time from t_resource " +
-                    "<where>" +
-                        " and id in (select resource_id from t_course_resource where course_id = #{courseId})" +
-                            "<if test='parentResourceId != -1'>" +
-                                "and parent_resource_id = #{parentResourceId}" +
-                            "</if>" +
-                            "<if test='parentResourceId == -1'>" +
-                                "and parent_resource_id is null" +
-                            "</if>" +
-                    "</where>" +
-                "order by type, create_time" +
+            "select id, type, ext, name, location, create_time from t_resource " +
+            "<where>" +
+            " and id in (select resource_id from t_course_resource where course_id = #{courseId})" +
+            "<if test='parentResourceId != -1'>" +
+            "and parent_resource_id = #{parentResourceId}" +
+            "</if>" +
+            "<if test='parentResourceId == -1'>" +
+            "and parent_resource_id is null" +
+            "</if>" +
+            "</where>" +
+            "order by type, create_time" +
             "</script>")
-    List<Resource> findByCourseIdAndParentId(@Param( "courseId" ) Long courseId, @Param( "parentResourceId" ) Long parentResourceId);
+    List<Resource> findByCourseIdAndParentId(@Param("courseId") Long courseId, @Param("parentResourceId") Long parentResourceId);
 
     @Results(id = "ancestorsMap", value = {
             @Result(column = "parent_resource_id", property = "parentResource",
-            one = @One(select = "com.yixuetang.resource.mapper.ResourceMapper.findParentByParentId", fetchType = FetchType.EAGER))
+                    one = @One(select = "com.yixuetang.resource.mapper.ResourceMapper.findParentByParentId", fetchType = FetchType.EAGER))
     })
-    @Select( "select id, parent_resource_id, name from t_resource where id = #{resourceId}" )
+    @Select("select id, parent_resource_id, name from t_resource where id = #{resourceId}")
     Resource findAncestorsByResourceId(Long resourceId);
 
     @Select("select id, name from t_resource where id = #{parentResourceId}")
     Resource findParentByParentId(Long parentResourceId);
+
+    @Results(id = "resourceMap", value = {
+            @Result(id = true, column = "id", property = "id"),
+            @Result(column = "content_type", property = "contentType"),
+            @Result(column = "create_time", property = "createTime"),
+            @Result(column = "update_time", property = "updateTime"),
+            @Result(column = "user_id", property = "user",
+                    one = @One(select = "com.yixuetang.user.mapper.UserMapper.findById", fetchType = FetchType.EAGER)),
+            @Result(column = "parent_resource_id", property = "parentResource",
+                    one = @One(select = "com.yixuetang.resource.mapper.ResourceMapper.findParentByParentId", fetchType = FetchType.LAZY)),
+            @Result(column = "id", property = "childResourceList",
+                    one = @One(select = "com.yixuetang.resource.mapper.ResourceMapper.findChildResourceListByResourceId", fetchType = FetchType.EAGER)),
+    })
+    @Select("select * from t_resource where id = #{resourceId}")
+    Resource findById(Long resourceId);
+
+    @Select("select * from t_resource where parent_resource_id = #{resourceId}")
+    List<Resource> findChildResourceListByResourceId(Long resourceId);
 }

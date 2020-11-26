@@ -1,6 +1,7 @@
 package com.yixuetang.utils.resource;
 
 import com.github.tobato.fastdfs.domain.StorePath;
+import com.github.tobato.fastdfs.exception.FdfsUnsupportStorePathException;
 import com.github.tobato.fastdfs.proto.storage.DownloadByteArray;
 import com.github.tobato.fastdfs.service.FastFileStorageClient;
 import com.yixuetang.entity.resource.Resource;
@@ -27,50 +28,70 @@ public class ResourceUtils {
     @Autowired
     private FastFileStorageClient storageClient;
 
-    private static final Logger LOGGER = LoggerFactory.getLogger( ResourceUtils.class );
+    private static final Logger LOGGER = LoggerFactory.getLogger(ResourceUtils.class);
 
     public String upload(MultipartFile file) {
         StorePath storePath;
         try {
-            storePath = this.storageClient.uploadFile( file.getInputStream(), file.getSize(),
-                    StringUtils.substringAfterLast( file.getOriginalFilename(), "." ), null );
+            storePath = this.storageClient.uploadFile(file.getInputStream(), file.getSize(),
+                    StringUtils.substringAfterLast(file.getOriginalFilename(), "."), null);
 
             // 生成url地址
             return "http://www.pava.run/" + storePath.getFullPath();
         } catch (IOException e) {
-            LOGGER.error( "服务器内部错误：{}，所上传文件名为：{}", e.getMessage(), file.getOriginalFilename() );
+            LOGGER.error("服务器内部错误：{}，所上传文件名为：{}", e.getMessage(), file.getOriginalFilename());
             return null;
         }
     }
 
     public void download(HttpServletResponse response, Resource resource) {
         String filePath = resource.getLocation();
-        StorePath storePath = StorePath.praseFromUrl( filePath );
+        StorePath storePath = StorePath.praseFromUrl(filePath);
 
         DownloadByteArray downloadByteArray = new DownloadByteArray();
-        byte[] data = this.storageClient.downloadFile( storePath.getGroup(), storePath.getPath(), downloadByteArray );
+        byte[] data = this.storageClient.downloadFile(storePath.getGroup(), storePath.getPath(), downloadByteArray);
 
         try {
 
             response.reset();
 
             // 跨域设置
-            response.addHeader( "Access-Control-Allow-Origin", "http://www.yixuetang.com" );
-            response.addHeader( "Access-Control-Allow-Methods", "GET, POST, PUT, DELETE" );
-            response.addHeader( "Access-Control-Allow-Credentials", "true" );
+            response.addHeader("Access-Control-Allow-Origin", "http://www.yixuetang.com");
+            response.addHeader("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE");
+            response.addHeader("Access-Control-Allow-Credentials", "true");
 
             // inline在浏览器中直接显示，不提示用户下载
             // attachment弹出对话框，提示用户进行下载保存本地
             // 默认为inline方式
-            response.setHeader( "Content-Disposition", "attachment;filename=" + resource.getName() );
+            response.setHeader("Content-Disposition", "attachment;filename=" + resource.getName());
 
-            response.addHeader( "Content-Length", "" + data.length );
-            response.setContentType( resource.getContentType() + ";charset=UTF-8" );
+            response.addHeader("Content-Length", "" + data.length);
+            response.setContentType(resource.getContentType() + ";charset=UTF-8");
 
-            IOUtils.write( data, response.getOutputStream() );
+            IOUtils.write(data, response.getOutputStream());
 
         } catch (Exception ex) {
-            LOGGER.error( "下载文件响应客户端发生异常！异常原因：{}", ex );
+            LOGGER.error("下载文件响应客户端发生异常！异常原因：{}", ex);
+        }
+    }
+
+    /**
+     * 删除文件
+     *
+     * @param fileUrl 文件访问地址
+     * @return boolean
+     */
+    public boolean delete(String fileUrl) {
+        if (StringUtils.isEmpty(fileUrl)) {
+            return false;
+        }
+        try {
+            StorePath storePath = StorePath.praseFromUrl(fileUrl);
+            storageClient.deleteFile(storePath.getGroup(), storePath.getPath());
+            return true;
+        } catch (FdfsUnsupportStorePathException e) {
+            LOGGER.error("删除文件响应客户端发生异常！异常原因：{}", e);
+            return false;
         }
     }
 }

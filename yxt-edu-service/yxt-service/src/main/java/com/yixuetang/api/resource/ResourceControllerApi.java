@@ -22,6 +22,15 @@ import javax.servlet.http.HttpServletResponse;
 @Api(value = "资源模块接口", description = "资源模块接口，提供资源的上传、下载")
 public interface ResourceControllerApi {
 
+    @ApiOperation("删除文件")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "resourceId", value = "资源id", required = true,
+                    paramType = "path", dataType = "long"),
+            @ApiImplicitParam(name = "userId", value = "用户id", required = true,
+                    paramType = "path", dataType = "long"),
+    })
+    CommonResponse delete(Long resourceId, Long userId);
+
     @ApiOperation("上传文件")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "userId", value = "用户id", required = true,
@@ -31,7 +40,7 @@ public interface ResourceControllerApi {
     })
     CommonResponse upload(MultipartFile file, Long userId, Long parentResourceId);
 
-    @ApiOperation( "使用 wangEditor 上传文件" )
+    @ApiOperation("使用 wangEditor 上传文件")
     @ApiImplicitParam(name = "userId", value = "用户id", required = true,
             paramType = "path", dataType = "long")
     UploadResponse upload(MultipartFile file, Long userId);
@@ -76,10 +85,10 @@ public interface ResourceControllerApi {
     @ApiImplicitParams({
             @ApiImplicitParam(name = "studentId", value = "学生id", required = true,
                     paramType = "path", dataType = "long"),
-            @ApiImplicitParam(name = "homeworkId", value = "作业id",required = true,
+            @ApiImplicitParam(name = "homeworkId", value = "作业id", required = true,
                     paramType = "path", dataType = "long")
     })
-    QueryResponse findHomework(Long studentId,long homeworkId);
+    QueryResponse findHomework(Long studentId, long homeworkId);
 
     @ApiOperation("修改资源名称")
     @ApiImplicitParam(name = "resourceId", value = "资源id", required = true,

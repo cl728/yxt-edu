@@ -79,18 +79,28 @@ public interface ResourceService {
 
     /**
      * 教师查询某个学生在某个课程上传的作业
-     * @param studentId 学生id
-     * @param homeworkId  作业id
+     *
+     * @param studentId  学生id
+     * @param homeworkId 作业id
      * @return 响应结果实体类
      */
     QueryResponse findHomework(Long studentId, long homeworkId);
 
     /**
-     *  重命名资源
+     * 重命名资源
      *
-     * @param resourceId    资源id
-     * @param name          资源名
-     * @return  响应结果实体类
+     * @param resourceId 资源id
+     * @param name       资源名
+     * @return 响应结果实体类
      */
     CommonResponse renameResource(long resourceId, String name);
+
+    /**
+     * 删除资源
+     *
+     * @param resourceId 资源id
+     * @param userId     用户id
+     * @return 响应结果实体类
+     */
+    CommonResponse delete(Long resourceId, Long userId);
 }

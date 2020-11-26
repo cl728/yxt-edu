@@ -30,36 +30,42 @@ public class ResourceController implements ResourceControllerApi {
     @Autowired
     private ResourceService resourceService;
 
+    @DeleteMapping("delete/resourceId/{resourceId}/userId/{userId}")
+    @Override
+    public CommonResponse delete(@PathVariable Long resourceId, @PathVariable Long userId) {
+        return this.resourceService.delete(resourceId, userId);
+    }
+
     @Override
     @PostMapping("upload/userId/{userId}")
     public CommonResponse upload(MultipartFile file,
                                  @PathVariable Long userId,
                                  @RequestParam(required = false) Long parentResourceId) {
-        return this.resourceService.upload( file, userId, parentResourceId );
+        return this.resourceService.upload(file, userId, parentResourceId);
     }
 
     @Override
     @PostMapping("upload/editor/userId/{userId}")
     public UploadResponse upload(MultipartFile file, @PathVariable Long userId) {
-        QueryResponse queryResponse = (QueryResponse) this.resourceService.upload( file, userId, null );
+        QueryResponse queryResponse = (QueryResponse) this.resourceService.upload(file, userId, null);
 
         @SuppressWarnings("unchecked")
         List<Resource> data = queryResponse.getQueryResult().getData();
 
         return UploadResponse.builder()
-                .errno( queryResponse.isSuccess() ? 0 : 1 )
-                .data( Collections.singletonList(
-                        CollectionUtils.isEmpty( data )
+                .errno(queryResponse.isSuccess() ? 0 : 1)
+                .data(Collections.singletonList(
+                        CollectionUtils.isEmpty(data)
                                 ? null
-                                : data.get( 0 ).getLocation()
-                ) )
+                                : data.get(0).getLocation()
+                ))
                 .build();
     }
 
     @Override
     @GetMapping("download/resourceId/{resourceId}")
     public void download(@PathVariable Long resourceId, HttpServletResponse response) {
-        this.resourceService.download( resourceId, response );
+        this.resourceService.download(resourceId, response);
     }
 
     @Override
@@ -67,38 +73,38 @@ public class ResourceController implements ResourceControllerApi {
     public CommonResponse createFolder(@PathVariable Long userId,
                                        @RequestParam(required = false) Long parentResourceId,
                                        @RequestBody InsertResource resource) {
-        return this.resourceService.createFolder( userId, parentResourceId, resource );
+        return this.resourceService.createFolder(userId, parentResourceId, resource);
     }
 
     @Override
     @GetMapping("courseId/{courseId}")
     public QueryResponse findByCourseIdAndParentResourceId(@PathVariable Long courseId,
                                                            @RequestParam(required = false) Long parentResourceId) {
-        return this.resourceService.findByCourseIdAndResourceId( courseId, parentResourceId );
+        return this.resourceService.findByCourseIdAndResourceId(courseId, parentResourceId);
     }
 
     @Override
     @PostMapping("courseResource")
     public CommonResponse saveCourseResource(@RequestBody InsertCourseResource courseResource) {
-        return this.resourceService.saveCourseResource( courseResource );
+        return this.resourceService.saveCourseResource(courseResource);
     }
 
     @Override
     @GetMapping("resourceId/{resourceId}")
     public QueryResponse findByResourceId(@PathVariable Long resourceId) {
-        return this.resourceService.findByResourceId( resourceId );
+        return this.resourceService.findByResourceId(resourceId);
     }
 
     @Override
     @GetMapping("ancestors/resourceId/{resourceId}")
     public QueryResponse findAncestorsByResourceId(@PathVariable Long resourceId) {
-        return this.resourceService.findAncestorsByResourceId( resourceId );
+        return this.resourceService.findAncestorsByResourceId(resourceId);
     }
 
     @Override
     @GetMapping("homeworkId/{homeworkId}/studentId/{studentId}")
     public QueryResponse findHomework(@PathVariable Long studentId, @PathVariable long homeworkId) {
-        return resourceService.findHomework(studentId,homeworkId);
+        return resourceService.findHomework(studentId, homeworkId);
     }
 
     @Override
