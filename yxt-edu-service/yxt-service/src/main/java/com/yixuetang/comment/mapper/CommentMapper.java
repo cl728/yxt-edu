@@ -50,10 +50,18 @@ public interface CommentMapper extends BaseMapper<Comment> {
             " where t1.parent_comment_id = t2.id and t2.id = #{id}")
     List<Comment> findChildCommentsById(long id);
 
-    @Insert("insert into t_comment(notice_id,user_id,content,parent_comment_id,create_time) values(#{comment.notice.id},#{comment.user.id},#{comment.content},#{comment.parentComment.id},#{comment.createTime})")
-    void save(@Param("comment") Comment comment);
+  /*  @Insert("insert into t_comment(notice_id,user_id,content,parent_comment_id,create_time) values(#{comment.notice.id},#{comment.user.id},#{comment.content},#{comment.parentComment.id},#{comment.createTime})")
+    void save(@Param("comment") Comment comment);*/
 
     @ResultMap("commentMap")
     @Select("select * from t_comment where id = #{id}")
     Comment findById(@Param("id") long id);
+
+    @Update("update t_comment set parent_comment_id = #{parentCommentId} where id = #{commentId}")
+    void updateParentIdById(@Param("parentCommentId") long parentCommentId, @Param("commentId") Long commentId);
+
+    @Update("update t_comment set notice_id = #{noticeId}, user_id = #{userId} where id = #{commentId}")
+    void updateNoticeIdAndUserIdById(@Param("noticeId") long noticeId,
+                                     @Param("userId") long userId,
+                                     @Param("commentId") Long commentId);
 }

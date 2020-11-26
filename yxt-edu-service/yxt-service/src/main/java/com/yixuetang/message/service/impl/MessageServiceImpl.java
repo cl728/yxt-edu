@@ -268,7 +268,7 @@ public class MessageServiceImpl implements MessageService {
                             .sourceContent( this.getSourceContent( eventRemind.getRemindType(), eventRemind.getSourceId(), eventRemind.getSourceName() ) )
                             .targetContent( this.getTargetContent( eventRemind.getRemindType(), eventRemind.getTargetId(), eventRemind.getSourceName() ) )
                             .url( eventRemind.getUrl() )
-                            .remindTime( new Date() )
+                            .remindTime( eventRemind.getRemindTime() )
                             .build();
                     eventRemindRespList.add( eventRemindResp );
                     // 将事件提醒设置为已读状态
@@ -298,11 +298,11 @@ public class MessageServiceImpl implements MessageService {
         // 课程、回复、点赞、私信提醒根据用户的具体设置决定是否将未读条数查出
         if (!setting.getAllRemind()) {
             // 用户关闭了消息提醒
-            builder.courseMessageCount( 0 ).replayMessageCount( 0 ).voteUpMessageCount( 0 ).chatMessageCount( 0 );
+            builder.courseMessageCount( 0 ).replyMessageCount( 0 ).voteUpMessageCount( 0 ).chatMessageCount( 0 );
         } else {
             // 用户未关闭消息提醒，根据具体情况查询
             builder.courseMessageCount( setting.getCourse() ? this.getEventRemindCount( userId, 0 ) : 0 )
-                    .replayMessageCount( setting.getReply() ? this.getEventRemindCount( userId, 1 ) : 0 )
+                    .replyMessageCount( setting.getReply() ? this.getEventRemindCount( userId, 1 ) : 0 )
                     .voteUpMessageCount( setting.getVoteUp() ? this.getEventRemindCount( userId, 2 ) : 0 )
                     .chatMessageCount( setting.getChat() ? this.getEventRemindCount( userId, 3 ) : 0 );
         }

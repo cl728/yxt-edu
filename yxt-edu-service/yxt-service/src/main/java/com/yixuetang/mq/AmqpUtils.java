@@ -48,4 +48,27 @@ public class AmqpUtils {
         }
     }
 
+    public void sendReplyRemind(long userId, long receiverId, long commentId, long targetId, String url) {
+        EventRemind eventRemind = EventRemind.builder().id( null )
+                .remindType( 1 ) // 与回复相关，remindType 为 1
+                .senderId( userId ) // 发送者为评论的人
+                .courseId( null ) // 与之关联的课程，这里为 null
+                .receiverId( receiverId ) // 接收者为被评论的人
+                .sourceId( commentId ) // 事件源id
+                .targetId( targetId ) // 目标id，这里是被回复的评论id
+                .action( "回复" )   // 动作类型，这里是回复
+                .sourceName( "评论" )   // 事件源名称，这里是评论
+                .url( url ) // 事件所发生的地点链接
+                .status( Boolean.FALSE )  // 是否已读，默认为 false
+                .remindTime( new Date() )  // 提醒时间
+                .build();
+        ObjectMapper mapper = new ObjectMapper();
+        try {
+            String eventRemindJson = mapper.writeValueAsString( eventRemind );
+            this.amqpTemplate.convertAndSend( "YXT.REMIND.EXCHANGE", "YXT.REMIND.REPLY", eventRemindJson );
+        } catch (JsonProcessingException e) {
+            LOGGER.error( "使用 Jackson 解析实体类发生异常！异常原因：{}", e );
+        }
+    }
+
 }

@@ -21,7 +21,7 @@ public class UnreadCountResp {
 
     private Integer courseMessageCount;
 
-    private Integer replayMessageCount;
+    private Integer replyMessageCount;
 
     private Integer voteUpMessageCount;
 

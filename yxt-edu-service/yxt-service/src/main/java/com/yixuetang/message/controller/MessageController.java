@@ -24,7 +24,7 @@ public class MessageController implements MessageControllerApi {
     private MessageService messageService;
 
     @Override
-    @DeleteMapping("message/admin/messageId/{messageId}")
+    @DeleteMapping("admin/messageId/{messageId}")
     public CommonResponse deleteMessageById(@PathVariable Long messageId) {
         return this.messageService.deleteMessageById( messageId );
     }

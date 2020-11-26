@@ -14,6 +14,7 @@ import com.yixuetang.entity.response.code.notice.NoticeCode;
 import com.yixuetang.entity.response.code.user.UserCode;
 import com.yixuetang.entity.response.result.QueryResult;
 import com.yixuetang.entity.user.User;
+import com.yixuetang.mq.AmqpUtils;
 import com.yixuetang.notice.mapper.NoticeMapper;
 import com.yixuetang.user.mapper.UserMapper;
 import com.yixuetang.utils.exception.ExceptionThrowUtils;
@@ -22,6 +23,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
+import org.springframework.util.ObjectUtils;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -45,18 +47,21 @@ public class CommentServiceImpl implements CommentService {
     @Autowired
     private UserMapper userMapper;
 
+    @Autowired
+    private AmqpUtils amqpUtils;
+
     // 存放迭代找出的所有子代的集合
     private List<Comment> tempChildComments = new ArrayList<>();
 
     @Override
     public QueryResponse findTopCommentsByNoticeId(long noticeId) {
-        if (this.noticeMapper.selectOne(new QueryWrapper<Notice>().eq("id", noticeId).select("id")) == null) {
-            ExceptionThrowUtils.cast(CommonCode.INVALID_PARAM);
+        if (this.noticeMapper.selectOne( new QueryWrapper<Notice>().eq( "id", noticeId ).select( "id" ) ) == null) {
+            ExceptionThrowUtils.cast( CommonCode.INVALID_PARAM );
         }
-        List<Comment> topComments = this.commentMapper.findTopCommentsByNoticeId(noticeId);
+        List<Comment> topComments = this.commentMapper.findTopCommentsByNoticeId( noticeId );
         // 循环每个顶级评论，找出其子孙评论，并设置到其子级评论列表中
-        List<Comment> comments = this.eachComment(topComments);
-        return new QueryResponse(CommonCode.SUCCESS, new QueryResult<>(comments, comments.size()));
+        List<Comment> comments = this.eachComment( topComments );
+        return new QueryResponse( CommonCode.SUCCESS, new QueryResult<>( comments, comments.size() ) );
     }
 
     /**
@@ -72,31 +77,43 @@ public class CommentServiceImpl implements CommentService {
 
         // 1.参数验证
         if (postComment == null) {
-            ExceptionThrowUtils.cast(CommonCode.INVALID_PARAM);
+            ExceptionThrowUtils.cast( CommonCode.INVALID_PARAM );
         }
 
         // 2. 根据公告id查询出已有的公告信息
-        Notice notice = this.noticeMapper.findById(noticeId);
+        Notice notice = this.noticeMapper.findById( noticeId );
         if (notice == null) {
             //找不到公告
-            return new CommonResponse(NoticeCode.NOTICE_NOT_FOUND);
+            return new CommonResponse( NoticeCode.NOTICE_NOT_FOUND );
         }
 
         // 3. 根据用户id查询出已有的用户信息
-        User user = this.userMapper.findById(userId);
+        User user = this.userMapper.findById( userId );
         if (user == null) {
             //找不到用户
-            return new CommonResponse(UserCode.USER_NOT_FOUND);
+            return new CommonResponse( UserCode.USER_NOT_FOUND );
         }
 
         // 4. 发布评论
-        Comment comment = new Comment();
-        comment.setContent(postComment.getContent());
-        comment.setParentComment(this.commentMapper.findParentCommentById(postComment.getParentCommentId()));
-        comment.setCreateTime(new Date());
-        comment.setNotice(notice);
-        comment.setUser(user);
-        this.commentMapper.save(comment);
+        Comment comment = Comment.builder().id( null )
+                .content( postComment.getContent() )
+                .createTime( new Date() ).build();
+        this.commentMapper.insert( comment );
+
+        // 5. 关联 parentCommentId
+        if (postComment.getParentCommentId() != -1) {
+            this.commentMapper.updateParentIdById( postComment.getParentCommentId(), comment.getId() );
+
+            Long receiverId = this.commentMapper.findById( postComment.getParentCommentId() ).getUser().getId();
+            if (!ObjectUtils.nullSafeEquals( userId, receiverId )) {
+                // 发送异步事件提醒，告知被回复者有人回复了他的评论
+                this.amqpUtils.sendReplyRemind( userId, receiverId, comment.getId(), postComment.getParentCommentId(),
+                        "http://www.yixuetang.com/noticeDetail.html?id=" + noticeId );
+            }
+        }
+
+        // 6. 关联 noticeId 和 userId
+        this.commentMapper.updateNoticeIdAndUserIdById( noticeId, userId, comment.getId() );
 
         return CommonResponse.SUCCESS();
     }
@@ -112,34 +129,34 @@ public class CommentServiceImpl implements CommentService {
     public CommonResponse deleteCommentFromNotice(long commentId) {
 
         // 1. 根据评论id查询出已有的评论信息
-        Comment comment = this.commentMapper.findById(commentId);
+        Comment comment = this.commentMapper.findById( commentId );
         if (comment == null) {
             //找不到该评论
-            return new CommonResponse(CommentCode.COMMENT_NOT_FOUND);
+            return new CommonResponse( CommentCode.COMMENT_NOT_FOUND );
         }
 
         // 2. 判断该评论是否存在子评论
         List<Comment> childComments = comment.getChildComments();
-        if (!CollectionUtils.isEmpty(childComments)) {
+        if (!CollectionUtils.isEmpty( childComments )) {
             // 先删除子评论
-            childComments.forEach(childComment -> this.deleteCommentFromNotice(childComment.getId()));
+            childComments.forEach( childComment -> this.deleteCommentFromNotice( childComment.getId() ) );
         }
 
         // 3. 再根据评论id删除此评论
-        this.commentMapper.deleteById(commentId);
+        this.commentMapper.deleteById( commentId );
 
-        return new CommonResponse(CommonCode.SUCCESS);
+        return new CommonResponse( CommonCode.SUCCESS );
     }
 
     private List<Comment> eachComment(List<Comment> comments) {
         List<Comment> commentsView = new ArrayList<>();
         for (Comment comment : comments) {
             Comment c = new Comment();
-            BeanUtils.copyProperties(comment, c);
-            commentsView.add(c);
+            BeanUtils.copyProperties( comment, c );
+            commentsView.add( c );
         }
         // 合并评论的各层子代到第一级子代集合中
-        this.combineChildren(commentsView);
+        this.combineChildren( commentsView );
         return commentsView;
     }
 
@@ -149,27 +166,27 @@ public class CommentServiceImpl implements CommentService {
             List<Comment> replyComments = comment.getChildComments();
             for (Comment reply1 : replyComments) {
                 // 循环迭代，找出子代，存放在 tempChildComments 中
-                recursively(reply1, tempChildComments);
+                recursively( reply1, tempChildComments );
             }
             // 修改顶级节点的 childComments 为迭代处理后的集合
-            comment.setChildComments(tempChildComments);
+            comment.setChildComments( tempChildComments );
             // 清除临时存放区
             tempChildComments = new ArrayList<>();
         }
     }
 
     private void recursively(Comment comment, List<Comment> tempChildComments) {
-        if (!tempChildComments.contains(comment)) {
-            tempChildComments.add(comment); // 顶节点添加到临时存放集合
+        if (!tempChildComments.contains( comment )) {
+            tempChildComments.add( comment ); // 顶节点添加到临时存放集合
         }
         List<Comment> childComments = comment.getChildComments();
-        if (!CollectionUtils.isEmpty(childComments)) {
-            childComments.forEach(childComment -> {
-                tempChildComments.add(childComment);
-                if (!CollectionUtils.isEmpty(childComment.getChildComments())) {
-                    this.recursively(childComment, tempChildComments);
+        if (!CollectionUtils.isEmpty( childComments )) {
+            childComments.forEach( childComment -> {
+                tempChildComments.add( childComment );
+                if (!CollectionUtils.isEmpty( childComment.getChildComments() )) {
+                    this.recursively( childComment, tempChildComments );
                 }
-            });
+            } );
         }
     }
 }

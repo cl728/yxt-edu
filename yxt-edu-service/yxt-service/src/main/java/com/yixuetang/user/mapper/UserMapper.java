@@ -29,10 +29,10 @@ public interface UserMapper extends BaseMapper<User> {
     User findById(long id);
 
     @ResultMap("userMap")
-    @Select("select id, role_id, avatar, real_name from t_user where id = #{id}")
+    @Select("select id, role_id, avatar, real_name, username from t_user where id = #{id}")
     User findCommentUserById(long id);
 
-    @Select( "select id, username from t_user where id = #{id}" )
+    @Select("select id, username from t_user where id = #{id}")
     User findPublisherById(long id);
 
     /**
@@ -101,33 +101,33 @@ public interface UserMapper extends BaseMapper<User> {
     @Select("select u.avatar, u.real_name from t_user u, t_course c where c.id = #{courseId} and u.id = c.teacher_id")
     User findByCourseId(long courseId);
 
-    @ResultMap( "userMap" )
-    @Select( "<script>" +
-                "select id, role_id, username, avatar, ts_no, real_name " +
-                " from t_user " +
-                "<where>" +
-                    "<if test='ids != null and ids.size() > 0'> " +
-                        "<foreach collection='ids' open='and id in (' close=')' separator=', ' item='id'>" +
-                            "#{id}" +
-                        "</foreach>" +
-                    "</if>" +
-                    "<if test='search != null and search.length() > 0'> " +
-                        "and real_name like #{search} or ts_no like #{search}" +
-                    "</if>" +
-                "</where>" +
-            "</script>" )
-    List<User> findPageByIds(@Param("page") Page<User> page, @Param("ids") List<Long> ids, @Param( "search" ) String search);
+    @ResultMap("userMap")
+    @Select("<script>" +
+            "select id, role_id, username, avatar, ts_no, real_name " +
+            " from t_user " +
+            "<where>" +
+            "<if test='ids != null and ids.size() > 0'> " +
+            "<foreach collection='ids' open='and id in (' close=')' separator=', ' item='id'>" +
+            "#{id}" +
+            "</foreach>" +
+            "</if>" +
+            "<if test='search != null and search.length() > 0'> " +
+            "and real_name like #{search} or ts_no like #{search}" +
+            "</if>" +
+            "</where>" +
+            "</script>")
+    List<User> findPageByIds(@Param("page") Page<User> page, @Param("ids") List<Long> ids, @Param("search") String search);
 
-    @Select( "<script>" +
-                "select id, ts_no, real_name from t_user " +
-                    "<where>" +
-                        " and id in (select student_id from t_homework_student where homework_id = #{homeworkId})" +
-                        "<if test='search != null and search.length() > 0'>" +
-                            "and real_name like #{search} or ts_no like #{search}" +
-                        "</if>" +
-                    "</where>" +
-            "</script>" )
+    @Select("<script>" +
+            "select id, ts_no, real_name from t_user " +
+            "<where>" +
+            " and id in (select student_id from t_homework_student where homework_id = #{homeworkId})" +
+            "<if test='search != null and search.length() > 0'>" +
+            "and real_name like #{search} or ts_no like #{search}" +
+            "</if>" +
+            "</where>" +
+            "</script>")
     List<User> findPageByHomeworkId(@Param("page") Page<User> page,
                                     @Param("homeworkId") long homeworkId,
-                                    @Param( "search" ) String search);
+                                    @Param("search") String search);
 }
