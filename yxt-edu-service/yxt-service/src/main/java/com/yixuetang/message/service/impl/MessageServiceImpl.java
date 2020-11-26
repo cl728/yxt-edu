@@ -4,11 +4,15 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.yixuetang.comment.mapper.CommentMapper;
+import com.yixuetang.entity.comment.Comment;
+import com.yixuetang.entity.homework.Homework;
 import com.yixuetang.entity.message.EventRemind;
 import com.yixuetang.entity.message.Message;
 import com.yixuetang.entity.message.UserMessage;
 import com.yixuetang.entity.message.UserMessageSetting;
+import com.yixuetang.entity.notice.Notice;
 import com.yixuetang.entity.request.message.QueryPageRequestMessage;
+import com.yixuetang.entity.resource.Resource;
 import com.yixuetang.entity.response.CommonResponse;
 import com.yixuetang.entity.response.QueryResponse;
 import com.yixuetang.entity.response.code.CommonCode;
@@ -349,18 +353,22 @@ public class MessageServiceImpl implements MessageService {
             case 0: // 课程相关提醒
                 switch (sourceName) {
                     case "作业":  // 发布作业，查询新作业的标题
-                        sourceContent = this.homeworkMapper.selectById( sourceId ).getTitle();
+                        Homework homework = this.homeworkMapper.selectById( sourceId );
+                        sourceContent = homework == null ? "[该作业已被删除]" : homework.getTitle();
                         break;
-                    case "资源":  // 发布资源，查询新资源的名称
-                        sourceContent = this.resourceMapper.selectById( sourceId ).getName();
+                    case "资源":  // 发布资源，查询新资源的名称:
+                        Resource resource = this.resourceMapper.selectById( sourceId );
+                        sourceContent = resource == null ? "[该资源已被删除]" : resource.getName();
                         break;
                     case "公告":  // 发布公告，查询新公告的标题
-                        sourceContent = this.noticeMapper.selectById( sourceId ).getTitle();
+                        Notice notice = this.noticeMapper.selectById( sourceId );
+                        sourceContent = notice == null ? "[该公告已被删除]" : this.noticeMapper.selectById( sourceId ).getTitle();
                         break;
                 }
                 break;
             case 1: // 回复相关提醒，查询回复的评论内容
-                sourceContent = this.commentMapper.selectById( sourceId ).getContent();
+                Comment comment = this.commentMapper.selectById( sourceId );
+                sourceContent = comment == null ? "[该评论已被删除]" : comment.getContent();
                 break;
             default: // 点赞相关提醒，不用查询 sourceContent
                 break;
@@ -370,12 +378,14 @@ public class MessageServiceImpl implements MessageService {
 
     private String getTargetContent(Integer remindType, Long targetId, String sourceName) {
         String targetContent = null;
-        switch (remindType) { // 根据提醒类型，设置不同的 targetContent
+        Comment comment = this.commentMapper.selectById( targetId );
+        String commentTargetContent = comment == null ? "[该评论已被删除]" : comment.getContent();
+        switch (remindType) { // 根据提醒类型，设置不同的 targetContent，目前只需要处理回复和点赞这两种提醒类型
             case 1: // 回复相关提醒，查询被回复的评论内容
-                targetContent = this.commentMapper.selectById( targetId ).getContent();
+                targetContent = commentTargetContent;
                 break;
             case 2: // 点赞相关提醒，查询被点赞的评论内容
-                targetContent = this.commentMapper.selectById( targetId ).getContent();
+                targetContent = commentTargetContent;
                 break;
             default: // 课程相关提醒，不用查询 targetContent
                 break;
