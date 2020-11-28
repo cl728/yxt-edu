@@ -94,4 +94,9 @@ public interface ResourceControllerApi {
     @ApiImplicitParam(name = "resourceId", value = "资源id", required = true,
             paramType = "path", dataType = "long")
     CommonResponse renameResource(long resourceId, String name);
+
+    @ApiOperation("查询某一课程下的所有资源")
+    @ApiImplicitParam(name = "courseId", value = "课程id", required = true,
+            paramType = "path", dataType = "long")
+    QueryResponse findByCourseId(long courseId);
 }

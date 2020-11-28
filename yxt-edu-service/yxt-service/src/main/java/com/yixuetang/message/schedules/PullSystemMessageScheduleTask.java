@@ -37,7 +37,7 @@ public class PullSystemMessageScheduleTask {
     @Autowired
     private UserMessageMapper userMessageMapper;
 
-    @Scheduled(cron = "0/50 * * * * *")
+    @Scheduled(cron = "0 */5 * * * ?")
     @Transactional
     public void task() {
         List<Message> messageList = this.messageMapper.selectList( new QueryWrapper<Message>().eq( "status", Boolean.FALSE ) );
@@ -56,7 +56,7 @@ public class PullSystemMessageScheduleTask {
                             .forEach( userId -> {
                                 insertUserMessage.setReceiverId( userId );
                                 this.userMessageMapper.insert( insertUserMessage );
-                            });
+                            } );
                     break;
                 case 1: // 该系统通知发布到单一用户:
                     insertUserMessage.setReceiverId( message.getReceiverId() );

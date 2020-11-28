@@ -62,6 +62,6 @@ public interface ResourceMapper extends BaseMapper<Resource> {
     @Select("select * from t_resource where id = #{resourceId}")
     Resource findById(Long resourceId);
 
-    @Select("select * from t_resource where parent_resource_id = #{resourceId}")
+    @Select("select * from t_resource where parent_resource_id = #{resourceId} order by type, create_time")
     List<Resource> findChildResourceListByResourceId(Long resourceId);
 }

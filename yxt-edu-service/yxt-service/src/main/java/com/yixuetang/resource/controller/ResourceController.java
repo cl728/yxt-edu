@@ -30,7 +30,7 @@ public class ResourceController implements ResourceControllerApi {
     @Autowired
     private ResourceService resourceService;
 
-    @DeleteMapping("delete/resourceId/{resourceId}/userId/{userId}")
+    @DeleteMapping("resourceId/{resourceId}/userId/{userId}")
     @Override
     public CommonResponse delete(@PathVariable Long resourceId, @PathVariable Long userId) {
         return this.resourceService.delete(resourceId, userId);
@@ -111,5 +111,11 @@ public class ResourceController implements ResourceControllerApi {
     @PutMapping("resourceId/{resourceId}")
     public CommonResponse renameResource(@PathVariable long resourceId, @RequestBody String name) {
         return resourceService.renameResource(resourceId, name);
+    }
+
+    @Override
+    @GetMapping("all/courseId/{courseId}")
+    public QueryResponse findByCourseId(@PathVariable long courseId) {
+        return this.resourceService.findByCourseId( courseId );
     }
 }

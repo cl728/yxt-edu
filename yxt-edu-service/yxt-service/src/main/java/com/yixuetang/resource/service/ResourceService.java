@@ -103,4 +103,12 @@ public interface ResourceService {
      * @return 响应结果实体类
      */
     CommonResponse delete(Long resourceId, Long userId);
+
+    /**
+     * 查询某一课程下的所有资源
+     *
+     * @param courseId 课程id
+     * @return 响应结果实体类
+     */
+    QueryResponse findByCourseId(long courseId);
 }
