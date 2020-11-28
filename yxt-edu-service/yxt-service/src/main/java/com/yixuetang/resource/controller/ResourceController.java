@@ -3,6 +3,7 @@ package com.yixuetang.resource.controller;
 import com.yixuetang.api.resource.ResourceControllerApi;
 import com.yixuetang.entity.request.resource.InsertCourseResource;
 import com.yixuetang.entity.request.resource.InsertResource;
+import com.yixuetang.entity.request.resource.UpdateResource;
 import com.yixuetang.entity.resource.Resource;
 import com.yixuetang.entity.response.CommonResponse;
 import com.yixuetang.entity.response.QueryResponse;
@@ -109,8 +110,9 @@ public class ResourceController implements ResourceControllerApi {
 
     @Override
     @PutMapping("resourceId/{resourceId}")
-    public CommonResponse renameResource(@PathVariable long resourceId, @RequestBody String name) {
-        return resourceService.renameResource(resourceId, name);
+    public CommonResponse renameResource(@PathVariable long resourceId,
+                                         @RequestBody UpdateResource updateResource) {
+        return resourceService.renameResource(resourceId, updateResource.getName());
     }
 
     @Override

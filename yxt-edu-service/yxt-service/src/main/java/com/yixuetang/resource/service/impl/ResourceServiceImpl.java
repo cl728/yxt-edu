@@ -204,7 +204,9 @@ public class ResourceServiceImpl implements ResourceService {
 
     @Override
     public QueryResponse findByResourceId(Long resourceId) {
-        Resource resource = this.resourceMapper.selectOne( new QueryWrapper<Resource>().eq( "id", resourceId ).select( "name", "location" ) );
+        Resource resource = this.resourceMapper.selectOne( new QueryWrapper<Resource>()
+                .eq( "id", resourceId )
+                .select( "id", "type", "ext", "name", "location" ) );
         if (resource == null) {
             ExceptionThrowUtils.cast( CommonCode.INVALID_PARAM );
         }

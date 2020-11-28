@@ -2,6 +2,7 @@ package com.yixuetang.api.resource;
 
 import com.yixuetang.entity.request.resource.InsertCourseResource;
 import com.yixuetang.entity.request.resource.InsertResource;
+import com.yixuetang.entity.request.resource.UpdateResource;
 import com.yixuetang.entity.response.CommonResponse;
 import com.yixuetang.entity.response.QueryResponse;
 import com.yixuetang.entity.response.UploadResponse;
@@ -93,7 +94,7 @@ public interface ResourceControllerApi {
     @ApiOperation("修改资源名称")
     @ApiImplicitParam(name = "resourceId", value = "资源id", required = true,
             paramType = "path", dataType = "long")
-    CommonResponse renameResource(long resourceId, String name);
+    CommonResponse renameResource(long resourceId, UpdateResource updateResource);
 
     @ApiOperation("查询某一课程下的所有资源")
     @ApiImplicitParam(name = "courseId", value = "课程id", required = true,
