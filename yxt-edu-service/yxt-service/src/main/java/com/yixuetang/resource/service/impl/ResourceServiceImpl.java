@@ -300,6 +300,8 @@ public class ResourceServiceImpl implements ResourceService {
         resource.setName( name );
         resource.setUpdateTime( new Date() );
         resourceMapper.updateById( resource );
+        // 删除 redis 缓存中的 resourceId -> Ancestors 记录
+        this.delCacheFromRedis( resource );
         return new CommonResponse( CommonCode.SUCCESS );
     }
 
@@ -397,5 +399,14 @@ public class ResourceServiceImpl implements ResourceService {
         this.courseResourceMapper.delete( new QueryWrapper<CourseResource>().eq( "resource_id", resource.getId() ) );
         // 3. 删除t_resource表的记录
         this.resourceMapper.deleteById( resource.getId() );
+        // 4. 删除 redis 缓存中的 resourceId -> Ancestors 记录
+        this.delCacheFromRedis( resource );
+    }
+
+    private void delCacheFromRedis(Resource resource) {
+        if (resource.getType() == 0 && !CollectionUtils.isEmpty( this.template.opsForZSet()
+                .reverseRangeWithScores( ANCESTORS_KEY_PREFIX + resource.getId(), 0, -1 ) )) {
+            this.template.delete( ANCESTORS_KEY_PREFIX + resource.getId() );
+        }
     }
 }
