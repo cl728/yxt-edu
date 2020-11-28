@@ -64,4 +64,7 @@ public interface ResourceMapper extends BaseMapper<Resource> {
 
     @Select("select * from t_resource where parent_resource_id = #{resourceId} order by type, create_time")
     List<Resource> findChildResourceListByResourceId(Long resourceId);
+
+    @Update( "update t_resource set parent_resource_id = null where id= #{draggingId}" )
+    void setParentResourceIdToNullById(long draggingId);
 }

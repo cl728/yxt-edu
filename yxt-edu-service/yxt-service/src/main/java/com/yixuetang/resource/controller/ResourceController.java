@@ -1,6 +1,7 @@
 package com.yixuetang.resource.controller;
 
 import com.yixuetang.api.resource.ResourceControllerApi;
+import com.yixuetang.entity.request.resource.DropResource;
 import com.yixuetang.entity.request.resource.InsertCourseResource;
 import com.yixuetang.entity.request.resource.InsertResource;
 import com.yixuetang.entity.request.resource.UpdateResource;
@@ -119,5 +120,12 @@ public class ResourceController implements ResourceControllerApi {
     @GetMapping("all/courseId/{courseId}")
     public QueryResponse findByCourseId(@PathVariable long courseId) {
         return this.resourceService.findByCourseId( courseId );
+    }
+
+    @Override
+    @PutMapping("parentResourceId/resourceId/{draggingId}")
+    public CommonResponse dropResource(@PathVariable long draggingId,
+                                       @RequestBody DropResource dropResource) {
+        return this.resourceService.dropResource( draggingId, dropResource );
     }
 }

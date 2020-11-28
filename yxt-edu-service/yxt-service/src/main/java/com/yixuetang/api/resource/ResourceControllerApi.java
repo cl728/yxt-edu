@@ -1,5 +1,6 @@
 package com.yixuetang.api.resource;
 
+import com.yixuetang.entity.request.resource.DropResource;
 import com.yixuetang.entity.request.resource.InsertCourseResource;
 import com.yixuetang.entity.request.resource.InsertResource;
 import com.yixuetang.entity.request.resource.UpdateResource;
@@ -100,4 +101,9 @@ public interface ResourceControllerApi {
     @ApiImplicitParam(name = "courseId", value = "课程id", required = true,
             paramType = "path", dataType = "long")
     QueryResponse findByCourseId(long courseId);
+
+    @ApiOperation("拖拽某一资源到目标资源旁边或里面")
+    @ApiImplicitParam(name = "draggingId", value = "被拖拽的资源id", required = true,
+            paramType = "path", dataType = "long")
+    CommonResponse dropResource(long draggingId, DropResource dropResource);
 }

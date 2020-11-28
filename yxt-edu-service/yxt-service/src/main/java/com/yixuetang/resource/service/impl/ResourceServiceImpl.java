@@ -5,6 +5,7 @@ import com.yixuetang.course.mapper.CourseMapper;
 import com.yixuetang.entity.course.Course;
 import com.yixuetang.entity.homework.Homework;
 import com.yixuetang.entity.homework.HomeworkResource;
+import com.yixuetang.entity.request.resource.DropResource;
 import com.yixuetang.entity.request.resource.InsertCourseResource;
 import com.yixuetang.entity.request.resource.InsertResource;
 import com.yixuetang.entity.resource.CourseResource;
@@ -349,6 +350,45 @@ public class ResourceServiceImpl implements ResourceService {
         this.forEachSetChildList( topResourceList );
 
         return new QueryResponse( CommonCode.SUCCESS, new QueryResult<>( topResourceList, topResourceList.size() ) );
+    }
+
+    @Override
+    public CommonResponse dropResource(long draggingId, DropResource dropResource) {
+
+        if (ObjectUtils.isEmpty( dropResource )) {
+            ExceptionThrowUtils.cast( CommonCode.INVALID_PARAM );
+        }
+
+        Resource draggingNode = this.resourceMapper.findById( draggingId );
+        Resource dropNode = this.resourceMapper.findById( dropResource.getDropId() );
+        String dropType = dropResource.getDropType();
+        if (ObjectUtils.isEmpty( draggingNode ) ||
+                ObjectUtils.isEmpty( dropNode ) ||
+                StringUtils.isBlank( dropType ) ||
+                !StringUtils.equalsAny( dropType, "before", "after", "inner" )) {
+            ExceptionThrowUtils.cast( CommonCode.INVALID_PARAM );
+        }
+
+        Resource parentResource = dropNode.getParentResource();
+
+        if (StringUtils.equalsAny( dropType, "before", "after" )) {
+            // 如果目标资源id的父节点为 null ，则将被拖拽节点的父节点设置为 null
+            if (ObjectUtils.isEmpty( parentResource )) {
+                this.resourceMapper.setParentResourceIdToNullById( draggingId );
+            } else {
+                this.resourceMapper.updateParentResourceIdById( parentResource.getId(), draggingId );
+            }
+        } else { // inner
+            if (dropNode.getType() == 1) {  // 不允许将资源拖拽入文件中
+                return new CommonResponse( ResourceCode.RESOURCE_IS_NOT_ALLOWED_TO_DROP_INTO_FILE );
+            }
+            this.resourceMapper.updateParentResourceIdById( dropResource.getDropId(), draggingId );
+        }
+
+        // 清理 redis 缓存
+        this.delCacheFromRedis( draggingNode );
+
+        return CommonResponse.SUCCESS();
     }
 
     private void saveToDatabase(Long userId, Long parentResourceId, Resource resource) {

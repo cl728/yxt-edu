@@ -1,5 +1,6 @@
 package com.yixuetang.resource.service;
 
+import com.yixuetang.entity.request.resource.DropResource;
 import com.yixuetang.entity.request.resource.InsertCourseResource;
 import com.yixuetang.entity.request.resource.InsertResource;
 import com.yixuetang.entity.response.CommonResponse;
@@ -111,4 +112,13 @@ public interface ResourceService {
      * @return 响应结果实体类
      */
     QueryResponse findByCourseId(long courseId);
+
+    /**
+     * 拖拽某一资源到目标资源旁边或里面
+     *
+     * @param draggingId   被拖拽的资源id
+     * @param dropResource 要拖拽到的目标资源id
+     * @return 响应结果实体类
+     */
+    CommonResponse dropResource(long draggingId, DropResource dropResource);
 }
