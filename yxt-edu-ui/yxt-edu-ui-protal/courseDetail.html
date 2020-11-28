@@ -16,6 +16,15 @@
         #resource-upload-btn>.el-upload {
             display: block;
         }
+
+        .custom-tree-node {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            font-size: 14px;
+            padding-right: 8px;
+        }
     </style>
 </head>
 
@@ -471,15 +480,18 @@
                                     </el-button>
                                 </el-upload>
                                 <el-button type="primary" plain style="float: left; margin-left: 8px;"
-                                    @click="createFolderFormVisible = true"><i class="el-icon-plus"></i> 新建文件夹
+                                    @click="createFolderFormVisible = true"><i class="el-icon-folder-add"></i> 新建文件夹
+                                </el-button>
+                                <el-button type="primary" plain style="float: left; margin-left: 8px;"
+                                    @click="resourceManageDialogVisible = true"><i class="el-icon-folder"></i> 资源管理
                                 </el-button>
                                 <!-- 创建文件夹表单 -->
                                 <el-dialog title="创建文件夹" :visible.sync="createFolderFormVisible" destroy-on-close
-                                    @close="createFolderForm = {}" center width="30%">
-                                    <el-form :model="createFolderForm" ref="folderCreateForm" :rules="createFolderRule"
+                                    @close="resourceForm = {}" center width="30%">
+                                    <el-form :model="resourceForm" ref="folderCreateForm" :rules="resourceRule"
                                         hide-required-asterisk="true">
                                         <el-form-item prop="name">
-                                            <el-input v-model="createFolderForm.name" autocomplete="off"
+                                            <el-input v-model="resourceForm.name" autocomplete="off"
                                                 prefix-icon="el-icon-folder-add" placeholder="请输入文件夹名称" clearable>
                                             </el-input>
                                         </el-form-item>
@@ -487,6 +499,51 @@
                                     <div slot="footer">
                                         <el-row>
                                             <el-button type="primary" @click="createFolder('folderCreateForm')"
+                                                style="display: block; width: 100%;">确定
+                                            </el-button>
+                                        </el-row>
+                                    </div>
+                                </el-dialog>
+                                <!-- 资源管理对话框 -->
+                                <el-dialog title="课程资源管理" :visible.sync="resourceManageDialogVisible" destroy-on-close
+                                    center @opened="getCourseResourceList()" @closed="getResourceData(course.id, -1)">
+                                    <el-tree :data="courseResourceList" node-key="id" :props="myProps" draggable
+                                        @node-drop="nodeDrop" :expand-on-click-node="false">
+                                        <span class="custom-tree-node" slot-scope="{ node, data }">
+                                            <span><img :src="getResourceSrcByName(node.label)" alt="" srcset=""
+                                                    style="height: 16px; width: 16px; margin-right: 5px;">{{ node.label }}</span>
+                                            <span>
+                                                <el-button type="text" size="mini"
+                                                    @click="showRenameResourceForm(node, data)">
+                                                    <i class="el-icon-edit"></i>
+                                                </el-button>
+                                                <el-popconfirm confirmButtonText="确认" cancelButtonText="取消"
+                                                    confirmButtonType="danger" cancelButtonType="success"
+                                                    placement="left" @onconfirm="remove(node, data)" title="确认要删除该资源吗？">
+                                                    <el-button size="mini" slot="reference" type="text"
+                                                        slot="reference">
+                                                        <i class="el-icon-delete"></i>
+                                                    </el-button>
+                                                </el-popconfirm>
+                                            </span>
+                                        </span>
+                                    </el-tree>
+                                </el-dialog>
+                                <!-- 重命名资源表单 -->
+                                <el-dialog title="重命名资源" :visible.sync="renameResourceFormVisible" destroy-on-close
+                                    @closed="resourceForm = {}" center width="30%">
+                                    <el-form :model="resourceForm" ref="resourceRenameForm" :rules="resourceRule"
+                                        hide-required-asterisk="true">
+                                        <el-form-item prop="name">
+                                            <el-input v-model="resourceForm.name" autocomplete="off"
+                                                :prefix-icon="resourceForm.type === 0 ? 'el-icon-folder' : 'el-icon-document'"
+                                                placeholder="请输入资源名称" clearable>
+                                            </el-input>
+                                        </el-form-item>
+                                    </el-form>
+                                    <div slot="footer">
+                                        <el-row>
+                                            <el-button type="primary" @click="renameResource('resourceRenameForm')"
                                                 style="display: block; width: 100%;">确定
                                             </el-button>
                                         </el-row>
@@ -514,21 +571,31 @@
                                                 v-for="(row, index) of resourceListRows" :key="index"
                                                 v-show="resourceListRows.length > 0">
                                                 <el-col :span="3" style="margin-right: 25px;"
+                                                    @mouseover.native="showDownloadResourceId = resource.id"
+                                                    @mouseout.native="showDownloadResourceId = -1"
                                                     v-for="(resource, innerindex) in row" :key="resource.id">
-                                                    <el-button style="height: 150px; width: 129px; padding: 12px 0;"
-                                                        @click="downloadOrGetResourceData(resource.id, resource.type, resource.name)">
-                                                        <el-row style="margin-bottom: 15px;">
-                                                            <img :src="getResourceSrc(resource.ext)" alt="" srcset=""
-                                                                style="height: 48px; width: 48px;">
-                                                        </el-row>
-                                                        <el-row>
-                                                            <el-tooltip :content="resource.name" placement="bottom"
-                                                                effect="light">
-                                                                <span style="font-size: 10px;"
-                                                                    v-text="resource.name.length > 7 ? resource.name.substring(0, 7) + '...': resource.name">实验</span>
-                                                            </el-tooltip>
-                                                        </el-row>
-                                                    </el-button>
+                                                    <el-row>
+                                                        <el-button style="height: 150px; width: 129px; padding: 12px 0;"
+                                                            @click="previewOrGetResourceData(resource.id, resource.type, resource.name)">
+                                                            <el-row style="margin-bottom: 15px;">
+                                                                <img :src="getResourceSrc(resource.ext)" alt=""
+                                                                    srcset="" style="height: 48px; width: 48px;">
+                                                            </el-row>
+                                                            <el-row>
+                                                                <el-tooltip :content="resource.name" placement="bottom"
+                                                                    effect="light">
+                                                                    <span style="font-size: 10px;"
+                                                                        v-text="resource.name.length > 7 ? resource.name.substring(0, 7) + '...': resource.name">实验</span>
+                                                                </el-tooltip>
+                                                            </el-row>
+                                                        </el-button>
+                                                    </el-row>
+                                                    <el-row>
+                                                        <el-button type="text" size="small"
+                                                            @click="postDownloadRequestToServer(resource.id)">
+                                                            <span v-show="resource.type === 1 && resource.id === showDownloadResourceId">下载</span>
+                                                        </el-button>
+                                                    </el-row>
                                                 </el-col>
                                             </el-row>
                                             <el-row v-show="resourceListRows.length === 0">
@@ -1651,7 +1718,7 @@
                 title: "",
                 content: "",
             },
-            createFolderForm: {},
+            resourceForm: {},
             updateCourseForm: {
                 clazz: "",
                 cname: "",
@@ -1718,8 +1785,8 @@
             noticeRule: {
                 title: [{ required: true, message: '请输入公告标题', trigger: 'blur' }],
             },
-            createFolderRule: {
-                name: [{ required: true, message: '请输入文件夹名称', trigger: 'blur' }],
+            resourceRule: {
+                name: [{ required: true, message: '请输入资源名称', trigger: 'blur' }],
             },
             homeworkCount: 1,
             resourceCount: 2,
@@ -1739,8 +1806,18 @@
             resourceList: [],
             resourceAncestors: [],
             parentResourceId: -1,
-            unreadMessageCount: {}
+            unreadMessageCount: {},
+            showDownloadResourceId: -1,
+            delResourceVisible: false,
+            resourceManageDialogVisible: false,
+            courseResourceList: [],
+            myProps: {
+                children: 'childResourceList',
+                label: 'name'
+            },
+            renameResourceFormVisible: false
         },
+
         methods: {
             initHomeworkEditor() {
                 const editor = new wangEditor(`#homeworkEditor`)
@@ -2122,6 +2199,9 @@
                     this.$message.error("服务器繁忙，请稍候再次刷新页面！")
                 })
             },
+            getResourceSrcByName(resourceName) {
+                return this.getResourceSrc(resourceName.substring(resourceName.lastIndexOf(".") + 1));
+            },
             getResourceSrc(ext) {
                 switch (ext) {
                     case 'jpg':
@@ -2159,30 +2239,44 @@
                         break;
                 }
             },
-            downloadOrGetResourceData(resourceId, type, name) {
+            previewOrGetResourceData(resourceId, type, name) {
                 if (type === 0) { // 文件类型是目录，获取其子级资源
                     this.getResourceData(this.course.id, resourceId);
                     this.parentResourceId = resourceId;
-                } else if (type === 1) { // 文件类型是文件，请求下载接口
-                    yxt.http.get("resource/download/resourceId/" + resourceId, {
-                        responseType: 'blob'
-                    }).then(resp => {
-                        yxt.http.get("resource/resourceId/" + resourceId)
-                            .then(({ data }) => {
-                                if (data.success) {
-                                    let fileName = data.queryResult.data[0].name;
-                                    this.download(resp.data, fileName);
-                                } else {
-                                    this.$message.error(data.message);
-                                }
-                            })
-                            .catch(() => {
-                                this.$message.error("服务器繁忙，请稍候再试！")
-                            })
-                    }).catch("服务器繁忙，请稍候再试！")
+                } else if (type === 1) { // 文件类型是文件，打开文件预览页面
+                    yxt.http.get("resource/resourceId/" + resourceId)
+                        .then(({ data }) => {
+                            if (data.success) {
+                                let url = data.queryResult.data[0].location;
+                                window.open("http://www.pava.run/preview/onlinePreview?url=" + encodeURIComponent(url))
+                            } else {
+                                this.$message.error(data.message);
+                            }
+                        })
+                        .catch(() => {
+                            this.$message.error("服务器繁忙，请稍候再试！")
+                        })
                 } else {
                     this.$message.error("服务器繁忙，请稍候再试！")
                 }
+            },
+            postDownloadRequestToServer(resourceId) {
+                yxt.http.get("resource/download/resourceId/" + resourceId, {
+                    responseType: 'blob'
+                }).then(resp => {
+                    yxt.http.get("resource/resourceId/" + resourceId)
+                        .then(({ data }) => {
+                            if (data.success) {
+                                let fileName = data.queryResult.data[0].name;
+                                this.download(resp.data, fileName);
+                            } else {
+                                this.$message.error(data.message);
+                            }
+                        })
+                        .catch(() => {
+                            this.$message.error("服务器繁忙，请稍候再试！")
+                        })
+                }).catch("服务器繁忙，请稍候再试！")
             },
             download(data, fileName) {
                 let url = window.URL.createObjectURL(data)
@@ -2197,8 +2291,8 @@
             createFolder(formName) {
                 this.$refs[formName].validate((valid) => {
                     if (valid) {
-                        this.createFolderForm.courseId = this.course.id;
-                        yxt.http.post("resource/folder/userId/" + this.user.id + "?parentResourceId=" + this.parentResourceId, this.createFolderForm).then(({ data }) => {
+                        this.resourceForm.courseId = this.course.id;
+                        yxt.http.post("resource/folder/userId/" + this.user.id + "?parentResourceId=" + this.parentResourceId, this.resourceForm).then(({ data }) => {
                             if (data.success) {
                                 this.createFolderFormVisible = false;
                                 this.$message.success(data.message);
@@ -2271,7 +2365,55 @@
                         this.unreadMessageCount = data.queryResult.data[0];
                     }
                 })
-            }
+            },
+            getCourseResourceList() {
+                yxt.http.get("resource/all/courseId/" + yxt.getUrlParam("id")).then(({ data }) => {
+                    if (data.success) {
+                        this.courseResourceList = data.queryResult.data;
+                    }
+                })
+            },
+            remove(node, resource) {
+                yxt.http.delete("resource/resourceId/" + resource.id + "/userId/" + this.user.id).then(({ data }) => {
+                    if (data.success) {
+                        this.$message.success(data.message);
+                        this.getCourseResourceList();
+                    } else {
+                        this.$message.error(data.message);
+                    }
+                }).catch(() => {
+                    this.$message.error("服务器繁忙，请稍候再试！")
+                })
+            },
+            showRenameResourceForm(node, resource) {
+                yxt.http.get("resource/resourceId/" + resource.id).then(({ data }) => {
+                    if (data.success) {
+                        this.resourceForm = data.queryResult.data[0];
+                        this.renameResourceFormVisible = true;
+                    } else {
+                        this.$message.error(data.message);
+                    }
+                }).catch(() => {
+                    this.$message.error("服务器繁忙，请稍候再试！")
+                })
+            },
+            renameResource(formName) {
+                this.$refs[formName].validate((valid) => {
+                    if (valid) {
+                        yxt.http.put("resource/resourceId/" + this.resourceForm.id, this.resourceForm).then(({ data }) => {
+                            if (data.success) {
+                                this.renameResourceFormVisible = false;
+                                this.$message.success(data.message);
+                                this.getCourseResourceList();
+                            } else {
+                                this.$message.error(data.message);
+                            }
+                        }).catch(() => {
+                            this.$message.error("服务器繁忙，请稍候再试！")
+                        })
+                    }
+                });
+            },
         },
         created() {
             this.verify();
