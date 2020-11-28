@@ -507,8 +507,8 @@
                                 <!-- 资源管理对话框 -->
                                 <el-dialog title="课程资源管理" :visible.sync="resourceManageDialogVisible" destroy-on-close
                                     center @opened="getCourseResourceList()" @closed="getResourceData(course.id, -1)">
-                                    <el-tree :data="courseResourceList" node-key="id" :props="myProps" draggable
-                                        @node-drop="nodeDrop" :expand-on-click-node="false">
+                                    <el-tree :data="courseResourceList" node-key="id" :props="myProps" default-expand-all draggable
+                                        @node-drop="handleDrop" :expand-on-click-node="false">
                                         <span class="custom-tree-node" slot-scope="{ node, data }">
                                             <span><img :src="getResourceSrcByName(node.label)" alt="" srcset=""
                                                     style="height: 16px; width: 16px; margin-right: 5px;">{{ node.label }}</span>
@@ -593,7 +593,8 @@
                                                     <el-row>
                                                         <el-button type="text" size="small"
                                                             @click="postDownloadRequestToServer(resource.id)">
-                                                            <span v-show="resource.type === 1 && resource.id === showDownloadResourceId">下载</span>
+                                                            <span
+                                                                v-show="resource.type === 1 && resource.id === showDownloadResourceId">下载</span>
                                                         </el-button>
                                                     </el-row>
                                                 </el-col>
@@ -2413,6 +2414,23 @@
                         })
                     }
                 });
+            },
+            handleDrop(draggingNode, dropNode, dropType, ev) {
+                let dropResource = {
+                    dropId: dropNode.data.id,
+                    dropType: dropType
+                }
+                yxt.http.put("resource/parentResourceId/resourceId/" + draggingNode.data.id, dropResource).then(({ data }) => {
+                    if (data.success) {
+                        this.$message.success(data.message);
+                    } else {
+                        this.$message.error(data.message);
+                    }
+                    this.getCourseResourceList();
+                }).catch(() => {
+                    this.$message.error("服务器繁忙，请稍候再试！")
+                    this.getCourseResourceList();
+                })
             },
         },
         created() {
