@@ -604,7 +604,8 @@
             },
             updateCourse: {},
             updateCourseFormVisable: false,
-            unreadMessageCount: {}
+            unreadMessageCount: {},
+            websocket: {}
         },
         methods: {
             handleSelect(key, keyPath) {
@@ -797,6 +798,13 @@
                         this.unreadMessageCount = data.queryResult.data[0];
                     }
                 })
+            },
+            initWebSocket() {
+                this.websocket = new WebSocket('ws://127.0.0.1:8888/message/' + this.user.id + '/unreadCount');
+                this.websocket.onmessage = this.setOnmessageMessage;
+            },
+            setOnmessageMessage({ data }) {
+                this.unreadMessageCount = JSON.parse(data);
             }
         },
         created() {
@@ -805,6 +813,7 @@
                     this.user = data.queryResult.data[0];
                     this.getCourseData();
                     this.getUnreadMessageCount();
+                    this.initWebSocket();
                 } else {
                     location.href = "index.html"
                 }

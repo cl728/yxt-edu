@@ -88,7 +88,7 @@
                                     <el-avatar size="large" :src="user.avatar">
                                     </el-avatar>
                                 </template>
-                                <el-menu-item @click="location.href = 'user/setting.html' "><i
+                                <el-menu-item @click="location.href = 'setting.html' "><i
                                         class="el-icon-setting"></i> 个人设置</el-menu-item>
                                 <el-menu-item><i class="el-icon-position"></i> 消息中心</el-menu-item>
                                 <el-menu-item @click="logout()"><i class="fa fa-sign-out"
@@ -104,7 +104,7 @@
             <!-- 中间 -->
             <el-container>
                 <!-- 左侧导航栏 -->
-                <el-aside width="300px">
+                <el-aside width="300px" style="overflow: hidden;">
                     <div id="menu" style="padding-top: 150px">
                         <el-menu default-active="1">
                             <el-menu-item index="1" @click="show('isSystemMessageVisible')">
@@ -196,62 +196,22 @@
                                     <!-- 课程相关列表 -->
                                     <el-card shadow="hover" v-if="courseRemindList.length > 0"
                                         style="margin-top: 10px;width: 1184px;height: auto; border-radius: 10px;border-width: 2px;padding: 0;">
-                                        <!-- 第一个 -->
-                                        <div>
-                                            <el-row>
-                                                <el-col :span="1">
-                                                    <el-avatar size="small" :src="courseRemindList[0].sender.avatar">
-                                                    </el-avatar>
-                                                </el-col>
-                                                <el-col :span="2.5" style="margin-top: 5px;">
-                                                    <span style="font-size: 14px; color: #222;"
-                                                        v-text="courseRemindList[0].sender.username">Colin</span>
-                                                    <span style="color: #999; font-size: small;"> <span
-                                                            v-text="courseRemindList[0].action">发布</span>了新<span
-                                                            v-text="courseRemindList[0].sourceName">作业</span>：</span>
-                                                    <el-link type="info" :underline="false"
-                                                        :href="courseRemindList[0].url"
-                                                        v-text="courseRemindList[0].sourceContent">新作业标题</el-link>
-                                                </el-col>
-                                            </el-row>
-                                            <el-row>
-                                                <el-col :span="24">
-                                                    <span
-                                                        style="float: left;padding-left: 20px; margin-top: 10px; margin-bottom: 5px;">
-                                                        <span style="font-size: 12px;color: #999">
-                                                            <i class="el-icon-date"></i> <span
-                                                                v-text="courseRemindList[0].remindTime">2020-11-23
-                                                                20:42</span>
-                                                            <span>
-                                                                <i class="el-icon-delete"
-                                                                    style="margin-left: 4px; margin-right: 1px;"></i>
-                                                                <el-button type="text"
-                                                                    @click="deleteRemind(courseRemindList[0].id)"
-                                                                    style="color: #999; font-size: 10px;">删除该通知
-                                                                </el-button>
-                                                            </span>
-                                                        </span>
-                                                    </span>
-                                                </el-col>
-                                            </el-row>
-                                            <el-divider></el-divider>
-                                        </div>
-                                        <!-- 中间 -->
-                                        <div v-for="(remind, index) in courseRemindList"
-                                            v-if="index > 0 && courseRemindList.length - 1 > index">
+                                        <div v-for="(courseRemind, index) in courseRemindList" :key="courseRemind.id"
+                                            @mouseover="showDel.courseRemindId = courseRemind.id"
+                                            @mouseout="showDel.courseRemindId = -1">
                                             <el-row style="margin-top: 20px;">
                                                 <el-col :span="1">
-                                                    <el-avatar size="small" :src="remind.sender.avatar">
+                                                    <el-avatar size="small" :src="courseRemind.sender.avatar">
                                                     </el-avatar>
                                                 </el-col>
                                                 <el-col :span="2.5" style="margin-top: 5px;">
                                                     <span style="font-size: 14px; color: #222;"
-                                                        v-text="remind.sender.username">Colin</span>
+                                                        v-text="courseRemind.sender.username">Colin</span>
                                                     <span style="color: #999; font-size: small;"> <span
-                                                            v-text="remind.action">上传</span>了新<span
-                                                            v-text="remind.sourceName">资源</span>：</span>
-                                                    <el-link type="info" :underline="false" :href="remind.url"
-                                                        v-text="remind.sourceContent">新资源名称</el-link>
+                                                            v-text="courseRemind.action">上传</span>了新<span
+                                                            v-text="courseRemind.sourceName">资源</span>：</span>
+                                                    <el-link type="info" :underline="false" :href="courseRemind.url"
+                                                        v-text="courseRemind.sourceContent">新资源名称</el-link>
                                                 </el-col>
                                             </el-row>
                                             <el-row>
@@ -260,60 +220,27 @@
                                                         style="float: left;padding-left: 20px; margin-top: 10px; margin-bottom: 10px;">
                                                         <span style="font-size: 12px;color: #999">
                                                             <i class="el-icon-date"></i> <span
-                                                                v-text="remind.remindTime">2020-11-23 20:42</span>
+                                                                v-text="courseRemind.remindTime">2020-11-23 20:42</span>
                                                             <span>
-                                                                <i class="el-icon-delete"
-                                                                    style="margin-left: 4px; margin-right: 1px;"></i>
-                                                                <el-button type="text" @click="deleteRemind(remind.id)"
-                                                                    style="color: #999; font-size: 10px;">删除该通知
-                                                                </el-button>
+                                                                <el-popconfirm confirmButtonText="确认"
+                                                                    cancelButtonText="取消" confirmButtonType="danger"
+                                                                    cancelButtonType="success" placement="right"
+                                                                    @onConfirm="deleteRemind(courseRemind.id)"
+                                                                    title="确认要删除该通知吗？">
+                                                                    <el-button type="text" slot="reference"
+                                                                        style="color: #999; font-size: 10px;">
+                                                                        <span
+                                                                            v-show="showDel.courseRemindId === courseRemind.id">
+                                                                            <i class="el-icon-delete"
+                                                                                style="margin-left: 8px; margin-right: 4px;"></i>删除该通知</span>
+                                                                    </el-button>
+                                                                </el-popconfirm>
                                                             </span>
                                                         </span>
                                                     </span>
                                                 </el-col>
                                             </el-row>
                                             <el-divider></el-divider>
-                                        </div>
-                                        <!-- 最后一个 -->
-                                        <div v-if="courseRemindList.length > 1">
-                                            <el-row style="margin-top: 20px;">
-                                                <el-col :span="1">
-                                                    <el-avatar size="small"
-                                                        :src="courseRemindList[courseRemindList.length - 1].sender.avatar">
-                                                    </el-avatar>
-                                                </el-col>
-                                                <el-col :span="2.5" style="margin-top: 5px;">
-                                                    <span style="font-size: 14px; color: #222;"
-                                                        v-text="courseRemindList[courseRemindList.length - 1].sender.username">Colin</span>
-                                                    <span style="color: #999; font-size: small;"> <span
-                                                            v-text="courseRemindList[courseRemindList.length - 1].action">发布</span>了新<span
-                                                            v-text="courseRemindList[courseRemindList.length - 1].sourceName">作业</span>：</span>
-                                                    <el-link type="info" :underline="false"
-                                                        :href="courseRemindList[courseRemindList.length - 1].url"
-                                                        v-text="courseRemindList[courseRemindList.length - 1].sourceContent">
-                                                        新作业标题</el-link>
-                                                </el-col>
-                                            </el-row>
-                                            <el-row>
-                                                <el-col :span="24">
-                                                    <span
-                                                        style="float: left;padding-left: 20px; margin-top: 10px; margin-bottom: 5px;">
-                                                        <span style="font-size: 12px;color: #999">
-                                                            <i class="el-icon-date"></i> <span
-                                                                v-text="courseRemindList[courseRemindList.length - 1].remindTime">2020-11-23
-                                                                20:42</span>
-                                                            <span>
-                                                                <i class="el-icon-delete"
-                                                                    style="margin-left: 4px; margin-right: 1px;"></i>
-                                                                <el-button type="text"
-                                                                    @click="deleteRemind(courseRemindList[courseRemindList.length - 1].id)"
-                                                                    style="color: #999; font-size: 10px;">删除该通知
-                                                                </el-button>
-                                                            </span>
-                                                        </span>
-                                                    </span>
-                                                </el-col>
-                                            </el-row>
                                         </div>
                                     </el-card>
                                     <el-card class="box-card" v-if="courseRemindList.length === 0" shadow="hover"
@@ -337,64 +264,11 @@
                                         </el-row>
                                     </el-card>
                                     <!-- 回复列表 -->
-                                    <el-card shadow="hover"
+                                    <el-card shadow="hover" v-if="replyRemindList.length > 0"
                                         style="margin-top: 10px;width: 1184px;height: auto; border-radius: 10px;border-width: 2px;padding: 0;">
-                                        <!-- 第一个 -->
-                                        <div>
-                                            <el-row>
-                                                <el-col :span="1">
-                                                    <el-avatar size="small" :src="replyRemindList[0].sender.avatar">
-                                                    </el-avatar>
-                                                </el-col>
-                                                <el-col :span="2.5" style="margin-top: 5px;">
-                                                    <span style="font-size: 14px; color: #222;"
-                                                        v-text="replyRemindList[0].sender.username">Colin</span>
-                                                    <span style="color: #999; font-size: small;">回复了我的评论：</span>
-                                                    <el-link type="info" :underline="false"
-                                                        v-text="replyRemindList[0].targetContent">我的评论内容</el-link>
-                                                </el-col>
-                                            </el-row>
-                                            <el-row>
-                                                <el-col :span="24">
-                                                    <span style="float: left;padding-left: 20px;margin-top: 3px;">
-                                                        <span style="font-size: 14px;color: #222">
-                                                            <el-link type="info" :underline="false"
-                                                                v-text="replyRemindList[0].sourceContent">Colin回复的内容
-                                                            </el-link>
-                                                        </span>
-                                                    </span>
-                                                </el-col>
-                                            </el-row>
-                                            <el-row>
-                                                <el-col :span="24">
-                                                    <span
-                                                        style="float: left;padding-left: 20px; margin-top: 10px; margin-bottom: 5px;">
-                                                        <span style="font-size: 12px;color: #999">
-                                                            <i class="el-icon-date"></i> 2020-11-23 20:42
-                                                            <i class="fa fa-mail-forward"
-                                                                style="margin-left: 8px; margin-right: 1px;"></i>
-                                                            <el-button type="text"
-                                                                style="color: #999; font-size: 10px;">回复</el-button>
-                                                            <i class="fa fa-thumbs-o-up"
-                                                                style="margin-left: 8px; margin-right: 1px;"></i>
-                                                            <el-button type="text"
-                                                                style="color: #999; font-size: 10px;">点赞</el-button>
-                                                            <span>
-                                                                <i class="el-icon-delete"
-                                                                    style="margin-left: 4px; margin-right: 1px;"></i>
-                                                                <el-button type="text"
-                                                                    style="color: #999; font-size: 10px;">删除该通知
-                                                                </el-button>
-                                                            </span>
-                                                        </span>
-                                                    </span>
-                                                </el-col>
-                                            </el-row>
-                                            <el-divider></el-divider>
-                                        </div>
-                                        <!-- 中间 -->
                                         <div v-for="(replyRemind, index) in replyRemindList"
-                                            v-if="index > 0 && replyRemindList.length - 1 > index">
+                                            @mouseover="showDel.replyRemindId = replyRemind.id"
+                                            @mouseout="showDel.replyRemindId = -1">
                                             <el-row style="margin-top: 20px;">
                                                 <el-col :span="1">
                                                     <el-avatar size="small" :src="replyRemind.sender.avatar">
@@ -404,7 +278,7 @@
                                                     <span style="font-size: 14px; color: #222;"
                                                         v-text="replyRemind.sender.username">Colin</span>
                                                     <span style="color: #999; font-size: small;">回复了我的评论：</span>
-                                                    <el-link type="info" :underline="false"
+                                                    <el-link type="info" :underline="false" :href="replyRemind.url"
                                                         v-text="replyRemind.targetContent">我的评论内容</el-link>
                                                 </el-col>
                                             </el-row>
@@ -413,6 +287,7 @@
                                                     <span style="float: left;padding-left: 20px;margin-top: 3px;">
                                                         <span style="font-size: 14px;color: #222">
                                                             <el-link type="info" :underline="false"
+                                                                :href="replyRemind.url"
                                                                 v-text="replyRemind.sourceContent">Colin回复的内容</el-link>
                                                         </span>
                                                     </span>
@@ -423,21 +298,33 @@
                                                     <span
                                                         style="float: left;padding-left: 20px; margin-top: 10px; margin-bottom: 10px;">
                                                         <span style="font-size: 12px;color: #999">
-                                                            <i class="el-icon-date"></i> 2020-11-23 20:42
-                                                            <i class="fa fa-mail-forward"
-                                                                style="margin-left: 8px; margin-right: 1px;"></i>
+                                                            <i class="el-icon-date"></i> <span
+                                                                v-text="replyRemind.remindTime">2020-11-23
+                                                                20:42</span>
+                                                            <!-- <el-button type="text"
+                                                                style="color: #999; font-size: 10px;"> <i
+                                                                    class="fa fa-mail-forward"
+                                                                    style="margin-left: 4px; margin-right: 4px;"></i>回复
+                                                            </el-button>
                                                             <el-button type="text"
-                                                                style="color: #999; font-size: 10px;">回复</el-button>
-                                                            <i class="fa fa-thumbs-o-up"
-                                                                style="margin-left: 8px; margin-right: 1px;"></i>
-                                                            <el-button type="text"
-                                                                style="color: #999; font-size: 10px;">点赞</el-button>
+                                                                style="color: #999; font-size: 10px;"><i
+                                                                    class="fa fa-thumbs-o-up"
+                                                                    style="margin-left: 4px; margin-right: 4px;"></i>点赞
+                                                            </el-button> -->
                                                             <span>
-                                                                <i class="el-icon-delete"
-                                                                    style="margin-left: 4px; margin-right: 1px;"></i>
-                                                                <el-button type="text"
-                                                                    style="color: #999; font-size: 10px;">删除该通知
-                                                                </el-button>
+                                                                <el-popconfirm confirmButtonText="确认"
+                                                                    cancelButtonText="取消" confirmButtonType="danger"
+                                                                    cancelButtonType="success" placement="right"
+                                                                    @onConfirm="deleteRemind(replyRemind.id)"
+                                                                    title="确认要删除该通知吗？">
+                                                                    <el-button type="text" slot="reference"
+                                                                        style="color: #999; font-size: 10px;">
+                                                                        <span
+                                                                            v-show="showDel.replyRemindId === replyRemind.id">
+                                                                            <i class="el-icon-delete"
+                                                                                style="margin-left: 8px; margin-right: 4px;"></i>删除该通知</span>
+                                                                    </el-button>
+                                                                </el-popconfirm>
                                                             </span>
                                                         </span>
                                                     </span>
@@ -445,58 +332,14 @@
                                             </el-row>
                                             <el-divider></el-divider>
                                         </div>
-                                        <!-- 最后一个 -->
-                                        <div v-if="replyRemindList.length > 1">
-                                            <el-row style="margin-top: 20px;">
-                                                <el-col :span="1">
-                                                    <el-avatar size="small"
-                                                        :src="replyRemindList[replyRemindList.length - 1].sender.avatar">
-                                                    </el-avatar>
-                                                </el-col>
-                                                <el-col :span="2.5" style="margin-top: 5px;">
-                                                    <span style="font-size: 14px; color: #222;"
-                                                        v-text="replyRemindList[replyRemindList.length - 1].sender.username">Colin</span>
-                                                    <span style="color: #999; font-size: small;">回复了我的评论：</span>
-                                                    <el-link type="info" :underline="false"
-                                                        v-text="replyRemindList[replyRemindList.length - 1].targetContent">
-                                                        我的评论内容</el-link>
-                                                </el-col>
-                                            </el-row>
-                                            <el-row>
-                                                <el-col :span="24">
-                                                    <span style="float: left;padding-left: 20px;margin-top: 3px;">
-                                                        <span style="font-size: 14px;color: #222">
-                                                            <el-link type="info" :underline="false"
-                                                                v-text="replyRemindList[replyRemindList.length - 1].sourceContent">
-                                                                Colin回复的内容</el-link>
-                                                        </span>
-                                                    </span>
-                                                </el-col>
-                                            </el-row>
-                                            <el-row>
-                                                <el-col :span="24">
-                                                    <span
-                                                        style="float: left;padding-left: 20px; margin-top: 10px; margin-bottom: 10px;">
-                                                        <span style="font-size: 12px;color: #999">
-                                                            <i class="el-icon-date"></i> 2020-11-23 20:42
-                                                            <i class="fa fa-mail-forward"
-                                                                style="margin-left: 8px; margin-right: 1px;"></i>
-                                                            <el-button type="text"
-                                                                style="color: #999; font-size: 10px;">回复</el-button>
-                                                            <i class="fa fa-thumbs-o-up"
-                                                                style="margin-left: 8px; margin-right: 1px;"></i>
-                                                            <el-button type="text"
-                                                                style="color: #999; font-size: 10px;">点赞</el-button>
-                                                            <span>
-                                                                <el-button type="text" icon="el-icon-delete"
-                                                                    style="color: #999; font-size: 10px;">删除该通知
-                                                                </el-button>
-                                                            </span>
-                                                        </span>
-                                                    </span>
-                                                </el-col>
-                                            </el-row>
-                                        </div>
+                                    </el-card>
+                                    <el-card class="box-card" v-if="replyRemindList.length === 0" shadow="hover"
+                                        style="margin-top: 20px;width: 1184px;height: 220px;border-radius: 10px;border-width: 2px">
+                                        <el-row>
+                                            <p
+                                                style="text-align: center; font-size: 15px; color: black; line-height: 160px;">
+                                                暂无回复我的提醒</p>
+                                        </el-row>
                                     </el-card>
                                 </div>
 
@@ -511,53 +354,22 @@
                                         </el-row>
                                     </el-card>
                                     <!-- 收到的赞列表 -->
-                                    <el-card shadow="hover"
+                                    <el-card shadow="hover" v-if="voteUpRemindList.length > 0"
                                         style="margin-top: 10px;width: 1184px;height: auto; border-radius: 10px;border-width: 2px;padding: 0;">
-                                        <!-- 第一个 -->
-                                        <div>
-                                            <el-row>
-                                                <el-col :span="1">
-                                                    <el-avatar size="small"
-                                                        src="http://www.pava.run/group1/M00/00/00/rBAABV-rZ9KAOAoyAAAnvyJPq-0893.jpg">
-                                                    </el-avatar>
-                                                </el-col>
-                                                <el-col :span="2.5" style="margin-top: 5px;">
-                                                    <span style="font-size: 14px; color: #222;">Colin</span>
-                                                    <span style="color: #999; font-size: small;">赞了我的评论：</span>
-                                                    <el-link type="info" :underline="false">我的评论内容</el-link>
-                                                </el-col>
-                                            </el-row>
-                                            <el-row>
-                                                <el-col :span="24">
-                                                    <span
-                                                        style="float: left;padding-left: 20px; margin-top: 10px; margin-bottom: 5px;">
-                                                        <span style="font-size: 12px;color: #999">
-                                                            <i class="el-icon-date"></i> 2020-11-23 20:42
-                                                            <span>
-                                                                <i class="el-icon-delete"
-                                                                    style="margin-left: 4px; margin-right: 1px;"></i>
-                                                                <el-button type="text"
-                                                                    style="color: #999; font-size: 10px;">删除该通知
-                                                                </el-button>
-                                                            </span>
-                                                        </span>
-                                                    </span>
-                                                </el-col>
-                                            </el-row>
-                                            <el-divider></el-divider>
-                                        </div>
-                                        <!-- 中间 -->
-                                        <div v-for="num in 2">
+                                        <div v-for="(voteUpRemind, index) in voteUpRemindList" :key="voteUpRemind.id"
+                                            @mouseover="showDel.voteUpRemindId = voteUpRemind.id"
+                                            @mouseout="showDel.voteUpRemindId = -1">
                                             <el-row style="margin-top: 20px;">
                                                 <el-col :span="1">
-                                                    <el-avatar size="small"
-                                                        src="http://www.pava.run/group1/M00/00/00/rBAABV-rZ9KAOAoyAAAnvyJPq-0893.jpg">
+                                                    <el-avatar size="small" :src="voteUpRemind.sender.avatar">
                                                     </el-avatar>
                                                 </el-col>
                                                 <el-col :span="2.5" style="margin-top: 5px;">
-                                                    <span style="font-size: 14px; color: #222;">Colin</span>
+                                                    <span style="font-size: 14px; color: #222;"
+                                                        v-text="voteUpRemind.sender.username">Colin</span>
                                                     <span style="color: #999; font-size: small;">赞了我的评论：</span>
-                                                    <el-link type="info" :underline="false">我的评论内容</el-link>
+                                                    <el-link type="info" :underline="false" :href="voteUpRemind.url"
+                                                        v-text="voteUpRemind.targetContent">我的评论内容</el-link>
                                                 </el-col>
                                             </el-row>
                                             <el-row>
@@ -565,13 +377,22 @@
                                                     <span
                                                         style="float: left;padding-left: 20px; margin-top: 10px; margin-bottom: 10px;">
                                                         <span style="font-size: 12px;color: #999">
-                                                            <i class="el-icon-date"></i> 2020-11-23 20:42
+                                                            <i class="el-icon-date"></i> <span
+                                                                v-text="voteUpRemind.remindTime">2020-11-23 20:42</span>
                                                             <span>
-                                                                <i class="el-icon-delete"
-                                                                    style="margin-left: 4px; margin-right: 1px;"></i>
-                                                                <el-button type="text"
-                                                                    style="color: #999; font-size: 10px;">删除该通知
-                                                                </el-button>
+                                                                <el-popconfirm confirmButtonText="确认"
+                                                                    cancelButtonText="取消" confirmButtonType="danger"
+                                                                    cancelButtonType="success" placement="right"
+                                                                    @onConfirm="deleteRemind(voteUpRemind.id)"
+                                                                    title="确认要删除该通知吗？">
+                                                                    <el-button type="text" slot="reference"
+                                                                        style="color: #999; font-size: 10px;">
+                                                                        <span
+                                                                            v-show="showDel.voteUpRemindId === voteUpRemind.id">
+                                                                            <i class="el-icon-delete"
+                                                                                style="margin-left: 8px; margin-right: 4px;"></i>删除该通知</span>
+                                                                    </el-button>
+                                                                </el-popconfirm>
                                                             </span>
                                                         </span>
                                                     </span>
@@ -579,36 +400,14 @@
                                             </el-row>
                                             <el-divider></el-divider>
                                         </div>
-                                        <!-- 最后一个 -->
-                                        <div>
-                                            <el-row style="margin-top: 20px;">
-                                                <el-col :span="1">
-                                                    <el-avatar size="small"
-                                                        src="http://www.pava.run/group1/M00/00/00/rBAABV-rZ9KAOAoyAAAnvyJPq-0893.jpg">
-                                                    </el-avatar>
-                                                </el-col>
-                                                <el-col :span="2.5" style="margin-top: 5px;">
-                                                    <span style="font-size: 14px; color: #222;">Colin</span>
-                                                    <span style="color: #999; font-size: small;">赞了我的评论：</span>
-                                                    <el-link type="info" :underline="false">我的评论内容</el-link>
-                                                </el-col>
-                                            </el-row>
-                                            <el-row>
-                                                <el-col :span="24">
-                                                    <span
-                                                        style="float: left;padding-left: 20px; margin-top: 10px; margin-bottom: 10px;">
-                                                        <span style="font-size: 12px;color: #999">
-                                                            <i class="el-icon-date"></i> 2020-11-23 20:42
-                                                            <span>
-                                                                <el-button type="text" icon="el-icon-delete"
-                                                                    style="color: #999; font-size: 10px;">删除该通知
-                                                                </el-button>
-                                                            </span>
-                                                        </span>
-                                                    </span>
-                                                </el-col>
-                                            </el-row>
-                                        </div>
+                                    </el-card>
+                                    <el-card class="box-card" v-if="voteUpRemindList.length === 0" shadow="hover"
+                                        style="margin-top: 20px;width: 1184px;height: 220px;border-radius: 10px;border-width: 2px">
+                                        <el-row>
+                                            <p
+                                                style="text-align: center; font-size: 15px; color: black; line-height: 160px;">
+                                                暂无收到的赞提醒</p>
+                                        </el-row>
                                     </el-card>
                                 </div>
 
@@ -775,7 +574,13 @@
                 voteUp: true,
                 chat: true
             },
-            unreadMessageCount: {}
+            unreadMessageCount: {},
+            showDel: {
+                systemMessageId: -1,
+                courseRemindId: -1,
+                replyRemindId: -1,
+                voteUpRemindId: -1
+            }
         },
         methods: {
             verify() {
@@ -847,7 +652,19 @@
                         this.unreadMessageCount = data.queryResult.data[0];
                     }
                 })
-            }
+            },
+            deleteRemind(remindId) {
+                yxt.http.delete("/message/eventRemind/remindId/" + remindId + "/userId/" + this.user.id).then(({ data }) => {
+                    if (data.success) {
+                        this.$message.success(data.message);
+                        this.getRemindData();
+                    } else {
+                        this.$message.error(data.message);
+                    }
+                }).catch(() => {
+                    this.$message.error("服务器繁忙，请稍候再试！")
+                });
+            },
         },
         created() {
             this.verify();
@@ -859,6 +676,12 @@
                     this.updateUserMessageSetting();
                 },
             },
+            showDel: {
+                deep: true,
+                handler(oldVal, newVal) {
+                    console.log(oldVal, newVal)
+                }
+            }
         },
         computed: {
             totalUnreadCount() {

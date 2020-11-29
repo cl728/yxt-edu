@@ -1,76 +1,78 @@
 <!DOCTYPE html>
 <html lang="en">
 
-	<head>
-		<meta charset="UTF-8">
-		<title>成员管理</title>
-		<link rel="stylesheet" href="https://cdn.bootcss.com/element-ui/2.13.2/theme-chalk/index.css">
-		<style>
-			#hwDeadline{
+<head>
+	<meta charset="UTF-8">
+	<title>成员管理</title>
+	<link rel="stylesheet" href="https://cdn.bootcss.com/element-ui/2.13.2/theme-chalk/index.css">
+	<style>
+		#hwDeadline {
 			font-size: 13px;
 			color: rgb(95, 99, 104);
 			background-color: rgb(241, 243, 244);
 			line-height: 20px;
 			margin-bottom: 40px;
-			margin-right: 10px;padding-left: 5px;
+			margin-right: 10px;
+			padding-left: 5px;
 			padding-right: 5px
 		}
 	</style>
-	</head>
+</head>
 
-	<body>
-		<div id="app">
-			<el-menu :default-active="activeIndex" class="el-menu-demo" mode="horizontal" @select="handleSelectFirst">
+<body>
+	<div id="app">
+		<el-menu :default-active="activeIndex" class="el-menu-demo" mode="horizontal" @select="handleSelectFirst">
 
-				<el-menu-item style="float: left;">
-					<el-button type="text" onclick="">
-						<i class="el-icon-back"></i></el-button>
-					<el-button type="primary" round><span v-text="course.cname">数据结构</span></el-button>
-				</el-menu-item>
+			<el-menu-item style="float: left;">
+				<el-button type="text" onclick="">
+					<i class="el-icon-back"></i></el-button>
+				<el-button type="primary" round><span v-text="course.cname">数据结构</span></el-button>
+			</el-menu-item>
 
-				<el-menu-item index="1" style="font-size: 20px;margin-left: 400px;">提交作业</el-menu-item>
-				<el-menu-item index="2" style="font-size: 20px;">作业讨论</el-menu-item>
+			<el-menu-item index="1" style="font-size: 20px;margin-left: 400px;">提交作业</el-menu-item>
+			<el-menu-item index="2" style="font-size: 20px;">作业讨论</el-menu-item>
 
-				<el-menu-item style="float: right;">
-					<el-dropdown trigger="click">
-						<span class="el-dropdown-link" style="font-size: 15px;">
-							<i class="el-icon-suitcase"></i>工具
+			<el-menu-item style="float: right;">
+				<el-dropdown trigger="click">
+					<span class="el-dropdown-link" style="font-size: 15px;">
+						<i class="el-icon-suitcase"></i>工具
+					</span>
+					<el-dropdown-menu slot="dropdown">
+						<el-dropdown-item>论文查重</el-dropdown-item>
+						<el-dropdown-item>学术存证</el-dropdown-item>
+						<el-dropdown-item>邀请教师</el-dropdown-item>
+					</el-dropdown-menu>
+				</el-dropdown>
+
+				<el-popover placement="bottom" title="通知信息:" width="200" trigger="click" content="暂无通知">
+					<el-button slot="reference" @click="open" type="text" icon="el-icon-bell"
+						style="padding-inline: 10px;"></el-button>
+				</el-popover>
+
+				<el-avatar :src="user.avatar"></el-avatar>
+			</el-menu-item>
+		</el-menu>
+		<div class="line"></div><br />
+		<!-- 提交作业 -->
+		<div v-show="activeIndex == '1'" style="padding: 10px;">
+			<el-row>
+				<el-col :span="20" :offset="2">
+					<div style="border-radius: 10px;border: 1px gainsboro solid; height: 60px;width: 100%;">
+
+					</div><br />
+
+					<p>
+						<span style="font-size: 18px;color: rgb(45, 45, 45);">{{homework.title}}</span>
+					</p>
+					<p>
+						<span style="font-size: 12px;color: rgb(112, 112, 112);" v-html="homework.description"></span>
+					</p>
+					<p style="float: left;">
+						<span id="hwDeadline">
+							截止日期：{{homework.deadline}}
 						</span>
-						<el-dropdown-menu slot="dropdown">
-							<el-dropdown-item>论文查重</el-dropdown-item>
-							<el-dropdown-item>学术存证</el-dropdown-item>
-							<el-dropdown-item>邀请教师</el-dropdown-item>
-						</el-dropdown-menu>
-					</el-dropdown>
-
-					<el-popover placement="bottom" title="通知信息:" width="200" trigger="click" content="暂无通知">
-						<el-button slot="reference" @click="open" type="text" icon="el-icon-bell" style="padding-inline: 10px;"></el-button>
-					</el-popover>
-
-					<el-avatar :src="user.avatar"></el-avatar>
-				</el-menu-item>
-			</el-menu>
-			<div class="line"></div><br />
-			<!-- 提交作业 -->
-			<div v-show="activeIndex == '1'" style="padding: 10px;">
-				<el-row>
-					<el-col :span="20" :offset="2">
-						<div style="border-radius: 10px;border: 1px gainsboro solid; height: 60px;width: 100%;">
-
-						</div><br />
-
-						<p>
-							<span style="font-size: 18px;color: rgb(45, 45, 45);">{{homework.title}}</span>
-						</p>
-						<p>
-							<span style="font-size: 12px;color: rgb(112, 112, 112);">{{homework.description}}</span>
-						</p>
-						<p style="float: left;">
-							<span id="hwDeadline">
-								截止日期：{{homework.deadline}}
-							</span>
-						</p>
-						<p style="float: left;">
+					</p>
+					<!-- <p style="float: left;">
 							<span id="hwDeadline">
 								个人作业
 							</span>
@@ -82,140 +84,160 @@
 						</p>
 						<p style="float: right;">
 							<el-button type="text" icon="el-icon-tickets">看谁交了</el-button>
-						</p>
-						<br /><br /><br /><br />
-						
-						<!--上传文件 action上传的地址-->
-						<div style="border-radius: 10px;border: 1px gainsboro solid; height: 240px; width: 100%;padding: 10px;">
-							<el-upload class="upload-demo" ref="upload" action="#" :on-preview="handlePreview"
-							 :on-remove="handleRemove" :file-list="fileList" :auto-upload="false">
-								<el-button slot="trigger"  type="primary">选取文件</el-button>
-								<el-button style="margin-left: 10px;"  type="success" @click="submitUpload">上传作业</el-button>
-								<span style="float: right;" v-if="homeworkStudent.status > 0">已提交</span>
-								<span style="float: right;" v-else>未完成</span>
-								<div slot="tip" class="el-upload__tip" style="font-size: 14px;">支持各类文档、图片、代码、压缩包格式</div><br/><br/>
-							</el-upload>
-						</div>
-						<!--查看提交日志-->
-						<el-button type="text" @click="showSubmitLog">{{logTip}}<i :class="logImg"></i></el-button>
-						<div v-if="homeworkStudent.status > 0" v-show="showLog == 1">
-							<span style="color: rgb(96, 98, 102); margin: 20px;">提交时间：{{homeworkStudent.submitTime}}</span>
-							<span style="color: rgb(96, 98, 102);">最后更新时间：{{homeworkStudent.updateTime}}</span>
-						</div>
-						<div v-show="showLog == 1" v-else><span>暂无记录</span></div>
-					</el-col>
-				</el-row>
-			</div>
+						</p> -->
+					<br /><br /><br /><br />
 
-			<!-- 作业讨论 -->
-			<div v-show="activeIndex == '2'">
-				<el-row>
-					<el-col :span="14" :offset="5">
-						<div style="border-radius: 10px;border: 1px gainsboro solid;width: 100%;padding: 10px;">
-							<p style="margin: 20px;">
-								<span style="font-size: 18px;color: rgb(45, 45, 45);">{{homework.title}}</span>
-							</p>
-							<p style="margin: 20px;">
-								<span style="font-size: 13px;color: rgb(160, 160, 160);">
-									截止日期：{{homework.deadline}}
-								</span>
-							</p>
-							<p style="margin: 20px;">
-								<span style="font-size: 12px;color: rgb(112, 112, 112);">{{homework.description}}</span>
-							</p>
-							<el-divider></el-divider>
-							<div style="padding: 20px">
-								<el-avatar :src="user.avatar"></el-avatar>
-								<el-input placeholder="添加评论" v-model="remark" style="width: 500px;margin-left: 20px;"></el-input>
-								<el-button style="margin-left: 10px;" @click="clearRemark">取消</el-button>
-								<el-button type="primary">确定</el-button>
-							</div>
-							
-							
-						</div>
-						
-					</el-col>
-				</el-row>
-			</div>
-
-
+					<!--上传文件 action上传的地址-->
+					<div
+						style="border-radius: 10px;border: 1px gainsboro solid; height: 240px; width: 100%;padding: 10px;">
+						<el-upload class="upload-demo" ref="upload" action="#" :on-preview="handlePreview"
+							:on-remove="handleRemove" :file-list="fileList" :auto-upload="false">
+							<el-button slot="trigger" type="primary">选取文件</el-button>
+							<el-button style="margin-left: 10px;" type="success" @click="submitUpload">上传作业</el-button>
+							<span style="float: right;" v-if="homeworkStudent.status > 0">已提交</span>
+							<span style="float: right;" v-else>未完成</span>
+							<div slot="tip" class="el-upload__tip" style="font-size: 14px;">支持各类文档、图片、代码、压缩包格式</div>
+							<br /><br />
+						</el-upload>
+					</div>
+					<!--查看提交日志-->
+					<el-button type="text" @click="showSubmitLog">{{logTip}}<i :class="logImg"></i></el-button>
+					<div v-if="homeworkStudent.status > 0" v-show="showLog == 1">
+						<span style="color: rgb(96, 98, 102); margin: 20px;">提交时间：{{homeworkStudent.submitTime}}</span>
+						<span style="color: rgb(96, 98, 102);">最后更新时间：{{homeworkStudent.updateTime}}</span>
+					</div>
+					<div v-show="showLog == 1" v-else><span>暂无记录</span></div>
+				</el-col>
+			</el-row>
 		</div>
-	</body>
-	<script src="https://unpkg.com/vue/dist/vue.js"></script>
-	<script src="https://cdn.bootcss.com/axios/0.19.2/axios.min.js"></script>
-	<script src="https://cdn.bootcss.com/element-ui/2.13.2/index.js"></script>
-	<script src="./js/common.js"></script>
 
-	<script>
-		new Vue({
-			el: '#app',
-			data: {
-				course: {
-					cname: '数据结构'
-				},
-				user: {},
-				activeIndex: '1',
-				//作业详情
-				homework: {
-					title: '作业标题',
-					description: '作业描述',
-					deadline: '2020-11-23 23:59'
-				},
-				//选中的上传文件
-				fileList: [{
-					name: 'food.jpeg',
-					url: 'https://fuss10.elemecdn.com/3/63/4e7f3a15429bfda99bce42a18cdd1jpeg.jpeg?imageMogr2/thumbnail/360x360/format/webp/quality/100'
-				}],
-				
-				//学生-作业记录相关: 状态 提交时间 更新时间
-				homeworkStudent:{status:1,submitTime:'2020-11-23 14:11',updateTime:'2020-11-23 14:11'},
-				
-				showLog: 0,
-				logTip:'查看提交日志',
-				logImg:'el-icon-arrow-right el-icon--right',
-				//作业评论
-				remark:'',
-				
+		<!-- 作业讨论 -->
+		<div v-show="activeIndex == '2'">
+			<el-row>
+				<el-col :span="14" :offset="5">
+					<div style="border-radius: 10px;border: 1px gainsboro solid;width: 100%;padding: 10px;">
+						<p style="margin: 20px;">
+							<span style="font-size: 18px;color: rgb(45, 45, 45);">{{homework.title}}</span>
+						</p>
+						<p style="margin: 20px;">
+							<span style="font-size: 13px;color: rgb(160, 160, 160);">
+								截止日期：{{homework.deadline}}
+							</span>
+						</p>
+						<p style="margin: 20px;">
+							<span style="font-size: 12px;color: rgb(112, 112, 112);">{{homework.description}}</span>
+						</p>
+						<el-divider></el-divider>
+						<div style="padding: 20px">
+							<el-avatar :src="user.avatar"></el-avatar>
+							<el-input placeholder="添加评论" v-model="remark" style="width: 500px;margin-left: 20px;">
+							</el-input>
+							<el-button style="margin-left: 10px;" @click="clearRemark">取消</el-button>
+							<el-button type="primary">确定</el-button>
+						</div>
+
+
+					</div>
+
+				</el-col>
+			</el-row>
+		</div>
+
+
+	</div>
+</body>
+<script src="https://unpkg.com/vue/dist/vue.js"></script>
+<script src="https://cdn.bootcss.com/axios/0.19.2/axios.min.js"></script>
+<script src="https://cdn.bootcss.com/element-ui/2.13.2/index.js"></script>
+<script src="./js/common.js"></script>
+
+<script>
+	new Vue({
+		el: '#app',
+		data: {
+			course: {
+				cname: '数据结构'
 			},
-			methods: {
-				handleSelectFirst(key, keyPath) {
-					if (key != null) {
-						this.activeIndex = key;
-					}
-				},
-				//上传文件
-				submitUpload() {
-					this.$refs.upload.submit();
-					this.homeworkStudent.status = 1;
-				},
-				handleRemove(file, fileList) {
-					console.log(file, fileList);
-				},
-				handlePreview(file) {
-					console.log(file);
-				},
-				showSubmitLog(){
-					if(this.showLog == 1){
-						this.showLog = 0;
-						this.logImg = 'el-icon-arrow-right el-icon--right';
-						this.logTip = "查看提交日志";
-					}else{
-						this.showLog = 1;
-						this.logImg = 'el-icon-arrow-down el-icon--right';
-						this.logTip = "收起日志";
-					}
-				},
-				clearRemark(){
-					this.remark='';
+			user: {},
+			activeIndex: '1',
+			//作业详情
+			homework: {
+				title: '作业标题',
+				description: '作业描述',
+				deadline: '2020-11-23 23:59'
+			},
+			//选中的上传文件
+			fileList: [{
+				name: 'food.jpeg',
+				url: 'https://fuss10.elemecdn.com/3/63/4e7f3a15429bfda99bce42a18cdd1jpeg.jpeg?imageMogr2/thumbnail/360x360/format/webp/quality/100'
+			}],
+
+			//学生-作业记录相关: 状态 提交时间 更新时间
+			homeworkStudent: { status: 1, submitTime: '2020-11-23 14:11', updateTime: '2020-11-23 14:11' },
+
+			showLog: 0,
+			logTip: '查看提交日志',
+			logImg: 'el-icon-arrow-right el-icon--right',
+			//作业评论
+			remark: '',
+
+		},
+		methods: {
+			handleSelectFirst(key, keyPath) {
+				if (key != null) {
+					this.activeIndex = key;
 				}
-
-
 			},
-
-			created() {
-
+			//上传文件
+			submitUpload() {
+				this.$refs.upload.submit();
+				this.homeworkStudent.status = 1;
 			},
+			handleRemove(file, fileList) {
+				console.log(file, fileList);
+			},
+			handlePreview(file) {
+				console.log(file);
+			},
+			showSubmitLog() {
+				if (this.showLog == 1) {
+					this.showLog = 0;
+					this.logImg = 'el-icon-arrow-right el-icon--right';
+					this.logTip = "查看提交日志";
+				} else {
+					this.showLog = 1;
+					this.logImg = 'el-icon-arrow-down el-icon--right';
+					this.logTip = "收起日志";
+				}
+			},
+			clearRemark() {
+				this.remark = '';
+			},
+			getHomeworkData() {
+				yxt.http.get("homework/homeworkId/" + yxt.getUrlParam("id")).then(({ data }) => {
+					if (data.success) {
+						this.homework = data.queryResult.data[0];
+					}
+				})
+			},
+			verify() {
+				yxt.http.get("/auth/verify/2").then(({ data }) => {
+					if (data.success) {
+						this.user = data.queryResult.data[0];
+					} else {
+						location.href = "index.html"
+					}
+				}).catch(() => {
+					location.href = "index.html"
+				});
+			}
+		},
+		created() {
+			this.verify();
+			this.getHomeworkData();
+		},
 
-		})
-	</script>
+	})
+</script>
+
 </html>

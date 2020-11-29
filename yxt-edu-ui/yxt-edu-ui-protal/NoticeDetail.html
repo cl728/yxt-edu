@@ -85,7 +85,11 @@
 						</el-row>
 						<el-row style="margin-top: 20px">
 							<el-link style="margin-left: 30px" type="primary" :underline="false"
-								@click="dialogTableVisible = true">
+								@click="dialogTableVisible = true" v-if="user.isTeacher">
+								<span v-text="notice.views">2</span>
+								人已读
+							</el-link>
+							<el-link style="margin-left: 30px" type="primary" :underline="false" v-if="!user.isTeacher">
 								<span v-text="notice.views">2</span>
 								人已读
 							</el-link>
@@ -98,8 +102,8 @@
 
 					<!-- 已读/未读对话框 -->
 					<div>
-						<el-dialog title="已读/未读列表" :visible.sync="dialogTableVisible && user.isTeacher"
-							class="add-dialog" width="30%">
+						<el-dialog title="已读/未读列表" :visible.sync="dialogTableVisible" class="add-dialog" width="30%"
+							destory-on-close @closed="dialogTableVisible = false">
 							<el-menu :default-active="activeIndex" class="el-menu-demo" mode="horizontal">
 								<el-menu-item index="1" @click="isReadUsersList()">
 									已读（
@@ -151,7 +155,7 @@
 							<div class="btn-control" v-if="isShowPubBtn">
 								<el-button class="btn" type="success" round @click="postComment()">发布
 								</el-button>
-								<el-button plain round @click="isShowPubBtn = false">取消
+								<el-button plain round @click="clear">取消
 								</el-button>
 							</div>
 						</div>
@@ -170,9 +174,18 @@
 							</div>
 							<div class="content" v-text="comment.content">hello world</div>
 							<div class="control">
-								<span class="reply-text">
-									<i class="fa fa-thumbs-o-up" style="margin-left: 6px; margin-right: 8px;"></i>
-									<span>点赞</span>
+								<span class="reply-text" @click="switchVoteUp(comment.id)">
+									<span v-if="comment.voteUpCount === 0">
+										<i class="fa fa-thumbs-o-up" style="margin-left: 6px; margin-right: 8px;"></i>
+										<span>点赞</span>
+									</span>
+									<span v-if="comment.voteUpCount != 0">
+										<i v-show="userVoteUp[comment.id]" class="fa fa-thumbs-up"
+											style="margin-left: 6px; margin-right: 2px;"></i>
+										<i v-show="!userVoteUp[comment.id]" class="fa fa-thumbs-o-up"
+											style="margin-left: 6px; margin-right: 2px;"></i>
+										<span v-text="comment.voteUpCount">24</span>
+									</span>
 								</span>
 								<span class="comment-reply" style="margin-left: 6px;"
 									@click="replyComment(comment.user.username, comment.id)">
@@ -192,12 +205,24 @@
 									</div>
 									<div class="reply-bottom">
 										<span v-text="reply.createTime">2020-11-26 12:39:22</span>
-										<span class="reply-text" @click="">
-											<i class="fa fa-thumbs-o-up"
-												style="margin-left: 6px; margin-right: 12px;"></i>
+										<span class="reply-text" @click="switchVoteUp(reply.id)">
+											<span v-if="reply.voteUpCount === 0">
+												<i class="fa fa-thumbs-o-up"
+													style="margin-left: 6px; margin-right: 3px;"></i>
+												<span>点赞</span>
+											</span>
+											<span v-if="reply.voteUpCount != 0">
+												<i v-show="userVoteUp[reply.id]" class="fa fa-thumbs-up"
+													style="margin-left: 6px; margin-right: 2px;"></i>
+												<i v-show="!userVoteUp[reply.id]" class="fa fa-thumbs-o-up"
+													style="margin-left: 6px; margin-right: 2px;"></i>
+												<span v-text="reply.voteUpCount">24</span>
+											</span>
 										</span>
 										<span class="reply-text" @click="replyComment(reply.user.username, reply.id)">
-											<i class="fa fa-mail-forward" style="margin-left: 6px;"></i>
+											<i class="fa fa-mail-forward"
+												style="margin-left: 6px; margin-right: 4px;"></i>
+											<span>回复</span>
 										</span>
 									</div>
 								</div>
@@ -327,24 +352,6 @@
 					username: 'sasaf'
 				}
 			],
-			studentData: [
-				{
-					avator: 'https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png',
-					sno: '20145',
-					realName: 'qqweq',
-					username: 'sasaf',
-					class: '12asda34',
-					joinTime: '2as1d3a'
-				},
-				{
-					avator: 'https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg',
-					sno: '2014asd5',
-					realName: 'qqasdaweq',
-					username: 'saasdsaf',
-					class: '12asddsaaa34',
-					joinTime: '2adsas1d3a'
-				}
-			],
 			readUsersTable: [{
 				avatar: "http://www.pava.run/group1/M00/00/00/rBAABV-jW1qALEibAAGxb3lI0NI550.jpg",
 				realName: '王小虎',
@@ -388,6 +395,7 @@
 			pubComment: {
 				parentCommentId: -1
 			},
+			userVoteUp: {}
 		},
 		methods: {
 			isReadUsersList() {
@@ -417,6 +425,7 @@
 						this.user = data.queryResult.data[0];
 						this.updateReadStatus();
 						this.getNoticeData();
+						this.getUserVoteUpData();
 					} else {
 						location.href = "../index.html"
 					}
@@ -471,6 +480,26 @@
 				document.getElementById("topComment").setAttribute("placeholder", "写下你的评论...");
 				this.isShowPubBtn = false;
 			},
+			switchVoteUp(commentId) {
+				yxt.http.put("comment/voteUpCount/commentId/" + commentId + "/userId/" + this.user.id).then(({ data }) => {
+					if (data.success) {
+						this.$message.success(data.message);
+						this.getCommentData();
+						this.getUserVoteUpData();
+					} else {
+						this.$message.error(data.message);
+					}
+				}).catch(() => {
+					this.$message.error("服务器繁忙，请稍候再试！")
+				})
+			},
+			getUserVoteUpData() {
+				yxt.http.get("comment/commentUser/userId/" + this.user.id).then(({ data }) => {
+					if (data.success) {
+						this.userVoteUp = data;
+					}
+				})
+			}
 		},
 		created() {
 			this.verify();
