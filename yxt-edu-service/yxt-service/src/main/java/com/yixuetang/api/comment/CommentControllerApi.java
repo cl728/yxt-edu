@@ -17,12 +17,12 @@ import io.swagger.annotations.ApiOperation;
 @Api(value = "评论模块管理接口", description = "评论模块管理接口，提供评论的增、删、改、查")
 public interface CommentControllerApi {
 
-    @ApiOperation("在某一公告下删除评论")
+    @ApiOperation("管理员删除某个评论")
     @ApiImplicitParams(value = {
             @ApiImplicitParam(name = "commentId", value = "评论id", required = true,
                     paramType = "path", dataType = "long"),
     })
-    CommonResponse deleteCommentFromNotice(long commentId);
+    CommonResponse deleteComment(long commentId);
 
     @ApiOperation("在某一公告下发布评论")
     @ApiImplicitParams(value = {

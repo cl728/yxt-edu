@@ -23,8 +23,8 @@ public class CommentController implements CommentControllerApi {
 
     @Override
     @DeleteMapping("/admin/id/{commentId}")
-    public CommonResponse deleteCommentFromNotice(@PathVariable long commentId) {
-        return this.commentService.deleteCommentFromNotice(commentId);
+    public CommonResponse deleteComment(@PathVariable long commentId) {
+        return this.commentService.deleteComment(commentId);
     }
 
     @Override

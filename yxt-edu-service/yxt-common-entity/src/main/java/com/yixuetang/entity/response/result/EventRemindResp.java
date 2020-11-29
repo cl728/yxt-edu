@@ -20,6 +20,8 @@ import java.util.Date;
 @AllArgsConstructor
 public class EventRemindResp {
 
+    private Long id;
+
     private Integer remindType;
 
     private User sender;

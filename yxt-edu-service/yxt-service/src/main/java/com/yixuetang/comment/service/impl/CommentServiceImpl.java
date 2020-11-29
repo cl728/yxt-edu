@@ -126,7 +126,7 @@ public class CommentServiceImpl implements CommentService {
      */
     @Transactional
     @Override
-    public CommonResponse deleteCommentFromNotice(long commentId) {
+    public CommonResponse deleteComment(long commentId) {
 
         // 1. 根据评论id查询出已有的评论信息
         Comment comment = this.commentMapper.findById( commentId );
@@ -139,7 +139,7 @@ public class CommentServiceImpl implements CommentService {
         List<Comment> childComments = comment.getChildComments();
         if (!CollectionUtils.isEmpty( childComments )) {
             // 先删除子评论
-            childComments.forEach( childComment -> this.deleteCommentFromNotice( childComment.getId() ) );
+            childComments.forEach( childComment -> this.deleteComment( childComment.getId() ) );
         }
 
         // 3. 再根据评论id删除此评论

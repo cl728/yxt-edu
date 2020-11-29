@@ -30,10 +30,10 @@ public interface CommentService {
     CommonResponse postCommentToNotice(long noticeId, long userId, PostComment postComment);
 
     /**
-     * 在某一公告下删除评论
+     * 管理员删除某个评论
      *
      * @param commentId 评论id
      * @return 响应结果实体类
      */
-    CommonResponse deleteCommentFromNotice(long commentId);
+    CommonResponse deleteComment(long commentId);
 }

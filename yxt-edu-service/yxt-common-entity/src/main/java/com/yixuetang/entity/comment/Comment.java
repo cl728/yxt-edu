@@ -46,4 +46,7 @@ public class Comment {
 
     @TableField(exist = false)
     private List<Comment> childComments;    // 评论-子级评论 多对一
+
+    @TableField(exist = false)
+    private Integer voteUpCount;    // 被点赞次数
 }

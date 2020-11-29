@@ -265,6 +265,7 @@ public class MessageServiceImpl implements MessageService {
                 .orderByDesc( "remind_time" ) )
                 .forEach( eventRemind -> {
                     EventRemindResp eventRemindResp = EventRemindResp.builder()
+                            .id( eventRemind.getId() )
                             .remindType( eventRemind.getRemindType() )
                             .sender( this.userMapper.selectById( eventRemind.getSenderId() ) )
                             .action( eventRemind.getAction() )
