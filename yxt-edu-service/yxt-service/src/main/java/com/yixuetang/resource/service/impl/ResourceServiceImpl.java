@@ -2,7 +2,9 @@ package com.yixuetang.resource.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.yixuetang.course.mapper.CourseMapper;
+import com.yixuetang.course.mapper.ScMapper;
 import com.yixuetang.entity.course.Course;
+import com.yixuetang.entity.course.StudentCourse;
 import com.yixuetang.entity.homework.Homework;
 import com.yixuetang.entity.homework.HomeworkResource;
 import com.yixuetang.entity.request.resource.DropResource;
@@ -25,6 +27,7 @@ import com.yixuetang.resource.service.ResourceService;
 import com.yixuetang.user.mapper.UserMapper;
 import com.yixuetang.utils.exception.ExceptionThrowUtils;
 import com.yixuetang.utils.resource.ResourceUtils;
+import com.yixuetang.ws.service.WebSocketService;
 import org.apache.commons.lang3.ObjectUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
@@ -40,6 +43,7 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.servlet.http.HttpServletResponse;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
+import java.util.stream.Collectors;
 
 /**
  * @author Colin
@@ -70,6 +74,9 @@ public class ResourceServiceImpl implements ResourceService {
 
     @Autowired
     private HomeworkResourceMapper homeworkResourceMapper;
+
+    @Autowired
+    private ScMapper scMapper;
 
     @javax.annotation.Resource(name = "template")
     private RedisTemplate<String, Object> template;
