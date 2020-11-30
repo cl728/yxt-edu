@@ -36,7 +36,9 @@ public enum CourseCode implements ResponseCode {
 
     DELETE_COURSE_FAIL_PASSWORD_WRONG(false, 50011, "密码错误！"),
 
-    FIND_COURSE_SCORES_FAIL_COURSE_NOT_BELONGS_TO_THIS_TEACHER(false, 50012, "查询失败，该用户不是该课程的授课老师！");
+    FIND_COURSE_SCORES_FAIL_COURSE_NOT_BELONGS_TO_THIS_TEACHER(false, 50012, "查询失败，该用户不是该课程的授课老师！"),
+
+    STUDENT_COURSE_NOT_FOUND(false, 50000, "学生-课程记录不存在！");
 
     private boolean success;
     private int code;

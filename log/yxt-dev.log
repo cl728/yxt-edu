@@ -1,273 +1,132 @@
-2020-11-23 14:12:12.517  INFO 8400 --- [main] com.yixuetang.YxtServiceApplication      : Starting YxtServiceApplication on SD-20191117RFKO with PID 8400 (E:\projects\yxt-edu\yxt-edu-service\yxt-service\target\classes started by Administrator in E:\projects\yxt-edu)
-2020-11-23 14:12:12.608 DEBUG 8400 --- [main] com.yixuetang.YxtServiceApplication      : Running with Spring Boot v2.2.5.RELEASE, Spring v5.2.4.RELEASE
-2020-11-23 14:12:12.608  INFO 8400 --- [main] com.yixuetang.YxtServiceApplication      : The following profiles are active: dev
-2020-11-23 14:12:19.674  INFO 8400 --- [main] .s.d.r.c.RepositoryConfigurationDelegate : Multiple Spring Data modules found, entering strict repository configuration mode!
-2020-11-23 14:12:19.723  INFO 8400 --- [main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data Redis repositories in DEFAULT mode.
-2020-11-23 14:12:20.109  INFO 8400 --- [main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 112ms. Found 0 Redis repository interfaces.
-2020-11-23 14:12:21.479  INFO 8400 --- [main] ptablePropertiesBeanFactoryPostProcessor : Post-processing PropertySource instances
-2020-11-23 14:12:21.607  INFO 8400 --- [main] c.u.j.EncryptablePropertySourceConverter : Converting PropertySource configurationProperties [org.springframework.boot.context.properties.source.ConfigurationPropertySourcesPropertySource] to AOP Proxy
-2020-11-23 14:12:21.607  INFO 8400 --- [main] c.u.j.EncryptablePropertySourceConverter : Converting PropertySource servletConfigInitParams [org.springframework.core.env.PropertySource$StubPropertySource] to EncryptablePropertySourceWrapper
-2020-11-23 14:12:21.607  INFO 8400 --- [main] c.u.j.EncryptablePropertySourceConverter : Converting PropertySource servletContextInitParams [org.springframework.core.env.PropertySource$StubPropertySource] to EncryptablePropertySourceWrapper
-2020-11-23 14:12:21.607  INFO 8400 --- [main] c.u.j.EncryptablePropertySourceConverter : Converting PropertySource systemProperties [org.springframework.core.env.PropertiesPropertySource] to EncryptableMapPropertySourceWrapper
-2020-11-23 14:12:21.607  INFO 8400 --- [main] c.u.j.EncryptablePropertySourceConverter : Converting PropertySource systemEnvironment [org.springframework.boot.env.SystemEnvironmentPropertySourceEnvironmentPostProcessor$OriginAwareSystemEnvironmentPropertySource] to EncryptableMapPropertySourceWrapper
-2020-11-23 14:12:21.607  INFO 8400 --- [main] c.u.j.EncryptablePropertySourceConverter : Converting PropertySource random [org.springframework.boot.env.RandomValuePropertySource] to EncryptablePropertySourceWrapper
-2020-11-23 14:12:21.607  INFO 8400 --- [main] c.u.j.EncryptablePropertySourceConverter : Converting PropertySource applicationConfig: [classpath:/application-dev.yml] [org.springframework.boot.env.OriginTrackedMapPropertySource] to EncryptableMapPropertySourceWrapper
-2020-11-23 14:12:21.607  INFO 8400 --- [main] c.u.j.EncryptablePropertySourceConverter : Converting PropertySource applicationConfig: [classpath:/application.yml] [org.springframework.boot.env.OriginTrackedMapPropertySource] to EncryptableMapPropertySourceWrapper
-2020-11-23 14:12:21.652  INFO 8400 --- [main] c.u.j.filter.DefaultLazyPropertyFilter   : Property Filter custom Bean not found with name 'encryptablePropertyFilter'. Initializing Default Property Filter
-2020-11-23 14:12:24.313  INFO 8400 --- [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port(s): 8888 (http)
-2020-11-23 14:12:24.365  INFO 8400 --- [main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
-2020-11-23 14:12:24.365  INFO 8400 --- [main] org.apache.catalina.core.StandardEngine  : Starting Servlet engine: [Apache Tomcat/9.0.31]
-2020-11-23 14:12:24.842  INFO 8400 --- [main] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
-2020-11-23 14:12:24.842  INFO 8400 --- [main] o.s.web.context.ContextLoader            : Root WebApplicationContext: initialization completed in 11849 ms
-2020-11-23 14:12:25.809  INFO 8400 --- [main] c.u.j.r.DefaultLazyPropertyResolver      : Property Resolver custom Bean not found with name 'encryptablePropertyResolver'. Initializing Default Property Resolver
-2020-11-23 14:12:25.809  INFO 8400 --- [main] c.u.j.d.DefaultLazyPropertyDetector      : Property Detector custom Bean not found with name 'encryptablePropertyDetector'. Initializing Default Property Detector
-2020-11-23 14:12:25.809  INFO 8400 --- [main] c.u.j.encryptor.DefaultLazyEncryptor     : String Encryptor custom Bean not found with name 'jasyptStringEncryptor'. Initializing Default String Encryptor
-2020-11-23 14:12:25.824  INFO 8400 --- [main] c.u.j.encryptor.DefaultLazyEncryptor     : Encryptor config not found for property jasypt.encryptor.algorithm, using default value: PBEWithMD5AndDES
-2020-11-23 14:12:25.824  INFO 8400 --- [main] c.u.j.encryptor.DefaultLazyEncryptor     : Encryptor config not found for property jasypt.encryptor.keyObtentionIterations, using default value: 1000
-2020-11-23 14:12:25.824  INFO 8400 --- [main] c.u.j.encryptor.DefaultLazyEncryptor     : Encryptor config not found for property jasypt.encryptor.poolSize, using default value: 1
-2020-11-23 14:12:25.824  INFO 8400 --- [main] c.u.j.encryptor.DefaultLazyEncryptor     : Encryptor config not found for property jasypt.encryptor.providerName, using default value: null
-2020-11-23 14:12:25.824  INFO 8400 --- [main] c.u.j.encryptor.DefaultLazyEncryptor     : Encryptor config not found for property jasypt.encryptor.providerClassName, using default value: null
-2020-11-23 14:12:25.824  INFO 8400 --- [main] c.u.j.encryptor.DefaultLazyEncryptor     : Encryptor config not found for property jasypt.encryptor.saltGeneratorClassname, using default value: org.jasypt.salt.RandomSaltGenerator
-2020-11-23 14:12:25.824  INFO 8400 --- [main] c.u.j.encryptor.DefaultLazyEncryptor     : Encryptor config not found for property jasypt.encryptor.stringOutputType, using default value: base64
-2020-11-23 14:12:30.885  INFO 8400 --- [main] pertySourcedRequestMappingHandlerMapping : Mapped URL path [/v2/api-docs] onto method [springfox.documentation.swagger2.web.Swagger2Controller#getDocumentation(String, HttpServletRequest)]
-2020-11-23 14:12:31.336  INFO 8400 --- [main] o.s.s.concurrent.ThreadPoolTaskExecutor  : Initializing ExecutorService 'applicationTaskExecutor'
-2020-11-23 14:12:31.837  INFO 8400 --- [main] d.s.w.p.DocumentationPluginsBootstrapper : Context refreshed
-2020-11-23 14:12:31.884  INFO 8400 --- [main] d.s.w.p.DocumentationPluginsBootstrapper : Found 1 custom documentation plugin(s)
-2020-11-23 14:12:31.949  INFO 8400 --- [main] s.d.s.w.s.ApiListingReferenceScanner     : Scanning for api listing references
-2020-11-23 14:12:32.272  INFO 8400 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: findByIdUsingGET_1
-2020-11-23 14:12:32.305  INFO 8400 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: findByIdUsingGET_2
-2020-11-23 14:12:32.320  INFO 8400 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: switchTopUsingPUT_1
-2020-11-23 14:12:32.336  INFO 8400 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: uploadUsingPOST_1
-2020-11-23 14:12:32.352  INFO 8400 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: delByIdUsingDELETE_1
-2020-11-23 14:12:32.352  INFO 8400 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: findByPageUsingGET_1
-2020-11-23 14:12:32.578  INFO 8400 --- [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port(s): 8888 (http) with context path ''
-2020-11-23 14:12:32.594  INFO 8400 --- [main] com.yixuetang.YxtServiceApplication      : Started YxtServiceApplication in 23.84 seconds (JVM running for 27.951)
-2020-11-23 14:17:02.508  INFO 8400 --- [http-nio-8888-exec-1] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring DispatcherServlet 'dispatcherServlet'
-2020-11-23 14:17:02.508  INFO 8400 --- [http-nio-8888-exec-1] o.s.web.servlet.DispatcherServlet        : Initializing Servlet 'dispatcherServlet'
-2020-11-23 14:17:02.539  INFO 8400 --- [http-nio-8888-exec-1] o.s.web.servlet.DispatcherServlet        : Completed initialization in 14 ms
-2020-11-23 14:17:02.686 ERROR 8400 --- [http-nio-8888-exec-1] c.y.utils.exception.ExceptionCatchUtils  : 捕获不可预知异常：Request method 'GET' not supported
- 不可预知异常：{}
-
-org.springframework.web.HttpRequestMethodNotSupportedException: Request method 'GET' not supported
-	at org.springframework.web.servlet.mvc.method.RequestMappingInfoHandlerMapping.handleNoMatch(RequestMappingInfoHandlerMapping.java:213) ~[spring-webmvc-5.2.4.RELEASE.jar:5.2.4.RELEASE]
-	at org.springframework.web.servlet.handler.AbstractHandlerMethodMapping.lookupHandlerMethod(AbstractHandlerMethodMapping.java:421) ~[spring-webmvc-5.2.4.RELEASE.jar:5.2.4.RELEASE]
-	at org.springframework.web.servlet.handler.AbstractHandlerMethodMapping.getHandlerInternal(AbstractHandlerMethodMapping.java:367) ~[spring-webmvc-5.2.4.RELEASE.jar:5.2.4.RELEASE]
-	at org.springframework.web.servlet.mvc.method.RequestMappingInfoHandlerMapping.getHandlerInternal(RequestMappingInfoHandlerMapping.java:110) ~[spring-webmvc-5.2.4.RELEASE.jar:5.2.4.RELEASE]
-	at org.springframework.web.servlet.mvc.method.RequestMappingInfoHandlerMapping.getHandlerInternal(RequestMappingInfoHandlerMapping.java:59) ~[spring-webmvc-5.2.4.RELEASE.jar:5.2.4.RELEASE]
-	at org.springframework.web.servlet.handler.AbstractHandlerMapping.getHandler(AbstractHandlerMapping.java:395) ~[spring-webmvc-5.2.4.RELEASE.jar:5.2.4.RELEASE]
-	at org.springframework.web.servlet.DispatcherServlet.getHandler(DispatcherServlet.java:1234) ~[spring-webmvc-5.2.4.RELEASE.jar:5.2.4.RELEASE]
-	at org.springframework.web.servlet.DispatcherServlet.doDispatch(DispatcherServlet.java:1016) ~[spring-webmvc-5.2.4.RELEASE.jar:5.2.4.RELEASE]
-	at org.springframework.web.servlet.DispatcherServlet.doService(DispatcherServlet.java:943) ~[spring-webmvc-5.2.4.RELEASE.jar:5.2.4.RELEASE]
-	at org.springframework.web.servlet.FrameworkServlet.processRequest(FrameworkServlet.java:1006) [spring-webmvc-5.2.4.RELEASE.jar:5.2.4.RELEASE]
-	at org.springframework.web.servlet.FrameworkServlet.doGet(FrameworkServlet.java:898) [spring-webmvc-5.2.4.RELEASE.jar:5.2.4.RELEASE]
-	at javax.servlet.http.HttpServlet.service(HttpServlet.java:634) [tomcat-embed-core-9.0.31.jar:9.0.31]
-	at org.springframework.web.servlet.FrameworkServlet.service(FrameworkServlet.java:883) [spring-webmvc-5.2.4.RELEASE.jar:5.2.4.RELEASE]
-	at javax.servlet.http.HttpServlet.service(HttpServlet.java:741) [tomcat-embed-core-9.0.31.jar:9.0.31]
-	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:231) [tomcat-embed-core-9.0.31.jar:9.0.31]
-	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:166) [tomcat-embed-core-9.0.31.jar:9.0.31]
-	at org.apache.tomcat.websocket.server.WsFilter.doFilter(WsFilter.java:53) [tomcat-embed-websocket-9.0.31.jar:9.0.31]
-	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:193) [tomcat-embed-core-9.0.31.jar:9.0.31]
-	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:166) [tomcat-embed-core-9.0.31.jar:9.0.31]
-	at org.springframework.web.filter.CorsFilter.doFilterInternal(CorsFilter.java:92) [spring-web-5.2.4.RELEASE.jar:5.2.4.RELEASE]
-	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:119) [spring-web-5.2.4.RELEASE.jar:5.2.4.RELEASE]
-	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:193) [tomcat-embed-core-9.0.31.jar:9.0.31]
-	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:166) [tomcat-embed-core-9.0.31.jar:9.0.31]
-	at org.springframework.web.filter.RequestContextFilter.doFilterInternal(RequestContextFilter.java:100) [spring-web-5.2.4.RELEASE.jar:5.2.4.RELEASE]
-	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:119) [spring-web-5.2.4.RELEASE.jar:5.2.4.RELEASE]
-	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:193) [tomcat-embed-core-9.0.31.jar:9.0.31]
-	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:166) [tomcat-embed-core-9.0.31.jar:9.0.31]
-	at org.springframework.web.filter.FormContentFilter.doFilterInternal(FormContentFilter.java:93) [spring-web-5.2.4.RELEASE.jar:5.2.4.RELEASE]
-	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:119) [spring-web-5.2.4.RELEASE.jar:5.2.4.RELEASE]
-	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:193) [tomcat-embed-core-9.0.31.jar:9.0.31]
-	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:166) [tomcat-embed-core-9.0.31.jar:9.0.31]
-	at org.springframework.web.filter.CharacterEncodingFilter.doFilterInternal(CharacterEncodingFilter.java:201) [spring-web-5.2.4.RELEASE.jar:5.2.4.RELEASE]
-	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:119) [spring-web-5.2.4.RELEASE.jar:5.2.4.RELEASE]
-	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:193) [tomcat-embed-core-9.0.31.jar:9.0.31]
-	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:166) [tomcat-embed-core-9.0.31.jar:9.0.31]
-	at org.apache.catalina.core.StandardWrapperValve.invoke(StandardWrapperValve.java:202) [tomcat-embed-core-9.0.31.jar:9.0.31]
-	at org.apache.catalina.core.StandardContextValve.invoke(StandardContextValve.java:96) [tomcat-embed-core-9.0.31.jar:9.0.31]
-	at org.apache.catalina.authenticator.AuthenticatorBase.invoke(AuthenticatorBase.java:541) [tomcat-embed-core-9.0.31.jar:9.0.31]
-	at org.apache.catalina.core.StandardHostValve.invoke(StandardHostValve.java:139) [tomcat-embed-core-9.0.31.jar:9.0.31]
-	at org.apache.catalina.valves.ErrorReportValve.invoke(ErrorReportValve.java:92) [tomcat-embed-core-9.0.31.jar:9.0.31]
-	at org.apache.catalina.core.StandardEngineValve.invoke(StandardEngineValve.java:74) [tomcat-embed-core-9.0.31.jar:9.0.31]
-	at org.apache.catalina.connector.CoyoteAdapter.service(CoyoteAdapter.java:343) [tomcat-embed-core-9.0.31.jar:9.0.31]
-	at org.apache.coyote.http11.Http11Processor.service(Http11Processor.java:367) [tomcat-embed-core-9.0.31.jar:9.0.31]
-	at org.apache.coyote.AbstractProcessorLight.process(AbstractProcessorLight.java:65) [tomcat-embed-core-9.0.31.jar:9.0.31]
-	at org.apache.coyote.AbstractProtocol$ConnectionHandler.process(AbstractProtocol.java:868) [tomcat-embed-core-9.0.31.jar:9.0.31]
-	at org.apache.tomcat.util.net.NioEndpoint$SocketProcessor.doRun(NioEndpoint.java:1639) [tomcat-embed-core-9.0.31.jar:9.0.31]
-	at org.apache.tomcat.util.net.SocketProcessorBase.run(SocketProcessorBase.java:49) [tomcat-embed-core-9.0.31.jar:9.0.31]
-	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1142) [na:1.8.0_91]
-	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:617) [na:1.8.0_91]
-	at org.apache.tomcat.util.threads.TaskThread$WrappingRunnable.run(TaskThread.java:61) [tomcat-embed-core-9.0.31.jar:9.0.31]
-	at java.lang.Thread.run(Thread.java:745) [na:1.8.0_91]
-
-2020-11-23 14:19:01.117 ERROR 8400 --- [http-nio-8888-exec-3] c.y.utils.exception.ExceptionCatchUtils  : 捕获不可预知异常：JSON parse error: Unexpected character (',' (code 44)): Expected space separating root-level values; nested exception is com.fasterxml.jackson.core.JsonParseException: Unexpected character (',' (code 44)): Expected space separating root-level values
- at [Source: (PushbackInputStream); line: 1, column: 3]
- 不可预知异常：{}
-
-org.springframework.http.converter.HttpMessageNotReadableException: JSON parse error: Unexpected character (',' (code 44)): Expected space separating root-level values; nested exception is com.fasterxml.jackson.core.JsonParseException: Unexpected character (',' (code 44)): Expected space separating root-level values
- at [Source: (PushbackInputStream); line: 1, column: 3]
-	at org.springframework.http.converter.json.AbstractJackson2HttpMessageConverter.readJavaType(AbstractJackson2HttpMessageConverter.java:252) ~[spring-web-5.2.4.RELEASE.jar:5.2.4.RELEASE]
-	at org.springframework.http.converter.json.AbstractJackson2HttpMessageConverter.read(AbstractJackson2HttpMessageConverter.java:228) ~[spring-web-5.2.4.RELEASE.jar:5.2.4.RELEASE]
-	at org.springframework.web.servlet.mvc.method.annotation.AbstractMessageConverterMethodArgumentResolver.readWithMessageConverters(AbstractMessageConverterMethodArgumentResolver.java:205) ~[spring-webmvc-5.2.4.RELEASE.jar:5.2.4.RELEASE]
-	at org.springframework.web.servlet.mvc.method.annotation.RequestResponseBodyMethodProcessor.readWithMessageConverters(RequestResponseBodyMethodProcessor.java:158) ~[spring-webmvc-5.2.4.RELEASE.jar:5.2.4.RELEASE]
-	at org.springframework.web.servlet.mvc.method.annotation.RequestResponseBodyMethodProcessor.resolveArgument(RequestResponseBodyMethodProcessor.java:131) ~[spring-webmvc-5.2.4.RELEASE.jar:5.2.4.RELEASE]
-	at org.springframework.web.method.support.HandlerMethodArgumentResolverComposite.resolveArgument(HandlerMethodArgumentResolverComposite.java:121) ~[spring-web-5.2.4.RELEASE.jar:5.2.4.RELEASE]
-	at org.springframework.web.method.support.InvocableHandlerMethod.getMethodArgumentValues(InvocableHandlerMethod.java:167) ~[spring-web-5.2.4.RELEASE.jar:5.2.4.RELEASE]
-	at org.springframework.web.method.support.InvocableHandlerMethod.invokeForRequest(InvocableHandlerMethod.java:134) ~[spring-web-5.2.4.RELEASE.jar:5.2.4.RELEASE]
-	at org.springframework.web.servlet.mvc.method.annotation.ServletInvocableHandlerMethod.invokeAndHandle(ServletInvocableHandlerMethod.java:106) ~[spring-webmvc-5.2.4.RELEASE.jar:5.2.4.RELEASE]
-	at org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter.invokeHandlerMethod(RequestMappingHandlerAdapter.java:879) ~[spring-webmvc-5.2.4.RELEASE.jar:5.2.4.RELEASE]
-	at org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter.handleInternal(RequestMappingHandlerAdapter.java:793) ~[spring-webmvc-5.2.4.RELEASE.jar:5.2.4.RELEASE]
-	at org.springframework.web.servlet.mvc.method.AbstractHandlerMethodAdapter.handle(AbstractHandlerMethodAdapter.java:87) ~[spring-webmvc-5.2.4.RELEASE.jar:5.2.4.RELEASE]
-	at org.springframework.web.servlet.DispatcherServlet.doDispatch(DispatcherServlet.java:1040) ~[spring-webmvc-5.2.4.RELEASE.jar:5.2.4.RELEASE]
-	at org.springframework.web.servlet.DispatcherServlet.doService(DispatcherServlet.java:943) ~[spring-webmvc-5.2.4.RELEASE.jar:5.2.4.RELEASE]
-	at org.springframework.web.servlet.FrameworkServlet.processRequest(FrameworkServlet.java:1006) [spring-webmvc-5.2.4.RELEASE.jar:5.2.4.RELEASE]
-	at org.springframework.web.servlet.FrameworkServlet.doPost(FrameworkServlet.java:909) [spring-webmvc-5.2.4.RELEASE.jar:5.2.4.RELEASE]
-	at javax.servlet.http.HttpServlet.service(HttpServlet.java:660) [tomcat-embed-core-9.0.31.jar:9.0.31]
-	at org.springframework.web.servlet.FrameworkServlet.service(FrameworkServlet.java:883) [spring-webmvc-5.2.4.RELEASE.jar:5.2.4.RELEASE]
-	at javax.servlet.http.HttpServlet.service(HttpServlet.java:741) [tomcat-embed-core-9.0.31.jar:9.0.31]
-	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:231) [tomcat-embed-core-9.0.31.jar:9.0.31]
-	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:166) [tomcat-embed-core-9.0.31.jar:9.0.31]
-	at org.apache.tomcat.websocket.server.WsFilter.doFilter(WsFilter.java:53) [tomcat-embed-websocket-9.0.31.jar:9.0.31]
-	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:193) [tomcat-embed-core-9.0.31.jar:9.0.31]
-	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:166) [tomcat-embed-core-9.0.31.jar:9.0.31]
-	at org.springframework.web.filter.CorsFilter.doFilterInternal(CorsFilter.java:92) [spring-web-5.2.4.RELEASE.jar:5.2.4.RELEASE]
-	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:119) [spring-web-5.2.4.RELEASE.jar:5.2.4.RELEASE]
-	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:193) [tomcat-embed-core-9.0.31.jar:9.0.31]
-	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:166) [tomcat-embed-core-9.0.31.jar:9.0.31]
-	at org.springframework.web.filter.RequestContextFilter.doFilterInternal(RequestContextFilter.java:100) [spring-web-5.2.4.RELEASE.jar:5.2.4.RELEASE]
-	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:119) [spring-web-5.2.4.RELEASE.jar:5.2.4.RELEASE]
-	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:193) [tomcat-embed-core-9.0.31.jar:9.0.31]
-	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:166) [tomcat-embed-core-9.0.31.jar:9.0.31]
-	at org.springframework.web.filter.FormContentFilter.doFilterInternal(FormContentFilter.java:93) [spring-web-5.2.4.RELEASE.jar:5.2.4.RELEASE]
-	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:119) [spring-web-5.2.4.RELEASE.jar:5.2.4.RELEASE]
-	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:193) [tomcat-embed-core-9.0.31.jar:9.0.31]
-	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:166) [tomcat-embed-core-9.0.31.jar:9.0.31]
-	at org.springframework.web.filter.CharacterEncodingFilter.doFilterInternal(CharacterEncodingFilter.java:201) [spring-web-5.2.4.RELEASE.jar:5.2.4.RELEASE]
-	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:119) [spring-web-5.2.4.RELEASE.jar:5.2.4.RELEASE]
-	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:193) [tomcat-embed-core-9.0.31.jar:9.0.31]
-	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:166) [tomcat-embed-core-9.0.31.jar:9.0.31]
-	at org.apache.catalina.core.StandardWrapperValve.invoke(StandardWrapperValve.java:202) [tomcat-embed-core-9.0.31.jar:9.0.31]
-	at org.apache.catalina.core.StandardContextValve.invoke(StandardContextValve.java:96) [tomcat-embed-core-9.0.31.jar:9.0.31]
-	at org.apache.catalina.authenticator.AuthenticatorBase.invoke(AuthenticatorBase.java:541) [tomcat-embed-core-9.0.31.jar:9.0.31]
-	at org.apache.catalina.core.StandardHostValve.invoke(StandardHostValve.java:139) [tomcat-embed-core-9.0.31.jar:9.0.31]
-	at org.apache.catalina.valves.ErrorReportValve.invoke(ErrorReportValve.java:92) [tomcat-embed-core-9.0.31.jar:9.0.31]
-	at org.apache.catalina.core.StandardEngineValve.invoke(StandardEngineValve.java:74) [tomcat-embed-core-9.0.31.jar:9.0.31]
-	at org.apache.catalina.connector.CoyoteAdapter.service(CoyoteAdapter.java:343) [tomcat-embed-core-9.0.31.jar:9.0.31]
-	at org.apache.coyote.http11.Http11Processor.service(Http11Processor.java:367) [tomcat-embed-core-9.0.31.jar:9.0.31]
-	at org.apache.coyote.AbstractProcessorLight.process(AbstractProcessorLight.java:65) [tomcat-embed-core-9.0.31.jar:9.0.31]
-	at org.apache.coyote.AbstractProtocol$ConnectionHandler.process(AbstractProtocol.java:868) [tomcat-embed-core-9.0.31.jar:9.0.31]
-	at org.apache.tomcat.util.net.NioEndpoint$SocketProcessor.doRun(NioEndpoint.java:1639) [tomcat-embed-core-9.0.31.jar:9.0.31]
-	at org.apache.tomcat.util.net.SocketProcessorBase.run(SocketProcessorBase.java:49) [tomcat-embed-core-9.0.31.jar:9.0.31]
-	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1142) [na:1.8.0_91]
-	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:617) [na:1.8.0_91]
-	at org.apache.tomcat.util.threads.TaskThread$WrappingRunnable.run(TaskThread.java:61) [tomcat-embed-core-9.0.31.jar:9.0.31]
-	at java.lang.Thread.run(Thread.java:745) [na:1.8.0_91]
-Caused by: com.fasterxml.jackson.core.JsonParseException: Unexpected character (',' (code 44)): Expected space separating root-level values
- at [Source: (PushbackInputStream); line: 1, column: 3]
-	at com.fasterxml.jackson.core.JsonParser._constructError(JsonParser.java:1840) ~[jackson-core-2.10.2.jar:2.10.2]
-	at com.fasterxml.jackson.core.base.ParserMinimalBase._reportError(ParserMinimalBase.java:712) ~[jackson-core-2.10.2.jar:2.10.2]
-	at com.fasterxml.jackson.core.base.ParserMinimalBase._reportUnexpectedChar(ParserMinimalBase.java:637) ~[jackson-core-2.10.2.jar:2.10.2]
-	at com.fasterxml.jackson.core.base.ParserMinimalBase._reportMissingRootWS(ParserMinimalBase.java:684) ~[jackson-core-2.10.2.jar:2.10.2]
-	at com.fasterxml.jackson.core.json.UTF8StreamJsonParser._verifyRootSpace(UTF8StreamJsonParser.java:1659) ~[jackson-core-2.10.2.jar:2.10.2]
-	at com.fasterxml.jackson.core.json.UTF8StreamJsonParser._parsePosNumber(UTF8StreamJsonParser.java:1399) ~[jackson-core-2.10.2.jar:2.10.2]
-	at com.fasterxml.jackson.core.json.UTF8StreamJsonParser._nextTokenNotInObject(UTF8StreamJsonParser.java:854) ~[jackson-core-2.10.2.jar:2.10.2]
-	at com.fasterxml.jackson.core.json.UTF8StreamJsonParser.nextToken(UTF8StreamJsonParser.java:753) ~[jackson-core-2.10.2.jar:2.10.2]
-	at com.fasterxml.jackson.databind.ObjectMapper._initForReading(ObjectMapper.java:4340) ~[jackson-databind-2.10.2.jar:2.10.2]
-	at com.fasterxml.jackson.databind.ObjectMapper._readMapAndClose(ObjectMapper.java:4189) ~[jackson-databind-2.10.2.jar:2.10.2]
-	at com.fasterxml.jackson.databind.ObjectMapper.readValue(ObjectMapper.java:3258) ~[jackson-databind-2.10.2.jar:2.10.2]
-	at org.springframework.http.converter.json.AbstractJackson2HttpMessageConverter.readJavaType(AbstractJackson2HttpMessageConverter.java:240) ~[spring-web-5.2.4.RELEASE.jar:5.2.4.RELEASE]
-	... 55 common frames omitted
-
-2020-11-23 14:19:21.495  INFO 8400 --- [http-nio-8888-exec-8] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
-2020-11-23 14:19:22.064  INFO 8400 --- [http-nio-8888-exec-8] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
-2020-11-23 14:19:22.087 DEBUG 8400 --- [http-nio-8888-exec-8] c.y.h.mapper.HomeworkMapper.selectOne    : ==>  Preparing: SELECT id,course_id,title,description,create_time,deadline,submit_count,total_score,top_num FROM t_homework WHERE (id = ?) 
-2020-11-23 14:19:22.127 DEBUG 8400 --- [http-nio-8888-exec-8] c.y.h.mapper.HomeworkMapper.selectOne    : ==> Parameters: 3(Long)
-2020-11-23 14:19:22.161 DEBUG 8400 --- [http-nio-8888-exec-8] c.y.h.mapper.HomeworkMapper.selectOne    : <==      Total: 1
-2020-11-23 14:19:22.195 DEBUG 8400 --- [http-nio-8888-exec-8] c.y.user.mapper.UserMapper.findById      : ==>  Preparing: select * from t_user where id = ? 
-2020-11-23 14:19:22.197 DEBUG 8400 --- [http-nio-8888-exec-8] c.y.user.mapper.UserMapper.findById      : ==> Parameters: 8(Long)
-2020-11-23 14:19:22.204 DEBUG 8400 --- [http-nio-8888-exec-8] c.y.user.mapper.RoleMapper.findById      : ====>  Preparing: select * from t_role where id = ? 
-2020-11-23 14:19:22.204 DEBUG 8400 --- [http-nio-8888-exec-8] c.y.user.mapper.RoleMapper.findById      : ====> Parameters: 3(Long)
-2020-11-23 14:19:22.214 DEBUG 8400 --- [http-nio-8888-exec-8] c.y.user.mapper.RoleMapper.findById      : <====      Total: 1
-2020-11-23 14:19:22.215 DEBUG 8400 --- [http-nio-8888-exec-8] c.y.user.mapper.UserMapper.findById      : <==      Total: 1
-2020-11-23 14:19:22.216 DEBUG 8400 --- [http-nio-8888-exec-8] c.y.h.m.HomeworkStudentMapper.selectOne  : ==>  Preparing: SELECT id,homework_id,student_id,score,submit_time,update_time,status,correct_count FROM t_homework_student WHERE (homework_id = ? AND student_id = ?) 
-2020-11-23 14:19:22.216 DEBUG 8400 --- [http-nio-8888-exec-8] c.y.h.m.HomeworkStudentMapper.selectOne  : ==> Parameters: 3(Long), 8(Long)
-2020-11-23 14:19:22.218 DEBUG 8400 --- [http-nio-8888-exec-8] c.y.h.m.HomeworkStudentMapper.selectOne  : <==      Total: 1
-2020-11-23 14:19:22.227 DEBUG 8400 --- [http-nio-8888-exec-8] c.y.h.m.H.updateById                     : ==>  Preparing: UPDATE t_homework_student SET homework_id=?, student_id=?, submit_time=?, update_time=?, status=?, correct_count=? WHERE id=? 
-2020-11-23 14:19:22.231 DEBUG 8400 --- [http-nio-8888-exec-8] c.y.h.m.H.updateById                     : ==> Parameters: 3(Long), 8(Long), 2020-11-23 14:19:22.225(Timestamp), 2020-11-23 14:19:22.225(Timestamp), 1(Integer), 0(Integer), 3(Long)
-2020-11-23 14:19:22.245 DEBUG 8400 --- [http-nio-8888-exec-8] c.y.h.m.H.updateById                     : <==    Updates: 1
-2020-11-23 14:19:22.261 DEBUG 8400 --- [http-nio-8888-exec-8] c.y.h.m.HomeworkResourceMapper.insert    : ==>  Preparing: INSERT INTO t_homework_resource ( homework_id, student_id, resource_id ) VALUES ( ?, ?, ? ) 
-2020-11-23 14:19:22.261 DEBUG 8400 --- [http-nio-8888-exec-8] c.y.h.m.HomeworkResourceMapper.insert    : ==> Parameters: 3(Long), 8(Long), 2(Long)
-2020-11-23 14:19:22.278 DEBUG 8400 --- [http-nio-8888-exec-8] c.y.h.m.HomeworkResourceMapper.insert    : <==    Updates: 1
-2020-11-23 14:19:22.278 DEBUG 8400 --- [http-nio-8888-exec-8] c.y.h.m.HomeworkResourceMapper.insert    : ==>  Preparing: INSERT INTO t_homework_resource ( homework_id, student_id, resource_id ) VALUES ( ?, ?, ? ) 
-2020-11-23 14:19:22.278 DEBUG 8400 --- [http-nio-8888-exec-8] c.y.h.m.HomeworkResourceMapper.insert    : ==> Parameters: 3(Long), 8(Long), 3(Long)
-2020-11-23 14:19:22.295 DEBUG 8400 --- [http-nio-8888-exec-8] c.y.h.m.HomeworkResourceMapper.insert    : <==    Updates: 1
-2020-11-23 15:01:54.593  INFO 2712 --- [main] com.yixuetang.YxtServiceApplication      : Starting YxtServiceApplication on SD-20191117RFKO with PID 2712 (E:\projects\yxt-edu\yxt-edu-service\yxt-service\target\classes started by Administrator in E:\projects\yxt-edu)
-2020-11-23 15:01:54.625 DEBUG 2712 --- [main] com.yixuetang.YxtServiceApplication      : Running with Spring Boot v2.2.5.RELEASE, Spring v5.2.4.RELEASE
-2020-11-23 15:01:54.625  INFO 2712 --- [main] com.yixuetang.YxtServiceApplication      : The following profiles are active: dev
-2020-11-23 15:01:58.676  INFO 2712 --- [main] .s.d.r.c.RepositoryConfigurationDelegate : Multiple Spring Data modules found, entering strict repository configuration mode!
-2020-11-23 15:01:58.678  INFO 2712 --- [main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data Redis repositories in DEFAULT mode.
-2020-11-23 15:01:58.759  INFO 2712 --- [main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 41ms. Found 0 Redis repository interfaces.
-2020-11-23 15:01:59.359  INFO 2712 --- [main] ptablePropertiesBeanFactoryPostProcessor : Post-processing PropertySource instances
-2020-11-23 15:01:59.479  INFO 2712 --- [main] c.u.j.EncryptablePropertySourceConverter : Converting PropertySource configurationProperties [org.springframework.boot.context.properties.source.ConfigurationPropertySourcesPropertySource] to AOP Proxy
-2020-11-23 15:01:59.479  INFO 2712 --- [main] c.u.j.EncryptablePropertySourceConverter : Converting PropertySource servletConfigInitParams [org.springframework.core.env.PropertySource$StubPropertySource] to EncryptablePropertySourceWrapper
-2020-11-23 15:01:59.479  INFO 2712 --- [main] c.u.j.EncryptablePropertySourceConverter : Converting PropertySource servletContextInitParams [org.springframework.core.env.PropertySource$StubPropertySource] to EncryptablePropertySourceWrapper
-2020-11-23 15:01:59.479  INFO 2712 --- [main] c.u.j.EncryptablePropertySourceConverter : Converting PropertySource systemProperties [org.springframework.core.env.PropertiesPropertySource] to EncryptableMapPropertySourceWrapper
-2020-11-23 15:01:59.479  INFO 2712 --- [main] c.u.j.EncryptablePropertySourceConverter : Converting PropertySource systemEnvironment [org.springframework.boot.env.SystemEnvironmentPropertySourceEnvironmentPostProcessor$OriginAwareSystemEnvironmentPropertySource] to EncryptableMapPropertySourceWrapper
-2020-11-23 15:01:59.479  INFO 2712 --- [main] c.u.j.EncryptablePropertySourceConverter : Converting PropertySource random [org.springframework.boot.env.RandomValuePropertySource] to EncryptablePropertySourceWrapper
-2020-11-23 15:01:59.479  INFO 2712 --- [main] c.u.j.EncryptablePropertySourceConverter : Converting PropertySource applicationConfig: [classpath:/application-dev.yml] [org.springframework.boot.env.OriginTrackedMapPropertySource] to EncryptableMapPropertySourceWrapper
-2020-11-23 15:01:59.479  INFO 2712 --- [main] c.u.j.EncryptablePropertySourceConverter : Converting PropertySource applicationConfig: [classpath:/application.yml] [org.springframework.boot.env.OriginTrackedMapPropertySource] to EncryptableMapPropertySourceWrapper
-2020-11-23 15:01:59.495  INFO 2712 --- [main] c.u.j.filter.DefaultLazyPropertyFilter   : Property Filter custom Bean not found with name 'encryptablePropertyFilter'. Initializing Default Property Filter
-2020-11-23 15:01:59.980  INFO 2712 --- [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port(s): 8888 (http)
-2020-11-23 15:02:00.002  INFO 2712 --- [main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
-2020-11-23 15:02:00.002  INFO 2712 --- [main] org.apache.catalina.core.StandardEngine  : Starting Servlet engine: [Apache Tomcat/9.0.31]
-2020-11-23 15:02:00.128  INFO 2712 --- [main] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
-2020-11-23 15:02:00.128  INFO 2712 --- [main] o.s.web.context.ContextLoader            : Root WebApplicationContext: initialization completed in 5318 ms
-2020-11-23 15:02:00.498  INFO 2712 --- [main] c.u.j.r.DefaultLazyPropertyResolver      : Property Resolver custom Bean not found with name 'encryptablePropertyResolver'. Initializing Default Property Resolver
-2020-11-23 15:02:00.499  INFO 2712 --- [main] c.u.j.d.DefaultLazyPropertyDetector      : Property Detector custom Bean not found with name 'encryptablePropertyDetector'. Initializing Default Property Detector
-2020-11-23 15:02:00.499  INFO 2712 --- [main] c.u.j.encryptor.DefaultLazyEncryptor     : String Encryptor custom Bean not found with name 'jasyptStringEncryptor'. Initializing Default String Encryptor
-2020-11-23 15:02:00.515  INFO 2712 --- [main] c.u.j.encryptor.DefaultLazyEncryptor     : Encryptor config not found for property jasypt.encryptor.algorithm, using default value: PBEWithMD5AndDES
-2020-11-23 15:02:00.515  INFO 2712 --- [main] c.u.j.encryptor.DefaultLazyEncryptor     : Encryptor config not found for property jasypt.encryptor.keyObtentionIterations, using default value: 1000
-2020-11-23 15:02:00.515  INFO 2712 --- [main] c.u.j.encryptor.DefaultLazyEncryptor     : Encryptor config not found for property jasypt.encryptor.poolSize, using default value: 1
-2020-11-23 15:02:00.515  INFO 2712 --- [main] c.u.j.encryptor.DefaultLazyEncryptor     : Encryptor config not found for property jasypt.encryptor.providerName, using default value: null
-2020-11-23 15:02:00.515  INFO 2712 --- [main] c.u.j.encryptor.DefaultLazyEncryptor     : Encryptor config not found for property jasypt.encryptor.providerClassName, using default value: null
-2020-11-23 15:02:00.515  INFO 2712 --- [main] c.u.j.encryptor.DefaultLazyEncryptor     : Encryptor config not found for property jasypt.encryptor.saltGeneratorClassname, using default value: org.jasypt.salt.RandomSaltGenerator
-2020-11-23 15:02:00.515  INFO 2712 --- [main] c.u.j.encryptor.DefaultLazyEncryptor     : Encryptor config not found for property jasypt.encryptor.stringOutputType, using default value: base64
-2020-11-23 15:02:03.922  INFO 2712 --- [main] pertySourcedRequestMappingHandlerMapping : Mapped URL path [/v2/api-docs] onto method [springfox.documentation.swagger2.web.Swagger2Controller#getDocumentation(String, HttpServletRequest)]
-2020-11-23 15:02:04.194  INFO 2712 --- [main] o.s.s.concurrent.ThreadPoolTaskExecutor  : Initializing ExecutorService 'applicationTaskExecutor'
-2020-11-23 15:02:04.613  INFO 2712 --- [main] d.s.w.p.DocumentationPluginsBootstrapper : Context refreshed
-2020-11-23 15:02:04.661  INFO 2712 --- [main] d.s.w.p.DocumentationPluginsBootstrapper : Found 1 custom documentation plugin(s)
-2020-11-23 15:02:04.730  INFO 2712 --- [main] s.d.s.w.s.ApiListingReferenceScanner     : Scanning for api listing references
-2020-11-23 15:02:05.017  INFO 2712 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: findByIdUsingGET_1
-2020-11-23 15:02:05.049  INFO 2712 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: findByIdUsingGET_2
-2020-11-23 15:02:05.065  INFO 2712 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: switchTopUsingPUT_1
-2020-11-23 15:02:05.101  INFO 2712 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: uploadUsingPOST_1
-2020-11-23 15:02:05.101  INFO 2712 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: delByIdUsingDELETE_1
-2020-11-23 15:02:05.117  INFO 2712 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: findByPageUsingGET_1
-2020-11-23 15:02:05.238  INFO 2712 --- [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port(s): 8888 (http) with context path ''
-2020-11-23 15:02:05.254  INFO 2712 --- [main] com.yixuetang.YxtServiceApplication      : Started YxtServiceApplication in 12.476 seconds (JVM running for 15.947)
-2020-11-23 15:02:20.694  INFO 2712 --- [http-nio-8888-exec-1] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring DispatcherServlet 'dispatcherServlet'
-2020-11-23 15:02:20.694  INFO 2712 --- [http-nio-8888-exec-1] o.s.web.servlet.DispatcherServlet        : Initializing Servlet 'dispatcherServlet'
-2020-11-23 15:02:20.694  INFO 2712 --- [http-nio-8888-exec-1] o.s.web.servlet.DispatcherServlet        : Completed initialization in 0 ms
-2020-11-23 15:02:59.135  INFO 2712 --- [http-nio-8888-exec-5] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
-2020-11-23 15:02:59.780  INFO 2712 --- [http-nio-8888-exec-5] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
-2020-11-23 15:02:59.814 DEBUG 2712 --- [http-nio-8888-exec-5] c.y.user.mapper.UserMapper.findById      : ==>  Preparing: select * from t_user where id = ? 
-2020-11-23 15:02:59.856 DEBUG 2712 --- [http-nio-8888-exec-5] c.y.user.mapper.UserMapper.findById      : ==> Parameters: 3(Long)
-2020-11-23 15:03:00.010 DEBUG 2712 --- [http-nio-8888-exec-5] c.y.user.mapper.RoleMapper.findById      : ====>  Preparing: select * from t_role where id = ? 
-2020-11-23 15:03:00.010 DEBUG 2712 --- [http-nio-8888-exec-5] c.y.user.mapper.RoleMapper.findById      : ====> Parameters: 1(Long)
-2020-11-23 15:03:00.017 DEBUG 2712 --- [http-nio-8888-exec-5] c.y.user.mapper.RoleMapper.findById      : <====      Total: 1
-2020-11-23 15:03:00.022 DEBUG 2712 --- [http-nio-8888-exec-5] c.y.user.mapper.UserMapper.findById      : <==      Total: 1
-2020-11-23 15:03:00.075 ERROR 2712 --- [http-nio-8888-exec-5] c.y.utils.exception.ExceptionCatchUtils  : 捕获自定义异常：错误代码：20002, 错误信息：非法请求！
+2020-11-30 13:14:57.517  INFO 5104 --- [main] com.yixuetang.YxtServiceApplication      : Starting YxtServiceApplication on SD-20191117RFKO with PID 5104 (E:\projects\yxt-edu\yxt-edu-service\yxt-service\target\classes started by Administrator in E:\projects\yxt-edu)
+2020-11-30 13:14:57.601 DEBUG 5104 --- [main] com.yixuetang.YxtServiceApplication      : Running with Spring Boot v2.2.5.RELEASE, Spring v5.2.4.RELEASE
+2020-11-30 13:14:57.601  INFO 5104 --- [main] com.yixuetang.YxtServiceApplication      : The following profiles are active: dev
+2020-11-30 13:15:04.339  INFO 5104 --- [main] .s.d.r.c.RepositoryConfigurationDelegate : Multiple Spring Data modules found, entering strict repository configuration mode!
+2020-11-30 13:15:04.339  INFO 5104 --- [main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data Redis repositories in DEFAULT mode.
+2020-11-30 13:15:04.473  INFO 5104 --- [main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 55ms. Found 0 Redis repository interfaces.
+2020-11-30 13:15:05.263  INFO 5104 --- [main] ptablePropertiesBeanFactoryPostProcessor : Post-processing PropertySource instances
+2020-11-30 13:15:05.468  INFO 5104 --- [main] c.u.j.EncryptablePropertySourceConverter : Converting PropertySource configurationProperties [org.springframework.boot.context.properties.source.ConfigurationPropertySourcesPropertySource] to AOP Proxy
+2020-11-30 13:15:05.485  INFO 5104 --- [main] c.u.j.EncryptablePropertySourceConverter : Converting PropertySource servletConfigInitParams [org.springframework.core.env.PropertySource$StubPropertySource] to EncryptablePropertySourceWrapper
+2020-11-30 13:15:05.485  INFO 5104 --- [main] c.u.j.EncryptablePropertySourceConverter : Converting PropertySource servletContextInitParams [org.springframework.core.env.PropertySource$StubPropertySource] to EncryptablePropertySourceWrapper
+2020-11-30 13:15:05.485  INFO 5104 --- [main] c.u.j.EncryptablePropertySourceConverter : Converting PropertySource systemProperties [org.springframework.core.env.PropertiesPropertySource] to EncryptableMapPropertySourceWrapper
+2020-11-30 13:15:05.485  INFO 5104 --- [main] c.u.j.EncryptablePropertySourceConverter : Converting PropertySource systemEnvironment [org.springframework.boot.env.SystemEnvironmentPropertySourceEnvironmentPostProcessor$OriginAwareSystemEnvironmentPropertySource] to EncryptableMapPropertySourceWrapper
+2020-11-30 13:15:05.485  INFO 5104 --- [main] c.u.j.EncryptablePropertySourceConverter : Converting PropertySource random [org.springframework.boot.env.RandomValuePropertySource] to EncryptablePropertySourceWrapper
+2020-11-30 13:15:05.485  INFO 5104 --- [main] c.u.j.EncryptablePropertySourceConverter : Converting PropertySource applicationConfig: [classpath:/application-dev.yml] [org.springframework.boot.env.OriginTrackedMapPropertySource] to EncryptableMapPropertySourceWrapper
+2020-11-30 13:15:05.485  INFO 5104 --- [main] c.u.j.EncryptablePropertySourceConverter : Converting PropertySource applicationConfig: [classpath:/application.yml] [org.springframework.boot.env.OriginTrackedMapPropertySource] to EncryptableMapPropertySourceWrapper
+2020-11-30 13:15:05.541  INFO 5104 --- [main] c.u.j.filter.DefaultLazyPropertyFilter   : Property Filter custom Bean not found with name 'encryptablePropertyFilter'. Initializing Default Property Filter
+2020-11-30 13:15:06.280  INFO 5104 --- [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port(s): 8888 (http)
+2020-11-30 13:15:06.291  INFO 5104 --- [main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2020-11-30 13:15:06.293  INFO 5104 --- [main] org.apache.catalina.core.StandardEngine  : Starting Servlet engine: [Apache Tomcat/9.0.31]
+2020-11-30 13:15:06.562  INFO 5104 --- [main] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2020-11-30 13:15:06.562  INFO 5104 --- [main] o.s.web.context.ContextLoader            : Root WebApplicationContext: initialization completed in 8688 ms
+2020-11-30 13:15:07.007  INFO 5104 --- [main] c.u.j.r.DefaultLazyPropertyResolver      : Property Resolver custom Bean not found with name 'encryptablePropertyResolver'. Initializing Default Property Resolver
+2020-11-30 13:15:07.009  INFO 5104 --- [main] c.u.j.d.DefaultLazyPropertyDetector      : Property Detector custom Bean not found with name 'encryptablePropertyDetector'. Initializing Default Property Detector
+2020-11-30 13:15:07.121  INFO 5104 --- [main] c.u.j.encryptor.DefaultLazyEncryptor     : String Encryptor custom Bean not found with name 'jasyptStringEncryptor'. Initializing Default String Encryptor
+2020-11-30 13:15:07.129  INFO 5104 --- [main] c.u.j.encryptor.DefaultLazyEncryptor     : Encryptor config not found for property jasypt.encryptor.algorithm, using default value: PBEWithMD5AndDES
+2020-11-30 13:15:07.129  INFO 5104 --- [main] c.u.j.encryptor.DefaultLazyEncryptor     : Encryptor config not found for property jasypt.encryptor.keyObtentionIterations, using default value: 1000
+2020-11-30 13:15:07.129  INFO 5104 --- [main] c.u.j.encryptor.DefaultLazyEncryptor     : Encryptor config not found for property jasypt.encryptor.poolSize, using default value: 1
+2020-11-30 13:15:07.129  INFO 5104 --- [main] c.u.j.encryptor.DefaultLazyEncryptor     : Encryptor config not found for property jasypt.encryptor.providerName, using default value: null
+2020-11-30 13:15:07.129  INFO 5104 --- [main] c.u.j.encryptor.DefaultLazyEncryptor     : Encryptor config not found for property jasypt.encryptor.providerClassName, using default value: null
+2020-11-30 13:15:07.129  INFO 5104 --- [main] c.u.j.encryptor.DefaultLazyEncryptor     : Encryptor config not found for property jasypt.encryptor.saltGeneratorClassname, using default value: org.jasypt.salt.RandomSaltGenerator
+2020-11-30 13:15:07.134  INFO 5104 --- [main] c.u.j.encryptor.DefaultLazyEncryptor     : Encryptor config not found for property jasypt.encryptor.stringOutputType, using default value: base64
+2020-11-30 13:15:10.333  WARN 5104 --- [main] c.b.m.core.injector.AbstractMethod       : [com.yixuetang.message.mapper.RemindMapper.deleteById] Has been loaded by XML or SqlProvider or Mybatis's Annotation, so ignoring this injection for [class com.baomidou.mybatisplus.core.injector.methods.DeleteById]
+2020-11-30 13:15:11.472  INFO 5104 --- [main] pertySourcedRequestMappingHandlerMapping : Mapped URL path [/v2/api-docs] onto method [springfox.documentation.swagger2.web.Swagger2Controller#getDocumentation(String, HttpServletRequest)]
+2020-11-30 13:15:11.891  INFO 5104 --- [main] o.s.s.concurrent.ThreadPoolTaskExecutor  : Initializing ExecutorService 'applicationTaskExecutor'
+2020-11-30 13:15:12.558  INFO 5104 --- [main] o.s.s.c.ThreadPoolTaskScheduler          : Initializing ExecutorService 'taskScheduler'
+2020-11-30 13:15:12.817  INFO 5104 --- [main] d.s.w.p.DocumentationPluginsBootstrapper : Context refreshed
+2020-11-30 13:15:12.875  INFO 5104 --- [main] d.s.w.p.DocumentationPluginsBootstrapper : Found 1 custom documentation plugin(s)
+2020-11-30 13:15:13.051  INFO 5104 --- [main] s.d.s.w.s.ApiListingReferenceScanner     : Scanning for api listing references
+2020-11-30 13:15:13.563  INFO 5104 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: findByIdUsingGET_1
+2020-11-30 13:15:13.691  INFO 5104 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: findByIdUsingGET_2
+2020-11-30 13:15:13.710  INFO 5104 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: switchTopUsingPUT_1
+2020-11-30 13:15:13.764  INFO 5104 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: findByCourseIdUsingGET_1
+2020-11-30 13:15:13.837  INFO 5104 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: uploadUsingPOST_1
+2020-11-30 13:15:13.837  INFO 5104 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: delByIdUsingDELETE_1
+2020-11-30 13:15:13.854  INFO 5104 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: findByPageUsingGET_1
+2020-11-30 13:15:14.000  INFO 5104 --- [main] o.s.a.r.c.CachingConnectionFactory       : Attempting to connect to: [42.194.162.66:5672]
+2020-11-30 13:15:14.146  INFO 5104 --- [main] o.s.a.r.c.CachingConnectionFactory       : Created new connection: rabbitConnectionFactory#6c3f1658:0/SimpleConnection@1179fc8c [delegate=amqp://colin@42.194.162.66:5672/colin-vhost, localPort= 50143]
+2020-11-30 13:15:14.351  INFO 5104 --- [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port(s): 8888 (http) with context path ''
+2020-11-30 13:15:14.351  INFO 5104 --- [main] com.yixuetang.YxtServiceApplication      : Started YxtServiceApplication in 22.031 seconds (JVM running for 26.689)
+2020-11-30 13:30:53.383  INFO 4820 --- [main] com.yixuetang.YxtServiceApplication      : Starting YxtServiceApplication on SD-20191117RFKO with PID 4820 (E:\projects\yxt-edu\yxt-edu-service\yxt-service\target\classes started by Administrator in E:\projects\yxt-edu)
+2020-11-30 13:30:53.402 DEBUG 4820 --- [main] com.yixuetang.YxtServiceApplication      : Running with Spring Boot v2.2.5.RELEASE, Spring v5.2.4.RELEASE
+2020-11-30 13:30:53.402  INFO 4820 --- [main] com.yixuetang.YxtServiceApplication      : The following profiles are active: dev
+2020-11-30 13:30:57.623  INFO 4820 --- [main] .s.d.r.c.RepositoryConfigurationDelegate : Multiple Spring Data modules found, entering strict repository configuration mode!
+2020-11-30 13:30:57.638  INFO 4820 --- [main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data Redis repositories in DEFAULT mode.
+2020-11-30 13:30:57.709  INFO 4820 --- [main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 43ms. Found 0 Redis repository interfaces.
+2020-11-30 13:30:59.132  INFO 4820 --- [main] ptablePropertiesBeanFactoryPostProcessor : Post-processing PropertySource instances
+2020-11-30 13:30:59.272  INFO 4820 --- [main] c.u.j.EncryptablePropertySourceConverter : Converting PropertySource configurationProperties [org.springframework.boot.context.properties.source.ConfigurationPropertySourcesPropertySource] to AOP Proxy
+2020-11-30 13:30:59.272  INFO 4820 --- [main] c.u.j.EncryptablePropertySourceConverter : Converting PropertySource servletConfigInitParams [org.springframework.core.env.PropertySource$StubPropertySource] to EncryptablePropertySourceWrapper
+2020-11-30 13:30:59.272  INFO 4820 --- [main] c.u.j.EncryptablePropertySourceConverter : Converting PropertySource servletContextInitParams [org.springframework.core.env.PropertySource$StubPropertySource] to EncryptablePropertySourceWrapper
+2020-11-30 13:30:59.272  INFO 4820 --- [main] c.u.j.EncryptablePropertySourceConverter : Converting PropertySource systemProperties [org.springframework.core.env.PropertiesPropertySource] to EncryptableMapPropertySourceWrapper
+2020-11-30 13:30:59.272  INFO 4820 --- [main] c.u.j.EncryptablePropertySourceConverter : Converting PropertySource systemEnvironment [org.springframework.boot.env.SystemEnvironmentPropertySourceEnvironmentPostProcessor$OriginAwareSystemEnvironmentPropertySource] to EncryptableMapPropertySourceWrapper
+2020-11-30 13:30:59.272  INFO 4820 --- [main] c.u.j.EncryptablePropertySourceConverter : Converting PropertySource random [org.springframework.boot.env.RandomValuePropertySource] to EncryptablePropertySourceWrapper
+2020-11-30 13:30:59.272  INFO 4820 --- [main] c.u.j.EncryptablePropertySourceConverter : Converting PropertySource applicationConfig: [classpath:/application-dev.yml] [org.springframework.boot.env.OriginTrackedMapPropertySource] to EncryptableMapPropertySourceWrapper
+2020-11-30 13:30:59.272  INFO 4820 --- [main] c.u.j.EncryptablePropertySourceConverter : Converting PropertySource applicationConfig: [classpath:/application.yml] [org.springframework.boot.env.OriginTrackedMapPropertySource] to EncryptableMapPropertySourceWrapper
+2020-11-30 13:30:59.317  INFO 4820 --- [main] c.u.j.filter.DefaultLazyPropertyFilter   : Property Filter custom Bean not found with name 'encryptablePropertyFilter'. Initializing Default Property Filter
+2020-11-30 13:31:00.382  INFO 4820 --- [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port(s): 8888 (http)
+2020-11-30 13:31:00.382  INFO 4820 --- [main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2020-11-30 13:31:00.382  INFO 4820 --- [main] org.apache.catalina.core.StandardEngine  : Starting Servlet engine: [Apache Tomcat/9.0.31]
+2020-11-30 13:31:00.602  INFO 4820 --- [main] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2020-11-30 13:31:00.602  INFO 4820 --- [main] o.s.web.context.ContextLoader            : Root WebApplicationContext: initialization completed in 7067 ms
+2020-11-30 13:31:01.109  INFO 4820 --- [main] c.u.j.r.DefaultLazyPropertyResolver      : Property Resolver custom Bean not found with name 'encryptablePropertyResolver'. Initializing Default Property Resolver
+2020-11-30 13:31:01.109  INFO 4820 --- [main] c.u.j.d.DefaultLazyPropertyDetector      : Property Detector custom Bean not found with name 'encryptablePropertyDetector'. Initializing Default Property Detector
+2020-11-30 13:31:01.109  INFO 4820 --- [main] c.u.j.encryptor.DefaultLazyEncryptor     : String Encryptor custom Bean not found with name 'jasyptStringEncryptor'. Initializing Default String Encryptor
+2020-11-30 13:31:01.109  INFO 4820 --- [main] c.u.j.encryptor.DefaultLazyEncryptor     : Encryptor config not found for property jasypt.encryptor.algorithm, using default value: PBEWithMD5AndDES
+2020-11-30 13:31:01.109  INFO 4820 --- [main] c.u.j.encryptor.DefaultLazyEncryptor     : Encryptor config not found for property jasypt.encryptor.keyObtentionIterations, using default value: 1000
+2020-11-30 13:31:01.109  INFO 4820 --- [main] c.u.j.encryptor.DefaultLazyEncryptor     : Encryptor config not found for property jasypt.encryptor.poolSize, using default value: 1
+2020-11-30 13:31:01.109  INFO 4820 --- [main] c.u.j.encryptor.DefaultLazyEncryptor     : Encryptor config not found for property jasypt.encryptor.providerName, using default value: null
+2020-11-30 13:31:01.109  INFO 4820 --- [main] c.u.j.encryptor.DefaultLazyEncryptor     : Encryptor config not found for property jasypt.encryptor.providerClassName, using default value: null
+2020-11-30 13:31:01.109  INFO 4820 --- [main] c.u.j.encryptor.DefaultLazyEncryptor     : Encryptor config not found for property jasypt.encryptor.saltGeneratorClassname, using default value: org.jasypt.salt.RandomSaltGenerator
+2020-11-30 13:31:01.109  INFO 4820 --- [main] c.u.j.encryptor.DefaultLazyEncryptor     : Encryptor config not found for property jasypt.encryptor.stringOutputType, using default value: base64
+2020-11-30 13:31:03.431  WARN 4820 --- [main] c.b.m.core.injector.AbstractMethod       : [com.yixuetang.message.mapper.RemindMapper.deleteById] Has been loaded by XML or SqlProvider or Mybatis's Annotation, so ignoring this injection for [class com.baomidou.mybatisplus.core.injector.methods.DeleteById]
+2020-11-30 13:31:09.799  INFO 4820 --- [main] pertySourcedRequestMappingHandlerMapping : Mapped URL path [/v2/api-docs] onto method [springfox.documentation.swagger2.web.Swagger2Controller#getDocumentation(String, HttpServletRequest)]
+2020-11-30 13:31:11.350  INFO 4820 --- [main] o.s.s.concurrent.ThreadPoolTaskExecutor  : Initializing ExecutorService 'applicationTaskExecutor'
+2020-11-30 13:31:13.283  INFO 4820 --- [main] o.s.s.c.ThreadPoolTaskScheduler          : Initializing ExecutorService 'taskScheduler'
+2020-11-30 13:31:13.947  INFO 4820 --- [main] d.s.w.p.DocumentationPluginsBootstrapper : Context refreshed
+2020-11-30 13:31:14.200  INFO 4820 --- [main] d.s.w.p.DocumentationPluginsBootstrapper : Found 1 custom documentation plugin(s)
+2020-11-30 13:31:14.733  INFO 4820 --- [main] s.d.s.w.s.ApiListingReferenceScanner     : Scanning for api listing references
+2020-11-30 13:31:15.736  INFO 4820 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: findByIdUsingGET_1
+2020-11-30 13:31:15.805  INFO 4820 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: findByIdUsingGET_2
+2020-11-30 13:31:15.823  INFO 4820 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: switchTopUsingPUT_1
+2020-11-30 13:31:15.838  INFO 4820 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: findByCourseIdUsingGET_1
+2020-11-30 13:31:15.872  INFO 4820 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: uploadUsingPOST_1
+2020-11-30 13:31:15.872  INFO 4820 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: delByIdUsingDELETE_1
+2020-11-30 13:31:15.889  INFO 4820 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: findByPageUsingGET_1
+2020-11-30 13:31:16.012  INFO 4820 --- [main] o.s.a.r.c.CachingConnectionFactory       : Attempting to connect to: [42.194.162.66:5672]
+2020-11-30 13:31:16.463  INFO 4820 --- [main] o.s.a.r.c.CachingConnectionFactory       : Created new connection: rabbitConnectionFactory#79d7035:0/SimpleConnection@2807cf3 [delegate=amqp://colin@42.194.162.66:5672/colin-vhost, localPort= 50264]
+2020-11-30 13:31:17.636  INFO 4820 --- [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port(s): 8888 (http) with context path ''
+2020-11-30 13:31:17.707  INFO 4820 --- [main] com.yixuetang.YxtServiceApplication      : Started YxtServiceApplication in 26.877 seconds (JVM running for 30.564)
+2020-11-30 13:32:12.294  INFO 4820 --- [http-nio-8888-exec-1] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring DispatcherServlet 'dispatcherServlet'
+2020-11-30 13:32:12.294  INFO 4820 --- [http-nio-8888-exec-1] o.s.web.servlet.DispatcherServlet        : Initializing Servlet 'dispatcherServlet'
+2020-11-30 13:32:12.309  INFO 4820 --- [http-nio-8888-exec-1] o.s.web.servlet.DispatcherServlet        : Completed initialization in 15 ms
+2020-11-30 13:32:41.783  INFO 4820 --- [http-nio-8888-exec-8] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2020-11-30 13:32:42.341  INFO 4820 --- [http-nio-8888-exec-8] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
+2020-11-30 13:32:42.432 DEBUG 4820 --- [http-nio-8888-exec-8] c.y.h.mapper.HomeworkMapper.selectOne    : ==>  Preparing: SELECT id,course_id,title,description,create_time,deadline,submit_count,total_score,top_num FROM t_homework WHERE (id = ?) 
+2020-11-30 13:32:42.499 DEBUG 4820 --- [http-nio-8888-exec-8] c.y.h.mapper.HomeworkMapper.selectOne    : ==> Parameters: 3(Long)
+2020-11-30 13:32:42.549 DEBUG 4820 --- [http-nio-8888-exec-8] c.y.h.mapper.HomeworkMapper.selectOne    : <==      Total: 1
+2020-11-30 13:32:42.568 DEBUG 4820 --- [http-nio-8888-exec-8] c.y.h.m.HomeworkStudentMapper.selectOne  : ==>  Preparing: SELECT id,homework_id,student_id,score,submit_time,update_time,status,correct_count FROM t_homework_student WHERE (homework_id = ? AND student_id = ?) 
+2020-11-30 13:32:42.568 DEBUG 4820 --- [http-nio-8888-exec-8] c.y.h.m.HomeworkStudentMapper.selectOne  : ==> Parameters: 3(Long), 8(Long)
+2020-11-30 13:32:42.602 DEBUG 4820 --- [http-nio-8888-exec-8] c.y.h.m.HomeworkStudentMapper.selectOne  : <==      Total: 1
+2020-11-30 13:33:01.210 DEBUG 4820 --- [http-nio-8888-exec-9] c.y.h.mapper.HomeworkMapper.selectOne    : ==>  Preparing: SELECT id,course_id,title,description,create_time,deadline,submit_count,total_score,top_num FROM t_homework WHERE (id = ?) 
+2020-11-30 13:33:01.210 DEBUG 4820 --- [http-nio-8888-exec-9] c.y.h.mapper.HomeworkMapper.selectOne    : ==> Parameters: 3(Long)
+2020-11-30 13:33:01.226 DEBUG 4820 --- [http-nio-8888-exec-9] c.y.h.mapper.HomeworkMapper.selectOne    : <==      Total: 1
+2020-11-30 13:33:01.228 DEBUG 4820 --- [http-nio-8888-exec-9] c.y.h.m.HomeworkStudentMapper.selectOne  : ==>  Preparing: SELECT id,homework_id,student_id,score,submit_time,update_time,status,correct_count FROM t_homework_student WHERE (homework_id = ? AND student_id = ?) 
+2020-11-30 13:33:01.228 DEBUG 4820 --- [http-nio-8888-exec-9] c.y.h.m.HomeworkStudentMapper.selectOne  : ==> Parameters: 3(Long), 1(Long)
+2020-11-30 13:33:01.228 DEBUG 4820 --- [http-nio-8888-exec-9] c.y.h.m.HomeworkStudentMapper.selectOne  : <==      Total: 1
+2020-11-30 13:33:09.310 DEBUG 4820 --- [http-nio-8888-exec-10] c.y.h.mapper.HomeworkMapper.selectOne    : ==>  Preparing: SELECT id,course_id,title,description,create_time,deadline,submit_count,total_score,top_num FROM t_homework WHERE (id = ?) 
+2020-11-30 13:33:09.310 DEBUG 4820 --- [http-nio-8888-exec-10] c.y.h.mapper.HomeworkMapper.selectOne    : ==> Parameters: 1(Long)
+2020-11-30 13:33:09.310 DEBUG 4820 --- [http-nio-8888-exec-10] c.y.h.mapper.HomeworkMapper.selectOne    : <==      Total: 0
+2020-11-30 13:33:09.391 ERROR 4820 --- [http-nio-8888-exec-10] c.y.utils.exception.ExceptionCatchUtils  : 捕获自定义异常：错误代码：20002, 错误信息：非法请求！
  自定义异常：{}
 
 com.yixuetang.entity.exception.CustomException: 错误代码：20002, 错误信息：非法请求！
 	at com.yixuetang.utils.exception.ExceptionThrowUtils.cast(ExceptionThrowUtils.java:16) ~[classes/:na]
-	at com.yixuetang.resource.service.impl.ResourceServiceImpl.findHomework(ResourceServiceImpl.java:254) ~[classes/:na]
-	at com.yixuetang.resource.service.impl.ResourceServiceImpl$$FastClassBySpringCGLIB$$372dc295.invoke(<generated>) ~[classes/:na]
+	at com.yixuetang.homework.service.impl.HomeworkServiceImpl.findStudentSubmit(HomeworkServiceImpl.java:409) ~[classes/:na]
+	at com.yixuetang.homework.service.impl.HomeworkServiceImpl$$FastClassBySpringCGLIB$$42d44d1.invoke(<generated>) ~[classes/:na]
 	at org.springframework.cglib.proxy.MethodProxy.invoke(MethodProxy.java:218) ~[spring-core-5.2.4.RELEASE.jar:5.2.4.RELEASE]
 	at org.springframework.aop.framework.CglibAopProxy$DynamicAdvisedInterceptor.intercept(CglibAopProxy.java:685) ~[spring-aop-5.2.4.RELEASE.jar:5.2.4.RELEASE]
-	at com.yixuetang.resource.service.impl.ResourceServiceImpl$$EnhancerBySpringCGLIB$$938e8127.findHomework(<generated>) ~[classes/:na]
-	at com.yixuetang.resource.controller.ResourceController.findHomework(ResourceController.java:101) ~[classes/:na]
+	at com.yixuetang.homework.service.impl.HomeworkServiceImpl$$EnhancerBySpringCGLIB$$fd18b37e.findStudentSubmit(<generated>) ~[classes/:na]
+	at com.yixuetang.homework.controller.HomeworkController.findStudentSubmit(HomeworkController.java:83) ~[classes/:na]
 	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method) ~[na:1.8.0_91]
 	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62) ~[na:1.8.0_91]
 	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43) ~[na:1.8.0_91]
@@ -323,69 +182,164 @@ com.yixuetang.entity.exception.CustomException: 错误代码：20002, 错误信�
 	at org.apache.tomcat.util.threads.TaskThread$WrappingRunnable.run(TaskThread.java:61) [tomcat-embed-core-9.0.31.jar:9.0.31]
 	at java.lang.Thread.run(Thread.java:745) [na:1.8.0_91]
 
-2020-11-23 15:03:09.861 DEBUG 2712 --- [http-nio-8888-exec-4] c.y.user.mapper.UserMapper.findById      : ==>  Preparing: select * from t_user where id = ? 
-2020-11-23 15:03:09.861 DEBUG 2712 --- [http-nio-8888-exec-4] c.y.user.mapper.UserMapper.findById      : ==> Parameters: 8(Long)
-2020-11-23 15:03:09.880 DEBUG 2712 --- [http-nio-8888-exec-4] c.y.user.mapper.RoleMapper.findById      : ====>  Preparing: select * from t_role where id = ? 
-2020-11-23 15:03:09.880 DEBUG 2712 --- [http-nio-8888-exec-4] c.y.user.mapper.RoleMapper.findById      : ====> Parameters: 3(Long)
-2020-11-23 15:03:09.881 DEBUG 2712 --- [http-nio-8888-exec-4] c.y.user.mapper.RoleMapper.findById      : <====      Total: 1
-2020-11-23 15:03:09.881 DEBUG 2712 --- [http-nio-8888-exec-4] c.y.user.mapper.UserMapper.findById      : <==      Total: 1
-2020-11-23 15:03:09.981 DEBUG 2712 --- [http-nio-8888-exec-4] c.y.h.mapper.HomeworkMapper.selectOne    : ==>  Preparing: SELECT id FROM t_homework WHERE (id = ?) 
-2020-11-23 15:03:09.981 DEBUG 2712 --- [http-nio-8888-exec-4] c.y.h.mapper.HomeworkMapper.selectOne    : ==> Parameters: 3(Long)
-2020-11-23 15:03:09.993 DEBUG 2712 --- [http-nio-8888-exec-4] c.y.h.mapper.HomeworkMapper.selectOne    : <==      Total: 1
-2020-11-23 15:03:09.995 DEBUG 2712 --- [http-nio-8888-exec-4] c.y.h.m.H.selectList                     : ==>  Preparing: SELECT id,homework_id,student_id,resource_id FROM t_homework_resource WHERE (student_id = ? AND homework_id = ?) 
-2020-11-23 15:03:09.995 DEBUG 2712 --- [http-nio-8888-exec-4] c.y.h.m.H.selectList                     : ==> Parameters: 8(Long), 3(Long)
-2020-11-23 15:03:09.997 DEBUG 2712 --- [http-nio-8888-exec-4] c.y.h.m.H.selectList                     : <==      Total: 2
-2020-11-23 15:03:10.006 DEBUG 2712 --- [http-nio-8888-exec-4] c.y.r.mapper.ResourceMapper.selectList   : ==>  Preparing: SELECT id,type,ext,name,location,content_type,create_time,update_time FROM t_resource WHERE (id IN (?,?)) 
-2020-11-23 15:03:10.006 DEBUG 2712 --- [http-nio-8888-exec-4] c.y.r.mapper.ResourceMapper.selectList   : ==> Parameters: 2(Long), 3(Long)
-2020-11-23 15:03:10.010 DEBUG 2712 --- [http-nio-8888-exec-4] c.y.r.mapper.ResourceMapper.selectList   : <==      Total: 2
-2020-11-23 15:04:07.512 DEBUG 2712 --- [http-nio-8888-exec-3] c.y.user.mapper.UserMapper.findById      : ==>  Preparing: select * from t_user where id = ? 
-2020-11-23 15:04:07.512 DEBUG 2712 --- [http-nio-8888-exec-3] c.y.user.mapper.UserMapper.findById      : ==> Parameters: 1(Long)
-2020-11-23 15:04:07.529 DEBUG 2712 --- [http-nio-8888-exec-3] c.y.user.mapper.RoleMapper.findById      : ====>  Preparing: select * from t_role where id = ? 
-2020-11-23 15:04:07.529 DEBUG 2712 --- [http-nio-8888-exec-3] c.y.user.mapper.RoleMapper.findById      : ====> Parameters: 3(Long)
-2020-11-23 15:04:07.531 DEBUG 2712 --- [http-nio-8888-exec-3] c.y.user.mapper.RoleMapper.findById      : <====      Total: 1
-2020-11-23 15:04:07.531 DEBUG 2712 --- [http-nio-8888-exec-3] c.y.user.mapper.UserMapper.findById      : <==      Total: 1
-2020-11-23 15:04:07.538 DEBUG 2712 --- [http-nio-8888-exec-3] c.y.h.mapper.HomeworkMapper.selectOne    : ==>  Preparing: SELECT id FROM t_homework WHERE (id = ?) 
-2020-11-23 15:04:07.538 DEBUG 2712 --- [http-nio-8888-exec-3] c.y.h.mapper.HomeworkMapper.selectOne    : ==> Parameters: 3(Long)
-2020-11-23 15:04:07.538 DEBUG 2712 --- [http-nio-8888-exec-3] c.y.h.mapper.HomeworkMapper.selectOne    : <==      Total: 1
-2020-11-23 15:04:07.547 DEBUG 2712 --- [http-nio-8888-exec-3] c.y.h.m.H.selectList                     : ==>  Preparing: SELECT id,homework_id,student_id,resource_id FROM t_homework_resource WHERE (student_id = ? AND homework_id = ?) 
-2020-11-23 15:04:07.547 DEBUG 2712 --- [http-nio-8888-exec-3] c.y.h.m.H.selectList                     : ==> Parameters: 1(Long), 3(Long)
-2020-11-23 15:04:07.547 DEBUG 2712 --- [http-nio-8888-exec-3] c.y.h.m.H.selectList                     : <==      Total: 0
-2020-11-23 15:04:07.556 DEBUG 2712 --- [http-nio-8888-exec-3] c.y.r.mapper.ResourceMapper.selectList   : ==>  Preparing: SELECT id,type,ext,name,location,content_type,create_time,update_time FROM t_resource WHERE (id IN ()) 
-2020-11-23 15:04:07.556 DEBUG 2712 --- [http-nio-8888-exec-3] c.y.r.mapper.ResourceMapper.selectList   : ==> Parameters: 
-2020-11-23 15:04:08.084 ERROR 2712 --- [http-nio-8888-exec-3] c.y.utils.exception.ExceptionCatchUtils  : 捕获不可预知异常：
-### Error querying database.  Cause: java.sql.SQLSyntaxErrorException: You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '))' at line 3
-### The error may exist in com/yixuetang/resource/mapper/ResourceMapper.java (best guess)
-### The error may involve defaultParameterMap
-### The error occurred while setting parameters
-### SQL: SELECT  id,type,ext,name,location,content_type,create_time,update_time  FROM t_resource     WHERE (id IN ())
-### Cause: java.sql.SQLSyntaxErrorException: You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '))' at line 3
-; bad SQL grammar []; nested exception is java.sql.SQLSyntaxErrorException: You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '))' at line 3
+2020-11-30 13:33:26.456 DEBUG 4820 --- [http-nio-8888-exec-4] c.y.h.mapper.HomeworkMapper.selectOne    : ==>  Preparing: SELECT id,course_id,title,description,create_time,deadline,submit_count,total_score,top_num FROM t_homework WHERE (id = ?) 
+2020-11-30 13:33:26.456 DEBUG 4820 --- [http-nio-8888-exec-4] c.y.h.mapper.HomeworkMapper.selectOne    : ==> Parameters: 3(Long)
+2020-11-30 13:33:26.457 DEBUG 4820 --- [http-nio-8888-exec-4] c.y.h.mapper.HomeworkMapper.selectOne    : <==      Total: 1
+2020-11-30 13:33:26.457 DEBUG 4820 --- [http-nio-8888-exec-4] c.y.h.m.HomeworkStudentMapper.selectOne  : ==>  Preparing: SELECT id,homework_id,student_id,score,submit_time,update_time,status,correct_count FROM t_homework_student WHERE (homework_id = ? AND student_id = ?) 
+2020-11-30 13:33:26.457 DEBUG 4820 --- [http-nio-8888-exec-4] c.y.h.m.HomeworkStudentMapper.selectOne  : ==> Parameters: 3(Long), 100(Long)
+2020-11-30 13:33:26.473 DEBUG 4820 --- [http-nio-8888-exec-4] c.y.h.m.HomeworkStudentMapper.selectOne  : <==      Total: 0
+2020-11-30 13:33:26.525 ERROR 4820 --- [http-nio-8888-exec-4] c.y.utils.exception.ExceptionCatchUtils  : 捕获自定义异常：错误代码：70008, 错误信息：学生-作业记录不存在！
+ 自定义异常：{}
+
+com.yixuetang.entity.exception.CustomException: 错误代码：70008, 错误信息：学生-作业记录不存在！
+	at com.yixuetang.utils.exception.ExceptionThrowUtils.cast(ExceptionThrowUtils.java:16) ~[classes/:na]
+	at com.yixuetang.homework.service.impl.HomeworkServiceImpl.findStudentSubmit(HomeworkServiceImpl.java:415) ~[classes/:na]
+	at com.yixuetang.homework.service.impl.HomeworkServiceImpl$$FastClassBySpringCGLIB$$42d44d1.invoke(<generated>) ~[classes/:na]
+	at org.springframework.cglib.proxy.MethodProxy.invoke(MethodProxy.java:218) ~[spring-core-5.2.4.RELEASE.jar:5.2.4.RELEASE]
+	at org.springframework.aop.framework.CglibAopProxy$DynamicAdvisedInterceptor.intercept(CglibAopProxy.java:685) ~[spring-aop-5.2.4.RELEASE.jar:5.2.4.RELEASE]
+	at com.yixuetang.homework.service.impl.HomeworkServiceImpl$$EnhancerBySpringCGLIB$$fd18b37e.findStudentSubmit(<generated>) ~[classes/:na]
+	at com.yixuetang.homework.controller.HomeworkController.findStudentSubmit(HomeworkController.java:83) ~[classes/:na]
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method) ~[na:1.8.0_91]
+	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62) ~[na:1.8.0_91]
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43) ~[na:1.8.0_91]
+	at java.lang.reflect.Method.invoke(Method.java:498) ~[na:1.8.0_91]
+	at org.springframework.web.method.support.InvocableHandlerMethod.doInvoke(InvocableHandlerMethod.java:190) ~[spring-web-5.2.4.RELEASE.jar:5.2.4.RELEASE]
+	at org.springframework.web.method.support.InvocableHandlerMethod.invokeForRequest(InvocableHandlerMethod.java:138) ~[spring-web-5.2.4.RELEASE.jar:5.2.4.RELEASE]
+	at org.springframework.web.servlet.mvc.method.annotation.ServletInvocableHandlerMethod.invokeAndHandle(ServletInvocableHandlerMethod.java:106) ~[spring-webmvc-5.2.4.RELEASE.jar:5.2.4.RELEASE]
+	at org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter.invokeHandlerMethod(RequestMappingHandlerAdapter.java:879) ~[spring-webmvc-5.2.4.RELEASE.jar:5.2.4.RELEASE]
+	at org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter.handleInternal(RequestMappingHandlerAdapter.java:793) ~[spring-webmvc-5.2.4.RELEASE.jar:5.2.4.RELEASE]
+	at org.springframework.web.servlet.mvc.method.AbstractHandlerMethodAdapter.handle(AbstractHandlerMethodAdapter.java:87) ~[spring-webmvc-5.2.4.RELEASE.jar:5.2.4.RELEASE]
+	at org.springframework.web.servlet.DispatcherServlet.doDispatch(DispatcherServlet.java:1040) ~[spring-webmvc-5.2.4.RELEASE.jar:5.2.4.RELEASE]
+	at org.springframework.web.servlet.DispatcherServlet.doService(DispatcherServlet.java:943) ~[spring-webmvc-5.2.4.RELEASE.jar:5.2.4.RELEASE]
+	at org.springframework.web.servlet.FrameworkServlet.processRequest(FrameworkServlet.java:1006) [spring-webmvc-5.2.4.RELEASE.jar:5.2.4.RELEASE]
+	at org.springframework.web.servlet.FrameworkServlet.doGet(FrameworkServlet.java:898) [spring-webmvc-5.2.4.RELEASE.jar:5.2.4.RELEASE]
+	at javax.servlet.http.HttpServlet.service(HttpServlet.java:634) [tomcat-embed-core-9.0.31.jar:9.0.31]
+	at org.springframework.web.servlet.FrameworkServlet.service(FrameworkServlet.java:883) [spring-webmvc-5.2.4.RELEASE.jar:5.2.4.RELEASE]
+	at javax.servlet.http.HttpServlet.service(HttpServlet.java:741) [tomcat-embed-core-9.0.31.jar:9.0.31]
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:231) [tomcat-embed-core-9.0.31.jar:9.0.31]
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:166) [tomcat-embed-core-9.0.31.jar:9.0.31]
+	at org.apache.tomcat.websocket.server.WsFilter.doFilter(WsFilter.java:53) [tomcat-embed-websocket-9.0.31.jar:9.0.31]
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:193) [tomcat-embed-core-9.0.31.jar:9.0.31]
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:166) [tomcat-embed-core-9.0.31.jar:9.0.31]
+	at org.springframework.web.filter.CorsFilter.doFilterInternal(CorsFilter.java:92) [spring-web-5.2.4.RELEASE.jar:5.2.4.RELEASE]
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:119) [spring-web-5.2.4.RELEASE.jar:5.2.4.RELEASE]
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:193) [tomcat-embed-core-9.0.31.jar:9.0.31]
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:166) [tomcat-embed-core-9.0.31.jar:9.0.31]
+	at org.springframework.web.filter.RequestContextFilter.doFilterInternal(RequestContextFilter.java:100) [spring-web-5.2.4.RELEASE.jar:5.2.4.RELEASE]
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:119) [spring-web-5.2.4.RELEASE.jar:5.2.4.RELEASE]
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:193) [tomcat-embed-core-9.0.31.jar:9.0.31]
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:166) [tomcat-embed-core-9.0.31.jar:9.0.31]
+	at org.springframework.web.filter.FormContentFilter.doFilterInternal(FormContentFilter.java:93) [spring-web-5.2.4.RELEASE.jar:5.2.4.RELEASE]
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:119) [spring-web-5.2.4.RELEASE.jar:5.2.4.RELEASE]
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:193) [tomcat-embed-core-9.0.31.jar:9.0.31]
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:166) [tomcat-embed-core-9.0.31.jar:9.0.31]
+	at org.springframework.web.filter.CharacterEncodingFilter.doFilterInternal(CharacterEncodingFilter.java:201) [spring-web-5.2.4.RELEASE.jar:5.2.4.RELEASE]
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:119) [spring-web-5.2.4.RELEASE.jar:5.2.4.RELEASE]
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:193) [tomcat-embed-core-9.0.31.jar:9.0.31]
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:166) [tomcat-embed-core-9.0.31.jar:9.0.31]
+	at org.apache.catalina.core.StandardWrapperValve.invoke(StandardWrapperValve.java:202) [tomcat-embed-core-9.0.31.jar:9.0.31]
+	at org.apache.catalina.core.StandardContextValve.invoke(StandardContextValve.java:96) [tomcat-embed-core-9.0.31.jar:9.0.31]
+	at org.apache.catalina.authenticator.AuthenticatorBase.invoke(AuthenticatorBase.java:541) [tomcat-embed-core-9.0.31.jar:9.0.31]
+	at org.apache.catalina.core.StandardHostValve.invoke(StandardHostValve.java:139) [tomcat-embed-core-9.0.31.jar:9.0.31]
+	at org.apache.catalina.valves.ErrorReportValve.invoke(ErrorReportValve.java:92) [tomcat-embed-core-9.0.31.jar:9.0.31]
+	at org.apache.catalina.core.StandardEngineValve.invoke(StandardEngineValve.java:74) [tomcat-embed-core-9.0.31.jar:9.0.31]
+	at org.apache.catalina.connector.CoyoteAdapter.service(CoyoteAdapter.java:343) [tomcat-embed-core-9.0.31.jar:9.0.31]
+	at org.apache.coyote.http11.Http11Processor.service(Http11Processor.java:367) [tomcat-embed-core-9.0.31.jar:9.0.31]
+	at org.apache.coyote.AbstractProcessorLight.process(AbstractProcessorLight.java:65) [tomcat-embed-core-9.0.31.jar:9.0.31]
+	at org.apache.coyote.AbstractProtocol$ConnectionHandler.process(AbstractProtocol.java:868) [tomcat-embed-core-9.0.31.jar:9.0.31]
+	at org.apache.tomcat.util.net.NioEndpoint$SocketProcessor.doRun(NioEndpoint.java:1639) [tomcat-embed-core-9.0.31.jar:9.0.31]
+	at org.apache.tomcat.util.net.SocketProcessorBase.run(SocketProcessorBase.java:49) [tomcat-embed-core-9.0.31.jar:9.0.31]
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1142) [na:1.8.0_91]
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:617) [na:1.8.0_91]
+	at org.apache.tomcat.util.threads.TaskThread$WrappingRunnable.run(TaskThread.java:61) [tomcat-embed-core-9.0.31.jar:9.0.31]
+	at java.lang.Thread.run(Thread.java:745) [na:1.8.0_91]
+
+2020-11-30 13:35:00.114 DEBUG 4820 --- [scheduling-1] c.y.m.mapper.MessageMapper.selectList    : ==>  Preparing: SELECT id,receiver_type,publisher_id,receiver_id,status,title,content,publish_time,update_time FROM t_message WHERE (status = ?) 
+2020-11-30 13:35:00.138 DEBUG 4820 --- [scheduling-1] c.y.m.mapper.MessageMapper.selectList    : ==> Parameters: false(Boolean)
+2020-11-30 13:35:00.138 DEBUG 4820 --- [scheduling-1] c.y.m.mapper.MessageMapper.selectList    : <==      Total: 0
+2020-11-30 14:26:21.224  INFO 6332 --- [main] com.yixuetang.YxtServiceApplication      : Starting YxtServiceApplication on SD-20191117RFKO with PID 6332 (E:\projects\yxt-edu\yxt-edu-service\yxt-service\target\classes started by Administrator in E:\projects\yxt-edu)
+2020-11-30 14:26:21.240 DEBUG 6332 --- [main] com.yixuetang.YxtServiceApplication      : Running with Spring Boot v2.2.5.RELEASE, Spring v5.2.4.RELEASE
+2020-11-30 14:26:21.240  INFO 6332 --- [main] com.yixuetang.YxtServiceApplication      : The following profiles are active: dev
+2020-11-30 14:26:25.330  INFO 6332 --- [main] .s.d.r.c.RepositoryConfigurationDelegate : Multiple Spring Data modules found, entering strict repository configuration mode!
+2020-11-30 14:26:25.330  INFO 6332 --- [main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data Redis repositories in DEFAULT mode.
+2020-11-30 14:26:25.418  INFO 6332 --- [main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 48ms. Found 0 Redis repository interfaces.
+2020-11-30 14:26:27.085  INFO 6332 --- [main] ptablePropertiesBeanFactoryPostProcessor : Post-processing PropertySource instances
+2020-11-30 14:26:27.277  INFO 6332 --- [main] c.u.j.EncryptablePropertySourceConverter : Converting PropertySource configurationProperties [org.springframework.boot.context.properties.source.ConfigurationPropertySourcesPropertySource] to AOP Proxy
+2020-11-30 14:26:27.277  INFO 6332 --- [main] c.u.j.EncryptablePropertySourceConverter : Converting PropertySource servletConfigInitParams [org.springframework.core.env.PropertySource$StubPropertySource] to EncryptablePropertySourceWrapper
+2020-11-30 14:26:27.277  INFO 6332 --- [main] c.u.j.EncryptablePropertySourceConverter : Converting PropertySource servletContextInitParams [org.springframework.core.env.PropertySource$StubPropertySource] to EncryptablePropertySourceWrapper
+2020-11-30 14:26:27.277  INFO 6332 --- [main] c.u.j.EncryptablePropertySourceConverter : Converting PropertySource systemProperties [org.springframework.core.env.PropertiesPropertySource] to EncryptableMapPropertySourceWrapper
+2020-11-30 14:26:27.277  INFO 6332 --- [main] c.u.j.EncryptablePropertySourceConverter : Converting PropertySource systemEnvironment [org.springframework.boot.env.SystemEnvironmentPropertySourceEnvironmentPostProcessor$OriginAwareSystemEnvironmentPropertySource] to EncryptableMapPropertySourceWrapper
+2020-11-30 14:26:27.277  INFO 6332 --- [main] c.u.j.EncryptablePropertySourceConverter : Converting PropertySource random [org.springframework.boot.env.RandomValuePropertySource] to EncryptablePropertySourceWrapper
+2020-11-30 14:26:27.277  INFO 6332 --- [main] c.u.j.EncryptablePropertySourceConverter : Converting PropertySource applicationConfig: [classpath:/application-dev.yml] [org.springframework.boot.env.OriginTrackedMapPropertySource] to EncryptableMapPropertySourceWrapper
+2020-11-30 14:26:27.277  INFO 6332 --- [main] c.u.j.EncryptablePropertySourceConverter : Converting PropertySource applicationConfig: [classpath:/application.yml] [org.springframework.boot.env.OriginTrackedMapPropertySource] to EncryptableMapPropertySourceWrapper
+2020-11-30 14:26:27.368  INFO 6332 --- [main] c.u.j.filter.DefaultLazyPropertyFilter   : Property Filter custom Bean not found with name 'encryptablePropertyFilter'. Initializing Default Property Filter
+2020-11-30 14:26:30.913  INFO 6332 --- [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port(s): 8888 (http)
+2020-11-30 14:26:31.013  INFO 6332 --- [main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2020-11-30 14:26:31.013  INFO 6332 --- [main] org.apache.catalina.core.StandardEngine  : Starting Servlet engine: [Apache Tomcat/9.0.31]
+2020-11-30 14:26:31.406  INFO 6332 --- [main] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2020-11-30 14:26:31.406  INFO 6332 --- [main] o.s.web.context.ContextLoader            : Root WebApplicationContext: initialization completed in 9940 ms
+2020-11-30 14:26:32.212  INFO 6332 --- [main] c.u.j.r.DefaultLazyPropertyResolver      : Property Resolver custom Bean not found with name 'encryptablePropertyResolver'. Initializing Default Property Resolver
+2020-11-30 14:26:32.212  INFO 6332 --- [main] c.u.j.d.DefaultLazyPropertyDetector      : Property Detector custom Bean not found with name 'encryptablePropertyDetector'. Initializing Default Property Detector
+2020-11-30 14:26:32.212  INFO 6332 --- [main] c.u.j.encryptor.DefaultLazyEncryptor     : String Encryptor custom Bean not found with name 'jasyptStringEncryptor'. Initializing Default String Encryptor
+2020-11-30 14:26:32.212  INFO 6332 --- [main] c.u.j.encryptor.DefaultLazyEncryptor     : Encryptor config not found for property jasypt.encryptor.algorithm, using default value: PBEWithMD5AndDES
+2020-11-30 14:26:32.212  INFO 6332 --- [main] c.u.j.encryptor.DefaultLazyEncryptor     : Encryptor config not found for property jasypt.encryptor.keyObtentionIterations, using default value: 1000
+2020-11-30 14:26:32.212  INFO 6332 --- [main] c.u.j.encryptor.DefaultLazyEncryptor     : Encryptor config not found for property jasypt.encryptor.poolSize, using default value: 1
+2020-11-30 14:26:32.212  INFO 6332 --- [main] c.u.j.encryptor.DefaultLazyEncryptor     : Encryptor config not found for property jasypt.encryptor.providerName, using default value: null
+2020-11-30 14:26:32.212  INFO 6332 --- [main] c.u.j.encryptor.DefaultLazyEncryptor     : Encryptor config not found for property jasypt.encryptor.providerClassName, using default value: null
+2020-11-30 14:26:32.212  INFO 6332 --- [main] c.u.j.encryptor.DefaultLazyEncryptor     : Encryptor config not found for property jasypt.encryptor.saltGeneratorClassname, using default value: org.jasypt.salt.RandomSaltGenerator
+2020-11-30 14:26:32.212  INFO 6332 --- [main] c.u.j.encryptor.DefaultLazyEncryptor     : Encryptor config not found for property jasypt.encryptor.stringOutputType, using default value: base64
+2020-11-30 14:26:46.540  WARN 6332 --- [main] c.b.m.core.injector.AbstractMethod       : [com.yixuetang.message.mapper.RemindMapper.deleteById] Has been loaded by XML or SqlProvider or Mybatis's Annotation, so ignoring this injection for [class com.baomidou.mybatisplus.core.injector.methods.DeleteById]
+2020-11-30 14:26:54.148  INFO 6332 --- [main] pertySourcedRequestMappingHandlerMapping : Mapped URL path [/v2/api-docs] onto method [springfox.documentation.swagger2.web.Swagger2Controller#getDocumentation(String, HttpServletRequest)]
+2020-11-30 14:26:56.080  INFO 6332 --- [main] o.s.s.concurrent.ThreadPoolTaskExecutor  : Initializing ExecutorService 'applicationTaskExecutor'
+2020-11-30 14:26:58.861  INFO 6332 --- [main] o.s.s.c.ThreadPoolTaskScheduler          : Initializing ExecutorService 'taskScheduler'
+2020-11-30 14:26:59.518  INFO 6332 --- [main] d.s.w.p.DocumentationPluginsBootstrapper : Context refreshed
+2020-11-30 14:26:59.677  INFO 6332 --- [main] d.s.w.p.DocumentationPluginsBootstrapper : Found 1 custom documentation plugin(s)
+2020-11-30 14:26:59.866  INFO 6332 --- [main] s.d.s.w.s.ApiListingReferenceScanner     : Scanning for api listing references
+2020-11-30 14:27:01.268  INFO 6332 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: findByIdUsingGET_1
+2020-11-30 14:27:01.374  INFO 6332 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: findByIdUsingGET_2
+2020-11-30 14:27:01.384  INFO 6332 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: switchTopUsingPUT_1
+2020-11-30 14:27:01.403  INFO 6332 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: findByCourseIdUsingGET_1
+2020-11-30 14:27:01.484  INFO 6332 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: uploadUsingPOST_1
+2020-11-30 14:27:01.484  INFO 6332 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: delByIdUsingDELETE_1
+2020-11-30 14:27:01.505  INFO 6332 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: findByPageUsingGET_1
+2020-11-30 14:27:01.650  INFO 6332 --- [main] o.s.a.r.c.CachingConnectionFactory       : Attempting to connect to: [42.194.162.66:5672]
+2020-11-30 14:27:02.084  INFO 6332 --- [main] o.s.a.r.c.CachingConnectionFactory       : Created new connection: rabbitConnectionFactory#6637a365:0/SimpleConnection@37a3ec27 [delegate=amqp://colin@42.194.162.66:5672/colin-vhost, localPort= 50825]
+2020-11-30 14:27:02.886  INFO 6332 --- [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port(s): 8888 (http) with context path ''
+2020-11-30 14:27:02.954  INFO 6332 --- [main] com.yixuetang.YxtServiceApplication      : Started YxtServiceApplication in 45.579 seconds (JVM running for 49.32)
+2020-11-30 14:27:08.809  INFO 6332 --- [http-nio-8888-exec-1] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring DispatcherServlet 'dispatcherServlet'
+2020-11-30 14:27:08.809  INFO 6332 --- [http-nio-8888-exec-1] o.s.web.servlet.DispatcherServlet        : Initializing Servlet 'dispatcherServlet'
+2020-11-30 14:27:08.828  INFO 6332 --- [http-nio-8888-exec-1] o.s.web.servlet.DispatcherServlet        : Completed initialization in 19 ms
+2020-11-30 14:28:23.592  INFO 6332 --- [http-nio-8888-exec-10] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2020-11-30 14:28:24.200  INFO 6332 --- [http-nio-8888-exec-10] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
+2020-11-30 14:28:24.216 DEBUG 6332 --- [http-nio-8888-exec-10] c.y.c.mapper.CourseMapper.selectOne      : ==>  Preparing: SELECT id,c_name,c_pic,c_code,s_count,create_time,update_time,school_year,semester,class AS clazz,top_num,is_filed FROM t_course WHERE (id = ?) 
+2020-11-30 14:28:24.264 DEBUG 6332 --- [http-nio-8888-exec-10] c.y.c.mapper.CourseMapper.selectOne      : ==> Parameters: 1(Long)
+2020-11-30 14:28:24.330 DEBUG 6332 --- [http-nio-8888-exec-10] c.y.c.mapper.CourseMapper.selectOne      : <==      Total: 1
+2020-11-30 14:28:24.362 DEBUG 6332 --- [http-nio-8888-exec-10] c.y.course.mapper.ScMapper.selectOne     : ==>  Preparing: SELECT id,student_id,course_id,final_grade,top_num,is_filed,join_time FROM t_student_course WHERE (course_id = ? AND student_id = ?) 
+2020-11-30 14:28:24.362 DEBUG 6332 --- [http-nio-8888-exec-10] c.y.course.mapper.ScMapper.selectOne     : ==> Parameters: 1(Long), 8(Long)
+2020-11-30 14:28:24.383 DEBUG 6332 --- [http-nio-8888-exec-10] c.y.course.mapper.ScMapper.selectOne     : <==      Total: 1
+2020-11-30 14:28:24.384 DEBUG 6332 --- [http-nio-8888-exec-10] c.y.h.mapper.HomeworkMapper.selectList   : ==>  Preparing: SELECT id,course_id,title,description,create_time,deadline,submit_count,total_score,top_num FROM t_homework WHERE (course_id = ?) 
+2020-11-30 14:28:24.384 DEBUG 6332 --- [http-nio-8888-exec-10] c.y.h.mapper.HomeworkMapper.selectList   : ==> Parameters: 1(Long)
+2020-11-30 14:28:24.396 DEBUG 6332 --- [http-nio-8888-exec-10] c.y.h.mapper.HomeworkMapper.selectList   : <==      Total: 3
+2020-11-30 14:28:24.396 DEBUG 6332 --- [http-nio-8888-exec-10] c.y.n.mapper.NoticeUserMapper.selectOne  : ==>  Preparing: SELECT id,notice_id,user_id,view FROM t_notice_user WHERE (user_id = ?) 
+2020-11-30 14:28:24.396 DEBUG 6332 --- [http-nio-8888-exec-10] c.y.n.mapper.NoticeUserMapper.selectOne  : ==> Parameters: 8(Long)
+2020-11-30 14:28:24.428 DEBUG 6332 --- [http-nio-8888-exec-10] c.y.n.mapper.NoticeUserMapper.selectOne  : <==      Total: 2
+2020-11-30 14:28:24.475 ERROR 6332 --- [http-nio-8888-exec-10] c.y.utils.exception.ExceptionCatchUtils  : 捕获不可预知异常：nested exception is org.apache.ibatis.exceptions.TooManyResultsException: Expected one result (or null) to be returned by selectOne(), but found: 2
  不可预知异常：{}
 
-org.springframework.jdbc.BadSqlGrammarException: 
-### Error querying database.  Cause: java.sql.SQLSyntaxErrorException: You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '))' at line 3
-### The error may exist in com/yixuetang/resource/mapper/ResourceMapper.java (best guess)
-### The error may involve defaultParameterMap
-### The error occurred while setting parameters
-### SQL: SELECT  id,type,ext,name,location,content_type,create_time,update_time  FROM t_resource     WHERE (id IN ())
-### Cause: java.sql.SQLSyntaxErrorException: You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '))' at line 3
-; bad SQL grammar []; nested exception is java.sql.SQLSyntaxErrorException: You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '))' at line 3
-	at org.springframework.jdbc.support.SQLErrorCodeSQLExceptionTranslator.doTranslate(SQLErrorCodeSQLExceptionTranslator.java:235) ~[spring-jdbc-5.2.4.RELEASE.jar:5.2.4.RELEASE]
-	at org.springframework.jdbc.support.AbstractFallbackSQLExceptionTranslator.translate(AbstractFallbackSQLExceptionTranslator.java:72) ~[spring-jdbc-5.2.4.RELEASE.jar:5.2.4.RELEASE]
-	at org.mybatis.spring.MyBatisExceptionTranslator.translateExceptionIfPossible(MyBatisExceptionTranslator.java:88) ~[mybatis-spring-2.0.4.jar:2.0.4]
+org.mybatis.spring.MyBatisSystemException: nested exception is org.apache.ibatis.exceptions.TooManyResultsException: Expected one result (or null) to be returned by selectOne(), but found: 2
+	at org.mybatis.spring.MyBatisExceptionTranslator.translateExceptionIfPossible(MyBatisExceptionTranslator.java:92) ~[mybatis-spring-2.0.4.jar:2.0.4]
 	at org.mybatis.spring.SqlSessionTemplate$SqlSessionInterceptor.invoke(SqlSessionTemplate.java:440) ~[mybatis-spring-2.0.4.jar:2.0.4]
-	at com.sun.proxy.$Proxy90.selectList(Unknown Source) ~[na:na]
-	at org.mybatis.spring.SqlSessionTemplate.selectList(SqlSessionTemplate.java:223) ~[mybatis-spring-2.0.4.jar:2.0.4]
-	at com.baomidou.mybatisplus.core.override.MybatisMapperMethod.executeForMany(MybatisMapperMethod.java:177) ~[mybatis-plus-core-3.3.2.jar:3.3.2]
-	at com.baomidou.mybatisplus.core.override.MybatisMapperMethod.execute(MybatisMapperMethod.java:78) ~[mybatis-plus-core-3.3.2.jar:3.3.2]
+	at com.sun.proxy.$Proxy95.selectOne(Unknown Source) ~[na:na]
+	at org.mybatis.spring.SqlSessionTemplate.selectOne(SqlSessionTemplate.java:159) ~[mybatis-spring-2.0.4.jar:2.0.4]
+	at com.baomidou.mybatisplus.core.override.MybatisMapperMethod.execute(MybatisMapperMethod.java:108) ~[mybatis-plus-core-3.3.2.jar:3.3.2]
 	at com.baomidou.mybatisplus.core.override.MybatisMapperProxy.invoke(MybatisMapperProxy.java:96) ~[mybatis-plus-core-3.3.2.jar:3.3.2]
-	at com.sun.proxy.$Proxy125.selectList(Unknown Source) ~[na:na]
-	at com.yixuetang.resource.service.impl.ResourceServiceImpl.findHomework(ResourceServiceImpl.java:270) ~[classes/:na]
-	at com.yixuetang.resource.service.impl.ResourceServiceImpl$$FastClassBySpringCGLIB$$372dc295.invoke(<generated>) ~[classes/:na]
+	at com.sun.proxy.$Proxy125.selectOne(Unknown Source) ~[na:na]
+	at com.yixuetang.homework.service.impl.HomeworkServiceImpl.findStudentCourseHomework(HomeworkServiceImpl.java:449) ~[classes/:na]
+	at com.yixuetang.homework.service.impl.HomeworkServiceImpl$$FastClassBySpringCGLIB$$42d44d1.invoke(<generated>) ~[classes/:na]
 	at org.springframework.cglib.proxy.MethodProxy.invoke(MethodProxy.java:218) ~[spring-core-5.2.4.RELEASE.jar:5.2.4.RELEASE]
 	at org.springframework.aop.framework.CglibAopProxy$DynamicAdvisedInterceptor.intercept(CglibAopProxy.java:685) ~[spring-aop-5.2.4.RELEASE.jar:5.2.4.RELEASE]
-	at com.yixuetang.resource.service.impl.ResourceServiceImpl$$EnhancerBySpringCGLIB$$938e8127.findHomework(<generated>) ~[classes/:na]
-	at com.yixuetang.resource.controller.ResourceController.findHomework(ResourceController.java:101) ~[classes/:na]
+	at com.yixuetang.homework.service.impl.HomeworkServiceImpl$$EnhancerBySpringCGLIB$$cc6d33c.findStudentCourseHomework(<generated>) ~[classes/:na]
+	at com.yixuetang.homework.controller.HomeworkController.findStudentCourseHomework(HomeworkController.java:89) ~[classes/:na]
 	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method) ~[na:1.8.0_91]
 	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62) ~[na:1.8.0_91]
 	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43) ~[na:1.8.0_91]
@@ -440,240 +394,44 @@ org.springframework.jdbc.BadSqlGrammarException:
 	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:617) [na:1.8.0_91]
 	at org.apache.tomcat.util.threads.TaskThread$WrappingRunnable.run(TaskThread.java:61) [tomcat-embed-core-9.0.31.jar:9.0.31]
 	at java.lang.Thread.run(Thread.java:745) [na:1.8.0_91]
-Caused by: java.sql.SQLSyntaxErrorException: You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '))' at line 3
-	at com.mysql.cj.jdbc.exceptions.SQLError.createSQLException(SQLError.java:120) ~[mysql-connector-java-8.0.19.jar:8.0.19]
-	at com.mysql.cj.jdbc.exceptions.SQLError.createSQLException(SQLError.java:97) ~[mysql-connector-java-8.0.19.jar:8.0.19]
-	at com.mysql.cj.jdbc.exceptions.SQLExceptionsMapping.translateException(SQLExceptionsMapping.java:122) ~[mysql-connector-java-8.0.19.jar:8.0.19]
-	at com.mysql.cj.jdbc.ClientPreparedStatement.executeInternal(ClientPreparedStatement.java:953) ~[mysql-connector-java-8.0.19.jar:8.0.19]
-	at com.mysql.cj.jdbc.ClientPreparedStatement.execute(ClientPreparedStatement.java:370) ~[mysql-connector-java-8.0.19.jar:8.0.19]
-	at com.zaxxer.hikari.pool.ProxyPreparedStatement.execute(ProxyPreparedStatement.java:44) ~[HikariCP-3.4.2.jar:na]
-	at com.zaxxer.hikari.pool.HikariProxyPreparedStatement.execute(HikariProxyPreparedStatement.java) ~[HikariCP-3.4.2.jar:na]
-	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method) ~[na:1.8.0_91]
-	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62) ~[na:1.8.0_91]
-	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43) ~[na:1.8.0_91]
-	at java.lang.reflect.Method.invoke(Method.java:498) ~[na:1.8.0_91]
-	at org.apache.ibatis.logging.jdbc.PreparedStatementLogger.invoke(PreparedStatementLogger.java:59) ~[mybatis-3.5.4.jar:3.5.4]
-	at com.sun.proxy.$Proxy175.execute(Unknown Source) ~[na:na]
-	at org.apache.ibatis.executor.statement.PreparedStatementHandler.query(PreparedStatementHandler.java:64) ~[mybatis-3.5.4.jar:3.5.4]
-	at org.apache.ibatis.executor.statement.RoutingStatementHandler.query(RoutingStatementHandler.java:79) ~[mybatis-3.5.4.jar:3.5.4]
-	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method) ~[na:1.8.0_91]
-	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62) ~[na:1.8.0_91]
-	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43) ~[na:1.8.0_91]
-	at java.lang.reflect.Method.invoke(Method.java:498) ~[na:1.8.0_91]
-	at org.apache.ibatis.plugin.Plugin.invoke(Plugin.java:63) ~[mybatis-3.5.4.jar:3.5.4]
-	at com.sun.proxy.$Proxy173.query(Unknown Source) ~[na:na]
-	at com.baomidou.mybatisplus.core.executor.MybatisSimpleExecutor.doQuery(MybatisSimpleExecutor.java:67) ~[mybatis-plus-core-3.3.2.jar:3.3.2]
-	at org.apache.ibatis.executor.BaseExecutor.queryFromDatabase(BaseExecutor.java:324) ~[mybatis-3.5.4.jar:3.5.4]
-	at org.apache.ibatis.executor.BaseExecutor.query(BaseExecutor.java:156) ~[mybatis-3.5.4.jar:3.5.4]
-	at com.baomidou.mybatisplus.core.executor.MybatisCachingExecutor.query(MybatisCachingExecutor.java:163) ~[mybatis-plus-core-3.3.2.jar:3.3.2]
-	at com.baomidou.mybatisplus.core.executor.MybatisCachingExecutor.query(MybatisCachingExecutor.java:90) ~[mybatis-plus-core-3.3.2.jar:3.3.2]
-	at org.apache.ibatis.session.defaults.DefaultSqlSession.selectList(DefaultSqlSession.java:147) ~[mybatis-3.5.4.jar:3.5.4]
-	at org.apache.ibatis.session.defaults.DefaultSqlSession.selectList(DefaultSqlSession.java:140) ~[mybatis-3.5.4.jar:3.5.4]
+Caused by: org.apache.ibatis.exceptions.TooManyResultsException: Expected one result (or null) to be returned by selectOne(), but found: 2
+	at org.apache.ibatis.session.defaults.DefaultSqlSession.selectOne(DefaultSqlSession.java:80) ~[mybatis-3.5.4.jar:3.5.4]
 	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method) ~[na:1.8.0_91]
 	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62) ~[na:1.8.0_91]
 	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43) ~[na:1.8.0_91]
 	at java.lang.reflect.Method.invoke(Method.java:498) ~[na:1.8.0_91]
 	at org.mybatis.spring.SqlSessionTemplate$SqlSessionInterceptor.invoke(SqlSessionTemplate.java:426) ~[mybatis-spring-2.0.4.jar:2.0.4]
-	... 66 common frames omitted
+	... 65 common frames omitted
 
-2020-11-23 15:04:19.983 DEBUG 2712 --- [http-nio-8888-exec-10] c.y.user.mapper.UserMapper.findById      : ==>  Preparing: select * from t_user where id = ? 
-2020-11-23 15:04:19.983 DEBUG 2712 --- [http-nio-8888-exec-10] c.y.user.mapper.UserMapper.findById      : ==> Parameters: 8(Long)
-2020-11-23 15:04:19.992 DEBUG 2712 --- [http-nio-8888-exec-10] c.y.user.mapper.RoleMapper.findById      : ====>  Preparing: select * from t_role where id = ? 
-2020-11-23 15:04:19.992 DEBUG 2712 --- [http-nio-8888-exec-10] c.y.user.mapper.RoleMapper.findById      : ====> Parameters: 3(Long)
-2020-11-23 15:04:20.007 DEBUG 2712 --- [http-nio-8888-exec-10] c.y.user.mapper.RoleMapper.findById      : <====      Total: 1
-2020-11-23 15:04:20.007 DEBUG 2712 --- [http-nio-8888-exec-10] c.y.user.mapper.UserMapper.findById      : <==      Total: 1
-2020-11-23 15:04:20.010 DEBUG 2712 --- [http-nio-8888-exec-10] c.y.h.mapper.HomeworkMapper.selectOne    : ==>  Preparing: SELECT id FROM t_homework WHERE (id = ?) 
-2020-11-23 15:04:20.010 DEBUG 2712 --- [http-nio-8888-exec-10] c.y.h.mapper.HomeworkMapper.selectOne    : ==> Parameters: 1(Long)
-2020-11-23 15:04:20.010 DEBUG 2712 --- [http-nio-8888-exec-10] c.y.h.mapper.HomeworkMapper.selectOne    : <==      Total: 0
-2020-11-23 15:04:20.022 ERROR 2712 --- [http-nio-8888-exec-10] c.y.utils.exception.ExceptionCatchUtils  : 捕获自定义异常：错误代码：20002, 错误信息：非法请求！
- 自定义异常：{}
-
-com.yixuetang.entity.exception.CustomException: 错误代码：20002, 错误信息：非法请求！
-	at com.yixuetang.utils.exception.ExceptionThrowUtils.cast(ExceptionThrowUtils.java:16) ~[classes/:na]
-	at com.yixuetang.resource.service.impl.ResourceServiceImpl.findHomework(ResourceServiceImpl.java:258) ~[classes/:na]
-	at com.yixuetang.resource.service.impl.ResourceServiceImpl$$FastClassBySpringCGLIB$$372dc295.invoke(<generated>) ~[classes/:na]
-	at org.springframework.cglib.proxy.MethodProxy.invoke(MethodProxy.java:218) ~[spring-core-5.2.4.RELEASE.jar:5.2.4.RELEASE]
-	at org.springframework.aop.framework.CglibAopProxy$DynamicAdvisedInterceptor.intercept(CglibAopProxy.java:685) ~[spring-aop-5.2.4.RELEASE.jar:5.2.4.RELEASE]
-	at com.yixuetang.resource.service.impl.ResourceServiceImpl$$EnhancerBySpringCGLIB$$938e8127.findHomework(<generated>) ~[classes/:na]
-	at com.yixuetang.resource.controller.ResourceController.findHomework(ResourceController.java:101) ~[classes/:na]
-	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method) ~[na:1.8.0_91]
-	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62) ~[na:1.8.0_91]
-	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43) ~[na:1.8.0_91]
-	at java.lang.reflect.Method.invoke(Method.java:498) ~[na:1.8.0_91]
-	at org.springframework.web.method.support.InvocableHandlerMethod.doInvoke(InvocableHandlerMethod.java:190) ~[spring-web-5.2.4.RELEASE.jar:5.2.4.RELEASE]
-	at org.springframework.web.method.support.InvocableHandlerMethod.invokeForRequest(InvocableHandlerMethod.java:138) ~[spring-web-5.2.4.RELEASE.jar:5.2.4.RELEASE]
-	at org.springframework.web.servlet.mvc.method.annotation.ServletInvocableHandlerMethod.invokeAndHandle(ServletInvocableHandlerMethod.java:106) ~[spring-webmvc-5.2.4.RELEASE.jar:5.2.4.RELEASE]
-	at org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter.invokeHandlerMethod(RequestMappingHandlerAdapter.java:879) ~[spring-webmvc-5.2.4.RELEASE.jar:5.2.4.RELEASE]
-	at org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter.handleInternal(RequestMappingHandlerAdapter.java:793) ~[spring-webmvc-5.2.4.RELEASE.jar:5.2.4.RELEASE]
-	at org.springframework.web.servlet.mvc.method.AbstractHandlerMethodAdapter.handle(AbstractHandlerMethodAdapter.java:87) ~[spring-webmvc-5.2.4.RELEASE.jar:5.2.4.RELEASE]
-	at org.springframework.web.servlet.DispatcherServlet.doDispatch(DispatcherServlet.java:1040) ~[spring-webmvc-5.2.4.RELEASE.jar:5.2.4.RELEASE]
-	at org.springframework.web.servlet.DispatcherServlet.doService(DispatcherServlet.java:943) ~[spring-webmvc-5.2.4.RELEASE.jar:5.2.4.RELEASE]
-	at org.springframework.web.servlet.FrameworkServlet.processRequest(FrameworkServlet.java:1006) [spring-webmvc-5.2.4.RELEASE.jar:5.2.4.RELEASE]
-	at org.springframework.web.servlet.FrameworkServlet.doGet(FrameworkServlet.java:898) [spring-webmvc-5.2.4.RELEASE.jar:5.2.4.RELEASE]
-	at javax.servlet.http.HttpServlet.service(HttpServlet.java:634) [tomcat-embed-core-9.0.31.jar:9.0.31]
-	at org.springframework.web.servlet.FrameworkServlet.service(FrameworkServlet.java:883) [spring-webmvc-5.2.4.RELEASE.jar:5.2.4.RELEASE]
-	at javax.servlet.http.HttpServlet.service(HttpServlet.java:741) [tomcat-embed-core-9.0.31.jar:9.0.31]
-	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:231) [tomcat-embed-core-9.0.31.jar:9.0.31]
-	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:166) [tomcat-embed-core-9.0.31.jar:9.0.31]
-	at org.apache.tomcat.websocket.server.WsFilter.doFilter(WsFilter.java:53) [tomcat-embed-websocket-9.0.31.jar:9.0.31]
-	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:193) [tomcat-embed-core-9.0.31.jar:9.0.31]
-	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:166) [tomcat-embed-core-9.0.31.jar:9.0.31]
-	at org.springframework.web.filter.CorsFilter.doFilterInternal(CorsFilter.java:92) [spring-web-5.2.4.RELEASE.jar:5.2.4.RELEASE]
-	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:119) [spring-web-5.2.4.RELEASE.jar:5.2.4.RELEASE]
-	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:193) [tomcat-embed-core-9.0.31.jar:9.0.31]
-	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:166) [tomcat-embed-core-9.0.31.jar:9.0.31]
-	at org.springframework.web.filter.RequestContextFilter.doFilterInternal(RequestContextFilter.java:100) [spring-web-5.2.4.RELEASE.jar:5.2.4.RELEASE]
-	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:119) [spring-web-5.2.4.RELEASE.jar:5.2.4.RELEASE]
-	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:193) [tomcat-embed-core-9.0.31.jar:9.0.31]
-	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:166) [tomcat-embed-core-9.0.31.jar:9.0.31]
-	at org.springframework.web.filter.FormContentFilter.doFilterInternal(FormContentFilter.java:93) [spring-web-5.2.4.RELEASE.jar:5.2.4.RELEASE]
-	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:119) [spring-web-5.2.4.RELEASE.jar:5.2.4.RELEASE]
-	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:193) [tomcat-embed-core-9.0.31.jar:9.0.31]
-	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:166) [tomcat-embed-core-9.0.31.jar:9.0.31]
-	at org.springframework.web.filter.CharacterEncodingFilter.doFilterInternal(CharacterEncodingFilter.java:201) [spring-web-5.2.4.RELEASE.jar:5.2.4.RELEASE]
-	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:119) [spring-web-5.2.4.RELEASE.jar:5.2.4.RELEASE]
-	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:193) [tomcat-embed-core-9.0.31.jar:9.0.31]
-	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:166) [tomcat-embed-core-9.0.31.jar:9.0.31]
-	at org.apache.catalina.core.StandardWrapperValve.invoke(StandardWrapperValve.java:202) [tomcat-embed-core-9.0.31.jar:9.0.31]
-	at org.apache.catalina.core.StandardContextValve.invoke(StandardContextValve.java:96) [tomcat-embed-core-9.0.31.jar:9.0.31]
-	at org.apache.catalina.authenticator.AuthenticatorBase.invoke(AuthenticatorBase.java:541) [tomcat-embed-core-9.0.31.jar:9.0.31]
-	at org.apache.catalina.core.StandardHostValve.invoke(StandardHostValve.java:139) [tomcat-embed-core-9.0.31.jar:9.0.31]
-	at org.apache.catalina.valves.ErrorReportValve.invoke(ErrorReportValve.java:92) [tomcat-embed-core-9.0.31.jar:9.0.31]
-	at org.apache.catalina.core.StandardEngineValve.invoke(StandardEngineValve.java:74) [tomcat-embed-core-9.0.31.jar:9.0.31]
-	at org.apache.catalina.connector.CoyoteAdapter.service(CoyoteAdapter.java:343) [tomcat-embed-core-9.0.31.jar:9.0.31]
-	at org.apache.coyote.http11.Http11Processor.service(Http11Processor.java:367) [tomcat-embed-core-9.0.31.jar:9.0.31]
-	at org.apache.coyote.AbstractProcessorLight.process(AbstractProcessorLight.java:65) [tomcat-embed-core-9.0.31.jar:9.0.31]
-	at org.apache.coyote.AbstractProtocol$ConnectionHandler.process(AbstractProtocol.java:868) [tomcat-embed-core-9.0.31.jar:9.0.31]
-	at org.apache.tomcat.util.net.NioEndpoint$SocketProcessor.doRun(NioEndpoint.java:1639) [tomcat-embed-core-9.0.31.jar:9.0.31]
-	at org.apache.tomcat.util.net.SocketProcessorBase.run(SocketProcessorBase.java:49) [tomcat-embed-core-9.0.31.jar:9.0.31]
-	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1142) [na:1.8.0_91]
-	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:617) [na:1.8.0_91]
-	at org.apache.tomcat.util.threads.TaskThread$WrappingRunnable.run(TaskThread.java:61) [tomcat-embed-core-9.0.31.jar:9.0.31]
-	at java.lang.Thread.run(Thread.java:745) [na:1.8.0_91]
-
-2020-11-23 15:04:23.014 DEBUG 2712 --- [http-nio-8888-exec-2] c.y.user.mapper.UserMapper.findById      : ==>  Preparing: select * from t_user where id = ? 
-2020-11-23 15:04:23.014 DEBUG 2712 --- [http-nio-8888-exec-2] c.y.user.mapper.UserMapper.findById      : ==> Parameters: 8(Long)
-2020-11-23 15:04:23.022 DEBUG 2712 --- [http-nio-8888-exec-2] c.y.user.mapper.RoleMapper.findById      : ====>  Preparing: select * from t_role where id = ? 
-2020-11-23 15:04:23.022 DEBUG 2712 --- [http-nio-8888-exec-2] c.y.user.mapper.RoleMapper.findById      : ====> Parameters: 3(Long)
-2020-11-23 15:04:23.040 DEBUG 2712 --- [http-nio-8888-exec-2] c.y.user.mapper.RoleMapper.findById      : <====      Total: 1
-2020-11-23 15:04:23.040 DEBUG 2712 --- [http-nio-8888-exec-2] c.y.user.mapper.UserMapper.findById      : <==      Total: 1
-2020-11-23 15:04:23.040 DEBUG 2712 --- [http-nio-8888-exec-2] c.y.h.mapper.HomeworkMapper.selectOne    : ==>  Preparing: SELECT id FROM t_homework WHERE (id = ?) 
-2020-11-23 15:04:23.040 DEBUG 2712 --- [http-nio-8888-exec-2] c.y.h.mapper.HomeworkMapper.selectOne    : ==> Parameters: 1(Long)
-2020-11-23 15:04:23.047 DEBUG 2712 --- [http-nio-8888-exec-2] c.y.h.mapper.HomeworkMapper.selectOne    : <==      Total: 0
-2020-11-23 15:04:23.053 ERROR 2712 --- [http-nio-8888-exec-2] c.y.utils.exception.ExceptionCatchUtils  : 捕获自定义异常：错误代码：20002, 错误信息：非法请求！
- 自定义异常：{}
-
-com.yixuetang.entity.exception.CustomException: 错误代码：20002, 错误信息：非法请求！
-	at com.yixuetang.utils.exception.ExceptionThrowUtils.cast(ExceptionThrowUtils.java:16) ~[classes/:na]
-	at com.yixuetang.resource.service.impl.ResourceServiceImpl.findHomework(ResourceServiceImpl.java:258) ~[classes/:na]
-	at com.yixuetang.resource.service.impl.ResourceServiceImpl$$FastClassBySpringCGLIB$$372dc295.invoke(<generated>) ~[classes/:na]
-	at org.springframework.cglib.proxy.MethodProxy.invoke(MethodProxy.java:218) ~[spring-core-5.2.4.RELEASE.jar:5.2.4.RELEASE]
-	at org.springframework.aop.framework.CglibAopProxy$DynamicAdvisedInterceptor.intercept(CglibAopProxy.java:685) ~[spring-aop-5.2.4.RELEASE.jar:5.2.4.RELEASE]
-	at com.yixuetang.resource.service.impl.ResourceServiceImpl$$EnhancerBySpringCGLIB$$938e8127.findHomework(<generated>) ~[classes/:na]
-	at com.yixuetang.resource.controller.ResourceController.findHomework(ResourceController.java:101) ~[classes/:na]
-	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method) ~[na:1.8.0_91]
-	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62) ~[na:1.8.0_91]
-	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43) ~[na:1.8.0_91]
-	at java.lang.reflect.Method.invoke(Method.java:498) ~[na:1.8.0_91]
-	at org.springframework.web.method.support.InvocableHandlerMethod.doInvoke(InvocableHandlerMethod.java:190) ~[spring-web-5.2.4.RELEASE.jar:5.2.4.RELEASE]
-	at org.springframework.web.method.support.InvocableHandlerMethod.invokeForRequest(InvocableHandlerMethod.java:138) ~[spring-web-5.2.4.RELEASE.jar:5.2.4.RELEASE]
-	at org.springframework.web.servlet.mvc.method.annotation.ServletInvocableHandlerMethod.invokeAndHandle(ServletInvocableHandlerMethod.java:106) ~[spring-webmvc-5.2.4.RELEASE.jar:5.2.4.RELEASE]
-	at org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter.invokeHandlerMethod(RequestMappingHandlerAdapter.java:879) ~[spring-webmvc-5.2.4.RELEASE.jar:5.2.4.RELEASE]
-	at org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter.handleInternal(RequestMappingHandlerAdapter.java:793) ~[spring-webmvc-5.2.4.RELEASE.jar:5.2.4.RELEASE]
-	at org.springframework.web.servlet.mvc.method.AbstractHandlerMethodAdapter.handle(AbstractHandlerMethodAdapter.java:87) ~[spring-webmvc-5.2.4.RELEASE.jar:5.2.4.RELEASE]
-	at org.springframework.web.servlet.DispatcherServlet.doDispatch(DispatcherServlet.java:1040) ~[spring-webmvc-5.2.4.RELEASE.jar:5.2.4.RELEASE]
-	at org.springframework.web.servlet.DispatcherServlet.doService(DispatcherServlet.java:943) ~[spring-webmvc-5.2.4.RELEASE.jar:5.2.4.RELEASE]
-	at org.springframework.web.servlet.FrameworkServlet.processRequest(FrameworkServlet.java:1006) [spring-webmvc-5.2.4.RELEASE.jar:5.2.4.RELEASE]
-	at org.springframework.web.servlet.FrameworkServlet.doGet(FrameworkServlet.java:898) [spring-webmvc-5.2.4.RELEASE.jar:5.2.4.RELEASE]
-	at javax.servlet.http.HttpServlet.service(HttpServlet.java:634) [tomcat-embed-core-9.0.31.jar:9.0.31]
-	at org.springframework.web.servlet.FrameworkServlet.service(FrameworkServlet.java:883) [spring-webmvc-5.2.4.RELEASE.jar:5.2.4.RELEASE]
-	at javax.servlet.http.HttpServlet.service(HttpServlet.java:741) [tomcat-embed-core-9.0.31.jar:9.0.31]
-	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:231) [tomcat-embed-core-9.0.31.jar:9.0.31]
-	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:166) [tomcat-embed-core-9.0.31.jar:9.0.31]
-	at org.apache.tomcat.websocket.server.WsFilter.doFilter(WsFilter.java:53) [tomcat-embed-websocket-9.0.31.jar:9.0.31]
-	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:193) [tomcat-embed-core-9.0.31.jar:9.0.31]
-	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:166) [tomcat-embed-core-9.0.31.jar:9.0.31]
-	at org.springframework.web.filter.CorsFilter.doFilterInternal(CorsFilter.java:92) [spring-web-5.2.4.RELEASE.jar:5.2.4.RELEASE]
-	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:119) [spring-web-5.2.4.RELEASE.jar:5.2.4.RELEASE]
-	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:193) [tomcat-embed-core-9.0.31.jar:9.0.31]
-	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:166) [tomcat-embed-core-9.0.31.jar:9.0.31]
-	at org.springframework.web.filter.RequestContextFilter.doFilterInternal(RequestContextFilter.java:100) [spring-web-5.2.4.RELEASE.jar:5.2.4.RELEASE]
-	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:119) [spring-web-5.2.4.RELEASE.jar:5.2.4.RELEASE]
-	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:193) [tomcat-embed-core-9.0.31.jar:9.0.31]
-	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:166) [tomcat-embed-core-9.0.31.jar:9.0.31]
-	at org.springframework.web.filter.FormContentFilter.doFilterInternal(FormContentFilter.java:93) [spring-web-5.2.4.RELEASE.jar:5.2.4.RELEASE]
-	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:119) [spring-web-5.2.4.RELEASE.jar:5.2.4.RELEASE]
-	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:193) [tomcat-embed-core-9.0.31.jar:9.0.31]
-	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:166) [tomcat-embed-core-9.0.31.jar:9.0.31]
-	at org.springframework.web.filter.CharacterEncodingFilter.doFilterInternal(CharacterEncodingFilter.java:201) [spring-web-5.2.4.RELEASE.jar:5.2.4.RELEASE]
-	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:119) [spring-web-5.2.4.RELEASE.jar:5.2.4.RELEASE]
-	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:193) [tomcat-embed-core-9.0.31.jar:9.0.31]
-	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:166) [tomcat-embed-core-9.0.31.jar:9.0.31]
-	at org.apache.catalina.core.StandardWrapperValve.invoke(StandardWrapperValve.java:202) [tomcat-embed-core-9.0.31.jar:9.0.31]
-	at org.apache.catalina.core.StandardContextValve.invoke(StandardContextValve.java:96) [tomcat-embed-core-9.0.31.jar:9.0.31]
-	at org.apache.catalina.authenticator.AuthenticatorBase.invoke(AuthenticatorBase.java:541) [tomcat-embed-core-9.0.31.jar:9.0.31]
-	at org.apache.catalina.core.StandardHostValve.invoke(StandardHostValve.java:139) [tomcat-embed-core-9.0.31.jar:9.0.31]
-	at org.apache.catalina.valves.ErrorReportValve.invoke(ErrorReportValve.java:92) [tomcat-embed-core-9.0.31.jar:9.0.31]
-	at org.apache.catalina.core.StandardEngineValve.invoke(StandardEngineValve.java:74) [tomcat-embed-core-9.0.31.jar:9.0.31]
-	at org.apache.catalina.connector.CoyoteAdapter.service(CoyoteAdapter.java:343) [tomcat-embed-core-9.0.31.jar:9.0.31]
-	at org.apache.coyote.http11.Http11Processor.service(Http11Processor.java:367) [tomcat-embed-core-9.0.31.jar:9.0.31]
-	at org.apache.coyote.AbstractProcessorLight.process(AbstractProcessorLight.java:65) [tomcat-embed-core-9.0.31.jar:9.0.31]
-	at org.apache.coyote.AbstractProtocol$ConnectionHandler.process(AbstractProtocol.java:868) [tomcat-embed-core-9.0.31.jar:9.0.31]
-	at org.apache.tomcat.util.net.NioEndpoint$SocketProcessor.doRun(NioEndpoint.java:1639) [tomcat-embed-core-9.0.31.jar:9.0.31]
-	at org.apache.tomcat.util.net.SocketProcessorBase.run(SocketProcessorBase.java:49) [tomcat-embed-core-9.0.31.jar:9.0.31]
-	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1142) [na:1.8.0_91]
-	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:617) [na:1.8.0_91]
-	at org.apache.tomcat.util.threads.TaskThread$WrappingRunnable.run(TaskThread.java:61) [tomcat-embed-core-9.0.31.jar:9.0.31]
-	at java.lang.Thread.run(Thread.java:745) [na:1.8.0_91]
-
-2020-11-23 15:04:40.792 DEBUG 2712 --- [http-nio-8888-exec-7] c.y.user.mapper.UserMapper.findById      : ==>  Preparing: select * from t_user where id = ? 
-2020-11-23 15:04:40.792 DEBUG 2712 --- [http-nio-8888-exec-7] c.y.user.mapper.UserMapper.findById      : ==> Parameters: 8(Long)
-2020-11-23 15:04:40.809 DEBUG 2712 --- [http-nio-8888-exec-7] c.y.user.mapper.RoleMapper.findById      : ====>  Preparing: select * from t_role where id = ? 
-2020-11-23 15:04:40.809 DEBUG 2712 --- [http-nio-8888-exec-7] c.y.user.mapper.RoleMapper.findById      : ====> Parameters: 3(Long)
-2020-11-23 15:04:40.811 DEBUG 2712 --- [http-nio-8888-exec-7] c.y.user.mapper.RoleMapper.findById      : <====      Total: 1
-2020-11-23 15:04:40.811 DEBUG 2712 --- [http-nio-8888-exec-7] c.y.user.mapper.UserMapper.findById      : <==      Total: 1
-2020-11-23 15:04:40.811 DEBUG 2712 --- [http-nio-8888-exec-7] c.y.h.mapper.HomeworkMapper.selectOne    : ==>  Preparing: SELECT id FROM t_homework WHERE (id = ?) 
-2020-11-23 15:04:40.811 DEBUG 2712 --- [http-nio-8888-exec-7] c.y.h.mapper.HomeworkMapper.selectOne    : ==> Parameters: 8(Long)
-2020-11-23 15:04:40.827 DEBUG 2712 --- [http-nio-8888-exec-7] c.y.h.mapper.HomeworkMapper.selectOne    : <==      Total: 1
-2020-11-23 15:04:40.827 DEBUG 2712 --- [http-nio-8888-exec-7] c.y.h.m.H.selectList                     : ==>  Preparing: SELECT id,homework_id,student_id,resource_id FROM t_homework_resource WHERE (student_id = ? AND homework_id = ?) 
-2020-11-23 15:04:40.827 DEBUG 2712 --- [http-nio-8888-exec-7] c.y.h.m.H.selectList                     : ==> Parameters: 8(Long), 8(Long)
-2020-11-23 15:04:40.827 DEBUG 2712 --- [http-nio-8888-exec-7] c.y.h.m.H.selectList                     : <==      Total: 0
-2020-11-23 15:04:40.838 DEBUG 2712 --- [http-nio-8888-exec-7] c.y.r.mapper.ResourceMapper.selectList   : ==>  Preparing: SELECT id,type,ext,name,location,content_type,create_time,update_time FROM t_resource WHERE (id IN ()) 
-2020-11-23 15:04:40.838 DEBUG 2712 --- [http-nio-8888-exec-7] c.y.r.mapper.ResourceMapper.selectList   : ==> Parameters: 
-2020-11-23 15:04:40.851 ERROR 2712 --- [http-nio-8888-exec-7] c.y.utils.exception.ExceptionCatchUtils  : 捕获不可预知异常：
-### Error querying database.  Cause: java.sql.SQLSyntaxErrorException: You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '))' at line 3
-### The error may exist in com/yixuetang/resource/mapper/ResourceMapper.java (best guess)
-### The error may involve defaultParameterMap
-### The error occurred while setting parameters
-### SQL: SELECT  id,type,ext,name,location,content_type,create_time,update_time  FROM t_resource     WHERE (id IN ())
-### Cause: java.sql.SQLSyntaxErrorException: You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '))' at line 3
-; bad SQL grammar []; nested exception is java.sql.SQLSyntaxErrorException: You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '))' at line 3
+2020-11-30 14:29:48.619 DEBUG 6332 --- [http-nio-8888-exec-4] c.y.c.mapper.CourseMapper.selectOne      : ==>  Preparing: SELECT id,c_name,c_pic,c_code,s_count,create_time,update_time,school_year,semester,class AS clazz,top_num,is_filed FROM t_course WHERE (id = ?) 
+2020-11-30 14:29:48.619 DEBUG 6332 --- [http-nio-8888-exec-4] c.y.c.mapper.CourseMapper.selectOne      : ==> Parameters: 32(Long)
+2020-11-30 14:29:48.636 DEBUG 6332 --- [http-nio-8888-exec-4] c.y.c.mapper.CourseMapper.selectOne      : <==      Total: 1
+2020-11-30 14:29:48.636 DEBUG 6332 --- [http-nio-8888-exec-4] c.y.course.mapper.ScMapper.selectOne     : ==>  Preparing: SELECT id,student_id,course_id,final_grade,top_num,is_filed,join_time FROM t_student_course WHERE (course_id = ? AND student_id = ?) 
+2020-11-30 14:29:48.636 DEBUG 6332 --- [http-nio-8888-exec-4] c.y.course.mapper.ScMapper.selectOne     : ==> Parameters: 32(Long), 13(Long)
+2020-11-30 14:29:48.636 DEBUG 6332 --- [http-nio-8888-exec-4] c.y.course.mapper.ScMapper.selectOne     : <==      Total: 1
+2020-11-30 14:29:48.653 DEBUG 6332 --- [http-nio-8888-exec-4] c.y.h.mapper.HomeworkMapper.selectList   : ==>  Preparing: SELECT id,course_id,title,description,create_time,deadline,submit_count,total_score,top_num FROM t_homework WHERE (course_id = ?) 
+2020-11-30 14:29:48.653 DEBUG 6332 --- [http-nio-8888-exec-4] c.y.h.mapper.HomeworkMapper.selectList   : ==> Parameters: 32(Long)
+2020-11-30 14:29:48.653 DEBUG 6332 --- [http-nio-8888-exec-4] c.y.h.mapper.HomeworkMapper.selectList   : <==      Total: 2
+2020-11-30 14:29:48.653 DEBUG 6332 --- [http-nio-8888-exec-4] c.y.n.mapper.NoticeUserMapper.selectOne  : ==>  Preparing: SELECT id,notice_id,user_id,view FROM t_notice_user WHERE (user_id = ?) 
+2020-11-30 14:29:48.653 DEBUG 6332 --- [http-nio-8888-exec-4] c.y.n.mapper.NoticeUserMapper.selectOne  : ==> Parameters: 13(Long)
+2020-11-30 14:29:48.671 DEBUG 6332 --- [http-nio-8888-exec-4] c.y.n.mapper.NoticeUserMapper.selectOne  : <==      Total: 3
+2020-11-30 14:29:48.672 ERROR 6332 --- [http-nio-8888-exec-4] c.y.utils.exception.ExceptionCatchUtils  : 捕获不可预知异常：nested exception is org.apache.ibatis.exceptions.TooManyResultsException: Expected one result (or null) to be returned by selectOne(), but found: 3
  不可预知异常：{}
 
-org.springframework.jdbc.BadSqlGrammarException: 
-### Error querying database.  Cause: java.sql.SQLSyntaxErrorException: You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '))' at line 3
-### The error may exist in com/yixuetang/resource/mapper/ResourceMapper.java (best guess)
-### The error may involve defaultParameterMap
-### The error occurred while setting parameters
-### SQL: SELECT  id,type,ext,name,location,content_type,create_time,update_time  FROM t_resource     WHERE (id IN ())
-### Cause: java.sql.SQLSyntaxErrorException: You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '))' at line 3
-; bad SQL grammar []; nested exception is java.sql.SQLSyntaxErrorException: You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '))' at line 3
-	at org.springframework.jdbc.support.SQLErrorCodeSQLExceptionTranslator.doTranslate(SQLErrorCodeSQLExceptionTranslator.java:235) ~[spring-jdbc-5.2.4.RELEASE.jar:5.2.4.RELEASE]
-	at org.springframework.jdbc.support.AbstractFallbackSQLExceptionTranslator.translate(AbstractFallbackSQLExceptionTranslator.java:72) ~[spring-jdbc-5.2.4.RELEASE.jar:5.2.4.RELEASE]
-	at org.mybatis.spring.MyBatisExceptionTranslator.translateExceptionIfPossible(MyBatisExceptionTranslator.java:88) ~[mybatis-spring-2.0.4.jar:2.0.4]
+org.mybatis.spring.MyBatisSystemException: nested exception is org.apache.ibatis.exceptions.TooManyResultsException: Expected one result (or null) to be returned by selectOne(), but found: 3
+	at org.mybatis.spring.MyBatisExceptionTranslator.translateExceptionIfPossible(MyBatisExceptionTranslator.java:92) ~[mybatis-spring-2.0.4.jar:2.0.4]
 	at org.mybatis.spring.SqlSessionTemplate$SqlSessionInterceptor.invoke(SqlSessionTemplate.java:440) ~[mybatis-spring-2.0.4.jar:2.0.4]
-	at com.sun.proxy.$Proxy90.selectList(Unknown Source) ~[na:na]
-	at org.mybatis.spring.SqlSessionTemplate.selectList(SqlSessionTemplate.java:223) ~[mybatis-spring-2.0.4.jar:2.0.4]
-	at com.baomidou.mybatisplus.core.override.MybatisMapperMethod.executeForMany(MybatisMapperMethod.java:177) ~[mybatis-plus-core-3.3.2.jar:3.3.2]
-	at com.baomidou.mybatisplus.core.override.MybatisMapperMethod.execute(MybatisMapperMethod.java:78) ~[mybatis-plus-core-3.3.2.jar:3.3.2]
+	at com.sun.proxy.$Proxy95.selectOne(Unknown Source) ~[na:na]
+	at org.mybatis.spring.SqlSessionTemplate.selectOne(SqlSessionTemplate.java:159) ~[mybatis-spring-2.0.4.jar:2.0.4]
+	at com.baomidou.mybatisplus.core.override.MybatisMapperMethod.execute(MybatisMapperMethod.java:108) ~[mybatis-plus-core-3.3.2.jar:3.3.2]
 	at com.baomidou.mybatisplus.core.override.MybatisMapperProxy.invoke(MybatisMapperProxy.java:96) ~[mybatis-plus-core-3.3.2.jar:3.3.2]
-	at com.sun.proxy.$Proxy125.selectList(Unknown Source) ~[na:na]
-	at com.yixuetang.resource.service.impl.ResourceServiceImpl.findHomework(ResourceServiceImpl.java:270) ~[classes/:na]
-	at com.yixuetang.resource.service.impl.ResourceServiceImpl$$FastClassBySpringCGLIB$$372dc295.invoke(<generated>) ~[classes/:na]
+	at com.sun.proxy.$Proxy125.selectOne(Unknown Source) ~[na:na]
+	at com.yixuetang.homework.service.impl.HomeworkServiceImpl.findStudentCourseHomework(HomeworkServiceImpl.java:449) ~[classes/:na]
+	at com.yixuetang.homework.service.impl.HomeworkServiceImpl$$FastClassBySpringCGLIB$$42d44d1.invoke(<generated>) ~[classes/:na]
 	at org.springframework.cglib.proxy.MethodProxy.invoke(MethodProxy.java:218) ~[spring-core-5.2.4.RELEASE.jar:5.2.4.RELEASE]
 	at org.springframework.aop.framework.CglibAopProxy$DynamicAdvisedInterceptor.intercept(CglibAopProxy.java:685) ~[spring-aop-5.2.4.RELEASE.jar:5.2.4.RELEASE]
-	at com.yixuetang.resource.service.impl.ResourceServiceImpl$$EnhancerBySpringCGLIB$$938e8127.findHomework(<generated>) ~[classes/:na]
-	at com.yixuetang.resource.controller.ResourceController.findHomework(ResourceController.java:101) ~[classes/:na]
+	at com.yixuetang.homework.service.impl.HomeworkServiceImpl$$EnhancerBySpringCGLIB$$cc6d33c.findStudentCourseHomework(<generated>) ~[classes/:na]
+	at com.yixuetang.homework.controller.HomeworkController.findStudentCourseHomework(HomeworkController.java:89) ~[classes/:na]
 	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method) ~[na:1.8.0_91]
 	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62) ~[na:1.8.0_91]
 	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43) ~[na:1.8.0_91]
@@ -728,88 +486,32 @@ org.springframework.jdbc.BadSqlGrammarException:
 	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:617) [na:1.8.0_91]
 	at org.apache.tomcat.util.threads.TaskThread$WrappingRunnable.run(TaskThread.java:61) [tomcat-embed-core-9.0.31.jar:9.0.31]
 	at java.lang.Thread.run(Thread.java:745) [na:1.8.0_91]
-Caused by: java.sql.SQLSyntaxErrorException: You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '))' at line 3
-	at com.mysql.cj.jdbc.exceptions.SQLError.createSQLException(SQLError.java:120) ~[mysql-connector-java-8.0.19.jar:8.0.19]
-	at com.mysql.cj.jdbc.exceptions.SQLError.createSQLException(SQLError.java:97) ~[mysql-connector-java-8.0.19.jar:8.0.19]
-	at com.mysql.cj.jdbc.exceptions.SQLExceptionsMapping.translateException(SQLExceptionsMapping.java:122) ~[mysql-connector-java-8.0.19.jar:8.0.19]
-	at com.mysql.cj.jdbc.ClientPreparedStatement.executeInternal(ClientPreparedStatement.java:953) ~[mysql-connector-java-8.0.19.jar:8.0.19]
-	at com.mysql.cj.jdbc.ClientPreparedStatement.execute(ClientPreparedStatement.java:370) ~[mysql-connector-java-8.0.19.jar:8.0.19]
-	at com.zaxxer.hikari.pool.ProxyPreparedStatement.execute(ProxyPreparedStatement.java:44) ~[HikariCP-3.4.2.jar:na]
-	at com.zaxxer.hikari.pool.HikariProxyPreparedStatement.execute(HikariProxyPreparedStatement.java) ~[HikariCP-3.4.2.jar:na]
-	at sun.reflect.GeneratedMethodAccessor220.invoke(Unknown Source) ~[na:na]
-	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43) ~[na:1.8.0_91]
-	at java.lang.reflect.Method.invoke(Method.java:498) ~[na:1.8.0_91]
-	at org.apache.ibatis.logging.jdbc.PreparedStatementLogger.invoke(PreparedStatementLogger.java:59) ~[mybatis-3.5.4.jar:3.5.4]
-	at com.sun.proxy.$Proxy175.execute(Unknown Source) ~[na:na]
-	at org.apache.ibatis.executor.statement.PreparedStatementHandler.query(PreparedStatementHandler.java:64) ~[mybatis-3.5.4.jar:3.5.4]
-	at org.apache.ibatis.executor.statement.RoutingStatementHandler.query(RoutingStatementHandler.java:79) ~[mybatis-3.5.4.jar:3.5.4]
-	at sun.reflect.GeneratedMethodAccessor219.invoke(Unknown Source) ~[na:na]
-	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43) ~[na:1.8.0_91]
-	at java.lang.reflect.Method.invoke(Method.java:498) ~[na:1.8.0_91]
-	at org.apache.ibatis.plugin.Plugin.invoke(Plugin.java:63) ~[mybatis-3.5.4.jar:3.5.4]
-	at com.sun.proxy.$Proxy173.query(Unknown Source) ~[na:na]
-	at com.baomidou.mybatisplus.core.executor.MybatisSimpleExecutor.doQuery(MybatisSimpleExecutor.java:67) ~[mybatis-plus-core-3.3.2.jar:3.3.2]
-	at org.apache.ibatis.executor.BaseExecutor.queryFromDatabase(BaseExecutor.java:324) ~[mybatis-3.5.4.jar:3.5.4]
-	at org.apache.ibatis.executor.BaseExecutor.query(BaseExecutor.java:156) ~[mybatis-3.5.4.jar:3.5.4]
-	at com.baomidou.mybatisplus.core.executor.MybatisCachingExecutor.query(MybatisCachingExecutor.java:163) ~[mybatis-plus-core-3.3.2.jar:3.3.2]
-	at com.baomidou.mybatisplus.core.executor.MybatisCachingExecutor.query(MybatisCachingExecutor.java:90) ~[mybatis-plus-core-3.3.2.jar:3.3.2]
-	at org.apache.ibatis.session.defaults.DefaultSqlSession.selectList(DefaultSqlSession.java:147) ~[mybatis-3.5.4.jar:3.5.4]
-	at org.apache.ibatis.session.defaults.DefaultSqlSession.selectList(DefaultSqlSession.java:140) ~[mybatis-3.5.4.jar:3.5.4]
+Caused by: org.apache.ibatis.exceptions.TooManyResultsException: Expected one result (or null) to be returned by selectOne(), but found: 3
+	at org.apache.ibatis.session.defaults.DefaultSqlSession.selectOne(DefaultSqlSession.java:80) ~[mybatis-3.5.4.jar:3.5.4]
 	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method) ~[na:1.8.0_91]
 	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62) ~[na:1.8.0_91]
 	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43) ~[na:1.8.0_91]
 	at java.lang.reflect.Method.invoke(Method.java:498) ~[na:1.8.0_91]
 	at org.mybatis.spring.SqlSessionTemplate$SqlSessionInterceptor.invoke(SqlSessionTemplate.java:426) ~[mybatis-spring-2.0.4.jar:2.0.4]
-	... 66 common frames omitted
+	... 65 common frames omitted
 
-2020-11-23 15:04:44.340 DEBUG 2712 --- [http-nio-8888-exec-8] c.y.user.mapper.UserMapper.findById      : ==>  Preparing: select * from t_user where id = ? 
-2020-11-23 15:04:44.340 DEBUG 2712 --- [http-nio-8888-exec-8] c.y.user.mapper.UserMapper.findById      : ==> Parameters: 8(Long)
-2020-11-23 15:04:44.357 DEBUG 2712 --- [http-nio-8888-exec-8] c.y.user.mapper.RoleMapper.findById      : ====>  Preparing: select * from t_role where id = ? 
-2020-11-23 15:04:44.357 DEBUG 2712 --- [http-nio-8888-exec-8] c.y.user.mapper.RoleMapper.findById      : ====> Parameters: 3(Long)
-2020-11-23 15:04:44.357 DEBUG 2712 --- [http-nio-8888-exec-8] c.y.user.mapper.RoleMapper.findById      : <====      Total: 1
-2020-11-23 15:04:44.357 DEBUG 2712 --- [http-nio-8888-exec-8] c.y.user.mapper.UserMapper.findById      : <==      Total: 1
-2020-11-23 15:04:44.357 DEBUG 2712 --- [http-nio-8888-exec-8] c.y.h.mapper.HomeworkMapper.selectOne    : ==>  Preparing: SELECT id FROM t_homework WHERE (id = ?) 
-2020-11-23 15:04:44.357 DEBUG 2712 --- [http-nio-8888-exec-8] c.y.h.mapper.HomeworkMapper.selectOne    : ==> Parameters: 8(Long)
-2020-11-23 15:04:44.374 DEBUG 2712 --- [http-nio-8888-exec-8] c.y.h.mapper.HomeworkMapper.selectOne    : <==      Total: 1
-2020-11-23 15:04:44.379 DEBUG 2712 --- [http-nio-8888-exec-8] c.y.h.m.H.selectList                     : ==>  Preparing: SELECT id,homework_id,student_id,resource_id FROM t_homework_resource WHERE (student_id = ? AND homework_id = ?) 
-2020-11-23 15:04:44.380 DEBUG 2712 --- [http-nio-8888-exec-8] c.y.h.m.H.selectList                     : ==> Parameters: 8(Long), 8(Long)
-2020-11-23 15:04:44.387 DEBUG 2712 --- [http-nio-8888-exec-8] c.y.h.m.H.selectList                     : <==      Total: 0
-2020-11-23 15:04:44.388 DEBUG 2712 --- [http-nio-8888-exec-8] c.y.r.mapper.ResourceMapper.selectList   : ==>  Preparing: SELECT id,type,ext,name,location,content_type,create_time,update_time FROM t_resource WHERE (id IN ()) 
-2020-11-23 15:04:44.388 DEBUG 2712 --- [http-nio-8888-exec-8] c.y.r.mapper.ResourceMapper.selectList   : ==> Parameters: 
-2020-11-23 15:04:44.400 ERROR 2712 --- [http-nio-8888-exec-8] c.y.utils.exception.ExceptionCatchUtils  : 捕获不可预知异常：
-### Error querying database.  Cause: java.sql.SQLSyntaxErrorException: You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '))' at line 3
-### The error may exist in com/yixuetang/resource/mapper/ResourceMapper.java (best guess)
-### The error may involve defaultParameterMap
-### The error occurred while setting parameters
-### SQL: SELECT  id,type,ext,name,location,content_type,create_time,update_time  FROM t_resource     WHERE (id IN ())
-### Cause: java.sql.SQLSyntaxErrorException: You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '))' at line 3
-; bad SQL grammar []; nested exception is java.sql.SQLSyntaxErrorException: You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '))' at line 3
- 不可预知异常：{}
+2020-11-30 14:30:00.047 DEBUG 6332 --- [scheduling-1] c.y.m.mapper.MessageMapper.selectList    : ==>  Preparing: SELECT id,receiver_type,publisher_id,receiver_id,status,title,content,publish_time,update_time FROM t_message WHERE (status = ?) 
+2020-11-30 14:30:00.047 DEBUG 6332 --- [scheduling-1] c.y.m.mapper.MessageMapper.selectList    : ==> Parameters: false(Boolean)
+2020-11-30 14:30:00.049 DEBUG 6332 --- [scheduling-1] c.y.m.mapper.MessageMapper.selectList    : <==      Total: 0
+2020-11-30 14:31:43.489 DEBUG 6332 --- [http-nio-8888-exec-5] c.y.c.mapper.CourseMapper.selectOne      : ==>  Preparing: SELECT id,c_name,c_pic,c_code,s_count,create_time,update_time,school_year,semester,class AS clazz,top_num,is_filed FROM t_course WHERE (id = ?) 
+2020-11-30 14:31:43.499 DEBUG 6332 --- [http-nio-8888-exec-5] c.y.c.mapper.CourseMapper.selectOne      : ==> Parameters: 10000(Long)
+2020-11-30 14:31:43.499 DEBUG 6332 --- [http-nio-8888-exec-5] c.y.c.mapper.CourseMapper.selectOne      : <==      Total: 0
+2020-11-30 14:31:43.508 ERROR 6332 --- [http-nio-8888-exec-5] c.y.utils.exception.ExceptionCatchUtils  : 捕获自定义异常：错误代码：20002, 错误信息：非法请求！
+ 自定义异常：{}
 
-org.springframework.jdbc.BadSqlGrammarException: 
-### Error querying database.  Cause: java.sql.SQLSyntaxErrorException: You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '))' at line 3
-### The error may exist in com/yixuetang/resource/mapper/ResourceMapper.java (best guess)
-### The error may involve defaultParameterMap
-### The error occurred while setting parameters
-### SQL: SELECT  id,type,ext,name,location,content_type,create_time,update_time  FROM t_resource     WHERE (id IN ())
-### Cause: java.sql.SQLSyntaxErrorException: You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '))' at line 3
-; bad SQL grammar []; nested exception is java.sql.SQLSyntaxErrorException: You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '))' at line 3
-	at org.springframework.jdbc.support.SQLErrorCodeSQLExceptionTranslator.doTranslate(SQLErrorCodeSQLExceptionTranslator.java:235) ~[spring-jdbc-5.2.4.RELEASE.jar:5.2.4.RELEASE]
-	at org.springframework.jdbc.support.AbstractFallbackSQLExceptionTranslator.translate(AbstractFallbackSQLExceptionTranslator.java:72) ~[spring-jdbc-5.2.4.RELEASE.jar:5.2.4.RELEASE]
-	at org.mybatis.spring.MyBatisExceptionTranslator.translateExceptionIfPossible(MyBatisExceptionTranslator.java:88) ~[mybatis-spring-2.0.4.jar:2.0.4]
-	at org.mybatis.spring.SqlSessionTemplate$SqlSessionInterceptor.invoke(SqlSessionTemplate.java:440) ~[mybatis-spring-2.0.4.jar:2.0.4]
-	at com.sun.proxy.$Proxy90.selectList(Unknown Source) ~[na:na]
-	at org.mybatis.spring.SqlSessionTemplate.selectList(SqlSessionTemplate.java:223) ~[mybatis-spring-2.0.4.jar:2.0.4]
-	at com.baomidou.mybatisplus.core.override.MybatisMapperMethod.executeForMany(MybatisMapperMethod.java:177) ~[mybatis-plus-core-3.3.2.jar:3.3.2]
-	at com.baomidou.mybatisplus.core.override.MybatisMapperMethod.execute(MybatisMapperMethod.java:78) ~[mybatis-plus-core-3.3.2.jar:3.3.2]
-	at com.baomidou.mybatisplus.core.override.MybatisMapperProxy.invoke(MybatisMapperProxy.java:96) ~[mybatis-plus-core-3.3.2.jar:3.3.2]
-	at com.sun.proxy.$Proxy125.selectList(Unknown Source) ~[na:na]
-	at com.yixuetang.resource.service.impl.ResourceServiceImpl.findHomework(ResourceServiceImpl.java:270) ~[classes/:na]
-	at com.yixuetang.resource.service.impl.ResourceServiceImpl$$FastClassBySpringCGLIB$$372dc295.invoke(<generated>) ~[classes/:na]
+com.yixuetang.entity.exception.CustomException: 错误代码：20002, 错误信息：非法请求！
+	at com.yixuetang.utils.exception.ExceptionThrowUtils.cast(ExceptionThrowUtils.java:16) ~[classes/:na]
+	at com.yixuetang.homework.service.impl.HomeworkServiceImpl.findStudentCourseHomework(HomeworkServiceImpl.java:433) ~[classes/:na]
+	at com.yixuetang.homework.service.impl.HomeworkServiceImpl$$FastClassBySpringCGLIB$$42d44d1.invoke(<generated>) ~[classes/:na]
 	at org.springframework.cglib.proxy.MethodProxy.invoke(MethodProxy.java:218) ~[spring-core-5.2.4.RELEASE.jar:5.2.4.RELEASE]
 	at org.springframework.aop.framework.CglibAopProxy$DynamicAdvisedInterceptor.intercept(CglibAopProxy.java:685) ~[spring-aop-5.2.4.RELEASE.jar:5.2.4.RELEASE]
-	at com.yixuetang.resource.service.impl.ResourceServiceImpl$$EnhancerBySpringCGLIB$$938e8127.findHomework(<generated>) ~[classes/:na]
-	at com.yixuetang.resource.controller.ResourceController.findHomework(ResourceController.java:101) ~[classes/:na]
+	at com.yixuetang.homework.service.impl.HomeworkServiceImpl$$EnhancerBySpringCGLIB$$cc6d33c.findStudentCourseHomework(<generated>) ~[classes/:na]
+	at com.yixuetang.homework.controller.HomeworkController.findStudentCourseHomework(HomeworkController.java:89) ~[classes/:na]
 	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method) ~[na:1.8.0_91]
 	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62) ~[na:1.8.0_91]
 	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43) ~[na:1.8.0_91]
@@ -864,98 +566,166 @@ org.springframework.jdbc.BadSqlGrammarException:
 	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:617) [na:1.8.0_91]
 	at org.apache.tomcat.util.threads.TaskThread$WrappingRunnable.run(TaskThread.java:61) [tomcat-embed-core-9.0.31.jar:9.0.31]
 	at java.lang.Thread.run(Thread.java:745) [na:1.8.0_91]
-Caused by: java.sql.SQLSyntaxErrorException: You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '))' at line 3
-	at com.mysql.cj.jdbc.exceptions.SQLError.createSQLException(SQLError.java:120) ~[mysql-connector-java-8.0.19.jar:8.0.19]
-	at com.mysql.cj.jdbc.exceptions.SQLError.createSQLException(SQLError.java:97) ~[mysql-connector-java-8.0.19.jar:8.0.19]
-	at com.mysql.cj.jdbc.exceptions.SQLExceptionsMapping.translateException(SQLExceptionsMapping.java:122) ~[mysql-connector-java-8.0.19.jar:8.0.19]
-	at com.mysql.cj.jdbc.ClientPreparedStatement.executeInternal(ClientPreparedStatement.java:953) ~[mysql-connector-java-8.0.19.jar:8.0.19]
-	at com.mysql.cj.jdbc.ClientPreparedStatement.execute(ClientPreparedStatement.java:370) ~[mysql-connector-java-8.0.19.jar:8.0.19]
-	at com.zaxxer.hikari.pool.ProxyPreparedStatement.execute(ProxyPreparedStatement.java:44) ~[HikariCP-3.4.2.jar:na]
-	at com.zaxxer.hikari.pool.HikariProxyPreparedStatement.execute(HikariProxyPreparedStatement.java) ~[HikariCP-3.4.2.jar:na]
-	at sun.reflect.GeneratedMethodAccessor220.invoke(Unknown Source) ~[na:na]
-	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43) ~[na:1.8.0_91]
-	at java.lang.reflect.Method.invoke(Method.java:498) ~[na:1.8.0_91]
-	at org.apache.ibatis.logging.jdbc.PreparedStatementLogger.invoke(PreparedStatementLogger.java:59) ~[mybatis-3.5.4.jar:3.5.4]
-	at com.sun.proxy.$Proxy175.execute(Unknown Source) ~[na:na]
-	at org.apache.ibatis.executor.statement.PreparedStatementHandler.query(PreparedStatementHandler.java:64) ~[mybatis-3.5.4.jar:3.5.4]
-	at org.apache.ibatis.executor.statement.RoutingStatementHandler.query(RoutingStatementHandler.java:79) ~[mybatis-3.5.4.jar:3.5.4]
-	at sun.reflect.GeneratedMethodAccessor219.invoke(Unknown Source) ~[na:na]
-	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43) ~[na:1.8.0_91]
-	at java.lang.reflect.Method.invoke(Method.java:498) ~[na:1.8.0_91]
-	at org.apache.ibatis.plugin.Plugin.invoke(Plugin.java:63) ~[mybatis-3.5.4.jar:3.5.4]
-	at com.sun.proxy.$Proxy173.query(Unknown Source) ~[na:na]
-	at com.baomidou.mybatisplus.core.executor.MybatisSimpleExecutor.doQuery(MybatisSimpleExecutor.java:67) ~[mybatis-plus-core-3.3.2.jar:3.3.2]
-	at org.apache.ibatis.executor.BaseExecutor.queryFromDatabase(BaseExecutor.java:324) ~[mybatis-3.5.4.jar:3.5.4]
-	at org.apache.ibatis.executor.BaseExecutor.query(BaseExecutor.java:156) ~[mybatis-3.5.4.jar:3.5.4]
-	at com.baomidou.mybatisplus.core.executor.MybatisCachingExecutor.query(MybatisCachingExecutor.java:163) ~[mybatis-plus-core-3.3.2.jar:3.3.2]
-	at com.baomidou.mybatisplus.core.executor.MybatisCachingExecutor.query(MybatisCachingExecutor.java:90) ~[mybatis-plus-core-3.3.2.jar:3.3.2]
-	at org.apache.ibatis.session.defaults.DefaultSqlSession.selectList(DefaultSqlSession.java:147) ~[mybatis-3.5.4.jar:3.5.4]
-	at org.apache.ibatis.session.defaults.DefaultSqlSession.selectList(DefaultSqlSession.java:140) ~[mybatis-3.5.4.jar:3.5.4]
+
+2020-11-30 14:31:55.973 DEBUG 6332 --- [http-nio-8888-exec-2] c.y.c.mapper.CourseMapper.selectOne      : ==>  Preparing: SELECT id,c_name,c_pic,c_code,s_count,create_time,update_time,school_year,semester,class AS clazz,top_num,is_filed FROM t_course WHERE (id = ?) 
+2020-11-30 14:31:55.973 DEBUG 6332 --- [http-nio-8888-exec-2] c.y.c.mapper.CourseMapper.selectOne      : ==> Parameters: 1(Long)
+2020-11-30 14:31:55.982 DEBUG 6332 --- [http-nio-8888-exec-2] c.y.c.mapper.CourseMapper.selectOne      : <==      Total: 1
+2020-11-30 14:31:55.983 DEBUG 6332 --- [http-nio-8888-exec-2] c.y.course.mapper.ScMapper.selectOne     : ==>  Preparing: SELECT id,student_id,course_id,final_grade,top_num,is_filed,join_time FROM t_student_course WHERE (course_id = ? AND student_id = ?) 
+2020-11-30 14:31:55.983 DEBUG 6332 --- [http-nio-8888-exec-2] c.y.course.mapper.ScMapper.selectOne     : ==> Parameters: 1(Long), 10000(Long)
+2020-11-30 14:31:55.993 DEBUG 6332 --- [http-nio-8888-exec-2] c.y.course.mapper.ScMapper.selectOne     : <==      Total: 0
+2020-11-30 14:31:56.028 ERROR 6332 --- [http-nio-8888-exec-2] c.y.utils.exception.ExceptionCatchUtils  : 捕获自定义异常：错误代码：50000, 错误信息：学生-课程记录不存在！
+ 自定义异常：{}
+
+com.yixuetang.entity.exception.CustomException: 错误代码：50000, 错误信息：学生-课程记录不存在！
+	at com.yixuetang.utils.exception.ExceptionThrowUtils.cast(ExceptionThrowUtils.java:16) ~[classes/:na]
+	at com.yixuetang.homework.service.impl.HomeworkServiceImpl.findStudentCourseHomework(HomeworkServiceImpl.java:439) ~[classes/:na]
+	at com.yixuetang.homework.service.impl.HomeworkServiceImpl$$FastClassBySpringCGLIB$$42d44d1.invoke(<generated>) ~[classes/:na]
+	at org.springframework.cglib.proxy.MethodProxy.invoke(MethodProxy.java:218) ~[spring-core-5.2.4.RELEASE.jar:5.2.4.RELEASE]
+	at org.springframework.aop.framework.CglibAopProxy$DynamicAdvisedInterceptor.intercept(CglibAopProxy.java:685) ~[spring-aop-5.2.4.RELEASE.jar:5.2.4.RELEASE]
+	at com.yixuetang.homework.service.impl.HomeworkServiceImpl$$EnhancerBySpringCGLIB$$cc6d33c.findStudentCourseHomework(<generated>) ~[classes/:na]
+	at com.yixuetang.homework.controller.HomeworkController.findStudentCourseHomework(HomeworkController.java:89) ~[classes/:na]
 	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method) ~[na:1.8.0_91]
 	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62) ~[na:1.8.0_91]
 	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43) ~[na:1.8.0_91]
 	at java.lang.reflect.Method.invoke(Method.java:498) ~[na:1.8.0_91]
-	at org.mybatis.spring.SqlSessionTemplate$SqlSessionInterceptor.invoke(SqlSessionTemplate.java:426) ~[mybatis-spring-2.0.4.jar:2.0.4]
-	... 66 common frames omitted
+	at org.springframework.web.method.support.InvocableHandlerMethod.doInvoke(InvocableHandlerMethod.java:190) ~[spring-web-5.2.4.RELEASE.jar:5.2.4.RELEASE]
+	at org.springframework.web.method.support.InvocableHandlerMethod.invokeForRequest(InvocableHandlerMethod.java:138) ~[spring-web-5.2.4.RELEASE.jar:5.2.4.RELEASE]
+	at org.springframework.web.servlet.mvc.method.annotation.ServletInvocableHandlerMethod.invokeAndHandle(ServletInvocableHandlerMethod.java:106) ~[spring-webmvc-5.2.4.RELEASE.jar:5.2.4.RELEASE]
+	at org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter.invokeHandlerMethod(RequestMappingHandlerAdapter.java:879) ~[spring-webmvc-5.2.4.RELEASE.jar:5.2.4.RELEASE]
+	at org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter.handleInternal(RequestMappingHandlerAdapter.java:793) ~[spring-webmvc-5.2.4.RELEASE.jar:5.2.4.RELEASE]
+	at org.springframework.web.servlet.mvc.method.AbstractHandlerMethodAdapter.handle(AbstractHandlerMethodAdapter.java:87) ~[spring-webmvc-5.2.4.RELEASE.jar:5.2.4.RELEASE]
+	at org.springframework.web.servlet.DispatcherServlet.doDispatch(DispatcherServlet.java:1040) ~[spring-webmvc-5.2.4.RELEASE.jar:5.2.4.RELEASE]
+	at org.springframework.web.servlet.DispatcherServlet.doService(DispatcherServlet.java:943) ~[spring-webmvc-5.2.4.RELEASE.jar:5.2.4.RELEASE]
+	at org.springframework.web.servlet.FrameworkServlet.processRequest(FrameworkServlet.java:1006) [spring-webmvc-5.2.4.RELEASE.jar:5.2.4.RELEASE]
+	at org.springframework.web.servlet.FrameworkServlet.doGet(FrameworkServlet.java:898) [spring-webmvc-5.2.4.RELEASE.jar:5.2.4.RELEASE]
+	at javax.servlet.http.HttpServlet.service(HttpServlet.java:634) [tomcat-embed-core-9.0.31.jar:9.0.31]
+	at org.springframework.web.servlet.FrameworkServlet.service(FrameworkServlet.java:883) [spring-webmvc-5.2.4.RELEASE.jar:5.2.4.RELEASE]
+	at javax.servlet.http.HttpServlet.service(HttpServlet.java:741) [tomcat-embed-core-9.0.31.jar:9.0.31]
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:231) [tomcat-embed-core-9.0.31.jar:9.0.31]
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:166) [tomcat-embed-core-9.0.31.jar:9.0.31]
+	at org.apache.tomcat.websocket.server.WsFilter.doFilter(WsFilter.java:53) [tomcat-embed-websocket-9.0.31.jar:9.0.31]
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:193) [tomcat-embed-core-9.0.31.jar:9.0.31]
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:166) [tomcat-embed-core-9.0.31.jar:9.0.31]
+	at org.springframework.web.filter.CorsFilter.doFilterInternal(CorsFilter.java:92) [spring-web-5.2.4.RELEASE.jar:5.2.4.RELEASE]
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:119) [spring-web-5.2.4.RELEASE.jar:5.2.4.RELEASE]
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:193) [tomcat-embed-core-9.0.31.jar:9.0.31]
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:166) [tomcat-embed-core-9.0.31.jar:9.0.31]
+	at org.springframework.web.filter.RequestContextFilter.doFilterInternal(RequestContextFilter.java:100) [spring-web-5.2.4.RELEASE.jar:5.2.4.RELEASE]
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:119) [spring-web-5.2.4.RELEASE.jar:5.2.4.RELEASE]
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:193) [tomcat-embed-core-9.0.31.jar:9.0.31]
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:166) [tomcat-embed-core-9.0.31.jar:9.0.31]
+	at org.springframework.web.filter.FormContentFilter.doFilterInternal(FormContentFilter.java:93) [spring-web-5.2.4.RELEASE.jar:5.2.4.RELEASE]
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:119) [spring-web-5.2.4.RELEASE.jar:5.2.4.RELEASE]
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:193) [tomcat-embed-core-9.0.31.jar:9.0.31]
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:166) [tomcat-embed-core-9.0.31.jar:9.0.31]
+	at org.springframework.web.filter.CharacterEncodingFilter.doFilterInternal(CharacterEncodingFilter.java:201) [spring-web-5.2.4.RELEASE.jar:5.2.4.RELEASE]
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:119) [spring-web-5.2.4.RELEASE.jar:5.2.4.RELEASE]
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:193) [tomcat-embed-core-9.0.31.jar:9.0.31]
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:166) [tomcat-embed-core-9.0.31.jar:9.0.31]
+	at org.apache.catalina.core.StandardWrapperValve.invoke(StandardWrapperValve.java:202) [tomcat-embed-core-9.0.31.jar:9.0.31]
+	at org.apache.catalina.core.StandardContextValve.invoke(StandardContextValve.java:96) [tomcat-embed-core-9.0.31.jar:9.0.31]
+	at org.apache.catalina.authenticator.AuthenticatorBase.invoke(AuthenticatorBase.java:541) [tomcat-embed-core-9.0.31.jar:9.0.31]
+	at org.apache.catalina.core.StandardHostValve.invoke(StandardHostValve.java:139) [tomcat-embed-core-9.0.31.jar:9.0.31]
+	at org.apache.catalina.valves.ErrorReportValve.invoke(ErrorReportValve.java:92) [tomcat-embed-core-9.0.31.jar:9.0.31]
+	at org.apache.catalina.core.StandardEngineValve.invoke(StandardEngineValve.java:74) [tomcat-embed-core-9.0.31.jar:9.0.31]
+	at org.apache.catalina.connector.CoyoteAdapter.service(CoyoteAdapter.java:343) [tomcat-embed-core-9.0.31.jar:9.0.31]
+	at org.apache.coyote.http11.Http11Processor.service(Http11Processor.java:367) [tomcat-embed-core-9.0.31.jar:9.0.31]
+	at org.apache.coyote.AbstractProcessorLight.process(AbstractProcessorLight.java:65) [tomcat-embed-core-9.0.31.jar:9.0.31]
+	at org.apache.coyote.AbstractProtocol$ConnectionHandler.process(AbstractProtocol.java:868) [tomcat-embed-core-9.0.31.jar:9.0.31]
+	at org.apache.tomcat.util.net.NioEndpoint$SocketProcessor.doRun(NioEndpoint.java:1639) [tomcat-embed-core-9.0.31.jar:9.0.31]
+	at org.apache.tomcat.util.net.SocketProcessorBase.run(SocketProcessorBase.java:49) [tomcat-embed-core-9.0.31.jar:9.0.31]
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1142) [na:1.8.0_91]
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:617) [na:1.8.0_91]
+	at org.apache.tomcat.util.threads.TaskThread$WrappingRunnable.run(TaskThread.java:61) [tomcat-embed-core-9.0.31.jar:9.0.31]
+	at java.lang.Thread.run(Thread.java:745) [na:1.8.0_91]
 
-2020-11-23 15:08:05.952  INFO 4436 --- [main] com.yixuetang.YxtServiceApplication      : Starting YxtServiceApplication on SD-20191117RFKO with PID 4436 (E:\projects\yxt-edu\yxt-edu-service\yxt-service\target\classes started by Administrator in E:\projects\yxt-edu)
-2020-11-23 15:08:05.971 DEBUG 4436 --- [main] com.yixuetang.YxtServiceApplication      : Running with Spring Boot v2.2.5.RELEASE, Spring v5.2.4.RELEASE
-2020-11-23 15:08:05.971  INFO 4436 --- [main] com.yixuetang.YxtServiceApplication      : The following profiles are active: dev
-2020-11-23 15:08:08.332  INFO 4436 --- [main] .s.d.r.c.RepositoryConfigurationDelegate : Multiple Spring Data modules found, entering strict repository configuration mode!
-2020-11-23 15:08:08.332  INFO 4436 --- [main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data Redis repositories in DEFAULT mode.
-2020-11-23 15:08:08.383  INFO 4436 --- [main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 30ms. Found 0 Redis repository interfaces.
-2020-11-23 15:08:09.248  INFO 4436 --- [main] ptablePropertiesBeanFactoryPostProcessor : Post-processing PropertySource instances
-2020-11-23 15:08:09.366  INFO 4436 --- [main] c.u.j.EncryptablePropertySourceConverter : Converting PropertySource configurationProperties [org.springframework.boot.context.properties.source.ConfigurationPropertySourcesPropertySource] to AOP Proxy
-2020-11-23 15:08:09.366  INFO 4436 --- [main] c.u.j.EncryptablePropertySourceConverter : Converting PropertySource servletConfigInitParams [org.springframework.core.env.PropertySource$StubPropertySource] to EncryptablePropertySourceWrapper
-2020-11-23 15:08:09.366  INFO 4436 --- [main] c.u.j.EncryptablePropertySourceConverter : Converting PropertySource servletContextInitParams [org.springframework.core.env.PropertySource$StubPropertySource] to EncryptablePropertySourceWrapper
-2020-11-23 15:08:09.366  INFO 4436 --- [main] c.u.j.EncryptablePropertySourceConverter : Converting PropertySource systemProperties [org.springframework.core.env.PropertiesPropertySource] to EncryptableMapPropertySourceWrapper
-2020-11-23 15:08:09.366  INFO 4436 --- [main] c.u.j.EncryptablePropertySourceConverter : Converting PropertySource systemEnvironment [org.springframework.boot.env.SystemEnvironmentPropertySourceEnvironmentPostProcessor$OriginAwareSystemEnvironmentPropertySource] to EncryptableMapPropertySourceWrapper
-2020-11-23 15:08:09.366  INFO 4436 --- [main] c.u.j.EncryptablePropertySourceConverter : Converting PropertySource random [org.springframework.boot.env.RandomValuePropertySource] to EncryptablePropertySourceWrapper
-2020-11-23 15:08:09.366  INFO 4436 --- [main] c.u.j.EncryptablePropertySourceConverter : Converting PropertySource applicationConfig: [classpath:/application-dev.yml] [org.springframework.boot.env.OriginTrackedMapPropertySource] to EncryptableMapPropertySourceWrapper
-2020-11-23 15:08:09.366  INFO 4436 --- [main] c.u.j.EncryptablePropertySourceConverter : Converting PropertySource applicationConfig: [classpath:/application.yml] [org.springframework.boot.env.OriginTrackedMapPropertySource] to EncryptableMapPropertySourceWrapper
-2020-11-23 15:08:09.401  INFO 4436 --- [main] c.u.j.filter.DefaultLazyPropertyFilter   : Property Filter custom Bean not found with name 'encryptablePropertyFilter'. Initializing Default Property Filter
-2020-11-23 15:08:10.219  INFO 4436 --- [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port(s): 8888 (http)
-2020-11-23 15:08:10.219  INFO 4436 --- [main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
-2020-11-23 15:08:10.219  INFO 4436 --- [main] org.apache.catalina.core.StandardEngine  : Starting Servlet engine: [Apache Tomcat/9.0.31]
-2020-11-23 15:08:10.359  INFO 4436 --- [main] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
-2020-11-23 15:08:10.359  INFO 4436 --- [main] o.s.web.context.ContextLoader            : Root WebApplicationContext: initialization completed in 4271 ms
-2020-11-23 15:08:10.767  INFO 4436 --- [main] c.u.j.r.DefaultLazyPropertyResolver      : Property Resolver custom Bean not found with name 'encryptablePropertyResolver'. Initializing Default Property Resolver
-2020-11-23 15:08:10.767  INFO 4436 --- [main] c.u.j.d.DefaultLazyPropertyDetector      : Property Detector custom Bean not found with name 'encryptablePropertyDetector'. Initializing Default Property Detector
-2020-11-23 15:08:10.767  INFO 4436 --- [main] c.u.j.encryptor.DefaultLazyEncryptor     : String Encryptor custom Bean not found with name 'jasyptStringEncryptor'. Initializing Default String Encryptor
-2020-11-23 15:08:10.803  INFO 4436 --- [main] c.u.j.encryptor.DefaultLazyEncryptor     : Encryptor config not found for property jasypt.encryptor.algorithm, using default value: PBEWithMD5AndDES
-2020-11-23 15:08:10.803  INFO 4436 --- [main] c.u.j.encryptor.DefaultLazyEncryptor     : Encryptor config not found for property jasypt.encryptor.keyObtentionIterations, using default value: 1000
-2020-11-23 15:08:10.803  INFO 4436 --- [main] c.u.j.encryptor.DefaultLazyEncryptor     : Encryptor config not found for property jasypt.encryptor.poolSize, using default value: 1
-2020-11-23 15:08:10.803  INFO 4436 --- [main] c.u.j.encryptor.DefaultLazyEncryptor     : Encryptor config not found for property jasypt.encryptor.providerName, using default value: null
-2020-11-23 15:08:10.803  INFO 4436 --- [main] c.u.j.encryptor.DefaultLazyEncryptor     : Encryptor config not found for property jasypt.encryptor.providerClassName, using default value: null
-2020-11-23 15:08:10.803  INFO 4436 --- [main] c.u.j.encryptor.DefaultLazyEncryptor     : Encryptor config not found for property jasypt.encryptor.saltGeneratorClassname, using default value: org.jasypt.salt.RandomSaltGenerator
-2020-11-23 15:08:10.819  INFO 4436 --- [main] c.u.j.encryptor.DefaultLazyEncryptor     : Encryptor config not found for property jasypt.encryptor.stringOutputType, using default value: base64
-2020-11-23 15:08:14.927  INFO 4436 --- [main] pertySourcedRequestMappingHandlerMapping : Mapped URL path [/v2/api-docs] onto method [springfox.documentation.swagger2.web.Swagger2Controller#getDocumentation(String, HttpServletRequest)]
-2020-11-23 15:08:15.613  INFO 4436 --- [main] o.s.s.concurrent.ThreadPoolTaskExecutor  : Initializing ExecutorService 'applicationTaskExecutor'
-2020-11-23 15:08:16.158  INFO 4436 --- [main] d.s.w.p.DocumentationPluginsBootstrapper : Context refreshed
-2020-11-23 15:08:16.214  INFO 4436 --- [main] d.s.w.p.DocumentationPluginsBootstrapper : Found 1 custom documentation plugin(s)
-2020-11-23 15:08:16.297  INFO 4436 --- [main] s.d.s.w.s.ApiListingReferenceScanner     : Scanning for api listing references
-2020-11-23 15:08:16.615  INFO 4436 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: findByIdUsingGET_1
-2020-11-23 15:08:16.632  INFO 4436 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: findByIdUsingGET_2
-2020-11-23 15:08:16.648  INFO 4436 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: switchTopUsingPUT_1
-2020-11-23 15:08:16.681  INFO 4436 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: uploadUsingPOST_1
-2020-11-23 15:08:16.681  INFO 4436 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: delByIdUsingDELETE_1
-2020-11-23 15:08:16.681  INFO 4436 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: findByPageUsingGET_1
-2020-11-23 15:08:16.803  INFO 4436 --- [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port(s): 8888 (http) with context path ''
-2020-11-23 15:08:16.822  INFO 4436 --- [main] com.yixuetang.YxtServiceApplication      : Started YxtServiceApplication in 12.383 seconds (JVM running for 14.214)
-2020-11-23 15:08:34.479  INFO 4436 --- [http-nio-8888-exec-1] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring DispatcherServlet 'dispatcherServlet'
-2020-11-23 15:08:34.479  INFO 4436 --- [http-nio-8888-exec-1] o.s.web.servlet.DispatcherServlet        : Initializing Servlet 'dispatcherServlet'
-2020-11-23 15:08:34.496  INFO 4436 --- [http-nio-8888-exec-1] o.s.web.servlet.DispatcherServlet        : Completed initialization in 17 ms
-2020-11-23 15:08:52.853  INFO 4436 --- [http-nio-8888-exec-6] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
-2020-11-23 15:08:53.470  INFO 4436 --- [http-nio-8888-exec-6] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
-2020-11-23 15:08:53.502 DEBUG 4436 --- [http-nio-8888-exec-6] c.y.user.mapper.UserMapper.findById      : ==>  Preparing: select * from t_user where id = ? 
-2020-11-23 15:08:53.537 DEBUG 4436 --- [http-nio-8888-exec-6] c.y.user.mapper.UserMapper.findById      : ==> Parameters: 8(Long)
-2020-11-23 15:08:53.572 DEBUG 4436 --- [http-nio-8888-exec-6] c.y.user.mapper.RoleMapper.findById      : ====>  Preparing: select * from t_role where id = ? 
-2020-11-23 15:08:53.572 DEBUG 4436 --- [http-nio-8888-exec-6] c.y.user.mapper.RoleMapper.findById      : ====> Parameters: 3(Long)
-2020-11-23 15:08:53.588 DEBUG 4436 --- [http-nio-8888-exec-6] c.y.user.mapper.RoleMapper.findById      : <====      Total: 1
-2020-11-23 15:08:53.588 DEBUG 4436 --- [http-nio-8888-exec-6] c.y.user.mapper.UserMapper.findById      : <==      Total: 1
-2020-11-23 15:08:53.704 DEBUG 4436 --- [http-nio-8888-exec-6] c.y.h.mapper.HomeworkMapper.selectOne    : ==>  Preparing: SELECT id FROM t_homework WHERE (id = ?) 
-2020-11-23 15:08:53.705 DEBUG 4436 --- [http-nio-8888-exec-6] c.y.h.mapper.HomeworkMapper.selectOne    : ==> Parameters: 10(Long)
-2020-11-23 15:08:53.712 DEBUG 4436 --- [http-nio-8888-exec-6] c.y.h.mapper.HomeworkMapper.selectOne    : <==      Total: 1
-2020-11-23 15:08:53.713 DEBUG 4436 --- [http-nio-8888-exec-6] c.y.h.m.H.selectList                     : ==>  Preparing: SELECT id,homework_id,student_id,resource_id FROM t_homework_resource WHERE (student_id = ? AND homework_id = ?) 
-2020-11-23 15:08:53.713 DEBUG 4436 --- [http-nio-8888-exec-6] c.y.h.m.H.selectList                     : ==> Parameters: 8(Long), 10(Long)
-2020-11-23 15:08:53.722 DEBUG 4436 --- [http-nio-8888-exec-6] c.y.h.m.H.selectList                     : <==      Total: 0
+2020-11-30 14:34:51.224  INFO 9952 --- [main] com.yixuetang.YxtServiceApplication      : Starting YxtServiceApplication on SD-20191117RFKO with PID 9952 (E:\projects\yxt-edu\yxt-edu-service\yxt-service\target\classes started by Administrator in E:\projects\yxt-edu)
+2020-11-30 14:34:51.224 DEBUG 9952 --- [main] com.yixuetang.YxtServiceApplication      : Running with Spring Boot v2.2.5.RELEASE, Spring v5.2.4.RELEASE
+2020-11-30 14:34:51.224  INFO 9952 --- [main] com.yixuetang.YxtServiceApplication      : The following profiles are active: dev
+2020-11-30 14:34:52.646  INFO 9952 --- [main] .s.d.r.c.RepositoryConfigurationDelegate : Multiple Spring Data modules found, entering strict repository configuration mode!
+2020-11-30 14:34:52.648  INFO 9952 --- [main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data Redis repositories in DEFAULT mode.
+2020-11-30 14:34:52.707  INFO 9952 --- [main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 42ms. Found 0 Redis repository interfaces.
+2020-11-30 14:34:52.941  INFO 9952 --- [main] ptablePropertiesBeanFactoryPostProcessor : Post-processing PropertySource instances
+2020-11-30 14:34:52.989  INFO 9952 --- [main] c.u.j.EncryptablePropertySourceConverter : Converting PropertySource configurationProperties [org.springframework.boot.context.properties.source.ConfigurationPropertySourcesPropertySource] to AOP Proxy
+2020-11-30 14:34:52.989  INFO 9952 --- [main] c.u.j.EncryptablePropertySourceConverter : Converting PropertySource servletConfigInitParams [org.springframework.core.env.PropertySource$StubPropertySource] to EncryptablePropertySourceWrapper
+2020-11-30 14:34:52.989  INFO 9952 --- [main] c.u.j.EncryptablePropertySourceConverter : Converting PropertySource servletContextInitParams [org.springframework.core.env.PropertySource$StubPropertySource] to EncryptablePropertySourceWrapper
+2020-11-30 14:34:52.989  INFO 9952 --- [main] c.u.j.EncryptablePropertySourceConverter : Converting PropertySource systemProperties [org.springframework.core.env.PropertiesPropertySource] to EncryptableMapPropertySourceWrapper
+2020-11-30 14:34:52.989  INFO 9952 --- [main] c.u.j.EncryptablePropertySourceConverter : Converting PropertySource systemEnvironment [org.springframework.boot.env.SystemEnvironmentPropertySourceEnvironmentPostProcessor$OriginAwareSystemEnvironmentPropertySource] to EncryptableMapPropertySourceWrapper
+2020-11-30 14:34:52.991  INFO 9952 --- [main] c.u.j.EncryptablePropertySourceConverter : Converting PropertySource random [org.springframework.boot.env.RandomValuePropertySource] to EncryptablePropertySourceWrapper
+2020-11-30 14:34:52.991  INFO 9952 --- [main] c.u.j.EncryptablePropertySourceConverter : Converting PropertySource applicationConfig: [classpath:/application-dev.yml] [org.springframework.boot.env.OriginTrackedMapPropertySource] to EncryptableMapPropertySourceWrapper
+2020-11-30 14:34:52.991  INFO 9952 --- [main] c.u.j.EncryptablePropertySourceConverter : Converting PropertySource applicationConfig: [classpath:/application.yml] [org.springframework.boot.env.OriginTrackedMapPropertySource] to EncryptableMapPropertySourceWrapper
+2020-11-30 14:34:53.008  INFO 9952 --- [main] c.u.j.filter.DefaultLazyPropertyFilter   : Property Filter custom Bean not found with name 'encryptablePropertyFilter'. Initializing Default Property Filter
+2020-11-30 14:34:53.308  INFO 9952 --- [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port(s): 8888 (http)
+2020-11-30 14:34:53.308  INFO 9952 --- [main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2020-11-30 14:34:53.308  INFO 9952 --- [main] org.apache.catalina.core.StandardEngine  : Starting Servlet engine: [Apache Tomcat/9.0.31]
+2020-11-30 14:34:53.414  INFO 9952 --- [main] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2020-11-30 14:34:53.414  INFO 9952 --- [main] o.s.web.context.ContextLoader            : Root WebApplicationContext: initialization completed in 2130 ms
+2020-11-30 14:34:53.572  INFO 9952 --- [main] c.u.j.r.DefaultLazyPropertyResolver      : Property Resolver custom Bean not found with name 'encryptablePropertyResolver'. Initializing Default Property Resolver
+2020-11-30 14:34:53.572  INFO 9952 --- [main] c.u.j.d.DefaultLazyPropertyDetector      : Property Detector custom Bean not found with name 'encryptablePropertyDetector'. Initializing Default Property Detector
+2020-11-30 14:34:53.666  INFO 9952 --- [main] c.u.j.encryptor.DefaultLazyEncryptor     : String Encryptor custom Bean not found with name 'jasyptStringEncryptor'. Initializing Default String Encryptor
+2020-11-30 14:34:53.668  INFO 9952 --- [main] c.u.j.encryptor.DefaultLazyEncryptor     : Encryptor config not found for property jasypt.encryptor.algorithm, using default value: PBEWithMD5AndDES
+2020-11-30 14:34:53.668  INFO 9952 --- [main] c.u.j.encryptor.DefaultLazyEncryptor     : Encryptor config not found for property jasypt.encryptor.keyObtentionIterations, using default value: 1000
+2020-11-30 14:34:53.668  INFO 9952 --- [main] c.u.j.encryptor.DefaultLazyEncryptor     : Encryptor config not found for property jasypt.encryptor.poolSize, using default value: 1
+2020-11-30 14:34:53.668  INFO 9952 --- [main] c.u.j.encryptor.DefaultLazyEncryptor     : Encryptor config not found for property jasypt.encryptor.providerName, using default value: null
+2020-11-30 14:34:53.668  INFO 9952 --- [main] c.u.j.encryptor.DefaultLazyEncryptor     : Encryptor config not found for property jasypt.encryptor.providerClassName, using default value: null
+2020-11-30 14:34:53.668  INFO 9952 --- [main] c.u.j.encryptor.DefaultLazyEncryptor     : Encryptor config not found for property jasypt.encryptor.saltGeneratorClassname, using default value: org.jasypt.salt.RandomSaltGenerator
+2020-11-30 14:34:53.668  INFO 9952 --- [main] c.u.j.encryptor.DefaultLazyEncryptor     : Encryptor config not found for property jasypt.encryptor.stringOutputType, using default value: base64
+2020-11-30 14:34:54.975  WARN 9952 --- [main] c.b.m.core.injector.AbstractMethod       : [com.yixuetang.message.mapper.RemindMapper.deleteById] Has been loaded by XML or SqlProvider or Mybatis's Annotation, so ignoring this injection for [class com.baomidou.mybatisplus.core.injector.methods.DeleteById]
+2020-11-30 14:34:56.037  INFO 9952 --- [main] pertySourcedRequestMappingHandlerMapping : Mapped URL path [/v2/api-docs] onto method [springfox.documentation.swagger2.web.Swagger2Controller#getDocumentation(String, HttpServletRequest)]
+2020-11-30 14:34:56.161  INFO 9952 --- [main] o.s.s.concurrent.ThreadPoolTaskExecutor  : Initializing ExecutorService 'applicationTaskExecutor'
+2020-11-30 14:34:56.554  INFO 9952 --- [main] o.s.s.c.ThreadPoolTaskScheduler          : Initializing ExecutorService 'taskScheduler'
+2020-11-30 14:34:56.672  INFO 9952 --- [main] d.s.w.p.DocumentationPluginsBootstrapper : Context refreshed
+2020-11-30 14:34:56.804  INFO 9952 --- [main] d.s.w.p.DocumentationPluginsBootstrapper : Found 1 custom documentation plugin(s)
+2020-11-30 14:34:56.879  INFO 9952 --- [main] s.d.s.w.s.ApiListingReferenceScanner     : Scanning for api listing references
+2020-11-30 14:34:57.145  INFO 9952 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: findByIdUsingGET_1
+2020-11-30 14:34:57.236  INFO 9952 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: findByIdUsingGET_2
+2020-11-30 14:34:57.249  INFO 9952 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: switchTopUsingPUT_1
+2020-11-30 14:34:57.282  INFO 9952 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: findByCourseIdUsingGET_1
+2020-11-30 14:34:57.315  INFO 9952 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: uploadUsingPOST_1
+2020-11-30 14:34:57.317  INFO 9952 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: delByIdUsingDELETE_1
+2020-11-30 14:34:57.351  INFO 9952 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: findByPageUsingGET_1
+2020-11-30 14:34:57.413  INFO 9952 --- [main] o.s.a.r.c.CachingConnectionFactory       : Attempting to connect to: [42.194.162.66:5672]
+2020-11-30 14:34:57.530  INFO 9952 --- [main] o.s.a.r.c.CachingConnectionFactory       : Created new connection: rabbitConnectionFactory#50b734c4:0/SimpleConnection@528e5e38 [delegate=amqp://colin@42.194.162.66:5672/colin-vhost, localPort= 51052]
+2020-11-30 14:34:57.700  INFO 9952 --- [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port(s): 8888 (http) with context path ''
+2020-11-30 14:34:57.700  INFO 9952 --- [main] com.yixuetang.YxtServiceApplication      : Started YxtServiceApplication in 6.976 seconds (JVM running for 7.911)
+2020-11-30 14:35:00.030  INFO 9952 --- [scheduling-1] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2020-11-30 14:35:00.265  INFO 9952 --- [scheduling-1] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
+2020-11-30 14:35:00.533 DEBUG 9952 --- [scheduling-1] c.y.m.mapper.MessageMapper.selectList    : ==>  Preparing: SELECT id,receiver_type,publisher_id,receiver_id,status,title,content,publish_time,update_time FROM t_message WHERE (status = ?) 
+2020-11-30 14:35:00.561 DEBUG 9952 --- [scheduling-1] c.y.m.mapper.MessageMapper.selectList    : ==> Parameters: false(Boolean)
+2020-11-30 14:35:00.829 DEBUG 9952 --- [scheduling-1] c.y.m.mapper.MessageMapper.selectList    : <==      Total: 0
+2020-11-30 14:35:06.312  INFO 9952 --- [http-nio-8888-exec-1] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring DispatcherServlet 'dispatcherServlet'
+2020-11-30 14:35:06.312  INFO 9952 --- [http-nio-8888-exec-1] o.s.web.servlet.DispatcherServlet        : Initializing Servlet 'dispatcherServlet'
+2020-11-30 14:35:06.328  INFO 9952 --- [http-nio-8888-exec-1] o.s.web.servlet.DispatcherServlet        : Completed initialization in 16 ms
+2020-11-30 14:35:21.317 DEBUG 9952 --- [http-nio-8888-exec-6] c.y.c.mapper.CourseMapper.selectOne      : ==>  Preparing: SELECT id,c_name,c_pic,c_code,s_count,create_time,update_time,school_year,semester,class AS clazz,top_num,is_filed FROM t_course WHERE (id = ?) 
+2020-11-30 14:35:21.318 DEBUG 9952 --- [http-nio-8888-exec-6] c.y.c.mapper.CourseMapper.selectOne      : ==> Parameters: 32(Long)
+2020-11-30 14:35:21.366 DEBUG 9952 --- [http-nio-8888-exec-6] c.y.c.mapper.CourseMapper.selectOne      : <==      Total: 1
+2020-11-30 14:35:21.366 DEBUG 9952 --- [http-nio-8888-exec-6] c.y.course.mapper.ScMapper.selectOne     : ==>  Preparing: SELECT id,student_id,course_id,final_grade,top_num,is_filed,join_time FROM t_student_course WHERE (course_id = ? AND student_id = ?) 
+2020-11-30 14:35:21.366 DEBUG 9952 --- [http-nio-8888-exec-6] c.y.course.mapper.ScMapper.selectOne     : ==> Parameters: 32(Long), 13(Long)
+2020-11-30 14:35:21.398 DEBUG 9952 --- [http-nio-8888-exec-6] c.y.course.mapper.ScMapper.selectOne     : <==      Total: 1
+2020-11-30 14:35:21.401 DEBUG 9952 --- [http-nio-8888-exec-6] c.y.h.mapper.HomeworkMapper.selectList   : ==>  Preparing: SELECT id,course_id,title,description,create_time,deadline,submit_count,total_score,top_num FROM t_homework WHERE (course_id = ?) 
+2020-11-30 14:35:21.402 DEBUG 9952 --- [http-nio-8888-exec-6] c.y.h.mapper.HomeworkMapper.selectList   : ==> Parameters: 32(Long)
+2020-11-30 14:35:21.416 DEBUG 9952 --- [http-nio-8888-exec-6] c.y.h.mapper.HomeworkMapper.selectList   : <==      Total: 2
+2020-11-30 14:35:21.417 DEBUG 9952 --- [http-nio-8888-exec-6] c.y.n.m.NoticeUserMapper.selectList      : ==>  Preparing: SELECT id,notice_id,user_id,view FROM t_notice_user WHERE (user_id = ?) 
+2020-11-30 14:35:21.417 DEBUG 9952 --- [http-nio-8888-exec-6] c.y.n.m.NoticeUserMapper.selectList      : ==> Parameters: 13(Long)
+2020-11-30 14:35:21.434 DEBUG 9952 --- [http-nio-8888-exec-6] c.y.n.m.NoticeUserMapper.selectList      : <==      Total: 3
+2020-11-30 14:35:21.438 DEBUG 9952 --- [http-nio-8888-exec-6] c.y.h.m.H.selectList                     : ==>  Preparing: SELECT id,homework_id,student_id,score,submit_time,update_time,status,correct_count FROM t_homework_student WHERE (student_id = ? AND homework_id IN (?,?)) 
+2020-11-30 14:35:21.438 DEBUG 9952 --- [http-nio-8888-exec-6] c.y.h.m.H.selectList                     : ==> Parameters: 13(Long), 16(Long), 21(Long)
+2020-11-30 14:35:21.448 DEBUG 9952 --- [http-nio-8888-exec-6] c.y.h.m.H.selectList                     : <==      Total: 2
+2020-11-30 14:36:30.277 DEBUG 9952 --- [http-nio-8888-exec-3] c.y.c.mapper.CourseMapper.selectOne      : ==>  Preparing: SELECT id,c_name,c_pic,c_code,s_count,create_time,update_time,school_year,semester,class AS clazz,top_num,is_filed FROM t_course WHERE (id = ?) 
+2020-11-30 14:36:30.277 DEBUG 9952 --- [http-nio-8888-exec-3] c.y.c.mapper.CourseMapper.selectOne      : ==> Parameters: 32(Long)
+2020-11-30 14:36:30.286 DEBUG 9952 --- [http-nio-8888-exec-3] c.y.c.mapper.CourseMapper.selectOne      : <==      Total: 1
+2020-11-30 14:36:30.295 DEBUG 9952 --- [http-nio-8888-exec-3] c.y.course.mapper.ScMapper.selectOne     : ==>  Preparing: SELECT id,student_id,course_id,final_grade,top_num,is_filed,join_time FROM t_student_course WHERE (course_id = ? AND student_id = ?) 
+2020-11-30 14:36:30.296 DEBUG 9952 --- [http-nio-8888-exec-3] c.y.course.mapper.ScMapper.selectOne     : ==> Parameters: 32(Long), 13(Long)
+2020-11-30 14:36:30.345 DEBUG 9952 --- [http-nio-8888-exec-3] c.y.course.mapper.ScMapper.selectOne     : <==      Total: 1
+2020-11-30 14:36:30.360 DEBUG 9952 --- [http-nio-8888-exec-3] c.y.h.mapper.HomeworkMapper.selectList   : ==>  Preparing: SELECT id,course_id,title,description,create_time,deadline,submit_count,total_score,top_num FROM t_homework WHERE (course_id = ?) 
+2020-11-30 14:36:30.360 DEBUG 9952 --- [http-nio-8888-exec-3] c.y.h.mapper.HomeworkMapper.selectList   : ==> Parameters: 32(Long)
+2020-11-30 14:36:30.360 DEBUG 9952 --- [http-nio-8888-exec-3] c.y.h.mapper.HomeworkMapper.selectList   : <==      Total: 2
+2020-11-30 14:36:30.376 DEBUG 9952 --- [http-nio-8888-exec-3] c.y.n.m.NoticeUserMapper.selectList      : ==>  Preparing: SELECT id,notice_id,user_id,view FROM t_notice_user WHERE (user_id = ?) 
+2020-11-30 14:36:30.376 DEBUG 9952 --- [http-nio-8888-exec-3] c.y.n.m.NoticeUserMapper.selectList      : ==> Parameters: 13(Long)
+2020-11-30 14:36:30.384 DEBUG 9952 --- [http-nio-8888-exec-3] c.y.n.m.NoticeUserMapper.selectList      : <==      Total: 3
+2020-11-30 14:36:30.386 DEBUG 9952 --- [http-nio-8888-exec-3] c.y.n.m.NoticeUserMapper.updateById      : ==>  Preparing: UPDATE t_notice_user SET notice_id=?, user_id=?, view=? WHERE id=? 
+2020-11-30 14:36:30.387 DEBUG 9952 --- [http-nio-8888-exec-3] c.y.n.m.NoticeUserMapper.updateById      : ==> Parameters: 23(Long), 13(Long), true(Boolean), 44(Long)
+2020-11-30 14:36:30.393 DEBUG 9952 --- [http-nio-8888-exec-3] c.y.n.m.NoticeUserMapper.updateById      : <==    Updates: 1
+2020-11-30 14:36:30.408 DEBUG 9952 --- [http-nio-8888-exec-3] c.y.h.m.H.selectList                     : ==>  Preparing: SELECT id,homework_id,student_id,score,submit_time,update_time,status,correct_count FROM t_homework_student WHERE (student_id = ? AND homework_id IN (?,?)) 
+2020-11-30 14:36:30.409 DEBUG 9952 --- [http-nio-8888-exec-3] c.y.h.m.H.selectList                     : ==> Parameters: 13(Long), 16(Long), 21(Long)
+2020-11-30 14:36:30.409 DEBUG 9952 --- [http-nio-8888-exec-3] c.y.h.m.H.selectList                     : <==      Total: 2
