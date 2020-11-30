@@ -278,7 +278,7 @@ public class ResourceServiceImpl implements ResourceService {
             ExceptionThrowUtils.cast( CommonCode.INVALID_PARAM );
         }
 
-        //查询学生提交的作业-资源记录 是否为空
+        /*//查询学生提交的作业-资源记录 是否为空
         List<HomeworkResource> homeworkResources = homeworkResourceMapper.selectList( new QueryWrapper<HomeworkResource>().eq( "student_id", studentId ).eq( "homework_id", homeworkId ) );
         if (homeworkResources.size() <= 0) {
             return new QueryResponse( ResourceCode.HOMEWORK_RESOURCE_NOT_EXISTS, null );
@@ -288,12 +288,23 @@ public class ResourceServiceImpl implements ResourceService {
         List<Long> resourceIds = new ArrayList<>();
         for (HomeworkResource homeworkResource : homeworkResources) {
             resourceIds.add( homeworkResource.getResourceId() );
-        }
+        }*/
+
+        List<Long> resourceIds = this.homeworkResourceMapper.selectList(
+                new QueryWrapper<HomeworkResource>()
+                        .eq( "student_id", studentId )
+                        .eq( "homework_id", homeworkId ) )
+                .stream()
+                .map( HomeworkResource::getResourceId )
+                .collect( Collectors.toList() );
 
         //根据学生作业-资源记录的资源id查询资源
-        List<Resource> resources = resourceMapper.selectList( new QueryWrapper<Resource>().in( "id", resourceIds ) );
+        List<Resource> resources =
+                CollectionUtils.isEmpty( resourceIds )
+                        ? new ArrayList<>()
+                        : resourceMapper.selectList( new QueryWrapper<Resource>().in( "id", resourceIds ) );
 
-        return new QueryResponse( CommonCode.SUCCESS, new QueryResult( resources, resources.size() ) );
+        return new QueryResponse( CommonCode.SUCCESS, new QueryResult<>( resources, resources.size() ) );
     }
 
     @Override

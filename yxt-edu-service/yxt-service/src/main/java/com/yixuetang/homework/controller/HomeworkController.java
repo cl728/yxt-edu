@@ -2,13 +2,12 @@ package com.yixuetang.homework.controller;
 
 import com.yixuetang.api.homework.HomeworkControllerApi;
 import com.yixuetang.entity.request.homework.InsertHomework;
+import com.yixuetang.entity.request.homework.SubmitHomework;
 import com.yixuetang.entity.response.CommonResponse;
 import com.yixuetang.entity.response.QueryResponse;
 import com.yixuetang.homework.service.HomeworkService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 /**
  * @author Colin
@@ -26,55 +25,56 @@ public class HomeworkController implements HomeworkControllerApi {
     @Override
     @GetMapping("scores/courseId/{courseId}/{teacherId}")
     public QueryResponse findScoresByCourseId(@PathVariable long courseId, @PathVariable long teacherId) {
-        return this.homeworkService.findScoresByCourseId(courseId, teacherId);
+        return this.homeworkService.findScoresByCourseId( courseId, teacherId );
     }
 
     @Override
     @GetMapping("courseId/{courseId}/{userId}")
     public QueryResponse findByCourseId(@PathVariable long courseId, @PathVariable long userId) {
-        return this.homeworkService.findByCourseId(courseId, userId);
+        return this.homeworkService.findByCourseId( courseId, userId );
     }
 
     @Override
     @PostMapping("courseId/{courseId}/{teacherId}")
     public CommonResponse saveHomework(@PathVariable long courseId, @PathVariable long teacherId, @RequestBody InsertHomework insertHomework) {
-        return this.homeworkService.saveByCourseId(courseId, teacherId, insertHomework);
+        return this.homeworkService.saveByCourseId( courseId, teacherId, insertHomework );
     }
 
     @Override
     @DeleteMapping("id/{homeworkId}/{courseId}")
     public CommonResponse deleteHomework(@PathVariable long homeworkId, @PathVariable long courseId) {
-        return this.homeworkService.deleteByHomeworkId(homeworkId, courseId);
+        return this.homeworkService.deleteByHomeworkId( homeworkId, courseId );
     }
 
     @Override
     @GetMapping("homeworkId/{homeworkId}")
     public QueryResponse findById(@PathVariable long homeworkId) {
-        return this.homeworkService.findById(homeworkId);
+        return this.homeworkService.findById( homeworkId );
     }
 
     @Override
     @PutMapping("info/homeworkId/{homeworkId}")
     public CommonResponse updateHomework(@PathVariable long homeworkId, @RequestBody InsertHomework insertHomework) {
-        return this.homeworkService.updateHomework(homeworkId, insertHomework);
+        return this.homeworkService.updateHomework( homeworkId, insertHomework );
     }
 
     @Override
     @PutMapping("topNum/homeworkId/{homeworkId}")
     public CommonResponse switchTop(@PathVariable long homeworkId) {
-        return this.homeworkService.switchTopNum(homeworkId);
+        return this.homeworkService.switchTopNum( homeworkId );
     }
 
     @Override
     @PostMapping("homeworkId/{homeworkId}/studentId/{studentId}")
-    public CommonResponse submitHomework(@PathVariable long homeworkId, @PathVariable long studentId, @RequestBody List<Long> resourceIds) {
-        return homeworkService.submitHomework(homeworkId,studentId,resourceIds);
+    public CommonResponse submitHomework(@PathVariable long homeworkId, @PathVariable long studentId,
+                                         @RequestBody SubmitHomework submitHomework) {
+        return homeworkService.submitHomework( homeworkId, studentId, submitHomework.getResourceIds() );
     }
 
     @Override
     @PutMapping("homeworkId/{homeworkId}/studentId/{studentId}")
     public CommonResponse scoreHomework(@PathVariable long homeworkId, @PathVariable long studentId, @RequestBody double score) {
-        return homeworkService.scoreHomework(homeworkId, studentId, score);
+        return homeworkService.scoreHomework( homeworkId, studentId, score );
     }
 
 }

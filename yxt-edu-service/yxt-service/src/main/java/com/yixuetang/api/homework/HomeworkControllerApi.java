@@ -1,14 +1,13 @@
 package com.yixuetang.api.homework;
 
 import com.yixuetang.entity.request.homework.InsertHomework;
+import com.yixuetang.entity.request.homework.SubmitHomework;
 import com.yixuetang.entity.response.CommonResponse;
 import com.yixuetang.entity.response.QueryResponse;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
-
-import java.util.List;
 
 /**
  * @author Colin
@@ -79,7 +78,7 @@ public interface HomeworkControllerApi {
             @ApiImplicitParam(name = "studentId", value = "学生id", required = true,
                     paramType = "path", dataType = "long"),
     })
-    CommonResponse submitHomework(long homeworkId, long studentId, List<Long> resourceIds);
+    CommonResponse submitHomework(long homeworkId, long studentId, SubmitHomework submitHomework);
 
     @ApiOperation("学生作业评分")
     @ApiImplicitParams(value = {

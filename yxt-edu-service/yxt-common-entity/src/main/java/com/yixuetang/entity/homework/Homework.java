@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
+import com.yixuetang.entity.course.Course;
 import com.yixuetang.entity.user.User;
 import lombok.Data;
 
@@ -46,5 +47,8 @@ public class Homework {
 
     @TableField(exist = false)
     private List<User> studentList; // 作业-学生 多对多
+
+    @TableField(exist = false)
+    private Course course;  // 作业-课程 多对一
 
 }

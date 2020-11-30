@@ -31,6 +31,7 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.CollectionUtils;
 
 import java.util.*;
 
@@ -174,13 +175,14 @@ public class HomeworkServiceImpl implements HomeworkService {
         }
 
         // 10. 发送异步事件提醒，告知学生老师发布了新作业
-        this.amqpUtils.sendCourseRemind( teacherId, courseId, homework.getId(),"作业",
+        this.amqpUtils.sendCourseRemind( teacherId, courseId, homework.getId(), "作业",
                 "发布", "http://www.yixuetang.com/courseDetail.html?id=" + courseId );
 
         return new CommonResponse( CommonCode.SUCCESS );
     }
 
     @Override
+    @Transactional
     public CommonResponse deleteByHomeworkId(long homeworkId, long courseId) {
         //  根据作业id查询作业
         Homework homework = this.homeworkMapper.selectById( homeworkId );
@@ -201,6 +203,7 @@ public class HomeworkServiceImpl implements HomeworkService {
     }
 
     @Override
+    @Transactional
     public CommonResponse updateHomework(long homeworkId, InsertHomework insertHomework) {
         //  根据作业id查询作业
         Homework homework = this.homeworkMapper.selectById( homeworkId );
@@ -321,7 +324,7 @@ public class HomeworkServiceImpl implements HomeworkService {
     @Override
     public QueryResponse findById(long homeworkId) {
         //  作业是否存在
-        Homework homework = this.homeworkMapper.selectById( homeworkId );
+        Homework homework = this.homeworkMapper.findById( homeworkId );
         if (homework == null) {
             ExceptionThrowUtils.cast( CommonCode.INVALID_PARAM );
         }
@@ -330,38 +333,48 @@ public class HomeworkServiceImpl implements HomeworkService {
     }
 
     @Override
+    @Transactional
     public CommonResponse submitHomework(long homeworkId, long studentId, List<Long> resourceIds) {
-        //判断作业是否存在
+        // 判断作业是否存在
         Homework homework = homeworkMapper.selectOne( new QueryWrapper<Homework>().eq( "id", homeworkId ) );
         if (homework == null) {
             ExceptionThrowUtils.cast( CommonCode.INVALID_PARAM );
         }
-        //学生是否存在
+        // 学生是否存在
         User user = userMapper.findById( studentId );
         if (user == null || user.getRole().getId() != 3) {
             ExceptionThrowUtils.cast( CommonCode.INVALID_PARAM );
         }
-        //resourceIds是否为空
+        // resourceIds是否为空
         if (resourceIds == null) {
             ExceptionThrowUtils.cast( CommonCode.INVALID_PARAM );
         }
 
-        //HomeworkStudent记录是否存在
+        // HomeworkStudent记录是否存在
         HomeworkStudent homeworkStudent = homeworkStudentMapper.selectOne( new QueryWrapper<HomeworkStudent>().eq( "homework_id", homeworkId ).eq( "student_id", studentId ) );
         if (homeworkStudent == null) {
             return new CommonResponse( HomeworkCode.STUDENT_HOMEWORK_NOT_EXIST );
         }
 
-        //修改 t_homework_student 记录的相关字段（submit_time, update_time, status）
+        // 判断是否是第一次提交
+        QueryWrapper<HomeworkResource> wrapper = new QueryWrapper<HomeworkResource>()
+                .eq( "homework_id", homeworkId )
+                .eq( "student_id", studentId );
+        List<HomeworkResource> homeworkResources = this.homeworkResourceMapper.selectList( wrapper );
+        if (!CollectionUtils.isEmpty( homeworkResources )) {    // 学生更新提交，需将已有的 homework_resource 记录删除
+            this.homeworkResourceMapper.delete( wrapper );
+        }
+
+        // 修改 t_homework_student 记录的相关字段（submit_time, update_time, status）
         Date date = new Date();
         if (homeworkStudent.getSubmitTime() == null) {
             homeworkStudent.setSubmitTime( date );
         }
         homeworkStudent.setUpdateTime( date );
-        homeworkStudent.setStatus( homeworkStudent.getStatus() + 1 );
+        homeworkStudent.setStatus( 1 );
         homeworkStudentMapper.updateById( homeworkStudent );
 
-        //在 t_homework_resource 里新增相关记录
+        // 在 t_homework_resource 里新增相关记录
         for (Long resourceId : resourceIds) {
             HomeworkResource homeworkResource = new HomeworkResource();
             homeworkResource.setHomeworkId( homeworkId );
