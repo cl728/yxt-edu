@@ -96,4 +96,20 @@ public interface HomeworkService {
      * @return
      */
     CommonResponse scoreHomework(long homeworkId, long studentId, double score);
+
+    /**
+     * 查询某个学生某次作业的提交情况
+     * @param homeworkId    作业id
+     * @param studentId     学生id
+     * @return  通用响应实体类
+     */
+    QueryResponse findStudentHomeworkSubmit(long homeworkId, long studentId);
+
+    /**
+     * 查询某个学生在某个课程下的作业完成情况
+     * @param courseId   课程id
+     * @param studentId  学生id
+     * @return  通用响应实体类
+     */
+    QueryResponse findStudentCourseHomework(long courseId, long studentId);
 }

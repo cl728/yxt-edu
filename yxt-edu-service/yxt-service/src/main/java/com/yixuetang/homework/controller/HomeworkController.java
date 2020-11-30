@@ -77,4 +77,16 @@ public class HomeworkController implements HomeworkControllerApi {
         return homeworkService.scoreHomework( homeworkId, studentId, score );
     }
 
+    @Override
+    @GetMapping("homeworkId/{homeworkId}/studentId/{studentId}")
+    public QueryResponse findStudentHomeworkSubmit(@PathVariable long homeworkId, @PathVariable long studentId) {
+        return homeworkService.findStudentHomeworkSubmit(homeworkId, studentId);
+    }
+
+    @Override
+    @GetMapping("courseId/{courseId}/studentId/{studentId}")
+    public QueryResponse findStudentCourseHomework(@PathVariable long courseId, @PathVariable long studentId) {
+        return homeworkService.findStudentCourseHomework(courseId, studentId);
+    }
+
 }

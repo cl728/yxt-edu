@@ -19,8 +19,17 @@ import io.swagger.annotations.ApiOperation;
 @Api(value = "站内消息模块接口", description = "站内消息模块接口，提供站内消息服务接口")
 public interface MessageControllerApi {
 
+    @ApiOperation("用户删除某一事件提醒")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "remindId", value = "事件提醒id", required = true,
+                    paramType = "path", dataType = "long"),
+            @ApiImplicitParam(name = "userId", value = "用户id", required = true,
+                    paramType = "path", dataType = "long")
+    })
+    CommonResponse deleteRemindById(Long remindId, Long userId);
+
     @ApiOperation("管理员删除系统通知")
-    @ApiImplicitParam(name = "messageId", value = "用户id", required = true,
+    @ApiImplicitParam(name = "messageId", value = "通知id", required = true,
             paramType = "path", dataType = "long")
     CommonResponse deleteMessageById(Long messageId);
 

@@ -99,4 +99,13 @@ public interface MessageService {
      * @return 响应结果实体类
      */
     QueryResponse findEventRemindListByUserId(long userId);
+
+    /**
+     * 用户删除某一事件提醒
+     *
+     * @param remindId 事件提醒id
+     * @param userId   用户id
+     * @return 响应结果实体类
+     */
+    CommonResponse deleteRemindById(Long remindId, Long userId);
 }

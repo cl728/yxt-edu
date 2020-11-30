@@ -4,9 +4,11 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.yixuetang.course.mapper.CourseMapper;
 import com.yixuetang.course.mapper.ScMapper;
 import com.yixuetang.entity.course.Course;
+import com.yixuetang.entity.course.StudentCourse;
 import com.yixuetang.entity.homework.Homework;
 import com.yixuetang.entity.homework.HomeworkResource;
 import com.yixuetang.entity.homework.HomeworkStudent;
+import com.yixuetang.entity.notice.NoticeUser;
 import com.yixuetang.entity.request.homework.InsertHomework;
 import com.yixuetang.entity.response.CommonResponse;
 import com.yixuetang.entity.response.QueryResponse;
@@ -22,6 +24,8 @@ import com.yixuetang.homework.mapper.HomeworkResourceMapper;
 import com.yixuetang.homework.mapper.HomeworkStudentMapper;
 import com.yixuetang.homework.service.HomeworkService;
 import com.yixuetang.mq.AmqpUtils;
+import com.yixuetang.notice.mapper.NoticeMapper;
+import com.yixuetang.notice.mapper.NoticeUserMapper;
 import com.yixuetang.user.mapper.UserMapper;
 import com.yixuetang.utils.exception.ExceptionThrowUtils;
 import org.apache.commons.lang3.ObjectUtils;
@@ -64,6 +68,9 @@ public class HomeworkServiceImpl implements HomeworkService {
 
     @Autowired
     private AmqpUtils amqpUtils;
+
+    @Autowired
+    private NoticeUserMapper noticeUserMapper;
 
     @Override
     public QueryResponse findByCourseId(long courseId, long userId) {
@@ -412,6 +419,62 @@ public class HomeworkServiceImpl implements HomeworkService {
         homeworkStudent.setCorrectCount( homeworkStudent.getCorrectCount() + 1 );
         homeworkStudentMapper.updateById( homeworkStudent );
         return new CommonResponse( CommonCode.SUCCESS );
+    }
+
+    @Override
+    public QueryResponse findStudentHomeworkSubmit(long homeworkId, long studentId) {
+        //判断作业是否存在
+        Homework homework = homeworkMapper.selectOne( new QueryWrapper<Homework>().eq( "id", homeworkId ) );
+        if (homework == null) {
+            ExceptionThrowUtils.cast( CommonCode.INVALID_PARAM );
+        }
+        //判断学生是否有该作业
+        HomeworkStudent homeworkStudent = homeworkStudentMapper.selectOne( new QueryWrapper<HomeworkStudent>().eq( "homework_id", homeworkId )
+                .eq( "student_id", studentId ) );
+        if (homeworkStudent == null) {
+            ExceptionThrowUtils.cast( HomeworkCode.STUDENT_HOMEWORK_NOT_EXIST );
+        }
+
+        return new QueryResponse(CommonCode.SUCCESS,new QueryResult<>( Collections.singletonList( homeworkStudent ), 1 ) );
+    }
+
+    @Override
+    public QueryResponse findStudentCourseHomework(long courseId, long studentId) {
+        //查询课程是否存在
+        Course course = courseMapper.selectOne(new QueryWrapper<Course>().eq("id", courseId));
+        if(course == null){
+            ExceptionThrowUtils.cast( CommonCode.INVALID_PARAM );
+        }
+        //查询学生-课程记录是否存在
+        StudentCourse studentCourse = scMapper.selectOne(new QueryWrapper<StudentCourse>().eq("course_id", courseId)
+                .eq("student_id", studentId));
+        if(studentCourse == null){
+            ExceptionThrowUtils.cast( CourseCode.STUDENT_COURSE_NOT_FOUND );
+        }
+
+        //查询课程下的所有作业
+        List<Homework> homeworkList = homeworkMapper.selectList(new QueryWrapper<Homework>().eq("course_id", courseId));
+        if(homeworkList.size() <= 0){
+            return new QueryResponse(HomeworkCode.HOMEWORK_NOT_EXIST,null);
+        }
+
+        //将 t_notice_user 表的相关记录的 view 字段修改为 true
+        List<NoticeUser> noticeUsers = noticeUserMapper.selectList(new QueryWrapper<NoticeUser>().eq("user_id", studentId));
+        for (NoticeUser noticeUser : noticeUsers) {
+            if(!noticeUser.getView()){
+                noticeUser.setView(true);
+                noticeUserMapper.updateById(noticeUser);
+            }
+        }
+
+        //查询某个学生在某个课程下的作业完成情况
+        List<Long> homeworkIds = new ArrayList<>();
+        for (Homework homework : homeworkList) {
+            homeworkIds.add(homework.getId());
+        }
+        List<HomeworkStudent> homeworkStudents = homeworkStudentMapper.selectList(new QueryWrapper<HomeworkStudent>().eq("student_id", studentId)
+                .in("homework_id", homeworkIds));
+        return new QueryResponse(CommonCode.SUCCESS,new QueryResult(homeworkStudents,homeworkStudents.size()));
     }
 
 

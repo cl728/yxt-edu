@@ -24,28 +24,34 @@ public class MessageController implements MessageControllerApi {
     private MessageService messageService;
 
     @Override
+    @DeleteMapping("eventRemind/remindId/{remindId}/userId/{userId}")
+    public CommonResponse deleteRemindById(@PathVariable Long remindId, @PathVariable Long userId) {
+        return this.messageService.deleteRemindById(remindId, userId);
+    }
+
+    @Override
     @DeleteMapping("admin/messageId/{messageId}")
     public CommonResponse deleteMessageById(@PathVariable Long messageId) {
-        return this.messageService.deleteMessageById( messageId );
+        return this.messageService.deleteMessageById(messageId);
     }
 
     @Override
     @PutMapping("setting/userId/{userId}")
     public CommonResponse updateMessageSetting(@PathVariable Long userId,
                                                @RequestBody UserMessageSetting setting) {
-        return this.messageService.updateMessageSetting( userId, setting );
+        return this.messageService.updateMessageSetting(userId, setting);
     }
 
     @Override
     @GetMapping("setting/userId/{userId}")
     public QueryResponse findMessageSettingByUserId(@PathVariable Long userId) {
-        return this.messageService.findMessageSettingByUserId( userId );
+        return this.messageService.findMessageSettingByUserId(userId);
     }
 
     @Override
     @GetMapping("userId/{userId}")
     public QueryResponse findMessageListByUserId(@PathVariable Long userId) {
-        return this.messageService.findMessageListByUserId( userId );
+        return this.messageService.findMessageListByUserId(userId);
     }
 
     @Override
@@ -53,19 +59,19 @@ public class MessageController implements MessageControllerApi {
     public QueryResponse findMessageListByPage(@PathVariable long currentPage,
                                                @PathVariable long pageSize,
                                                QueryPageRequestMessage queryPageRequestMessage) {
-        return this.messageService.findMessageListByPage( currentPage, pageSize, queryPageRequestMessage );
+        return this.messageService.findMessageListByPage(currentPage, pageSize, queryPageRequestMessage);
     }
 
     @Override
     @GetMapping("info/messageId/{messageId}")
     public QueryResponse findMessageById(@PathVariable long messageId) {
-        return this.messageService.findMessageById( messageId );
+        return this.messageService.findMessageById(messageId);
     }
 
     @Override
     @PostMapping("admin/adminId/{adminId}")
     public CommonResponse inputMessage(@PathVariable long adminId, @RequestBody Message message) {
-        return this.messageService.inputMessage( adminId, message );
+        return this.messageService.inputMessage(adminId, message);
     }
 
     @Override
@@ -73,18 +79,18 @@ public class MessageController implements MessageControllerApi {
     public CommonResponse editMessage(@PathVariable long adminId,
                                       @PathVariable long messageId,
                                       @RequestBody Message message) {
-        return this.messageService.editMessage( adminId, messageId, message );
+        return this.messageService.editMessage(adminId, messageId, message);
     }
 
     @Override
     @GetMapping("unreadCount/userId/{userId}")
     public QueryResponse findUnreadCountByUserId(@PathVariable long userId) {
-        return this.messageService.findUnreadCountByUserId( userId );
+        return this.messageService.findUnreadCountByUserId(userId);
     }
 
     @Override
     @GetMapping("eventRemind/userId/{userId}")
     public QueryResponse findEventRemindListByUserId(@PathVariable long userId) {
-        return this.messageService.findEventRemindListByUserId( userId );
+        return this.messageService.findEventRemindListByUserId(userId);
     }
 }

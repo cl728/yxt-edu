@@ -88,4 +88,22 @@ public interface HomeworkControllerApi {
                     paramType = "path", dataType = "long"),
     })
     CommonResponse scoreHomework(long homeworkId, long studentId, double score);
+
+    @ApiOperation("查询某个学生某次作业的提交情况")
+    @ApiImplicitParams(value = {
+            @ApiImplicitParam(name = "homeworkId", value = "作业id", required = true,
+                    paramType = "path", dataType = "long"),
+            @ApiImplicitParam(name = "studentId", value = "学生id", required = true,
+                    paramType = "path", dataType = "long"),
+    })
+    QueryResponse findStudentHomeworkSubmit(long homeworkId, long studentId);
+
+    @ApiOperation("查询某个学生在某个课程下的作业完成情况")
+    @ApiImplicitParams(value = {
+            @ApiImplicitParam(name = "courseId", value = "课程id", required = true,
+                    paramType = "path", dataType = "long"),
+            @ApiImplicitParam(name = "studentId", value = "学生id", required = true,
+                    paramType = "path", dataType = "long"),
+    })
+    QueryResponse findStudentCourseHomework(long courseId, long studentId);
 }

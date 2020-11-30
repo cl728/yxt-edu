@@ -13,6 +13,7 @@ package com.yixuetang.entity.response.code;
  * - 公告模块相应代码：80000 - 89999
  * - 评论模块相应代码：90000 - 99999
  * - 消息模块相应代码：100000 - 109999
+ * - 事件提醒模块相应代码：110000 - 119999
  * @date 2020/10/23 15:48
  */
 public interface ResponseCode {
