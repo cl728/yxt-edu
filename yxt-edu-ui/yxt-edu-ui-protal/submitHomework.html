@@ -3,7 +3,7 @@
 
 <head>
 	<meta charset="UTF-8">
-	<title>成员管理</title>
+	<title>提交作业</title>
 	<link rel="stylesheet" href="https://cdn.bootcss.com/element-ui/2.13.2/theme-chalk/index.css">
 	<style>
 		#hwDeadline {
@@ -16,21 +16,26 @@
 			padding-left: 5px;
 			padding-right: 5px
 		}
+
+		#homework-resources-card>.el-card__body {
+			padding: 0;
+		}
 	</style>
 </head>
 
 <body>
 	<div id="app">
-		<el-menu :default-active="activeIndex" class="el-menu-demo" mode="horizontal" @select="handleSelectFirst">
+		<el-menu :default-active="activeIndex" class="el-menu-demo" mode="horizontal">
 
 			<el-menu-item style="float: left;">
-				<el-button type="text" onclick="">
+				<el-button type="text" @click="location.href = 'courseDetail.html?id=' + homework.course.id">
 					<i class="el-icon-back"></i></el-button>
-				<el-button type="primary" round><span v-text="course.cname">数据结构</span></el-button>
+				<el-button type="primary" round @click="location.href = 'courseDetail.html?id=' + homework.course.id">
+					<span v-text="homework.course.cname">数据结构</span></el-button>
 			</el-menu-item>
 
-			<el-menu-item index="1" style="font-size: 20px;margin-left: 400px;">提交作业</el-menu-item>
-			<el-menu-item index="2" style="font-size: 20px;">作业讨论</el-menu-item>
+			<el-menu-item index="1" style="font-size: 20px;margin-left: 600px;">提交作业</el-menu-item>
+			<!-- <el-menu-item index="2" style="font-size: 20px;">作业讨论</el-menu-item> -->
 
 			<el-menu-item style="float: right;">
 				<el-dropdown trigger="click">
@@ -52,67 +57,167 @@
 				<el-avatar :src="user.avatar"></el-avatar>
 			</el-menu-item>
 		</el-menu>
-		<div class="line"></div><br />
 		<!-- 提交作业 -->
-		<div v-show="activeIndex == '1'" style="padding: 10px;">
-			<el-row>
-				<el-col :span="20" :offset="2">
-					<div style="border-radius: 10px;border: 1px gainsboro solid; height: 60px;width: 100%;">
+		<el-container style="width: 1000px;margin-left: 500px;">
+			<el-main style="margin-top: 30px">
+				<el-card class="box-card" shadow="never" style="width: 900px;border-width: 2px;border-radius: 4px">
+					<div>
+						<!-- <div style="border-radius: 10px;border: 1px gainsboro solid; height: 60px;width: 100%;">
+							</div><br /> -->
+						<el-row>
+							<h3 style="margin-left: 30px;margin-top: 0" v-text="homework.title">作业标题</h3>
+						</el-row>
+						<el-row style="height: 24px">
+							<el-col :span="6">
+								<span style="margin-left: 30px;margin-top: 0;color: #A0A0A0;font-size: 12px"
+									v-text="homework.createTime">2020年11月21日 10:36</span>
+							</el-col>
+							<el-col :span="6">
+								<el-row>
+									<el-col :span="4">
+										<el-avatar :size="24" :src="homework.course.teacher.avatar"></el-avatar>
+									</el-col>
+									<el-col :span="4">
+										<el-link :underline="false" type="primary"><span
+												style="color: #A0A0A0;font-size: 12px;"
+												v-text="homework.course.teacher.username">Colin</span>
+										</el-link>
+									</el-col>
+								</el-row>
+							</el-col>
+						</el-row>
+						<el-row style="margin-top: 20px">
+							<span style="margin-left: 30px;font-size: 14px;color: #303133"
+								v-html="homework.description">如题所述
+								作业简介</span>
+						</el-row>
+						<el-row>
+							<el-col :span="12" style="float: left;">
+								<span id="hwDeadline">
+									截止日期：<span v-text="homework.deadline">2020年11月21日 10:36</span>
+								</span>
+							</el-col>
+							<el-col :span="12" style="float: right;" v-show="checkIfDeadlineForSub(homework.deadline)">
+								<span style="float: right;">
+									<el-tag type="danger">已截止</el-tag>
+								</span>
+							</el-col>
+						</el-row>
+						<!-- <p style="float: left;">
+									<span id="hwDeadline">
+										个人作业
+									</span>
+								</p>
+								<p style="float: left;">
+									<span id="hwDeadline">
+										需要查重
+									</span>
+								</p>
+								<p style="float: right;">
+									<el-button type="text" icon="el-icon-tickets">看谁交了</el-button>
+								</p> -->
+						<el-row>
+							<el-col :offset="1" :span="22">
+								<el-divider></el-divider>
+							</el-col>
+						</el-row>
 
-					</div><br />
-
-					<p>
-						<span style="font-size: 18px;color: rgb(45, 45, 45);">{{homework.title}}</span>
-					</p>
-					<p>
-						<span style="font-size: 12px;color: rgb(112, 112, 112);" v-html="homework.description"></span>
-					</p>
-					<p style="float: left;">
-						<span id="hwDeadline">
-							截止日期：{{homework.deadline}}
-						</span>
-					</p>
-					<!-- <p style="float: left;">
-							<span id="hwDeadline">
-								个人作业
-							</span>
-						</p>
-						<p style="float: left;">
-							<span id="hwDeadline">
-								需要查重
-							</span>
-						</p>
-						<p style="float: right;">
-							<el-button type="text" icon="el-icon-tickets">看谁交了</el-button>
-						</p> -->
-					<br /><br /><br /><br />
-
-					<!--上传文件 action上传的地址-->
-					<div
-						style="border-radius: 10px;border: 1px gainsboro solid; height: 240px; width: 100%;padding: 10px;">
-						<el-upload class="upload-demo" ref="upload" action="#" :on-preview="handlePreview"
-							:on-remove="handleRemove" :file-list="fileList" :auto-upload="false">
-							<el-button slot="trigger" type="primary">选取文件</el-button>
-							<el-button style="margin-left: 10px;" type="success" @click="submitUpload">上传作业</el-button>
-							<span style="float: right;" v-if="homeworkStudent.status > 0">已提交</span>
-							<span style="float: right;" v-else>未完成</span>
-							<div slot="tip" class="el-upload__tip" style="font-size: 14px;">支持各类文档、图片、代码、压缩包格式</div>
-							<br /><br />
-						</el-upload>
+						<!--上传文件 action上传的地址-->
+						<el-row v-show="!checkIfDeadlineForSub(homework.deadline)"
+							style="border-radius: 10px;border: 1px gainsboro solid; height: 240px; width: 97%;padding: 10px;">
+							<el-upload class="upload-demo" action="#" :http-request="uploadHomework"
+								:on-remove="handleRemove" :file-list="fileList">
+								<el-button slot="trigger" type="primary">选取文件</el-button>
+								<el-popconfirm confirmButtonText="确认" cancelButtonText="取消" confirmButtonType="danger"
+									cancelButtonType="success" placement="right" @onconfirm="submitHomework"
+									:title="homeworkStudent.status === 0 ? '确认要提交作业吗？' : '确认要更新提交吗？'">
+									<el-button style="margin-left: 10px;" type="success"
+										:disabled="fileList.length === 0" slot="reference">
+										<span v-text="homeworkStudent.status === 0 ? '提交作业' : '更新提交'"></span>
+									</el-button>
+								</el-popconfirm>
+								<span v-show="homeworkStudent.status > 0" style="float: right;">
+									<el-tag>已提交</el-tag>
+								</span>
+								<span v-show="homeworkStudent.status === 0" style="float: right;">
+									<el-tag type="danger">未提交</el-tag>
+								</span>
+								<div slot="tip" class="el-upload__tip" style="font-size: 14px;">
+									支持各类文档、图片、代码、压缩包格式
+								</div>
+							</el-upload>
+						</el-row>
+						<el-row v-show="checkIfDeadlineForSub(homework.deadline)">
+							<el-card class="box-card" id="homework-resources-card" shadow="never"
+								style="margin-top: 10px;width: 850px;height: auto; border-radius: 6px;border-width: 2px;padding: 0;">
+								<el-container>
+									<el-header style="background-color:#F1F3F4; width: 850px; height: 42px;">
+										<span style="float: left;">
+											<el-button type="text">提交的作业列表</el-button>
+										</span>
+									</el-header>
+									<!-- 提交的作业列表 -->
+									<el-main>
+										<el-row type="flex" justify="space-start" :gutter="5" style="margin: 10px;"
+											v-for="(row, index) of fileListRows" :key="index"
+											v-show="fileListRows.length > 0">
+											<el-col :span="3" style="margin-right: 25px;"
+												@mouseover.native="showDownloadResourceId = resource.id"
+												@mouseout.native="showDownloadResourceId = -1"
+												v-for="(resource, innerindex) in row" :key="resource.id">
+												<el-row>
+													<el-button style="height: 100px; width: 80px; padding: 12px 0;"
+														@click="previewResourceData(resource.id, resource.type, resource.name)">
+														<el-row style="margin-bottom: 15px;">
+															<img :src="getResourceSrc(resource.ext)" alt="" srcset=""
+																style="height: 36px; width: 36px;">
+														</el-row>
+														<el-row>
+															<el-tooltip :content="resource.name" placement="bottom"
+																effect="light">
+																<span style="font-size: 6px;"
+																	v-text="resource.name.length > 6 ? resource.name.substring(0, 6) + '...': resource.name">实验</span>
+															</el-tooltip>
+														</el-row>
+													</el-button>
+												</el-row>
+												<el-row>
+													<el-button type="text" size="small"
+														@click="postDownloadRequestToServer(resource.id)">
+														<span
+															v-show="resource.type === 1 && resource.id === showDownloadResourceId">下载</span>
+													</el-button>
+												</el-row>
+											</el-col>
+										</el-row>
+										<el-row v-show="fileListRows.length === 0">
+											<p
+												style="text-align: center; font-size: 15px; color: black; line-height: 160px;">
+												您未提交本次作业</p>
+										</el-row>
+									</el-main>
+								</el-container>
+							</el-card>
+						</el-row>
+						<!--查看提交日志-->
+						<!-- <el-row>
+							<el-button type="text" @click="showSubmitLog">{{logTip}}<i :class="logImg"></i>
+							</el-button>
+							<div v-if="homeworkStudent.status > 0" v-show="showLog == 1">
+								<span
+									style="color: rgb(96, 98, 102); margin: 20px;">提交时间：{{homeworkStudent.submitTime}}</span>
+								<span style="color: rgb(96, 98, 102);">最后更新时间：{{homeworkStudent.updateTime}}</span>
+							</div>
+							<div v-show="showLog == 1" v-else><span>暂无记录</span></div>
+						</el-row> -->
 					</div>
-					<!--查看提交日志-->
-					<el-button type="text" @click="showSubmitLog">{{logTip}}<i :class="logImg"></i></el-button>
-					<div v-if="homeworkStudent.status > 0" v-show="showLog == 1">
-						<span style="color: rgb(96, 98, 102); margin: 20px;">提交时间：{{homeworkStudent.submitTime}}</span>
-						<span style="color: rgb(96, 98, 102);">最后更新时间：{{homeworkStudent.updateTime}}</span>
-					</div>
-					<div v-show="showLog == 1" v-else><span>暂无记录</span></div>
-				</el-col>
-			</el-row>
-		</div>
+				</el-card>
+			</el-main>
+
+		</el-container>
 
 		<!-- 作业讨论 -->
-		<div v-show="activeIndex == '2'">
+		<!-- <div v-show="activeIndex == '2'">
 			<el-row>
 				<el-col :span="14" :offset="5">
 					<div style="border-radius: 10px;border: 1px gainsboro solid;width: 100%;padding: 10px;">
@@ -141,63 +246,65 @@
 
 				</el-col>
 			</el-row>
-		</div>
-
-
+		</div> -->
 	</div>
 </body>
-<script src="https://unpkg.com/vue/dist/vue.js"></script>
+<script src="https://cdn.bootcss.com/vue/2.6.11/vue.min.js"></script>
 <script src="https://cdn.bootcss.com/axios/0.19.2/axios.min.js"></script>
-<script src="https://cdn.bootcss.com/element-ui/2.13.2/index.js"></script>
+<!-- <script src="https://cdn.bootcss.com/element-ui/2.13.2/index.js"></script> -->
+<script src="./js/index.js"></script>
 <script src="./js/common.js"></script>
 
 <script>
 	new Vue({
 		el: '#app',
 		data: {
-			course: {
-				cname: '数据结构'
-			},
 			user: {},
 			activeIndex: '1',
 			//作业详情
 			homework: {
-				title: '作业标题',
-				description: '作业描述',
-				deadline: '2020-11-23 23:59'
+				course: {
+					teacher: {}
+				}
 			},
 			//选中的上传文件
-			fileList: [{
-				name: 'food.jpeg',
-				url: 'https://fuss10.elemecdn.com/3/63/4e7f3a15429bfda99bce42a18cdd1jpeg.jpeg?imageMogr2/thumbnail/360x360/format/webp/quality/100'
-			}],
+			fileList: [],
 
 			//学生-作业记录相关: 状态 提交时间 更新时间
-			homeworkStudent: { status: 1, submitTime: '2020-11-23 14:11', updateTime: '2020-11-23 14:11' },
+			homeworkStudent: { status: 0, submitTime: '2020-11-23 14:11', updateTime: '2020-11-23 14:11' },
 
 			showLog: 0,
 			logTip: '查看提交日志',
 			logImg: 'el-icon-arrow-right el-icon--right',
 			//作业评论
 			remark: '',
-
+			showDownloadResourceId: -1,
 		},
 		methods: {
-			handleSelectFirst(key, keyPath) {
-				if (key != null) {
-					this.activeIndex = key;
-				}
+			// 提交作业
+			submitHomework() {
+				let resourceIds = this.fileList.map(file => file.id);
+				yxt.http.post("homework/homeworkId/" + yxt.getUrlParam("id")
+					+ "/studentId/" + this.user.id, { resourceIds: resourceIds }).then(({ data }) => {
+						if (data.success) {
+							this.$message.success(data.message);
+							this.getHomeworkStudentData();
+						} else {
+							this.$message.error(data.message);
+						}
+					}).catch(() => {
+						this.$message.error("服务器繁忙，请稍候再试！");
+					});
 			},
-			//上传文件
-			submitUpload() {
-				this.$refs.upload.submit();
-				this.homeworkStudent.status = 1;
+			getHomeworkStudentData() {
+				yxt.http.get("homework/homeworkId/" + yxt.getUrlParam("id") + "/studentId/" + this.user.id).then(({ data }) => {
+					if (data.success) {
+						this.homeworkStudent = data.queryResult.data[0];
+					}
+				})
 			},
 			handleRemove(file, fileList) {
-				console.log(file, fileList);
-			},
-			handlePreview(file) {
-				console.log(file);
+				this.fileList = fileList;
 			},
 			showSubmitLog() {
 				if (this.showLog == 1) {
@@ -220,23 +327,120 @@
 					}
 				})
 			},
+			getFileList() {
+				yxt.http.get("resource/homeworkId/" + yxt.getUrlParam("id") + "/studentId/" + this.user.id).then(({ data }) => {
+					if (data.success) {
+						this.fileList = data.queryResult.data;
+					}
+				})
+			},
+			uploadHomework(f) {
+				let formdata = new FormData()
+				formdata.append('file', f.file)
+				yxt.http({
+					url: '/resource/upload/userId/' + this.user.id,
+					method: 'post',
+					data: formdata,
+					headers: { 'Content-Type': 'multipart/form-data' }
+				}).then(({ data }) => {
+					if (data.success) {
+						this.fileList.push(data.queryResult.data[0])
+					} else {
+						this.$message.error(data.message);
+					}
+				}).catch(() => {
+					this.$message.error("服务器繁忙，请稍候再试！");
+				});
+			},
 			verify() {
 				yxt.http.get("/auth/verify/2").then(({ data }) => {
 					if (data.success) {
 						this.user = data.queryResult.data[0];
+						this.getFileList();
+						this.getHomeworkStudentData();
 					} else {
 						location.href = "index.html"
 					}
 				}).catch(() => {
 					location.href = "index.html"
 				});
-			}
+			},
+			checkIfDeadlineForSub(deadline) {
+				return new Date().valueOf() >= new Date(deadline).valueOf();
+			},
+			getResourceSrc(ext) {
+				switch (ext) {
+					case 'jpg':
+						return "https://www.ketangpai.com/Public/Common/img/fileicon/file_ext_big_jpg.png";
+						break;
+					case 'png':
+						return "https://www.ketangpai.com/Public/Common/img/fileicon/file_ext_big_png.png";
+						break;
+					case 'doc':
+						return "https://www.ketangpai.com/Public/Common/img/fileicon/file_ext_big_doc.png";
+						break;
+					case 'ppt':
+						return "https://www.ketangpai.com/Public/Common/img/fileicon/file_ext_big_ppt.png";
+						break;
+					case 'pptx':
+						return "https://www.ketangpai.com/Public/Common/img/fileicon/file_ext_big_pptx.png";
+						break;
+					case 'mp4':
+						return "https://www.ketangpai.com/Public/Common/img/fileicon/file_ext_big_mp4.png";
+						break;
+					case 'pdf':
+						return "https://www.ketangpai.com/Public/Common/img/fileicon/file_ext_big_pdf.png";
+						break;
+					case 'xlsx':
+						return "https://www.ketangpai.com/Public/Common/img/fileicon/file_ext_big_xlsx.png";
+						break;
+					case 'txt':
+						return "https://www.ketangpai.com/Public/Common/img/fileicon/file_ext_big_txt.png";
+						break;
+					case 'zip':
+						return "https://www.ketangpai.com/Public/Common/img/fileicon/file_ext_big_zip.png";
+						break;
+					default:
+						return "https://www.ketangpai.com/Public/Common/img/fileicon/file_ext_big_folder.png";
+						break;
+				}
+			},
+			previewResourceData(resourceId, type, name) {
+				if (type === 1) { // 文件类型是文件，打开文件预览页面
+					yxt.http.get("resource/resourceId/" + resourceId)
+						.then(({ data }) => {
+							if (data.success) {
+								let url = data.queryResult.data[0].location;
+								window.open("http://www.pava.run/preview/onlinePreview?url=" + encodeURIComponent(url))
+							} else {
+								this.$message.error(data.message);
+							}
+						})
+						.catch(() => {
+							this.$message.error("服务器繁忙，请稍候再试！")
+						})
+				} else {
+					this.$message.error("服务器繁忙，请稍候再试！")
+				}
+			},
 		},
 		created() {
 			this.verify();
 			this.getHomeworkData();
 		},
-
+		computed: {
+			fileListRows() {
+				const fileListRows = [];
+				this.fileList.forEach((file, index) => {
+					const row = Math.floor(index / 7);
+					if (!fileListRows[row]) {
+						fileListRows[row] = [];
+					}
+					fileListRows[row].push(file);
+				})
+				return fileListRows;
+			},
+		}
 	})
 </script>
 
