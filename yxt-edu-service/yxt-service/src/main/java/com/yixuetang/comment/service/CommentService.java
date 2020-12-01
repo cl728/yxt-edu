@@ -36,4 +36,13 @@ public interface CommentService {
      * @return 响应结果实体类
      */
     CommonResponse deleteComment(long commentId);
+
+    /**
+     *  用户对评论点赞/取消点赞
+     *
+     * @param commentId 评论id
+     * @param userId    用户id
+     * @return  响应结果实体类
+     */
+    CommonResponse likeComment(long commentId, long userId);
 }
