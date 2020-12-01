@@ -166,7 +166,7 @@
 												@mouseout.native="showDownloadResourceId = -1"
 												v-for="(resource, innerindex) in row" :key="resource.id">
 												<el-row>
-													<el-button style="height: 100px; width: 80px; padding: 12px 0;"
+													<el-button style="height: 110px; width: 95px; padding: 12px 0;"
 														@click="previewResourceData(resource.id, resource.type, resource.name)">
 														<el-row style="margin-bottom: 15px;">
 															<img :src="getResourceSrc(resource.ext)" alt="" srcset=""
@@ -182,11 +182,13 @@
 													</el-button>
 												</el-row>
 												<el-row>
-													<el-button type="text" size="small"
-														@click="postDownloadRequestToServer(resource.id)">
-														<span
-															v-show="resource.type === 1 && resource.id === showDownloadResourceId">下载</span>
-													</el-button>
+													<el-col :span="8" :push="8">
+														<el-button type="text" size="small"
+															@click="postDownloadRequestToServer(resource.id)">
+															<span
+																v-show="resource.type === 1 && resource.id === showDownloadResourceId">下载</span>
+														</el-button>
+													</el-col>
 												</el-row>
 											</el-col>
 										</el-row>
@@ -422,6 +424,34 @@
 				} else {
 					this.$message.error("服务器繁忙，请稍候再试！")
 				}
+			},
+			postDownloadRequestToServer(resourceId) {
+				yxt.http.get("resource/download/resourceId/" + resourceId, {
+					responseType: 'blob'
+				}).then(resp => {
+					yxt.http.get("resource/resourceId/" + resourceId)
+						.then(({ data }) => {
+							if (data.success) {
+								let fileName = data.queryResult.data[0].name;
+								this.download(resp.data, fileName);
+							} else {
+								this.$message.error(data.message);
+							}
+						})
+						.catch(() => {
+							this.$message.error("服务器繁忙，请稍候再试！")
+						})
+				}).catch("服务器繁忙，请稍候再试！")
+			},
+			download(data, fileName) {
+				let url = window.URL.createObjectURL(data)
+				let link = document.createElement('a')
+				link.style.display = 'none'
+				link.href = url
+				link.download = fileName // 设置文件名
+				document.body.appendChild(link)
+				link.click()
+				window.URL.revokeObjectURL(link.href);
 			},
 		},
 		created() {
