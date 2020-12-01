@@ -38,4 +38,12 @@ public interface CommentControllerApi {
             paramType = "path", dataType = "long")
     QueryResponse findTopCommentsByNoticeId(long noticeId);
 
+    @ApiOperation("用户给评论点赞/取消点赞")
+    @ApiImplicitParams(value = {
+            @ApiImplicitParam(name = "commentId", value = "评论id", required = true,
+                    paramType = "path", dataType = "long"),
+            @ApiImplicitParam(name = "userId", value = "用户id", required = true,
+                    paramType = "path", dataType = "long"),
+    })
+    CommonResponse likeComment(long commentId, long userId);
 }

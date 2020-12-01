@@ -2,8 +2,10 @@ package com.yixuetang.comment.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.yixuetang.comment.mapper.CommentMapper;
+import com.yixuetang.comment.mapper.CommentUserMapper;
 import com.yixuetang.comment.service.CommentService;
 import com.yixuetang.entity.comment.Comment;
+import com.yixuetang.entity.comment.CommentUser;
 import com.yixuetang.entity.notice.Notice;
 import com.yixuetang.entity.request.comment.PostComment;
 import com.yixuetang.entity.response.CommonResponse;
@@ -49,6 +51,9 @@ public class CommentServiceImpl implements CommentService {
 
     @Autowired
     private AmqpUtils amqpUtils;
+
+    @Autowired
+    private CommentUserMapper commentUserMapper;
 
     // 存放迭代找出的所有子代的集合
     private List<Comment> tempChildComments = new ArrayList<>();
@@ -146,6 +151,21 @@ public class CommentServiceImpl implements CommentService {
         this.commentMapper.deleteById( commentId );
 
         return new CommonResponse( CommonCode.SUCCESS );
+    }
+
+    @Override
+    public CommonResponse likeComment(long commentId, long userId) {
+        // 1. 根据评论id和用户id查询出询 t_comment_user 表的记录
+        CommentUser commentUser = commentUserMapper.selectOne(new QueryWrapper<CommentUser>().eq("comment_id", commentId)
+                .eq("user_id", userId));
+        //  判断记录是否存在
+        if (commentUser == null){
+            ExceptionThrowUtils.cast(CommonCode.INVALID_PARAM);
+        }
+        // 2.找到评论后，更改点赞状态
+        commentUser.setStatus(!commentUser.getStatus());
+        commentUserMapper.updateById(commentUser);
+        return new CommonResponse(CommonCode.SUCCESS);
     }
 
     private List<Comment> eachComment(List<Comment> comments) {

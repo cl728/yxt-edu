@@ -39,4 +39,10 @@ public class CommentController implements CommentControllerApi {
         return this.commentService.findTopCommentsByNoticeId(noticeId);
     }
 
+    @Override
+    @PutMapping("voteUpCount/commentId/{commentId}/userId/{userId}")
+    public CommonResponse likeComment(@PathVariable long commentId, @PathVariable long userId) {
+        return commentService.likeComment(commentId, userId);
+    }
+
 }
