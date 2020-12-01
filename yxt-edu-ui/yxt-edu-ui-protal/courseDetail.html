@@ -192,7 +192,7 @@
                                                 <el-col :span="6">
                                                     <div id="course-code"
                                                         style="border-radius: 3px;color: white;height: 24px;background-color: #909399;font-size: 12px">
-                                                        <el-dropdown>
+                                                        <el-dropdown v-show="user.isTeacher">
                                                             <span class="el-dropdown-link">
                                                                 <el-link :underline="false" style="color: white">
                                                                     <div id="course-code-content"
@@ -202,11 +202,24 @@
                                                                     </div>
                                                                 </el-link>
                                                             </span>
-                                                            <!-- <el-dropdown-menu slot="dropdown" v-show="user.isTeacher"
+                                                            <el-dropdown-menu slot="dropdown"
                                                                 style="width: 106px;text-align: center">
-                                                                <el-dropdown-item>停用</el-dropdown-item>
-                                                                <el-dropdown-item>重置</el-dropdown-item>
-                                                            </el-dropdown-menu> -->
+                                                                <!-- <el-dropdown-item>停用</el-dropdown-item> -->
+                                                                <el-dropdown-item>
+                                                                    <el-link @click="resetCourseCode()">重置</el-link>
+                                                                </el-dropdown-item>
+                                                            </el-dropdown-menu>
+                                                        </el-dropdown>
+                                                        <el-dropdown v-show="!user.isTeacher">
+                                                            <span class="el-dropdown-link">
+                                                                <el-link :underline="false" style="color: white">
+                                                                    <div id="course-code-content"
+                                                                        style="padding-top: 3px">
+                                                                        <span>加课码:</span>
+                                                                        <span v-text="course.ccode">R6AD65</span>
+                                                                    </div>
+                                                                </el-link>
+                                                            </span>
                                                         </el-dropdown>
                                                     </div>
                                                 </el-col>
@@ -1476,7 +1489,7 @@
                                                         v-text="notice.createTime">2020-11-09 22:17</span></span>
                                             </div>
                                         </el-col>
-                                        <el-col :span="12">
+                                        <el-col :span="12" v-show="user.isTeacher">
                                             <div class="homework-operation" style="float: right">
                                                 <el-dropdown>
                                                     <span class="el-dropdown-link">
@@ -2122,10 +2135,7 @@
                             this.userInfo = data.queryResult.data[0];
                             this.realName = this.userInfo.realName;
                             this.course.id = yxt.getUrlParam("id");
-                            yxt.http.get("/courses/info/id/" + this.course.id).then(({ data }) => {
-                                this.course = data.queryResult.data[0];
-                                this.updateCourseForm = Object.assign({}, this.course);
-                            })
+                            this.getCourseData();
                         });
                         this.getHomeworkData();
                         this.getUnreadMessageCount();
@@ -2420,12 +2430,32 @@
                 })
             },
             getStudentHomeworkData() {
-                yxt.http.get("homework/courseId/" + yxt.getUrlParam("id") + "/studentId/" + this.user.id).then(({ data }) => {
+                if (!this.user.isTeacher) {
+                    yxt.http.get("homework/courseId/" + yxt.getUrlParam("id") + "/studentId/" + this.user.id).then(({ data }) => {
+                        if (data.success) {
+                            let tempHomeworkStudents = data.queryResult.data;
+                            tempHomeworkStudents.forEach(tempHomeworkStudent =>
+                                this.studentHomework[tempHomeworkStudent.homeworkId] = tempHomeworkStudent.status)
+                        }
+                    })
+                }
+            },
+            getCourseData() {
+                yxt.http.get("/courses/info/id/" + this.course.id).then(({ data }) => {
+                    this.course = data.queryResult.data[0];
+                    this.updateCourseForm = Object.assign({}, this.course);
+                })
+            },
+            resetCourseCode() {
+                yxt.http.put("courses/code/courseId/" + yxt.getUrlParam("id")).then(({ data }) => {
                     if (data.success) {
-                        let tempHomeworkStudents = data.queryResult.data;
-                        tempHomeworkStudents.forEach(tempHomeworkStudent =>
-                            this.studentHomework[tempHomeworkStudent.homeworkId] = tempHomeworkStudent.status)
+                        this.$message.success(data.message);
+                        this.getCourseData();
+                    } else {
+                        this.$message.error(data.message);
                     }
+                }).catch(() => {
+                    this.$message.error("服务器繁忙，请稍候再试！")
                 })
             }
         },
