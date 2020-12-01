@@ -16,6 +16,7 @@ import com.yixuetang.entity.response.CommonResponse;
 import com.yixuetang.entity.response.QueryResponse;
 import com.yixuetang.entity.response.code.CommonCode;
 import com.yixuetang.entity.response.code.user.UserCode;
+import com.yixuetang.entity.response.result.CourseUserResp;
 import com.yixuetang.entity.response.result.QueryResult;
 import com.yixuetang.entity.response.result.UserResp;
 import com.yixuetang.entity.user.Role;
@@ -549,6 +550,79 @@ public class UserServiceImpl implements UserService {
                         StringUtils.isBlank( search )
                                 ? ids.size() // 如果搜索字段为空，则 total 为总的作业成员
                                 : filterUsers.size() ) ); // 否则为过滤后的成员
+    }
+
+    @Override
+    public QueryResponse findCourseUsers(long userId) {
+
+        Long roleId = this.userMapper.findById( userId ).getRole().getId();
+
+        List<CourseUserResp> courseUserRespList = new ArrayList<>();
+
+        if (Objects.equals( roleId, 2L )) { // 该用户为教师
+            // 查询该名教师所教的课程列表
+            List<Long> courseIds = this.courseMapper.selectList(
+                    new QueryWrapper<Course>()
+                            .eq( "teacher_id", userId )
+                            .select( "id", "c_name" ) )
+                    .stream()
+                    .map( Course::getId )
+                    .collect( Collectors.toList() );
+            this.getCourseUserRespList( courseUserRespList, courseIds );
+        } else {  // 该名用户为学生
+            // 找出该名学生加入的课程
+            List<Long> courseIds = this.scMapper.selectList(
+                    new QueryWrapper<StudentCourse>()
+                            .eq( "student_id", userId ) )
+                    .stream()
+                    .map( StudentCourse::getCourseId )
+                    .collect( Collectors.toList() );
+            this.getCourseUserRespList( courseUserRespList, courseIds );
+        }
+
+        return new QueryResponse( CommonCode.SUCCESS,
+                new QueryResult<>( courseUserRespList, courseUserRespList.size() ) );
+    }
+
+    private void getCourseUserRespList(List<CourseUserResp> courseUserRespList, List<Long> courseIds) {
+        if (!CollectionUtils.isEmpty( courseIds )) {
+            // 查询每一门课程下的成员列表
+            courseIds.forEach( courseId -> {
+                // 查询该门课程的信息
+                Course course = this.courseMapper.findById( courseId );
+
+                // 找出该门课程的老师
+                User teacher = course.getTeacher();
+
+                // 定义成员列表
+                List<User> users = new ArrayList<>();
+
+                // 找出该门课程的学生
+                List<Long> studentIds = this.scMapper.selectList(
+                        new QueryWrapper<StudentCourse>()
+                                .eq( "course_id", course.getId() ) )
+                        .stream()
+                        .map( StudentCourse::getStudentId )
+                        .collect( Collectors.toList() );
+                List<User> students = CollectionUtils.isEmpty( studentIds )
+                        ? new ArrayList<>()
+                        : this.userMapper.selectList(
+                        new QueryWrapper<User>()
+                                .in( "id", studentIds ) );
+
+                users.add( teacher );  // 将该名教师添加到成员列表中
+                users.addAll( students );   // 将学生列表添加到成员列表中
+
+                // 用特殊字符 # 将用户名和头像隔开
+                users.forEach( member -> member.setUsername( member.getUsername() + "#" + member.getAvatar() ) );
+
+                courseUserRespList.add( // 将构建好的每一门课程及其成员列表添加到 courseUserRespList 中
+                        CourseUserResp.builder()
+                                .id( course.getId() )
+                                .username( course.getCName() )
+                                .userList( users ).build() );
+            } );
+        }
     }
 
     private void screen(QueryPageRequestUser queryPageRequestUser, QueryWrapper<User> queryWrapper) {

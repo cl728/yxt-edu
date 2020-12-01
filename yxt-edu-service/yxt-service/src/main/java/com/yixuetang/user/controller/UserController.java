@@ -145,6 +145,12 @@ public class UserController implements UserControllerApi {
         return this.userService.findPageByHomeworkId( homeworkId, currentPage, pageSize, search );
     }
 
+    @Override
+    @GetMapping("courseUser/userId/{userId}")
+    public QueryResponse findCourseUsers(@PathVariable long userId) {
+        return this.userService.findCourseUsers( userId);
+    }
+
     private boolean checkIdIfInvalid(@PathVariable long id, HttpServletRequest request) {
         String token = CookieUtils.getCookieValue( request, id == 3 ? config.getAdminCookieName() : config.getUserCookieName() );
         UserInfo userInfo;

@@ -123,4 +123,8 @@ public interface UserControllerApi {
     })
     QueryResponse findPageByHomeworkId(long homeworkId, long currentPage, long pageSize, String search);
 
+    @ApiOperation("查询某个用户加入（或拥有）的课程中的用户成员列表")
+    @ApiImplicitParam(name = "userId", value = "用户id", required = true,
+            paramType = "path", dataType = "long")
+    QueryResponse findCourseUsers(long userId);
 }

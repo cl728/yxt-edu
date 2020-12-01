@@ -153,4 +153,12 @@ public interface UserService {
      * @return 响应结果实体类
      */
     QueryResponse findPageByHomeworkId(long homeworkId, long currentPage, long pageSize, String search);
+
+    /**
+     * 查询某个用户加入（或拥有）的课程中的用户成员列表
+     *
+     * @param userId 用户id
+     * @return 响应结果实体类
+     */
+    QueryResponse findCourseUsers(long userId);
 }
