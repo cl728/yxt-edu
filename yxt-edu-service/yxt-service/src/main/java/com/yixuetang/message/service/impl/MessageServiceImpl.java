@@ -395,7 +395,7 @@ public class MessageServiceImpl implements MessageService {
                 Comment comment = this.commentMapper.selectById(sourceId);
                 sourceContent = comment == null ? "[该评论已被删除]" : comment.getContent();
                 break;
-            default: // 点赞相关提醒，不用查询 sourceContent
+            default: // 点赞和私信相关提醒，不用查询 sourceContent
                 break;
         }
         return sourceContent;

@@ -156,23 +156,34 @@ public class CommentServiceImpl implements CommentService {
     @Override
     public CommonResponse likeComment(long commentId, long userId) {
         // 1. 根据评论id和用户id查询出询 t_comment_user 表的记录
-        CommentUser commentUser = commentUserMapper.selectOne(new QueryWrapper<CommentUser>().eq("comment_id", commentId)
-                .eq("user_id", userId));
+        CommentUser commentUser = commentUserMapper.selectOne( new QueryWrapper<CommentUser>().eq( "comment_id", commentId )
+                .eq( "user_id", userId ) );
         //  判断记录是否存在
-        if (commentUser == null){
-            ExceptionThrowUtils.cast(CommonCode.INVALID_PARAM);
+        if (commentUser == null) {
+            // 如果不存在，代表用户第一次给此评论点赞，新增一条记录，status 为 true
+            this.commentUserMapper.insert(
+                    CommentUser.builder()
+                            .id( null )
+                            .commentId( commentId )
+                            .userId( userId )
+                            .status( Boolean.TRUE ).build()
+            );
+            // 发送事件提醒，告知被点赞者有用户点赞了他的评论
+            this.amqpUtils.sendVoteUpRemind( userId, commentId,
+                    this.commentMapper.findById( commentId ).getUser().getId());
+        } else {
+            // 如果存在，切换点赞状态
+            commentUser.setStatus( !commentUser.getStatus() );
+            commentUserMapper.updateById( commentUser );
         }
-        // 2.找到评论后，更改点赞状态
-        commentUser.setStatus(!commentUser.getStatus());
-        commentUserMapper.updateById(commentUser);
-        return new CommonResponse(CommonCode.SUCCESS);
+        return new CommonResponse( CommonCode.SUCCESS );
     }
 
     @Override
     public QueryResponse findLike(long userId) {
         // 1. 根据用户id查询点赞记录
-        List<CommentUser> userLike = commentUserMapper.selectList(new QueryWrapper<CommentUser>()
-                .eq("user_id", userId));
+        List<CommentUser> userLike = commentUserMapper.selectList( new QueryWrapper<CommentUser>()
+                .eq( "user_id", userId ) );
         return new QueryResponse( CommonCode.SUCCESS, new QueryResult<>( userLike, userLike.size() ) );
     }
 

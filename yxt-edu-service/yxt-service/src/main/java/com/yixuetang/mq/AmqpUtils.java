@@ -72,6 +72,29 @@ public class AmqpUtils {
         }
     }
 
+    public void sendVoteUpRemind(long userId, long commentId, Long receiverId) {
+        EventRemind eventRemind = EventRemind.builder().id( null )
+                .remindType( 2 ) // 与点赞相关，remindType 为 2
+                .senderId( userId ) // 发送者为点赞评论的人
+                .courseId( null ) // 与之关联的课程，这里为 null
+                .receiverId( receiverId ) // 接收者为被评论的人
+                .sourceId( null ) // 事件源id，这里为 null
+                .targetId( commentId ) // 目标id，这里为被点赞的评论
+                .action( "点赞" )   // 动作类型，这里是回复
+                .sourceName( "评论" )   // 事件源名称，这里是评论
+                .url( null ) // 事件所发生的地点链接
+                .status( Boolean.FALSE )  // 是否已读，默认为 false
+                .remindTime( new Date() )  // 提醒时间
+                .build();
+        ObjectMapper mapper = new ObjectMapper();
+        try {
+            String eventRemindJson = mapper.writeValueAsString( eventRemind );
+            this.amqpTemplate.convertAndSend( "YXT.REMIND.EXCHANGE", "YXT.REMIND.VOTEUP", eventRemindJson );
+        } catch (JsonProcessingException e) {
+            LOGGER.error( "使用 Jackson 解析实体类发生异常！异常原因：{}", e );
+        }
+    }
+
     public void sendChatRemind(ChatMessage chatMessage) {
         EventRemind eventRemind = EventRemind.builder().id( null )
                 .remindType( 3 ) // 与私信相关，remindType 为 3
@@ -95,5 +118,4 @@ public class AmqpUtils {
             LOGGER.error( "使用 Jackson 解析实体类发生异常！异常原因：{}", e );
         }
     }
-
 }
