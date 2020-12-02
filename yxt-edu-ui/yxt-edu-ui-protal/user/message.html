@@ -122,7 +122,7 @@
                 <!-- 左侧导航栏 -->
                 <el-aside width="300px" style="overflow: hidden;">
                     <div id="menu" style="padding-top: 150px">
-                        <el-menu default-active="5">
+                        <el-menu default-active="1">
                             <el-menu-item index="1" @click="show('isSystemMessageVisible')">
                                 <i class="el-icon-message-solid"></i>
                                 <span slot="title">系统通知</span>
@@ -473,25 +473,6 @@
                                                     </el-tree>
                                                 </el-row>
                                                 <el-row v-show="!active.isClassActive">
-                                                    <!--  <div v-for="(latelyUser, index) in latelyUserList">
-                                                        <div>
-                                                            <div style="vertical-align: top; border-top: 1px solid transparent; 
-                                                                border-bottom: 1px solid transparent; width: 180px; padding: 13px 6px 0 10px;
-                                                                cursor: pointer; transition: background-color .1s;">
-                                                                <img style="height: 40px; width: 40px; border-radius: 20px;"
-                                                                    :src="latelyUser.avatar">
-                                                                </img>
-                                                                <el-link :underline="false" type="primary">
-                                                                    <span v-text="latelyUser.name"
-                                                                        style="color: #A0A0A0;font-size: 13px; display: inline-block; 
-                                                                            margin: 0 0 20px 15px; max-width: 110px; white-space: nowrap;
-                                                                            overflow: hidden; text-overflow: ellipsis;">
-                                                                        Colin
-                                                                    </span>
-                                                                </el-link>
-                                                            </div>
-                                                        </div>
-                                                    </div> -->
                                                     <el-tree style="background-color:#f3f3f3; margin-top: 15px;"
                                                         :data="latelyUserList" :props="chatProps"
                                                         @node-click="findLatelyChatMessageList" default-expand-all>
@@ -524,7 +505,8 @@
                                                     </span>
                                                 </el-row>
                                                 <el-divider></el-divider>
-                                                <div style="height: 400px; overflow-y: auto;">
+                                                <div style="height: 400px; width: 900px; overflow-y: auto;"
+                                                    id="chat-box">
                                                     <el-row v-for="(content, index) in chat.messageList" :key="index"
                                                         style="line-height: 40px;">
                                                         <span style="float: right; margin-right: 10px;"
@@ -562,15 +544,15 @@
                                                 </div>
                                                 <el-divider></el-divider>
                                                 <el-row style="height: 150px;">
-                                                    <textarea id="chat-textarea" rows='1' cols='50'
+                                                    <textarea id="chat-textarea" rows='1' cols='50' @keyup.enter="keyUp"
                                                         placeholder="说些什么..."></textarea>
                                                 </el-row>
                                                 <el-row>
-                                                    <!--  <el-col :span="6">
+                                                    <el-col :span="8">
                                                         <span
                                                             style="color: #aaa; padding: 0 20px 0 0; font-size: 14px;">按
-                                                            Ctrl + Enter 发送</span>
-                                                    </el-col> -->
+                                                            Ctrl + Enter 换行，按 Enter 发送</span>
+                                                    </el-col>
                                                     <el-col :span="3" style="float: right; margin-right: 20px;">
                                                         <el-button type="primary" @click="sendChatContent()">
                                                             发送</el-button>
@@ -723,12 +705,12 @@
         data: {
             user: {},
             visible: {
-                isSystemMessageVisible: false,
+                isSystemMessageVisible: true,
                 isMessageSettingVisible: false,
                 isCourseMessageVisible: false,
                 isReplyMessageVisible: false,
                 isVoteUpMessageVisible: false,
-                isChatMessageVisible: true
+                isChatMessageVisible: false
             },
             systemMessageList: [],
             courseRemindList: [],
@@ -747,7 +729,6 @@
             },
             unreadMessageCount: {},
             showDel: {
-                systemMessageId: -1,
                 courseRemindId: -1,
                 replyRemindId: -1,
                 voteUpRemindId: -1
@@ -851,6 +832,9 @@
                 for (let k in this.visible) {
                     this.visible[k] = k === key;
                 }
+                if (this.visible.isChatMessageVisible) {
+                    this.scroll();
+                }
             },
             change(key) {
                 for (let k in this.active) {
@@ -912,7 +896,13 @@
                     if (data.success) {
                         this.chat.messageList = data.queryResult.data;
                     }
+                    this.scroll();
                 })
+            },
+            scroll() {
+                var chatBox = document.getElementById('chat-box');
+                // chatBox.scrollTop = 10000000;
+                chatBox.scrollTo(0, 10000000)
             },
             getClassAvatar(avatar) {
                 if (!avatar) {
@@ -922,6 +912,7 @@
             },
             sendChatContent() {
                 let contentText = document.getElementById("chat-textarea").value;
+                contentText = contentText.replace(/[\n\r]/gi, "");
                 if (contentText === '') {
                     this.$message.error("请输入要发送的内容！")
                     return;
@@ -947,13 +938,13 @@
                     }
                 })
             },
-            /* keyDown(e) {
+            keyUp(e) {
                 if (e.ctrlKey && e.keyCode == 13) {   // 用户点击了 ctrl + enter 触发
-                    this.sendChatContent();
+                    document.getElementById("chat-textarea").value += '\n';
                 } else { // 用户点击了 enter 触发
-                    this.textarea += '\n';
+                    this.sendChatContent();
                 }
-            } */
+            },
             initWebSocket() {
                 this.websocket = new WebSocket('ws://127.0.0.1:8888/chat/' + this.user.id)
                 // 接收到消息时回调
@@ -977,9 +968,9 @@
                             }
                         ]
                         this.chat.toUser = {
-                            userId: this.latelyUserList.chatUserList[0].id,
-                            username: this.latelyUserList.chatUserList[0].name,
-                            avatar: this.latelyUserList.chatUserList[0].avatar
+                            userId: this.latelyUserList[0].chatUserList[0].id,
+                            username: this.latelyUserList[0].chatUserList[0].name,
+                            avatar: this.latelyUserList[0].chatUserList[0].avatar
                         };
                         this.getMessageList();
                     }
