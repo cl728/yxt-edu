@@ -1,5 +1,6 @@
 package com.yixuetang.api.message;
 
+import com.yixuetang.entity.message.ChatMessage;
 import com.yixuetang.entity.message.Message;
 import com.yixuetang.entity.message.UserMessageSetting;
 import com.yixuetang.entity.request.message.QueryPageRequestMessage;
@@ -85,4 +86,23 @@ public interface MessageControllerApi {
     @ApiImplicitParam(name = "userId", value = "用户id", required = true,
             paramType = "path", dataType = "long")
     QueryResponse findEventRemindListByUserId(long userId);
+
+    @ApiOperation("向指定窗口推送消息")
+    @ApiImplicitParam(name = "toId", value = "接收方id", required = true,
+            paramType = "path", dataType = "long")
+    CommonResponse push(long toId, ChatMessage message);
+
+    @ApiOperation("获取与指定用户的聊天消息内容")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "fromId", value = "发送方id", required = true,
+                    paramType = "path", dataType = "long"),
+            @ApiImplicitParam(name = "toId", value = "接收方id", required = true,
+                    paramType = "path", dataType = "long")
+    })
+    QueryResponse findSelfMessageList(long fromId, long toId);
+
+    @ApiOperation("获取某个用户的最近聊天用户列表")
+    @ApiImplicitParam(name = "userId", value = "用户id", required = true,
+            paramType = "path", dataType = "long")
+    QueryResponse findLatelyUserList(long userId);
 }

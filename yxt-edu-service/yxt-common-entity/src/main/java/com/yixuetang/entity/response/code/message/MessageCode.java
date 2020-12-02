@@ -10,7 +10,9 @@ import com.yixuetang.entity.response.code.ResponseCode;
  */
 public enum MessageCode implements ResponseCode {
 
-    MESSAGE_NOT_FOUND(false, 100000, "找不到消息");
+    MESSAGE_NOT_FOUND( false, 100000, "找不到消息" ),
+
+    PUSH_FAIL_TO_USER_NOT_FOUND( false, 100001, "找不到指定推送用户！" );
 
     private boolean success;
     private int code;

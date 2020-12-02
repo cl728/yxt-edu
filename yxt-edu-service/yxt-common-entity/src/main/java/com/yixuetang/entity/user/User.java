@@ -64,4 +64,7 @@ public class User {
     @TableField(exist = false)
     private HomeworkStudent homeworkStudent;
 
+    @TableField(exist = false)
+    private String courseName;  // 这是为了展示私信聊天页面用户所在课程名称而增设的字段
+
 }

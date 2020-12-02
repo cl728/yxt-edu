@@ -42,6 +42,8 @@ public class EventRemind {
     @TableField("source_id")
     private Long sourceId;          // 事件源id，如评论id，作业id等
 
+    private String message;         // 给对方发送的私信
+
     @TableField("target_id")
     private Long targetId;          // 目标源id，如被回复、被点赞的评论id等
 

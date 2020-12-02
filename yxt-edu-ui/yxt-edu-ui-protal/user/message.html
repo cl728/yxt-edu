@@ -16,6 +16,22 @@
         .el-divider--horizontal {
             margin: 5px 0 5px 0;
         }
+
+        #chat-card>.el-card__body {
+            padding: 0;
+        }
+
+        #chat-textarea {
+            resize: none;
+            padding: 10px 30px;
+            height: 80%;
+            width: 100%;
+            border: none;
+            outline: 0;
+            box-sizing: border-box;
+            font-size: 14px;
+            overflow: hidden;
+        }
     </style>
 </head>
 
@@ -88,8 +104,8 @@
                                     <el-avatar size="large" :src="user.avatar">
                                     </el-avatar>
                                 </template>
-                                <el-menu-item @click="location.href = 'setting.html' "><i
-                                        class="el-icon-setting"></i> 个人设置</el-menu-item>
+                                <el-menu-item @click="location.href = 'setting.html' "><i class="el-icon-setting"></i>
+                                    个人设置</el-menu-item>
                                 <el-menu-item><i class="el-icon-position"></i> 消息中心</el-menu-item>
                                 <el-menu-item @click="logout()"><i class="fa fa-sign-out"
                                         style="margin-left: 6px; margin-right: 9px;"></i>
@@ -106,7 +122,7 @@
                 <!-- 左侧导航栏 -->
                 <el-aside width="300px" style="overflow: hidden;">
                     <div id="menu" style="padding-top: 150px">
-                        <el-menu default-active="1">
+                        <el-menu default-active="5">
                             <el-menu-item index="1" @click="show('isSystemMessageVisible')">
                                 <i class="el-icon-message-solid"></i>
                                 <span slot="title">系统通知</span>
@@ -222,19 +238,14 @@
                                                             <i class="el-icon-date"></i> <span
                                                                 v-text="courseRemind.remindTime">2020-11-23 20:42</span>
                                                             <span>
-                                                                <el-popconfirm confirmButtonText="确认"
-                                                                    cancelButtonText="取消" confirmButtonType="danger"
-                                                                    cancelButtonType="success" placement="right"
-                                                                    @onConfirm="deleteRemind(courseRemind.id)"
-                                                                    title="确认要删除该通知吗？">
-                                                                    <el-button type="text" slot="reference"
-                                                                        style="color: #999; font-size: 10px;">
-                                                                        <span
-                                                                            v-show="showDel.courseRemindId === courseRemind.id">
-                                                                            <i class="el-icon-delete"
-                                                                                style="margin-left: 8px; margin-right: 4px;"></i>删除该通知</span>
-                                                                    </el-button>
-                                                                </el-popconfirm>
+                                                                <el-button type="text"
+                                                                    @click="deleteRemind(courseRemind.id)"
+                                                                    style="color: #999; font-size: 10px;">
+                                                                    <span
+                                                                        v-show="showDel.courseRemindId === courseRemind.id">
+                                                                        <i class="el-icon-delete"
+                                                                            style="margin-left: 8px; margin-right: 4px;"></i>删除该通知</span>
+                                                                </el-button>
                                                             </span>
                                                         </span>
                                                     </span>
@@ -412,6 +423,163 @@
                                 </div>
 
                                 <!-- 我的私信 -->
+                                <div v-show="visible.isChatMessageVisible">
+                                    <el-card shadow="never" id="chat-card"
+                                        style="margin-top: 100px; width: 1184px; height: 700px; border-radius: 10px;border-width: 2px;padding: 0;">
+                                        <!-- 左侧 toolbar -->
+                                        <div style="width: 80px; overflow: hidden; float: left; color: #fff">
+                                            <div style="background-color:#9adaf3; height: 700px;">
+                                                <el-row>
+                                                    <el-link :underline="false"
+                                                        style="display: block; width: 80px; height: 80px; color: #fff;
+                                                    text-align: center; line-height: 80px; text-indent: 999em; overflow: hidden;
+                                                    background: url('https://www.ketangpai.com/Public/Home/img/chaticon.png') no-repeat;"
+                                                        :style="active.isLatelyActive ? 'background-position: -80px 0' : 'background-position: 4px 0'"
+                                                        @click="change('isLatelyActive')">
+                                                    </el-link>
+                                                </el-row>
+                                                <el-row>
+                                                    <el-link :underline="false"
+                                                        style="display: block; width: 80px; height: 80px; color: #fff;
+                                                text-align: center; line-height: 80px; text-indent: 999em; overflow: hidden;
+                                                background: url('https://www.ketangpai.com/Public/Home/img/chaticon.png') no-repeat;"
+                                                        :style="active.isClassActive ? 'background-position: -82px -80px' : 'background-position: 4px -80px;'"
+                                                        @click="change('isClassActive')">
+                                                    </el-link>
+                                                </el-row>
+                                            </div>
+                                        </div>
+                                        <!-- 中间 sidebar -->
+                                        <div style="float: left; width: 220px; overflow: hidden;">
+                                            <div style="background-color:#f3f3f3; height: 700px;">
+                                                <el-row>
+                                                    <el-input style="margin: 15px 25px 15px 0; width: 150px;"
+                                                        v-model="search" placeholder="搜索学号、姓名"
+                                                        prefix-icon="el-icon-search"></el-input>
+                                                </el-row>
+                                                <el-divider></el-divider>
+                                                <el-row v-show="active.isClassActive">
+                                                    <el-tree style="background-color:#f3f3f3; margin-top: 15px;"
+                                                        :data="userList" :props="classProps"
+                                                        @node-click="findClassChatMessageList">
+                                                        <span class="custom-tree-node" slot-scope="{ node, data }">
+                                                            <span>
+                                                                <el-avatar size="big" :src="getClassAvatar(data.avatar)"
+                                                                    style="height: 16px; width: 16px; margin-right: 5px;">
+                                                                </el-avatar>
+                                                                <span v-text="data.username">1班(12)</span>
+                                                            </span>
+                                                        </span>
+                                                    </el-tree>
+                                                </el-row>
+                                                <el-row v-show="!active.isClassActive">
+                                                    <!--  <div v-for="(latelyUser, index) in latelyUserList">
+                                                        <div>
+                                                            <div style="vertical-align: top; border-top: 1px solid transparent; 
+                                                                border-bottom: 1px solid transparent; width: 180px; padding: 13px 6px 0 10px;
+                                                                cursor: pointer; transition: background-color .1s;">
+                                                                <img style="height: 40px; width: 40px; border-radius: 20px;"
+                                                                    :src="latelyUser.avatar">
+                                                                </img>
+                                                                <el-link :underline="false" type="primary">
+                                                                    <span v-text="latelyUser.name"
+                                                                        style="color: #A0A0A0;font-size: 13px; display: inline-block; 
+                                                                            margin: 0 0 20px 15px; max-width: 110px; white-space: nowrap;
+                                                                            overflow: hidden; text-overflow: ellipsis;">
+                                                                        Colin
+                                                                    </span>
+                                                                </el-link>
+                                                            </div>
+                                                        </div>
+                                                    </div> -->
+                                                    <el-tree style="background-color:#f3f3f3; margin-top: 15px;"
+                                                        :data="latelyUserList" :props="chatProps"
+                                                        @node-click="findLatelyChatMessageList" default-expand-all>
+                                                        <span class="custom-tree-node" slot-scope="{ node, data }">
+                                                            <span>
+                                                                <el-avatar size="big" :src="data.avatar"
+                                                                    style="height: 16px; width: 16px; margin-right: 5px;">
+                                                                </el-avatar>
+                                                                <span v-text="data.name">1班(12)</span>
+                                                            </span>
+                                                        </span>
+                                                    </el-tree>
+                                                </el-row>
+                                            </div>
+                                        </div>
+                                        <!-- 右侧聊天框 -->
+                                        <div style="float: left; width: 880px; overflow: hidden;">
+                                            <div style="height: 700px;">
+                                                <el-row style="min-height: 70px;">
+                                                    <span style="float: left; margin: 24.5px;">
+                                                        <span style="color: #222;" v-text="chat.toUser.username">
+                                                            Colin
+                                                        </span>
+                                                        <span v-if="chat.toUser.courseName != ''">
+                                                            <span style="color: #aaa; "
+                                                                v-text="getChatToUserCourseName(chat.toUser.courseName)">
+                                                                1班
+                                                            </span>
+                                                        </span>
+                                                    </span>
+                                                </el-row>
+                                                <el-divider></el-divider>
+                                                <div style="height: 400px; overflow-y: auto;">
+                                                    <el-row v-for="(content, index) in chat.messageList" :key="index"
+                                                        style="line-height: 40px;">
+                                                        <span style="float: right; margin-right: 10px;"
+                                                            v-show="content.from.id === user.id">
+                                                            <span v-text="content.time"
+                                                                style="position: relative; font-size: 12px; color: #aaa">
+                                                                2020-11-30 18:05
+                                                            </span>
+                                                            <span v-text="content.message"
+                                                                style="display: inline-block; position: relative;
+                                                        padding: 0 10px; min-height: 30px; line-height: 2.5; text-align: left;
+                                                        word-break: break-all; background-color: #b2e281; border-radius: 8px;">
+                                                                hello!
+                                                            </span>
+                                                            <img width="30" height="30" style="border-radius: 20px;"
+                                                                :src="user.avatar">
+                                                            </img>
+                                                        </span>
+                                                        <span style="float: left; margin-left: 10px;"
+                                                            v-show="content.to.id === user.id">
+                                                            <img width="30" height="30" style="border-radius: 20px;"
+                                                                :src="chat.toUser.avatar">
+                                                            </img>
+                                                            <span v-text="content.message"
+                                                                style="display: inline-block; position: relative;
+                                                                padding: 0 10px; min-height: 30px; line-height: 2.5; text-align: left;
+                                                                word-break: break-all; background-color: #e4e4e4; border-radius: 8px;">
+                                                                hello!
+                                                            </span>
+                                                            <span v-text="content.time"
+                                                                style="position: relative; font-size: 12px; color: #aaa">2020-11-30
+                                                                18:05</span>
+                                                        </span>
+                                                    </el-row>
+                                                </div>
+                                                <el-divider></el-divider>
+                                                <el-row style="height: 150px;">
+                                                    <textarea id="chat-textarea" rows='1' cols='50'
+                                                        placeholder="说些什么..."></textarea>
+                                                </el-row>
+                                                <el-row>
+                                                    <!--  <el-col :span="6">
+                                                        <span
+                                                            style="color: #aaa; padding: 0 20px 0 0; font-size: 14px;">按
+                                                            Ctrl + Enter 发送</span>
+                                                    </el-col> -->
+                                                    <el-col :span="3" style="float: right; margin-right: 20px;">
+                                                        <el-button type="primary" @click="sendChatContent()">
+                                                            发送</el-button>
+                                                    </el-col>
+                                                </el-row>
+                                            </div>
+                                        </div>
+                                    </el-card>
+                                </div>
 
                                 <!-- 消息设置 -->
                                 <div v-show="visible.isMessageSettingVisible">
@@ -543,8 +711,11 @@
 </body>
 <script src="https://cdn.bootcss.com/vue/2.6.11/vue.min.js"></script>
 <script src="https://cdn.bootcss.com/axios/0.19.2/axios.min.js"></script>
-<script src="https://cdn.bootcss.com/element-ui/2.13.2/index.js"></script>
+<!-- <script src="https://cdn.bootcss.com/element-ui/2.13.2/index.js"></script> -->
+<script src="../js/index.js"></script>
 <script src="../js/common.js"></script>
+<script src="https://cdn.bootcss.com/jquery/3.2.1/jquery.min.js"></script>
+<script src="../js/date-format.js"></script>
 
 <script>
     new Vue({
@@ -552,12 +723,12 @@
         data: {
             user: {},
             visible: {
-                isSystemMessageVisible: true,
+                isSystemMessageVisible: false,
                 isMessageSettingVisible: false,
                 isCourseMessageVisible: false,
                 isReplyMessageVisible: false,
                 isVoteUpMessageVisible: false,
-                isChatMessageVisible: false
+                isChatMessageVisible: true
             },
             systemMessageList: [],
             courseRemindList: [],
@@ -580,7 +751,39 @@
                 courseRemindId: -1,
                 replyRemindId: -1,
                 voteUpRemindId: -1
-            }
+            },
+            active: {
+                isLatelyActive: true,
+                isClassActive: false
+            },
+            userList: [],
+            classProps: {
+                children: 'userList',
+                label: 'username'
+            },
+            chatProps: {
+                children: 'chatUserList',
+                label: 'name'
+            },
+            search: "",
+            chat: {
+                toUser: {
+                    courseName: "",
+                    username: "",
+                },
+                fromUser: {
+                    username: "",
+                    avatar: ""
+                },
+                messageList: []
+            },
+            websocket: null,
+            latelyUserList: [
+                {
+                    name: "最近聊天用户列表",
+                    chatUserList: []
+                }
+            ], // 最近聊天用户列表
         },
         methods: {
             verify() {
@@ -590,6 +793,9 @@
                         this.getUserMessageSetting();
                         this.getMessageData();
                         this.getRemindData();
+                        this.getUserList();
+                        this.initWebSocket();
+                        this.getLatelyUserList();
                     } else {
                         location.href = "../index.html"
                     }
@@ -646,6 +852,14 @@
                     this.visible[k] = k === key;
                 }
             },
+            change(key) {
+                for (let k in this.active) {
+                    this.active[k] = k === key;
+                }
+                if (key === 'isLatelyActive') {
+                    this.getLatelyUserList();
+                }
+            },
             getUnreadMessageCount() {
                 yxt.http.get("message/unreadCount/userId/" + this.user.id).then(({ data }) => {
                     if (data.success) {
@@ -665,6 +879,118 @@
                     this.$message.error("服务器繁忙，请稍候再试！")
                 });
             },
+            findClassChatMessageList(data) {
+                if (!data.userList && data.id != this.user.id) {
+                    this.chat.toUser = {
+                        userId: data.id,
+                        courseName: data.courseName,
+                        username: data.username,
+                        avatar: data.avatar
+                    };
+                    this.getMessageList();
+                }
+            },
+            findLatelyChatMessageList(data) {
+                if (!data.chatUserList && data.id != this.user.id) {
+                    this.chat.toUser = {
+                        userId: data.id,
+                        username: data.name,
+                        avatar: data.avatar
+                    };
+                    this.getMessageList();
+                }
+            },
+            getUserList() {
+                yxt.http.get("users/courseUser/userId/" + this.user.id + "?search=" + this.search).then(({ data }) => {
+                    if (data.success) {
+                        this.userList = data.queryResult.data;
+                    }
+                })
+            },
+            getMessageList() {
+                yxt.http.get("message/chat/self/fromId/" + this.user.id + "/toId/" + this.chat.toUser.userId).then(({ data }) => {
+                    if (data.success) {
+                        this.chat.messageList = data.queryResult.data;
+                    }
+                })
+            },
+            getClassAvatar(avatar) {
+                if (!avatar) {
+                    return "http://www.pava.run/group1/M00/00/02/rBAABV_E4CeAV5qDAAAg8abH-rE007.jpg";
+                }
+                return avatar;
+            },
+            sendChatContent() {
+                let contentText = document.getElementById("chat-textarea").value;
+                if (contentText === '') {
+                    this.$message.error("请输入要发送的内容！")
+                    return;
+                }
+                let chatMessage = {
+                    from: {
+                        id: this.user.id,
+                        name: this.user.username,
+                        avatar: this.user.avatar
+                    },
+                    message: contentText,
+                    to: {
+                        id: this.chat.toUser.userId,
+                        name: this.chat.toUser.name,
+                        avatar: this.chat.toUser.avatar
+                    },
+                    time: new Date().Format("yyyy-MM-dd hh:mm:ss")
+                }
+                yxt.http.post("message/chat/toId/" + this.chat.toUser.userId, chatMessage).then(({ data }) => {
+                    if (data.success) {
+                        document.getElementById("chat-textarea").value = '';
+                        this.getMessageList();
+                    }
+                })
+            },
+            /* keyDown(e) {
+                if (e.ctrlKey && e.keyCode == 13) {   // 用户点击了 ctrl + enter 触发
+                    this.sendChatContent();
+                } else { // 用户点击了 enter 触发
+                    this.textarea += '\n';
+                }
+            } */
+            initWebSocket() {
+                this.websocket = new WebSocket('ws://127.0.0.1:8888/chat/' + this.user.id)
+                // 接收到消息时回调
+                this.websocket.onmessage = ({ data }) => {
+                    let toUser = JSON.parse(data);
+                    this.chat.toUser = {
+                        userId: toUser.id,
+                        username: toUser.name,
+                        avatar: toUser.avatar
+                    };
+                    this.getMessageList();
+                }
+            },
+            getLatelyUserList() {
+                yxt.http.get("message/chat/lately/userId/" + this.user.id).then(({ data }) => {
+                    if (data.success) {
+                        this.latelyUserList = [
+                            {
+                                name: "最近聊天用户列表",
+                                chatUserList: data.queryResult.data
+                            }
+                        ]
+                        this.chat.toUser = {
+                            userId: this.latelyUserList.chatUserList[0].id,
+                            username: this.latelyUserList.chatUserList[0].name,
+                            avatar: this.latelyUserList.chatUserList[0].avatar
+                        };
+                        this.getMessageList();
+                    }
+                })
+            },
+            getChatToUserCourseName(courseName) {
+                if (courseName != undefined) {
+                    return "( " + courseName + " )"
+                }
+                return ""
+            }
         },
         created() {
             this.verify();
@@ -676,10 +1002,9 @@
                     this.updateUserMessageSetting();
                 },
             },
-            showDel: {
-                deep: true,
-                handler(oldVal, newVal) {
-                    console.log(oldVal, newVal)
+            search: {
+                handler() {
+                    this.getUserList();
                 }
             }
         },

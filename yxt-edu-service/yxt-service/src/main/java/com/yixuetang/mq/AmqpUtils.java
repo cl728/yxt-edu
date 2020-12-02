@@ -2,6 +2,7 @@ package com.yixuetang.mq;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.yixuetang.entity.message.ChatMessage;
 import com.yixuetang.entity.message.EventRemind;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -66,6 +67,30 @@ public class AmqpUtils {
         try {
             String eventRemindJson = mapper.writeValueAsString( eventRemind );
             this.amqpTemplate.convertAndSend( "YXT.REMIND.EXCHANGE", "YXT.REMIND.REPLY", eventRemindJson );
+        } catch (JsonProcessingException e) {
+            LOGGER.error( "使用 Jackson 解析实体类发生异常！异常原因：{}", e );
+        }
+    }
+
+    public void sendChatRemind(ChatMessage chatMessage) {
+        EventRemind eventRemind = EventRemind.builder().id( null )
+                .remindType( 3 ) // 与私信相关，remindType 为 3
+                .senderId( chatMessage.getFrom().getId() ) // 发送者
+                .courseId( null ) // 与之关联的课程，这里为 null
+                .receiverId( chatMessage.getTo().getId() ) // 接收者
+                .sourceId( null ) // 事件源id，这里为 null
+                .message( chatMessage.getMessage() )    // 发送的私信内容
+                .targetId( null ) // 目标id，这里为 null
+                .action( "发送" )   // 动作类型，这里是发送
+                .sourceName( "私信" )   // 事件源名称，这里是私信
+                .url( "http://www.yixuetang.com/message.html" ) // 事件所发生的地点链接
+                .status( Boolean.FALSE )  // 是否已读，默认为 false
+                .remindTime( new Date() )  // 提醒时间
+                .build();
+        ObjectMapper mapper = new ObjectMapper();
+        try {
+            String eventRemindJson = mapper.writeValueAsString( eventRemind );
+            this.amqpTemplate.convertAndSend( "YXT.REMIND.EXCHANGE", "YXT.REMIND.CHAT", eventRemindJson );
         } catch (JsonProcessingException e) {
             LOGGER.error( "使用 Jackson 解析实体类发生异常！异常原因：{}", e );
         }

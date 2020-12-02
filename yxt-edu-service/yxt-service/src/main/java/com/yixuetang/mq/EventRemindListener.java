@@ -7,7 +7,7 @@ import com.yixuetang.course.mapper.ScMapper;
 import com.yixuetang.entity.course.StudentCourse;
 import com.yixuetang.entity.message.EventRemind;
 import com.yixuetang.message.mapper.RemindMapper;
-import com.yixuetang.ws.service.WebSocketService;
+import com.yixuetang.message.ws.remind.WebSocketRemindEndpoint;
 import org.apache.commons.lang3.ObjectUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -39,7 +39,7 @@ public class EventRemindListener {
     private ScMapper scMapper;
 
     @Autowired
-    private WebSocketService webSocketService;
+    private WebSocketRemindEndpoint webSocketEndpoint;
 
     @RabbitListener(bindings = @QueueBinding(
             value = @Queue(value = "YXT.REMIND.QUEUE", durable = "true"),
@@ -74,13 +74,12 @@ public class EventRemindListener {
                     .forEach( studentId -> {
                         eventRemind.setReceiverId( studentId );
                         this.remindMapper.insert( eventRemind );
-                        this.webSocketService.sendUnreadCountToUser( studentId );  // 给前台发送实时消息提醒
+                        this.webSocketEndpoint.sendUnreadCountToUser( studentId );  // 给前台发送实时消息提醒
                     } );
         } else {
             this.remindMapper.insert( eventRemind ); // 否则为传送过来的接收者id
-            this.webSocketService.sendUnreadCountToUser( eventRemind.getReceiverId() );  // 给前台发送实时消息提醒
+            this.webSocketEndpoint.sendUnreadCountToUser( eventRemind.getReceiverId() );  // 给前台发送实时消息提醒
         }
-
 
     }
 
