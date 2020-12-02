@@ -266,15 +266,17 @@ public class MessageServiceImpl implements MessageService {
                 .orderByDesc("remind_time"))
                 .forEach(eventRemind -> {
                     EventRemindResp eventRemindResp = EventRemindResp.builder()
-                            .id(eventRemind.getId())
-                            .remindType(eventRemind.getRemindType())
-                            .sender(this.userMapper.selectById(eventRemind.getSenderId()))
-                            .action(eventRemind.getAction())
-                            .sourceName(eventRemind.getSourceName())
-                            .sourceContent(this.getSourceContent(eventRemind.getRemindType(), eventRemind.getSourceId(), eventRemind.getSourceName()))
-                            .targetContent(this.getTargetContent(eventRemind.getRemindType(), eventRemind.getTargetId(), eventRemind.getSourceName()))
-                            .url(eventRemind.getUrl())
-                            .remindTime(eventRemind.getRemindTime())
+                            .id( eventRemind.getId() )
+                            .remindType( eventRemind.getRemindType() )
+                            .sender( this.userMapper.selectById( eventRemind.getSenderId() ) )
+                            .action( eventRemind.getAction() )
+                            .sourceName( eventRemind.getSourceName() )
+                            .sourceContent( eventRemind.getRemindType() == 3
+                                    ? eventRemind.getMessage()
+                                    : this.getSourceContent( eventRemind.getRemindType(), eventRemind.getSourceId(), eventRemind.getSourceName() ) )
+                            .targetContent( this.getTargetContent( eventRemind.getRemindType(), eventRemind.getTargetId(), eventRemind.getSourceName() ) )
+                            .url( eventRemind.getUrl() )
+                            .remindTime( eventRemind.getRemindTime() )
                             .build();
                     eventRemindRespList.add(eventRemindResp);
                     // 将事件提醒设置为已读状态
@@ -410,7 +412,7 @@ public class MessageServiceImpl implements MessageService {
             case 2: // 点赞相关提醒，查询被点赞的评论内容
                 targetContent = commentTargetContent;
                 break;
-            default: // 课程相关提醒，不用查询 targetContent
+            default: // 课程和私信相关提醒，不用查询 targetContent
                 break;
         }
         return targetContent;

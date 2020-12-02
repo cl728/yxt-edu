@@ -496,7 +496,9 @@
 			getUserVoteUpData() {
 				yxt.http.get("comment/commentUser/userId/" + this.user.id).then(({ data }) => {
 					if (data.success) {
-						this.userVoteUp = data;
+						let tempVoteUpUsers = data.queryResult.data;
+						tempVoteUpUsers.forEach(tempVoteUpUser =>
+							this.userVoteUp[tempVoteUpUser.commentId] = tempVoteUpUser.status)
 					}
 				})
 			}

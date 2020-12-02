@@ -613,8 +613,8 @@ public class UserServiceImpl implements UserService {
                 users.add( teacher );  // 将该名教师添加到成员列表中
                 users.addAll( students );   // 将学生列表添加到成员列表中
 
-                // 用特殊字符 # 将用户名和头像隔开
-                users.forEach( member -> member.setUsername( member.getUsername() + "#" + member.getAvatar() ) );
+                // 设置用户所在课程名称
+                users.forEach( member -> member.setCourseName( course.getCName() ) );
 
                 courseUserRespList.add( // 将构建好的每一门课程及其成员列表添加到 courseUserRespList 中
                         CourseUserResp.builder()
