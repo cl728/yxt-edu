@@ -45,4 +45,12 @@ public interface CommentService {
      * @return  响应结果实体类
      */
     CommonResponse likeComment(long commentId, long userId);
+
+    /**
+     *  查询某一用户对评论的点赞状态
+     *
+     * @param userId    用户id
+     * @return  响应结果实体类
+     */
+    QueryResponse findLike(long userId);
 }

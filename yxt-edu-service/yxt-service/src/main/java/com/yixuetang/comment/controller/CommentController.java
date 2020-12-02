@@ -45,4 +45,10 @@ public class CommentController implements CommentControllerApi {
         return commentService.likeComment(commentId, userId);
     }
 
+    @Override
+    @GetMapping("commentUser/userId/{userId}")
+    public QueryResponse findLike(@PathVariable long userId) {
+        return commentService.findLike(userId);
+    }
+
 }

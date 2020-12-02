@@ -46,4 +46,9 @@ public interface CommentControllerApi {
                     paramType = "path", dataType = "long"),
     })
     CommonResponse likeComment(long commentId, long userId);
+
+    @ApiOperation("查询某⼀⽤⼾对评论的点赞状态")
+    @ApiImplicitParam(name = "userId", value = "用户id", required = true,
+                    paramType = "path", dataType = "long")
+    QueryResponse findLike(long userId);
 }

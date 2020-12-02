@@ -168,6 +168,14 @@ public class CommentServiceImpl implements CommentService {
         return new CommonResponse(CommonCode.SUCCESS);
     }
 
+    @Override
+    public QueryResponse findLike(long userId) {
+        // 1. 根据用户id查询点赞记录
+        List<CommentUser> userLike = commentUserMapper.selectList(new QueryWrapper<CommentUser>()
+                .eq("user_id", userId));
+        return new QueryResponse( CommonCode.SUCCESS, new QueryResult<>( userLike, userLike.size() ) );
+    }
+
     private List<Comment> eachComment(List<Comment> comments) {
         List<Comment> commentsView = new ArrayList<>();
         for (Comment comment : comments) {
