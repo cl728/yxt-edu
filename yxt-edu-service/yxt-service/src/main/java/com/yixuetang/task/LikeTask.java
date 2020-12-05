@@ -12,7 +12,7 @@ import org.springframework.stereotype.Component;
 /**
  * @author Colin
  * @version 1.0.0
- * @description 点赞的定时任务
+ * @description 将 Redis 里的点赞信息同步到数据库里的定时任务
  * @date 2020/12/5 21:12
  */
 @Component

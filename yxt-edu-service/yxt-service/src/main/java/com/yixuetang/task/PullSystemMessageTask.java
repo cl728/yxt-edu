@@ -1,6 +1,7 @@
-package com.yixuetang.message.schedules;
+package com.yixuetang.task;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.yixuetang.comment.service.CommentService;
 import com.yixuetang.entity.message.Message;
 import com.yixuetang.entity.message.UserMessage;
 import com.yixuetang.entity.response.code.CommonCode;
@@ -9,10 +10,13 @@ import com.yixuetang.message.mapper.MessageMapper;
 import com.yixuetang.message.mapper.UserMessageMapper;
 import com.yixuetang.user.mapper.UserMapper;
 import com.yixuetang.utils.exception.ExceptionThrowUtils;
+import org.quartz.JobExecutionContext;
+import org.quartz.JobExecutionException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.scheduling.annotation.Scheduled;
+import org.springframework.scheduling.quartz.QuartzJobBean;
 import org.springframework.stereotype.Component;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 
 import java.util.Date;
@@ -23,10 +27,10 @@ import java.util.stream.Collectors;
  * @author Colin
  * @version 1.0.0
  * @description 拉取系统通知，存储到 t_user_message 定时任务
- * @date 2020/11/25 10:14
+ * @date 2020/12/5 21:12
  */
 @Component
-public class PullSystemMessageScheduleTask {
+public class PullSystemMessageTask extends QuartzJobBean {
 
     @Autowired
     private MessageMapper messageMapper;
@@ -37,9 +41,12 @@ public class PullSystemMessageScheduleTask {
     @Autowired
     private UserMessageMapper userMessageMapper;
 
-    @Scheduled(cron = "0 */5 * * * ?")
-    @Transactional
-    public void task() {
+    private static final Logger LOGGER = LoggerFactory.getLogger( PullSystemMessageTask.class );
+
+    @Override
+    protected void executeInternal(JobExecutionContext jobExecutionContext) throws JobExecutionException {
+        LOGGER.info( "--------PullSystemMessageTask--------" );
+
         List<Message> messageList = this.messageMapper.selectList( new QueryWrapper<Message>().eq( "status", Boolean.FALSE ) );
         if (CollectionUtils.isEmpty( messageList )) { // 系统通知表里没有待拉取的系统通知
             return;
@@ -70,5 +77,4 @@ public class PullSystemMessageScheduleTask {
             this.messageMapper.updateById( message );
         } );
     }
-
 }
