@@ -38,19 +38,24 @@ public interface CommentService {
     CommonResponse deleteComment(long commentId);
 
     /**
-     *  用户对评论点赞/取消点赞
+     * 用户对评论点赞/取消点赞
      *
      * @param commentId 评论id
      * @param userId    用户id
-     * @return  响应结果实体类
+     * @return 响应结果实体类
      */
     CommonResponse likeComment(long commentId, long userId);
 
     /**
-     *  查询某一用户对评论的点赞状态
+     * 查询某一用户对评论的点赞状态
      *
-     * @param userId    用户id
-     * @return  响应结果实体类
+     * @param userId 用户id
+     * @return 响应结果实体类
      */
     QueryResponse findLike(long userId);
+
+    /**
+     * 将 Redis 里的点赞数据存入数据库中
+     */
+    void transLikedFromRedis2DB();
 }

@@ -230,36 +230,35 @@ public class CommentServiceImpl implements CommentService {
     @Override
     @SuppressWarnings("unchecked")
     public QueryResponse findLike(long userId) {
-       /* // 1. 根据用户id查询点赞记录
-        List<CommentUser> userLike = commentUserMapper.selectList( new QueryWrapper<CommentUser>()
-                .eq( "user_id", userId ) );*/
-
-        Cursor<Map.Entry<Object, Object>> cursor =
-                this.redisTemplate.opsForHash().scan( MAP_KEY_USER_LIKED,
-                        ScanOptions.scanOptions()
-                                .count( 50L )
-                                .match( userId + CommonConstant.REDIS_MATCH_PREFIX ) // 将该用户的点赞记录取出
-                                .build() );
-        List<CommentUser> commentUsers = new ArrayList<>();
-        while (cursor.hasNext()) {
-            Map.Entry<Object, Object> entry = cursor.next();
-            String key = (String) entry.getKey();
-            // 分离出 likedUserId，likedCommentId
-            String[] split = key.split( "::" );
-            String likedUserId = split[0];
-            String likedCommentId = split[1];
-            Integer value = (Integer) entry.getValue();
-
-            // 组装成 CommentUser 对象
-            CommentUser commentUser = CommentUser.builder()
-                    .userId( Long.parseLong( likedUserId ) )
-                    .commentId( Long.parseLong( likedCommentId ) )
-                    .status( Objects.equals( LikedStatusEnum.LIKE.getCode(), value ) )
-                    .build();
-            commentUsers.add( commentUser );
-        }
+        List<CommentUser> commentUsers = this.getLikedDataFromRedis(
+                ScanOptions.scanOptions().count( 50L )
+                        .match( userId + CommonConstant.REDIS_MATCH_PREFIX ) // 将该用户的点赞记录取出
+                        .build() );
 
         return new QueryResponse( CommonCode.SUCCESS, new QueryResult<>( commentUsers, commentUsers.size() ) );
+    }
+
+    @Override
+    @Transactional
+    public void transLikedFromRedis2DB() {
+        List<CommentUser> commentUserList = this.getLikedDataFromRedis(
+                ScanOptions.scanOptions().count( 50L ).build() );
+
+        commentUserList.forEach( commentUser -> {
+
+            CommentUser foundCommentUser = this.commentUserMapper.selectOne(
+                    new QueryWrapper<>( CommentUser.builder()
+                            .userId( commentUser.getUserId() )
+                            .commentId( commentUser.getCommentId() ).build() ) );
+
+            if (ObjectUtils.isEmpty( foundCommentUser )) { // 没有记录，直接存入
+                this.commentUserMapper.insert( commentUser );
+            } else { // 有记录，需要更新
+                foundCommentUser.setStatus( commentUser.getStatus() );
+                this.commentUserMapper.updateById( foundCommentUser );
+            }
+
+        } );
     }
 
     private List<Comment> eachComment(List<Comment> comments) {
@@ -320,5 +319,32 @@ public class CommentServiceImpl implements CommentService {
     private void setCommentVoteUpCount(Comment comment) {
         comment.setVoteUpCount( (Integer) this.redisTemplate.opsForHash()
                 .get( MAP_KEY_USER_LIKED_COUNT, String.valueOf( comment.getId() ) ) );
+    }
+
+    @SuppressWarnings("unchecked")
+    private List<CommentUser> getLikedDataFromRedis(ScanOptions scanOptions) {
+        List<CommentUser> commentUserList = new ArrayList<>();
+        Cursor<Map.Entry<Object, Object>> cursor =
+                this.redisTemplate.opsForHash().scan( MAP_KEY_USER_LIKED, scanOptions );
+        while (cursor.hasNext()) {
+            Map.Entry<Object, Object> entry = cursor.next();
+            String key = (String) entry.getKey();
+            // 分离出 likedUserId，likedCommentId
+            String[] split = key.split( "::" );
+            String likedUserId = split[0];
+            String likedCommentId = split[1];
+            Integer value = (Integer) entry.getValue();
+
+            // 组装成 CommentUser 对象
+            CommentUser commentUser = CommentUser.builder()
+                    .id( null )
+                    .userId( Long.parseLong( likedUserId ) )
+                    .commentId( Long.parseLong( likedCommentId ) )
+                    .status( Objects.equals( LikedStatusEnum.LIKE.getCode(), value ) )
+                    .build();
+            commentUserList.add( commentUser );
+
+        }
+        return commentUserList;
     }
 }
