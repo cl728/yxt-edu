@@ -6,6 +6,8 @@ import com.yixuetang.comment.mapper.CommentUserMapper;
 import com.yixuetang.comment.service.CommentService;
 import com.yixuetang.entity.comment.Comment;
 import com.yixuetang.entity.comment.CommentUser;
+import com.yixuetang.entity.comment.LikedStatusEnum;
+import com.yixuetang.entity.message.CommonConstant;
 import com.yixuetang.entity.notice.Notice;
 import com.yixuetang.entity.request.comment.PostComment;
 import com.yixuetang.entity.response.CommonResponse;
@@ -22,14 +24,16 @@ import com.yixuetang.user.mapper.UserMapper;
 import com.yixuetang.utils.exception.ExceptionThrowUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.Cursor;
+import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.core.ScanOptions;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.ObjectUtils;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import javax.annotation.Resource;
+import java.util.*;
 
 /**
  * @author Colin
@@ -58,6 +62,15 @@ public class CommentServiceImpl implements CommentService {
     // 存放迭代找出的所有子代的集合
     private List<Comment> tempChildComments = new ArrayList<>();
 
+    // 保存用户点赞数据的key
+    private static final String MAP_KEY_USER_LIKED = "MAP_USER_LIKED";
+
+    // 保存用户被点赞数量的key
+    private static final String MAP_KEY_USER_LIKED_COUNT = "MAP_USER_LIKED_COUNT";
+
+    @Resource(name = "template")
+    private RedisTemplate redisTemplate;
+
     @Override
     public QueryResponse findTopCommentsByNoticeId(long noticeId) {
         if (this.noticeMapper.selectOne( new QueryWrapper<Notice>().eq( "id", noticeId ).select( "id" ) ) == null) {
@@ -66,6 +79,10 @@ public class CommentServiceImpl implements CommentService {
         List<Comment> topComments = this.commentMapper.findTopCommentsByNoticeId( noticeId );
         // 循环每个顶级评论，找出其子孙评论，并设置到其子级评论列表中
         List<Comment> comments = this.eachComment( topComments );
+
+        // 找出每个评论的点赞数量
+        this.setCommentsVoteUpCount( comments );
+
         return new QueryResponse( CommonCode.SUCCESS, new QueryResult<>( comments, comments.size() ) );
     }
 
@@ -154,8 +171,9 @@ public class CommentServiceImpl implements CommentService {
     }
 
     @Override
+    @SuppressWarnings("unchecked")
     public CommonResponse likeComment(long commentId, long userId) {
-        // 1. 根据评论id和用户id查询出询 t_comment_user 表的记录
+        /*// 1. 根据评论id和用户id查询出询 t_comment_user 表的记录
         CommentUser commentUser = commentUserMapper.selectOne( new QueryWrapper<CommentUser>().eq( "comment_id", commentId )
                 .eq( "user_id", userId ) );
         //  判断记录是否存在
@@ -175,16 +193,73 @@ public class CommentServiceImpl implements CommentService {
             // 如果存在，切换点赞状态
             commentUser.setStatus( !commentUser.getStatus() );
             commentUserMapper.updateById( commentUser );
+        }*/
+
+        // filedKey 格式为：点赞用户id::被点赞评论id, filedValue 为 0（未点赞） 或 1（点赞）
+        String filedKey = userId + "::" + commentId;
+        Object filedValue = this.redisTemplate.opsForHash().get( MAP_KEY_USER_LIKED, filedKey );
+
+        if (ObjectUtils.isEmpty( filedValue )) { // 没有相关记录，用户第一次给此评论点赞
+
+            // 保存点赞记录到 redis 中
+            redisTemplate.opsForHash().put( MAP_KEY_USER_LIKED, filedKey, LikedStatusEnum.LIKE.getCode() );
+
+            // 将该被点赞评论的点赞数量 + 1
+            redisTemplate.opsForHash().increment( MAP_KEY_USER_LIKED_COUNT, String.valueOf( commentId ), 1 );
+
+            // 发送事件提醒，告知被点赞者有用户点赞了他的评论
+            this.amqpUtils.sendVoteUpRemind( userId, commentId,
+                    this.commentMapper.findById( commentId ).getUser().getId() );
+
+        } else {    // 有此记录，切换点赞状态
+
+            // 判断该名用户对此评论是否为点赞状态，true 是，false 不是
+            boolean isLiked = Objects.equals( filedValue, LikedStatusEnum.LIKE.getCode() );
+
+            // 更新该记录的点赞状态
+            redisTemplate.opsForHash().put( MAP_KEY_USER_LIKED, filedKey,
+                    isLiked ? LikedStatusEnum.UNLIKE.getCode() : LikedStatusEnum.LIKE.getCode() );
+
+            // 更新被点赞评论的点赞数量
+            redisTemplate.opsForHash().increment( MAP_KEY_USER_LIKED_COUNT, String.valueOf( commentId ), isLiked ? -1 : 1 );
+
         }
         return new CommonResponse( CommonCode.SUCCESS );
     }
 
     @Override
+    @SuppressWarnings("unchecked")
     public QueryResponse findLike(long userId) {
-        // 1. 根据用户id查询点赞记录
+       /* // 1. 根据用户id查询点赞记录
         List<CommentUser> userLike = commentUserMapper.selectList( new QueryWrapper<CommentUser>()
-                .eq( "user_id", userId ) );
-        return new QueryResponse( CommonCode.SUCCESS, new QueryResult<>( userLike, userLike.size() ) );
+                .eq( "user_id", userId ) );*/
+
+        Cursor<Map.Entry<Object, Object>> cursor =
+                this.redisTemplate.opsForHash().scan( MAP_KEY_USER_LIKED,
+                        ScanOptions.scanOptions()
+                                .count( 50L )
+                                .match( userId + CommonConstant.REDIS_MATCH_PREFIX ) // 将该用户的点赞记录取出
+                                .build() );
+        List<CommentUser> commentUsers = new ArrayList<>();
+        while (cursor.hasNext()) {
+            Map.Entry<Object, Object> entry = cursor.next();
+            String key = (String) entry.getKey();
+            // 分离出 likedUserId，likedCommentId
+            String[] split = key.split( "::" );
+            String likedUserId = split[0];
+            String likedCommentId = split[1];
+            Integer value = (Integer) entry.getValue();
+
+            // 组装成 CommentUser 对象
+            CommentUser commentUser = CommentUser.builder()
+                    .userId( Long.parseLong( likedUserId ) )
+                    .commentId( Long.parseLong( likedCommentId ) )
+                    .status( Objects.equals( LikedStatusEnum.LIKE.getCode(), value ) )
+                    .build();
+            commentUsers.add( commentUser );
+        }
+
+        return new QueryResponse( CommonCode.SUCCESS, new QueryResult<>( commentUsers, commentUsers.size() ) );
     }
 
     private List<Comment> eachComment(List<Comment> comments) {
@@ -227,5 +302,23 @@ public class CommentServiceImpl implements CommentService {
                 }
             } );
         }
+    }
+
+    private void setCommentsVoteUpCount(List<Comment> comments) {
+        if (!CollectionUtils.isEmpty( comments )) {
+            comments.forEach( comment -> {
+                this.setCommentVoteUpCount( comment );
+                List<Comment> childComments = comment.getChildComments();
+                if (!CollectionUtils.isEmpty( childComments )) {
+                    childComments.forEach( this::setCommentVoteUpCount );
+                }
+            } );
+        }
+    }
+
+    @SuppressWarnings("unchecked")
+    private void setCommentVoteUpCount(Comment comment) {
+        comment.setVoteUpCount( (Integer) this.redisTemplate.opsForHash()
+                .get( MAP_KEY_USER_LIKED_COUNT, String.valueOf( comment.getId() ) ) );
     }
 }

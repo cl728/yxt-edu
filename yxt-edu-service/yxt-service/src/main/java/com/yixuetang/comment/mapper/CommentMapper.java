@@ -29,8 +29,6 @@ public interface CommentMapper extends BaseMapper<Comment> {
                     one = @One(select = "com.yixuetang.notice.mapper.NoticeMapper.findById", fetchType = FetchType.EAGER)),
             @Result(column = "parent_comment_id", property = "parentComment",
                     one = @One(select = "com.yixuetang.comment.mapper.CommentMapper.findParentCommentById", fetchType = FetchType.EAGER)),
-            @Result(column = "id", property = "voteUpCount",
-                    one = @One(select = "com.yixuetang.comment.mapper.CommentMapper.findVoteUpCountById", fetchType = FetchType.EAGER)),
             @Result(column = "id", property = "childComments",
                     many = @Many(select = "com.yixuetang.comment.mapper.CommentMapper.findChildCommentsById", fetchType = FetchType.LAZY))
     })
@@ -59,8 +57,8 @@ public interface CommentMapper extends BaseMapper<Comment> {
     @Select("select * from t_comment where id = #{id}")
     Comment findById(@Param("id") long id);
 
-    @Select("select count(*) from t_comment_user where comment_id = #{commentId} and status = true")
-    Integer findVoteUpCountById(long commentId);
+   /* @Select("select count(*) from t_comment_user where comment_id = #{commentId} and status = true")
+    Integer findVoteUpCountById(long commentId);*/
 
     @Update("update t_comment set parent_comment_id = #{parentCommentId} where id = #{commentId}")
     void updateParentIdById(@Param("parentCommentId") long parentCommentId, @Param("commentId") Long commentId);
