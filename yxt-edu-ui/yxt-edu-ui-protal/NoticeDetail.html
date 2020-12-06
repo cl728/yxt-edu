@@ -175,16 +175,18 @@
 							<div class="content" v-text="comment.content">hello world</div>
 							<div class="control">
 								<span class="reply-text" @click="switchVoteUp(comment.id)">
-									<span v-if="comment.voteUpCount === 0">
-										<i class="fa fa-thumbs-o-up" style="margin-left: 6px; margin-right: 8px;"></i>
+									<span
+										v-show="!commentVoteUpCount[comment.id] || commentVoteUpCount[comment.id] === 0">
+										<i class="fa fa-thumbs-o-up" style="margin-left: 6px; margin-right: 4px;"></i>
 										<span>点赞</span>
 									</span>
-									<span v-if="comment.voteUpCount != 0">
+									<span
+										v-show="commentVoteUpCount[comment.id] != null && commentVoteUpCount[comment.id] != 0">
 										<i v-show="userVoteUp[comment.id]" class="fa fa-thumbs-up"
 											style="margin-left: 6px; margin-right: 2px;"></i>
 										<i v-show="!userVoteUp[comment.id]" class="fa fa-thumbs-o-up"
 											style="margin-left: 6px; margin-right: 2px;"></i>
-										<span v-text="comment.voteUpCount">24</span>
+										<span v-text="commentVoteUpCount[comment.id]">24</span>
 									</span>
 								</span>
 								<span class="comment-reply" style="margin-left: 6px;"
@@ -206,17 +208,19 @@
 									<div class="reply-bottom">
 										<span v-text="reply.createTime">2020-11-26 12:39:22</span>
 										<span class="reply-text" @click="switchVoteUp(reply.id)">
-											<span v-if="reply.voteUpCount === 0">
+											<span
+												v-if="!commentVoteUpCount[reply.id] || commentVoteUpCount[reply.id] === 0">
 												<i class="fa fa-thumbs-o-up"
 													style="margin-left: 6px; margin-right: 3px;"></i>
 												<span>点赞</span>
 											</span>
-											<span v-if="reply.voteUpCount != 0">
+											<span
+												v-if="commentVoteUpCount[reply.id] != null && commentVoteUpCount[reply.id] != 0">
 												<i v-show="userVoteUp[reply.id]" class="fa fa-thumbs-up"
 													style="margin-left: 6px; margin-right: 2px;"></i>
 												<i v-show="!userVoteUp[reply.id]" class="fa fa-thumbs-o-up"
 													style="margin-left: 6px; margin-right: 2px;"></i>
-												<span v-text="reply.voteUpCount">24</span>
+												<span v-text="commentVoteUpCount[reply.id]">24</span>
 											</span>
 										</span>
 										<span class="reply-text" @click="replyComment(reply.user.username, reply.id)">
@@ -395,7 +399,8 @@
 			pubComment: {
 				parentCommentId: -1
 			},
-			userVoteUp: {}
+			userVoteUp: {},
+			commentVoteUpCount: {}
 		},
 		methods: {
 			isReadUsersList() {
@@ -438,7 +443,9 @@
 			},
 			getCommentData() {
 				yxt.http.get("/comment/topComments/noticeId/" + yxt.getUrlParam("id")).then(({ data }) => {
-					this.comments = data.queryResult.data;
+					if (data.success) {
+						this.comments = data.queryResult.data;
+					}
 				})
 			},
 			replyComment(username, id) {
@@ -485,6 +492,7 @@
 					if (data.success) {
 						this.$message.success(data.message);
 						this.getCommentData();
+						this.getCommentVoteUpCount();
 						this.getUserVoteUpData();
 					} else {
 						this.$message.error(data.message);
@@ -501,11 +509,21 @@
 							this.userVoteUp[tempVoteUpUser.commentId] = tempVoteUpUser.status)
 					}
 				})
+			},
+			getCommentVoteUpCount() {
+				yxt.http.get("comment/commentVoteUpCount").then(({ data }) => {
+					if (data.success) {
+						let tempVoteUpCountComments = data.queryResult.data;
+						tempVoteUpCountComments.forEach(tempVoteUpCountComment =>
+							this.commentVoteUpCount[tempVoteUpCountComment.id] = tempVoteUpCountComment.count)
+					}
+				})
 			}
 		},
 		created() {
 			this.verify();
 			this.getCommentData();
+			this.getCommentVoteUpCount();
 		},
 	})
 </script>
