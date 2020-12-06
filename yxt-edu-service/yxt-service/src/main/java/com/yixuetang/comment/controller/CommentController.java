@@ -51,4 +51,10 @@ public class CommentController implements CommentControllerApi {
         return commentService.findLike(userId);
     }
 
+    @Override
+    @GetMapping("commentVoteUpCount")
+    public QueryResponse findCommentVoteUpCount() {
+        return this.commentService.findCommentVoteUpCount();
+    }
+
 }

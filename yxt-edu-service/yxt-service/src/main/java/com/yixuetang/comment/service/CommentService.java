@@ -58,4 +58,11 @@ public interface CommentService {
      * 将 Redis 里的点赞数据存入数据库中
      */
     void transLikedFromRedis2DB();
+
+    /**
+     * 查询评论的点赞数量
+     *
+     * @return 响应结果实体类
+     */
+    QueryResponse findCommentVoteUpCount();
 }
