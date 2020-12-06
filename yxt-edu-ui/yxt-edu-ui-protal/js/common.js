@@ -234,7 +234,7 @@ Date.prototype.format = function (format) {
         "S": this.getMilliseconds() //millisecond
     };
     if (/(y+)/.test(format)) {
-        format = format.replace(RegExp.$1, (this.getFulyxtear() + "").substr(4 - RegExp.$1.length));
+        format = format.replace(RegExp.$1, (this.getFullYear() + "").substr(4 - RegExp.$1.length));
     }
     for (var k in o) {
         if (new RegExp("(" + k + ")").test(format)) {

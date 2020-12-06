@@ -629,30 +629,34 @@
                     </div>
                     <div id="course-exam" v-if="activeIndex2=='3'">
                         <div id="course-exam-box" style="margin-top: 30px">
-                            <div id="exam-buttons" style="float:left;margin-bottom: 10px" v-if="user.isTeacher">
+                            <div id="exam-buttons" v-if="user.isTeacher">
                                 <el-row>
-                                    <el-col :span="24">
-                                        <el-button type="primary">
+                                    <el-col :span="12">
+                                        <el-button type="primary" style="float: left;">
                                             <i class="el-icon-plus"></i>
                                             新建测试（考试）
                                         </el-button>
-                                        <el-button type="primary" plain>
+                                    </el-col>
+                                    <el-col :span="12">
+                                        <!-- <el-button type="primary" plain>
                                             导入测试（考试）
                                         </el-button>
                                         <el-link type="primary" :underline="false" style="padding-left: 30px">先去备课区组卷
-                                        </el-link>
-                                        <el-link :underline="false" style="padding-left: 450px">
-                                            <i class="el-icon-document"></i>
-                                            测试成绩管理
-                                        </el-link>
-                                        <el-link :underline="false" style="padding-left: 30px">
+                                        </el-link> -->
+                                        <div style="float: right;">
+                                            <el-link :underline="false">
+                                                <i class="el-icon-document"></i>
+                                                测试成绩管理
+                                            </el-link>
+                                        </div>
+                                        <!-- <el-link :underline="false" style="padding-left: 30px">
                                             <i class="el-icon-download"></i>
                                             下载所有测试
-                                        </el-link>
+                                        </el-link> -->
                                     </el-col>
                                 </el-row>
                             </div>
-                            <div id="exam-menubar" style="margin-top: 30px">
+                            <div id="exam-menubar" style="margin-top: 10px">
                                 <el-row>
                                     <el-col :span="24">
                                         <el-tabs v-model="activeName">
@@ -664,8 +668,8 @@
                                                             <el-col :span="14">
                                                                 <div class="homework-create-time" style="float: left">
                                                                     <el-tag type="danger">未发布</el-tag>
-                                                                    <span
-                                                                        style="padding-left: 30px;font-size: 15px;color: #5F6368">限时：无</span>
+                                                                    <!-- <span
+                                                                        style="padding-left: 30px;font-size: 15px;color: #5F6368">限时：无</span> -->
                                                                     <span
                                                                         style="padding-left: 30px;font-size: 15px;color: #5F6368">起止时间：2020-11-09
                                                                         22:17 ~ 2020-11-09 23:17</span>
@@ -722,7 +726,7 @@
                                                                 <el-col :span="12">
                                                                     <div class="exam-finished-buttons"
                                                                         style="float: right">
-                                                                        <el-button type="primary" plain>编辑标题及简介
+                                                                        <el-button type="primary" plain>编辑基本信息
                                                                         </el-button>
                                                                         <el-button type="primary" plain>编辑试题内容
                                                                         </el-button>
@@ -750,8 +754,8 @@
                                                             <el-col :span="14">
                                                                 <div class="homework-create-time" style="float: left">
                                                                     <el-tag type="warning">未开始</el-tag>
-                                                                    <span
-                                                                        style="padding-left: 30px;font-size: 15px;color: #5F6368">限时：无</span>
+                                                                    <!-- <span
+                                                                        style="padding-left: 30px;font-size: 15px;color: #5F6368">限时：无</span> -->
                                                                     <span
                                                                         style="padding-left: 30px;font-size: 15px;color: #5F6368">起止时间：2020-11-09
                                                                         22:17 ~ 2020-11-09 23:17</span>
@@ -768,7 +772,7 @@
                                                                 <el-row style="height: 55px">
                                                                     <el-col :span="24">
                                                                         <el-link :underline="false"
-                                                                            style="color: #3B3D45;font-size: 26px;float: left;padding-left: 30px;padding-top: 3px">
+                                                                            style="color: #3B3D45;font-size: 26px;float: left;padding-left: 30px;padding-top: 3px; margin-top: 8px;">
                                                                             <b>未开始_测试（考试）</b>
                                                                         </el-link>
                                                                     </el-col>
@@ -808,7 +812,7 @@
                                                                 <el-col :span="12">
                                                                     <div class="exam-finished-buttons"
                                                                         style="float: right">
-                                                                        <el-button type="primary" plain>编辑标题及简介
+                                                                        <el-button type="primary" plain>编辑基本信息
                                                                         </el-button>
                                                                         <el-button type="primary" plain>编辑试题内容
                                                                         </el-button>
@@ -838,8 +842,8 @@
                                                             <el-col :span="14">
                                                                 <div class="homework-create-time" style="float: left">
                                                                     <el-tag type="success">已发布</el-tag>
-                                                                    <span
-                                                                        style="padding-left: 30px;font-size: 15px;color: #5F6368">限时：无</span>
+                                                                    <!-- <span
+                                                                        style="padding-left: 30px;font-size: 15px;color: #5F6368">限时：无</span> -->
                                                                     <span
                                                                         style="padding-left: 30px;font-size: 15px;color: #5F6368">起止时间：2020-11-09
                                                                         22:17 ~ 2020-11-09 23:17</span>
@@ -851,7 +855,7 @@
                                                                 <el-row style="height: 55px">
                                                                     <el-col :span="24">
                                                                         <el-link :underline="false"
-                                                                            style="color: #3B3D45;font-size: 26px;float: left;padding-left: 30px;padding-top: 3px">
+                                                                            style="color: #3B3D45;font-size: 26px;float: left;padding-left: 30px;padding-top: 3px; margin-top: 8px;">
                                                                             <b>已发布_测试（考试）</b>
                                                                         </el-link>
                                                                     </el-col>
@@ -927,7 +931,7 @@
                                                                 <el-col :span="12">
                                                                     <div class="exam-finished-buttons"
                                                                         style="float: right">
-                                                                        <el-button type="primary" plain>编辑标题及简介
+                                                                        <el-button type="primary" plain>编辑基本信息
                                                                         </el-button>
                                                                         <el-button type="primary" plain>编辑试题内容
                                                                         </el-button>
@@ -957,8 +961,8 @@
                                                             <el-col :span="14">
                                                                 <div class="homework-create-time" style="float: left">
                                                                     <el-tag>已结束</el-tag>
-                                                                    <span
-                                                                        style="padding-left: 30px;font-size: 15px;color: #5F6368">限时：无</span>
+                                                                    <!-- <span
+                                                                        style="padding-left: 30px;font-size: 15px;color: #5F6368">限时：无</span> -->
                                                                     <span
                                                                         style="padding-left: 30px;font-size: 15px;color: #5F6368">起止时间：2020-11-09
                                                                         22:17 ~ 2020-11-09 23:17</span>
@@ -970,7 +974,7 @@
                                                                 <el-row style="height: 55px">
                                                                     <el-col :span="24">
                                                                         <el-link :underline="false"
-                                                                            style="color: #3B3D45;font-size: 26px;float: left;padding-left: 30px;padding-top: 3px">
+                                                                            style="color: #3B3D45;font-size: 26px;float: left;padding-left: 30px;padding-top: 3px; margin-top: 8px;">
                                                                             <b>已结束_测试（考试）</b>
                                                                         </el-link>
                                                                     </el-col>
@@ -1047,7 +1051,7 @@
                                                                     <div class="exam-finished-buttons"
                                                                         style="float: right">
                                                                         <el-button type="primary">重新发布</el-button>
-                                                                        <el-button type="primary" plain>编辑标题及简介
+                                                                        <el-button type="primary" plain>编辑基本信息
                                                                         </el-button>
                                                                         <el-button type="primary" plain>编辑试题内容
                                                                         </el-button>
@@ -1078,8 +1082,8 @@
                                                         <el-col :span="14">
                                                             <div class="homework-create-time" style="float: left">
                                                                 <el-tag type="danger">未发布</el-tag>
-                                                                <span
-                                                                    style="padding-left: 30px;font-size: 15px;color: #5F6368">限时：无</span>
+                                                                <!-- <span
+                                                                    style="padding-left: 30px;font-size: 15px;color: #5F6368">限时：无</span> -->
                                                                 <span
                                                                     style="padding-left: 30px;font-size: 15px;color: #5F6368">起止时间：2020-11-09
                                                                     22:17 ~ 2020-11-09 23:17</span>
@@ -1096,7 +1100,7 @@
                                                             <el-row style="height: 55px">
                                                                 <el-col :span="24">
                                                                     <el-link :underline="false"
-                                                                        style="color: #3B3D45;font-size: 26px;float: left;padding-left: 30px;padding-top: 3px">
+                                                                        style="color: #3B3D45;font-size: 26px;float: left;padding-left: 30px;padding-top: 3px; margin-top: 8px;">
                                                                         <b>未发布_测试（考试）</b>
                                                                     </el-link>
                                                                 </el-col>
@@ -1132,7 +1136,7 @@
                                                             </el-col>
                                                             <el-col :span="12">
                                                                 <div class="exam-finished-buttons" style="float: right">
-                                                                    <el-button type="primary" plain>编辑标题及简介</el-button>
+                                                                    <el-button type="primary" plain>编辑基本信息</el-button>
                                                                     <el-button type="primary" plain>编辑试题内容</el-button>
                                                                     <el-dropdown>
                                                                         <el-button type="primary">
@@ -1158,8 +1162,8 @@
                                                         <el-col :span="14">
                                                             <div class="homework-create-time" style="float: left">
                                                                 <el-tag type="warning">未开始</el-tag>
-                                                                <span
-                                                                    style="padding-left: 30px;font-size: 15px;color: #5F6368">限时：无</span>
+                                                                <!-- <span
+                                                                    style="padding-left: 30px;font-size: 15px;color: #5F6368">限时：无</span> -->
                                                                 <span
                                                                     style="padding-left: 30px;font-size: 15px;color: #5F6368">起止时间：2020-11-09
                                                                     22:17 ~ 2020-11-09 23:17</span>
@@ -1212,7 +1216,7 @@
                                                             </el-col>
                                                             <el-col :span="12">
                                                                 <div class="exam-finished-buttons" style="float: right">
-                                                                    <el-button type="primary" plain>编辑标题及简介</el-button>
+                                                                    <el-button type="primary" plain>编辑基本信息</el-button>
                                                                     <el-button type="primary" plain>编辑试题内容</el-button>
                                                                     <el-dropdown>
                                                                         <el-button type="primary">
@@ -1239,8 +1243,8 @@
                                                         <el-col :span="14">
                                                             <div class="homework-create-time" style="float: left">
                                                                 <el-tag type="success">已发布</el-tag>
-                                                                <span
-                                                                    style="padding-left: 30px;font-size: 15px;color: #5F6368">限时：无</span>
+                                                                <!-- <span
+                                                                    style="padding-left: 30px;font-size: 15px;color: #5F6368">限时：无</span> -->
                                                                 <span
                                                                     style="padding-left: 30px;font-size: 15px;color: #5F6368">起止时间：2020-11-09
                                                                     22:17 ~ 2020-11-09 23:17</span>
@@ -1324,7 +1328,7 @@
                                                             </el-col>
                                                             <el-col :span="12">
                                                                 <div class="exam-finished-buttons" style="float: right">
-                                                                    <el-button type="primary" plain>编辑标题及简介</el-button>
+                                                                    <el-button type="primary" plain>编辑基本信息</el-button>
                                                                     <el-button type="primary" plain>编辑试题内容</el-button>
                                                                     <el-dropdown>
                                                                         <el-button type="primary">
@@ -1351,8 +1355,8 @@
                                                         <el-col :span="14">
                                                             <div class="homework-create-time" style="float: left">
                                                                 <el-tag>已结束</el-tag>
-                                                                <span
-                                                                    style="padding-left: 30px;font-size: 15px;color: #5F6368">限时：无</span>
+                                                                <!-- <span
+                                                                    style="padding-left: 30px;font-size: 15px;color: #5F6368">限时：无</span> -->
                                                                 <span
                                                                     style="padding-left: 30px;font-size: 15px;color: #5F6368">起止时间：2020-11-09
                                                                     22:17 ~ 2020-11-09 23:17</span>
@@ -1437,7 +1441,7 @@
                                                             <el-col :span="12">
                                                                 <div class="exam-finished-buttons" style="float: right">
                                                                     <el-button type="primary">重新发布</el-button>
-                                                                    <el-button type="primary" plain>编辑标题及简介</el-button>
+                                                                    <el-button type="primary" plain>编辑基本信息</el-button>
                                                                     <el-button type="primary" plain>编辑试题内容</el-button>
                                                                     <el-dropdown>
                                                                         <el-button type="primary">
@@ -1937,7 +1941,7 @@
                 this.$refs[formName].validate((valid) => {
                     if (valid) {
                         let t = this.homeworkForm.deadline;
-                        this.homeworkForm.deadline = this.formatDateTime(t);
+                        this.homeworkForm.deadline = yxt.formatDate(t);
                         yxt.http.post("/homework/courseId/" + this.course.id + "/" + this.user.id, this.homeworkForm).then(({ data }) => {
                             if (data.success) {
                                 this.$message.success(data.message);
@@ -2014,7 +2018,7 @@
                     if (valid) {
                         let t = this.homeworkForm.deadline;
                         if (this.homeworkDeadline != t) {
-                            this.homeworkForm.deadline = this.formatDateTime(t);
+                            this.homeworkForm.deadline = yxt.formatDate(t);
                         }
                         yxt.http.put("/homework/info/homeworkId/" + this.homeworkForm.id, this.homeworkForm).then(({ data }) => {
                             if (data.success) {
@@ -2349,9 +2353,6 @@
                     return false;
                 }
                 return true;
-            },
-            formatDateTime(t) {
-                return t.getFullYear() + "-" + (t.getMonth() + 1) + "-" + t.getDate() + " " + t.getHours() + ":" + t.getMinutes() + ":" + t.getSeconds();
             },
             getSimpleText(html) {
                 let re1 = new RegExp("<.+?>", "g"); // 匹配 html 标签的正则表达式，"g"是搜索匹配多个符合的内容

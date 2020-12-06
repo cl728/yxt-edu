@@ -49,7 +49,7 @@ public class Exam {
     @TableField("total_score")
     private Double totalScore;  // 测试的总分
 
-    private Integer status;     // 测试的状态，0 未发布，1 未开始，2 已发布，3 已结束
+    private Boolean status;     // 测试是否已发布，true 是 false 不是，默认为 false
 
     @TableField("top_num")
     private Integer topNum;     // 测试置顶字段，数字越大，置顶等级越高，默认为0

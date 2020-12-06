@@ -89,7 +89,7 @@ public class HomeworkServiceImpl implements HomeworkService {
 
         List<Homework> homeworkList = this.homeworkMapper.selectList( new QueryWrapper<Homework>()
                 .eq( "course_id", courseId )
-                .orderByDesc( "top_num" ) );
+                .orderByDesc( "top_num", "create_time" ) );
 
         List<HomeworkResp> homeworkRespList = new ArrayList<>( homeworkList.size() );
 
@@ -435,46 +435,46 @@ public class HomeworkServiceImpl implements HomeworkService {
             ExceptionThrowUtils.cast( HomeworkCode.STUDENT_HOMEWORK_NOT_EXIST );
         }
 
-        return new QueryResponse(CommonCode.SUCCESS,new QueryResult<>( Collections.singletonList( homeworkStudent ), 1 ) );
+        return new QueryResponse( CommonCode.SUCCESS, new QueryResult<>( Collections.singletonList( homeworkStudent ), 1 ) );
     }
 
     @Override
     public QueryResponse findStudentCourseHomework(long courseId, long studentId) {
         //查询课程是否存在
-        Course course = courseMapper.selectOne(new QueryWrapper<Course>().eq("id", courseId));
-        if(course == null){
+        Course course = courseMapper.selectOne( new QueryWrapper<Course>().eq( "id", courseId ) );
+        if (course == null) {
             ExceptionThrowUtils.cast( CommonCode.INVALID_PARAM );
         }
         //查询学生-课程记录是否存在
-        StudentCourse studentCourse = scMapper.selectOne(new QueryWrapper<StudentCourse>().eq("course_id", courseId)
-                .eq("student_id", studentId));
-        if(studentCourse == null){
+        StudentCourse studentCourse = scMapper.selectOne( new QueryWrapper<StudentCourse>().eq( "course_id", courseId )
+                .eq( "student_id", studentId ) );
+        if (studentCourse == null) {
             ExceptionThrowUtils.cast( CourseCode.STUDENT_COURSE_NOT_FOUND );
         }
 
         //查询课程下的所有作业
-        List<Homework> homeworkList = homeworkMapper.selectList(new QueryWrapper<Homework>().eq("course_id", courseId));
-        if(homeworkList.size() <= 0){
-            return new QueryResponse(HomeworkCode.HOMEWORK_NOT_EXIST,null);
+        List<Homework> homeworkList = homeworkMapper.selectList( new QueryWrapper<Homework>().eq( "course_id", courseId ) );
+        if (homeworkList.size() <= 0) {
+            return new QueryResponse( HomeworkCode.HOMEWORK_NOT_EXIST, null );
         }
 
         //将 t_notice_user 表的相关记录的 view 字段修改为 true
-        List<NoticeUser> noticeUsers = noticeUserMapper.selectList(new QueryWrapper<NoticeUser>().eq("user_id", studentId));
+        List<NoticeUser> noticeUsers = noticeUserMapper.selectList( new QueryWrapper<NoticeUser>().eq( "user_id", studentId ) );
         for (NoticeUser noticeUser : noticeUsers) {
-            if(!noticeUser.getView()){
-                noticeUser.setView(true);
-                noticeUserMapper.updateById(noticeUser);
+            if (!noticeUser.getView()) {
+                noticeUser.setView( true );
+                noticeUserMapper.updateById( noticeUser );
             }
         }
 
         //查询某个学生在某个课程下的作业完成情况
         List<Long> homeworkIds = new ArrayList<>();
         for (Homework homework : homeworkList) {
-            homeworkIds.add(homework.getId());
+            homeworkIds.add( homework.getId() );
         }
-        List<HomeworkStudent> homeworkStudents = homeworkStudentMapper.selectList(new QueryWrapper<HomeworkStudent>().eq("student_id", studentId)
-                .in("homework_id", homeworkIds));
-        return new QueryResponse(CommonCode.SUCCESS,new QueryResult(homeworkStudents,homeworkStudents.size()));
+        List<HomeworkStudent> homeworkStudents = homeworkStudentMapper.selectList( new QueryWrapper<HomeworkStudent>().eq( "student_id", studentId )
+                .in( "homework_id", homeworkIds ) );
+        return new QueryResponse( CommonCode.SUCCESS, new QueryResult<>( homeworkStudents, homeworkStudents.size() ) );
     }
 
 
