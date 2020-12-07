@@ -7,7 +7,6 @@ import com.yixuetang.entity.response.QueryResponse;
 /**
  * @author Curtis
  * @version 1.0.0
- * @description TODO
  * @date 2020/11/12 12:25
  */
 public interface NoticeService {
@@ -64,11 +63,11 @@ public interface NoticeService {
     CommonResponse switchTopNum(long noticeId);
 
     /**
-     *  修改用户对某个公告的已读状态
+     * 修改用户对某个公告的已读状态
      *
-     * @param noticeId  公告id
-     * @param userId    用户id
-     * @return  带查询结果集的响应实体类
+     * @param noticeId 公告id
+     * @param userId   用户id
+     * @return 带查询结果集的响应实体类
      */
     CommonResponse updateReadStatus(long noticeId, long userId);
 }
