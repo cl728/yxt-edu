@@ -18,4 +18,10 @@ public interface ExamControllerApi {
     @ApiImplicitParam(name = "courseId", value = "课程id", required = true,
             paramType = "path", dataType = "long")
     CommonResponse newExam(long courseId, InsertExam insertExam);
+
+    @ApiOperation("教师置顶/取消置顶测试（考试）")
+    @ApiImplicitParam(name = "examId", value = "测试（考试）id", required = true,
+            paramType = "path", dataType = "long")
+    CommonResponse examTop(long examId);
+
 }

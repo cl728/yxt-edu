@@ -16,4 +16,11 @@ public interface ExamService {
      * @return  响应结果实体类
      */
     CommonResponse newExam(long courseId, InsertExam insertExam);
+
+    /**
+     * 教师置顶/取消置顶测试（考试）
+     * @param examId  测试（考试）id
+     * @return  响应结果实体类
+     */
+    CommonResponse examTop(long examId);
 }

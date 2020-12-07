@@ -1,5 +1,6 @@
 package com.yixuetang.exam.service.impl;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.yixuetang.course.mapper.CourseMapper;
 import com.yixuetang.entity.course.Course;
 import com.yixuetang.entity.exam.Exam;
@@ -67,6 +68,23 @@ public class ExamServiceImpl implements ExamService {
         exam.setCreateTime( new Date() );
         examMapper.insert( exam );
 
+        return new CommonResponse(CommonCode.SUCCESS);
+    }
+
+    @Override
+    public CommonResponse examTop(long examId) {
+        //测试考试是否存在
+        Exam exam = examMapper.selectOne(new QueryWrapper<Exam>().eq("id", examId));
+        if(exam == null){
+            ExceptionThrowUtils.cast( CommonCode.INVALID_PARAM );
+        }
+        //置顶或取消置顶
+        if(exam.getTopNum() <= 0){
+            exam.setTopNum(10);
+        } else{
+            exam.setTopNum(0);
+        }
+        examMapper.updateById(exam);
         return new CommonResponse(CommonCode.SUCCESS);
     }
 }

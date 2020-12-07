@@ -26,5 +26,11 @@ public class ExamController implements ExamControllerApi {
     public CommonResponse newExam(@PathVariable long courseId, @RequestBody InsertExam insertExam) {
         return this.examService.newExam(courseId, insertExam);
     }
+
+    @Override
+    @PutMapping("topNum/examId/{examId}")
+    public CommonResponse examTop(@PathVariable long examId) {
+        return this.examService.examTop(examId);
+    }
 }
 
