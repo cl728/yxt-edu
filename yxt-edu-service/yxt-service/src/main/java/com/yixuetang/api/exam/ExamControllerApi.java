@@ -1,6 +1,10 @@
 package com.yixuetang.api.exam;
 
+import com.yixuetang.entity.request.exam.InsertExam;
+import com.yixuetang.entity.response.CommonResponse;
 import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiOperation;
 
 /**
  * @author Curtis
@@ -10,4 +14,8 @@ import io.swagger.annotations.Api;
  */
 @Api(value = "考试模块管理接口", description = "考试模块管理接口，提供考试的增、删、改、查")
 public interface ExamControllerApi {
+    @ApiOperation("教师在某一课程下新建测试（考试）")
+    @ApiImplicitParam(name = "courseId", value = "课程id", required = true,
+            paramType = "path", dataType = "long")
+    CommonResponse newExam(long courseId, InsertExam insertExam);
 }
