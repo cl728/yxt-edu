@@ -33,4 +33,12 @@ public interface ExamService {
      * @return  响应结果实体类
      */
     CommonResponse saveQuestion(long examId, long teacherId, InsertQuestion insertQuestion);
+
+    /**
+     * 教师删除试卷的某道题目
+     * @param examId  测试（考试）id
+     * @param questionNumber  题目编号
+     * @return 响应结果实体类
+     */
+    CommonResponse deleteQuestion(long examId, long questionNumber);
 }

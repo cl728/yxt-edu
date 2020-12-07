@@ -35,4 +35,13 @@ public interface ExamControllerApi {
     })
     CommonResponse saveQuestion(long examId, long teacherId, InsertQuestion insertQuestion);
 
+    @ApiOperation("教师删除试卷的某道题目")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "examId", value = "测试（考试）id", required = true,
+                    paramType = "path", dataType = "long"),
+            @ApiImplicitParam(name = "questionNumber", value = "题目编号", required = true,
+                    paramType = "path", dataType = "long")
+    })
+    CommonResponse deleteQuestion(long examId, long questionNumber);
+
 }

@@ -797,3 +797,156 @@ com.yixuetang.entity.exception.CustomException: 错误代码：20002, 错误信�
 2020-12-07 22:05:49.859 DEBUG 4168 --- [http-nio-8888-exec-4] c.y.e.mapper.ExamQuestionMapper.insert   : ==>  Preparing: INSERT INTO t_exam_question ( exam_id, question_number, question_type, question_id ) VALUES ( ?, ?, ?, ? ) 
 2020-12-07 22:05:49.859 DEBUG 4168 --- [http-nio-8888-exec-4] c.y.e.mapper.ExamQuestionMapper.insert   : ==> Parameters: 2(Long), 6(Integer), 3(Integer), 1(Long)
 2020-12-07 22:05:49.870 DEBUG 4168 --- [http-nio-8888-exec-4] c.y.e.mapper.ExamQuestionMapper.insert   : <==    Updates: 1
+2020-12-07 22:30:07.427  INFO 9464 --- [main] com.yixuetang.YxtServiceApplication      : Starting YxtServiceApplication on SD-20191117RFKO with PID 9464 (E:\projects\yxt-edu\yxt-edu-service\yxt-service\target\classes started by Administrator in E:\projects\yxt-edu)
+2020-12-07 22:30:07.686 DEBUG 9464 --- [main] com.yixuetang.YxtServiceApplication      : Running with Spring Boot v2.2.5.RELEASE, Spring v5.2.4.RELEASE
+2020-12-07 22:30:07.686  INFO 9464 --- [main] com.yixuetang.YxtServiceApplication      : The following profiles are active: dev
+2020-12-07 22:30:41.249  INFO 9464 --- [main] .s.d.r.c.RepositoryConfigurationDelegate : Multiple Spring Data modules found, entering strict repository configuration mode!
+2020-12-07 22:30:41.249  INFO 9464 --- [main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data Redis repositories in DEFAULT mode.
+2020-12-07 22:30:41.334  INFO 9464 --- [main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 34ms. Found 0 Redis repository interfaces.
+2020-12-07 22:30:42.185  INFO 9464 --- [main] ptablePropertiesBeanFactoryPostProcessor : Post-processing PropertySource instances
+2020-12-07 22:30:42.307  INFO 9464 --- [main] c.u.j.EncryptablePropertySourceConverter : Converting PropertySource configurationProperties [org.springframework.boot.context.properties.source.ConfigurationPropertySourcesPropertySource] to AOP Proxy
+2020-12-07 22:30:42.308  INFO 9464 --- [main] c.u.j.EncryptablePropertySourceConverter : Converting PropertySource servletConfigInitParams [org.springframework.core.env.PropertySource$StubPropertySource] to EncryptablePropertySourceWrapper
+2020-12-07 22:30:42.309  INFO 9464 --- [main] c.u.j.EncryptablePropertySourceConverter : Converting PropertySource servletContextInitParams [org.springframework.core.env.PropertySource$StubPropertySource] to EncryptablePropertySourceWrapper
+2020-12-07 22:30:42.309  INFO 9464 --- [main] c.u.j.EncryptablePropertySourceConverter : Converting PropertySource systemProperties [org.springframework.core.env.PropertiesPropertySource] to EncryptableMapPropertySourceWrapper
+2020-12-07 22:30:42.309  INFO 9464 --- [main] c.u.j.EncryptablePropertySourceConverter : Converting PropertySource systemEnvironment [org.springframework.boot.env.SystemEnvironmentPropertySourceEnvironmentPostProcessor$OriginAwareSystemEnvironmentPropertySource] to EncryptableMapPropertySourceWrapper
+2020-12-07 22:30:42.309  INFO 9464 --- [main] c.u.j.EncryptablePropertySourceConverter : Converting PropertySource random [org.springframework.boot.env.RandomValuePropertySource] to EncryptablePropertySourceWrapper
+2020-12-07 22:30:42.309  INFO 9464 --- [main] c.u.j.EncryptablePropertySourceConverter : Converting PropertySource applicationConfig: [classpath:/application-dev.yml] [org.springframework.boot.env.OriginTrackedMapPropertySource] to EncryptableMapPropertySourceWrapper
+2020-12-07 22:30:42.309  INFO 9464 --- [main] c.u.j.EncryptablePropertySourceConverter : Converting PropertySource applicationConfig: [classpath:/application.yml] [org.springframework.boot.env.OriginTrackedMapPropertySource] to EncryptableMapPropertySourceWrapper
+2020-12-07 22:30:42.360  INFO 9464 --- [main] c.u.j.filter.DefaultLazyPropertyFilter   : Property Filter custom Bean not found with name 'encryptablePropertyFilter'. Initializing Default Property Filter
+2020-12-07 22:30:43.250  INFO 9464 --- [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port(s): 8888 (http)
+2020-12-07 22:30:43.298  INFO 9464 --- [main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2020-12-07 22:30:43.298  INFO 9464 --- [main] org.apache.catalina.core.StandardEngine  : Starting Servlet engine: [Apache Tomcat/9.0.31]
+2020-12-07 22:30:43.589  INFO 9464 --- [main] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2020-12-07 22:30:43.589  INFO 9464 --- [main] o.s.web.context.ContextLoader            : Root WebApplicationContext: initialization completed in 35568 ms
+2020-12-07 22:30:44.115  INFO 9464 --- [main] c.u.j.r.DefaultLazyPropertyResolver      : Property Resolver custom Bean not found with name 'encryptablePropertyResolver'. Initializing Default Property Resolver
+2020-12-07 22:30:44.116  INFO 9464 --- [main] c.u.j.d.DefaultLazyPropertyDetector      : Property Detector custom Bean not found with name 'encryptablePropertyDetector'. Initializing Default Property Detector
+2020-12-07 22:30:44.116  INFO 9464 --- [main] c.u.j.encryptor.DefaultLazyEncryptor     : String Encryptor custom Bean not found with name 'jasyptStringEncryptor'. Initializing Default String Encryptor
+2020-12-07 22:30:44.116  INFO 9464 --- [main] c.u.j.encryptor.DefaultLazyEncryptor     : Encryptor config not found for property jasypt.encryptor.algorithm, using default value: PBEWithMD5AndDES
+2020-12-07 22:30:44.116  INFO 9464 --- [main] c.u.j.encryptor.DefaultLazyEncryptor     : Encryptor config not found for property jasypt.encryptor.keyObtentionIterations, using default value: 1000
+2020-12-07 22:30:44.116  INFO 9464 --- [main] c.u.j.encryptor.DefaultLazyEncryptor     : Encryptor config not found for property jasypt.encryptor.poolSize, using default value: 1
+2020-12-07 22:30:44.116  INFO 9464 --- [main] c.u.j.encryptor.DefaultLazyEncryptor     : Encryptor config not found for property jasypt.encryptor.providerName, using default value: null
+2020-12-07 22:30:44.116  INFO 9464 --- [main] c.u.j.encryptor.DefaultLazyEncryptor     : Encryptor config not found for property jasypt.encryptor.providerClassName, using default value: null
+2020-12-07 22:30:44.116  INFO 9464 --- [main] c.u.j.encryptor.DefaultLazyEncryptor     : Encryptor config not found for property jasypt.encryptor.saltGeneratorClassname, using default value: org.jasypt.salt.RandomSaltGenerator
+2020-12-07 22:30:44.116  INFO 9464 --- [main] c.u.j.encryptor.DefaultLazyEncryptor     : Encryptor config not found for property jasypt.encryptor.stringOutputType, using default value: base64
+2020-12-07 22:30:46.998  WARN 9464 --- [main] c.b.m.core.injector.AbstractMethod       : [com.yixuetang.message.mapper.RemindMapper.deleteById] Has been loaded by XML or SqlProvider or Mybatis's Annotation, so ignoring this injection for [class com.baomidou.mybatisplus.core.injector.methods.DeleteById]
+2020-12-07 22:30:48.793  INFO 9464 --- [main] pertySourcedRequestMappingHandlerMapping : Mapped URL path [/v2/api-docs] onto method [springfox.documentation.swagger2.web.Swagger2Controller#getDocumentation(String, HttpServletRequest)]
+2020-12-07 22:30:49.675  INFO 9464 --- [main] o.s.s.concurrent.ThreadPoolTaskExecutor  : Initializing ExecutorService 'applicationTaskExecutor'
+2020-12-07 22:30:50.576  INFO 9464 --- [main] org.quartz.impl.StdSchedulerFactory      : Using default implementation for ThreadExecutor
+2020-12-07 22:30:50.626  INFO 9464 --- [main] org.quartz.core.SchedulerSignalerImpl    : Initialized Scheduler Signaller of type: class org.quartz.core.SchedulerSignalerImpl
+2020-12-07 22:30:50.626  INFO 9464 --- [main] org.quartz.core.QuartzScheduler          : Quartz Scheduler v.2.3.2 created.
+2020-12-07 22:30:50.626  INFO 9464 --- [main] org.quartz.simpl.RAMJobStore             : RAMJobStore initialized.
+2020-12-07 22:30:50.626  INFO 9464 --- [main] org.quartz.core.QuartzScheduler          : Scheduler meta-data: Quartz Scheduler (v2.3.2) 'quartzScheduler' with instanceId 'NON_CLUSTERED'
+  Scheduler class: 'org.quartz.core.QuartzScheduler' - running locally.
+  NOT STARTED.
+  Currently in standby mode.
+  Number of jobs executed: 0
+  Using thread pool 'org.quartz.simpl.SimpleThreadPool' - with 10 threads.
+  Using job-store 'org.quartz.simpl.RAMJobStore' - which does not support persistence. and is not clustered.
+
+2020-12-07 22:30:50.626  INFO 9464 --- [main] org.quartz.impl.StdSchedulerFactory      : Quartz scheduler 'quartzScheduler' initialized from an externally provided properties instance.
+2020-12-07 22:30:50.626  INFO 9464 --- [main] org.quartz.impl.StdSchedulerFactory      : Quartz scheduler version: 2.3.2
+2020-12-07 22:30:50.626  INFO 9464 --- [main] org.quartz.core.QuartzScheduler          : JobFactory set to: org.springframework.scheduling.quartz.SpringBeanJobFactory@38c10190
+2020-12-07 22:30:50.643  INFO 9464 --- [main] o.s.s.c.ThreadPoolTaskScheduler          : Initializing ExecutorService 'taskScheduler'
+2020-12-07 22:30:51.063  INFO 9464 --- [main] d.s.w.p.DocumentationPluginsBootstrapper : Context refreshed
+2020-12-07 22:30:51.094  INFO 9464 --- [main] d.s.w.p.DocumentationPluginsBootstrapper : Found 1 custom documentation plugin(s)
+2020-12-07 22:30:51.196  INFO 9464 --- [main] s.d.s.w.s.ApiListingReferenceScanner     : Scanning for api listing references
+2020-12-07 22:30:51.851  INFO 9464 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: findByIdUsingGET_1
+2020-12-07 22:30:51.947  INFO 9464 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: findByIdUsingGET_2
+2020-12-07 22:30:51.964  INFO 9464 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: switchTopUsingPUT_1
+2020-12-07 22:30:51.980  INFO 9464 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: findByCourseIdUsingGET_1
+2020-12-07 22:30:51.996  INFO 9464 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: uploadUsingPOST_1
+2020-12-07 22:30:52.014  INFO 9464 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: delByIdUsingDELETE_1
+2020-12-07 22:30:52.014  INFO 9464 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: findByPageUsingGET_1
+2020-12-07 22:30:52.097  INFO 9464 --- [main] o.s.a.r.c.CachingConnectionFactory       : Attempting to connect to: [42.194.162.66:5672]
+2020-12-07 22:30:52.671  INFO 9464 --- [main] o.s.a.r.c.CachingConnectionFactory       : Created new connection: rabbitConnectionFactory#42297bdf:0/SimpleConnection@38dbeb39 [delegate=amqp://colin@42.194.162.66:5672/colin-vhost, localPort= 52593]
+2020-12-07 22:30:53.119  INFO 9464 --- [main] o.s.s.quartz.SchedulerFactoryBean        : Starting Quartz Scheduler now
+2020-12-07 22:30:53.119  INFO 9464 --- [main] org.quartz.core.QuartzScheduler          : Scheduler quartzScheduler_$_NON_CLUSTERED started.
+2020-12-07 22:30:53.128  INFO 9464 --- [quartzScheduler_Worker-2] c.yixuetang.task.PullSystemMessageTask   : --------PullSystemMessageTask--------
+2020-12-07 22:30:53.128  INFO 9464 --- [quartzScheduler_Worker-1] com.yixuetang.task.LikeTask              : --------LikeTask--------
+2020-12-07 22:30:53.212  INFO 9464 --- [quartzScheduler_Worker-1] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2020-12-07 22:30:53.495  INFO 9464 --- [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port(s): 8888 (http) with context path ''
+2020-12-07 22:30:53.528  INFO 9464 --- [main] com.yixuetang.YxtServiceApplication      : Started YxtServiceApplication in 53.166 seconds (JVM running for 69.409)
+2020-12-07 22:30:54.726  INFO 9464 --- [quartzScheduler_Worker-1] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
+2020-12-07 22:30:54.776 DEBUG 9464 --- [quartzScheduler_Worker-2] c.y.m.mapper.MessageMapper.selectList    : ==>  Preparing: SELECT id,receiver_type,publisher_id,receiver_id,status,title,content,publish_time,update_time FROM t_message WHERE (status = ?) 
+2020-12-07 22:30:54.826 DEBUG 9464 --- [quartzScheduler_Worker-2] c.y.m.mapper.MessageMapper.selectList    : ==> Parameters: false(Boolean)
+2020-12-07 22:30:55.285 DEBUG 9464 --- [quartzScheduler_Worker-2] c.y.m.mapper.MessageMapper.selectList    : <==      Total: 0
+2020-12-07 22:30:56.071  INFO 9464 --- [quartzScheduler_Worker-1] io.lettuce.core.EpollProvider            : Starting without optional epoll library
+2020-12-07 22:30:56.081  INFO 9464 --- [quartzScheduler_Worker-1] io.lettuce.core.KqueueProvider           : Starting without optional kqueue library
+2020-12-07 22:30:57.031 DEBUG 9464 --- [quartzScheduler_Worker-1] c.y.c.m.CommentUserMapper.selectOne      : ==>  Preparing: SELECT id,comment_id,user_id,status FROM t_comment_user WHERE comment_id=? AND user_id=? 
+2020-12-07 22:30:57.031 DEBUG 9464 --- [quartzScheduler_Worker-1] c.y.c.m.CommentUserMapper.selectOne      : ==> Parameters: 18(Long), 11(Long)
+2020-12-07 22:30:57.044 DEBUG 9464 --- [quartzScheduler_Worker-1] c.y.c.m.CommentUserMapper.selectOne      : <==      Total: 1
+2020-12-07 22:30:57.044 DEBUG 9464 --- [quartzScheduler_Worker-1] c.y.c.m.CommentUserMapper.updateById     : ==>  Preparing: UPDATE t_comment_user SET comment_id=?, user_id=?, status=? WHERE id=? 
+2020-12-07 22:30:57.044 DEBUG 9464 --- [quartzScheduler_Worker-1] c.y.c.m.CommentUserMapper.updateById     : ==> Parameters: 18(Long), 11(Long), false(Boolean), 14(Long)
+2020-12-07 22:30:57.061 DEBUG 9464 --- [quartzScheduler_Worker-1] c.y.c.m.CommentUserMapper.updateById     : <==    Updates: 1
+2020-12-07 22:30:57.061 DEBUG 9464 --- [quartzScheduler_Worker-1] c.y.c.m.CommentUserMapper.selectOne      : ==>  Preparing: SELECT id,comment_id,user_id,status FROM t_comment_user WHERE comment_id=? AND user_id=? 
+2020-12-07 22:30:57.061 DEBUG 9464 --- [quartzScheduler_Worker-1] c.y.c.m.CommentUserMapper.selectOne      : ==> Parameters: 19(Long), 11(Long)
+2020-12-07 22:30:57.077 DEBUG 9464 --- [quartzScheduler_Worker-1] c.y.c.m.CommentUserMapper.selectOne      : <==      Total: 1
+2020-12-07 22:30:57.077 DEBUG 9464 --- [quartzScheduler_Worker-1] c.y.c.m.CommentUserMapper.updateById     : ==>  Preparing: UPDATE t_comment_user SET comment_id=?, user_id=?, status=? WHERE id=? 
+2020-12-07 22:30:57.077 DEBUG 9464 --- [quartzScheduler_Worker-1] c.y.c.m.CommentUserMapper.updateById     : ==> Parameters: 19(Long), 11(Long), true(Boolean), 15(Long)
+2020-12-07 22:30:57.093 DEBUG 9464 --- [quartzScheduler_Worker-1] c.y.c.m.CommentUserMapper.updateById     : <==    Updates: 1
+2020-12-07 22:30:57.093 DEBUG 9464 --- [quartzScheduler_Worker-1] c.y.c.m.CommentUserMapper.selectOne      : ==>  Preparing: SELECT id,comment_id,user_id,status FROM t_comment_user WHERE comment_id=? AND user_id=? 
+2020-12-07 22:30:57.093 DEBUG 9464 --- [quartzScheduler_Worker-1] c.y.c.m.CommentUserMapper.selectOne      : ==> Parameters: 21(Long), 11(Long)
+2020-12-07 22:30:57.110 DEBUG 9464 --- [quartzScheduler_Worker-1] c.y.c.m.CommentUserMapper.selectOne      : <==      Total: 1
+2020-12-07 22:30:57.110 DEBUG 9464 --- [quartzScheduler_Worker-1] c.y.c.m.CommentUserMapper.updateById     : ==>  Preparing: UPDATE t_comment_user SET comment_id=?, user_id=?, status=? WHERE id=? 
+2020-12-07 22:30:57.110 DEBUG 9464 --- [quartzScheduler_Worker-1] c.y.c.m.CommentUserMapper.updateById     : ==> Parameters: 21(Long), 11(Long), true(Boolean), 11(Long)
+2020-12-07 22:30:57.138 DEBUG 9464 --- [quartzScheduler_Worker-1] c.y.c.m.CommentUserMapper.updateById     : <==    Updates: 1
+2020-12-07 22:30:57.138 DEBUG 9464 --- [quartzScheduler_Worker-1] c.y.c.m.CommentUserMapper.selectOne      : ==>  Preparing: SELECT id,comment_id,user_id,status FROM t_comment_user WHERE comment_id=? AND user_id=? 
+2020-12-07 22:30:57.138 DEBUG 9464 --- [quartzScheduler_Worker-1] c.y.c.m.CommentUserMapper.selectOne      : ==> Parameters: 20(Long), 11(Long)
+2020-12-07 22:30:57.155 DEBUG 9464 --- [quartzScheduler_Worker-1] c.y.c.m.CommentUserMapper.selectOne      : <==      Total: 1
+2020-12-07 22:30:57.155 DEBUG 9464 --- [quartzScheduler_Worker-1] c.y.c.m.CommentUserMapper.updateById     : ==>  Preparing: UPDATE t_comment_user SET comment_id=?, user_id=?, status=? WHERE id=? 
+2020-12-07 22:30:57.155 DEBUG 9464 --- [quartzScheduler_Worker-1] c.y.c.m.CommentUserMapper.updateById     : ==> Parameters: 20(Long), 11(Long), true(Boolean), 16(Long)
+2020-12-07 22:30:57.387 DEBUG 9464 --- [quartzScheduler_Worker-1] c.y.c.m.CommentUserMapper.updateById     : <==    Updates: 1
+2020-12-07 22:30:57.387 DEBUG 9464 --- [quartzScheduler_Worker-1] c.y.c.m.CommentUserMapper.selectOne      : ==>  Preparing: SELECT id,comment_id,user_id,status FROM t_comment_user WHERE comment_id=? AND user_id=? 
+2020-12-07 22:30:57.387 DEBUG 9464 --- [quartzScheduler_Worker-1] c.y.c.m.CommentUserMapper.selectOne      : ==> Parameters: 22(Long), 11(Long)
+2020-12-07 22:30:57.387 DEBUG 9464 --- [quartzScheduler_Worker-1] c.y.c.m.CommentUserMapper.selectOne      : <==      Total: 1
+2020-12-07 22:30:57.387 DEBUG 9464 --- [quartzScheduler_Worker-1] c.y.c.m.CommentUserMapper.updateById     : ==>  Preparing: UPDATE t_comment_user SET comment_id=?, user_id=?, status=? WHERE id=? 
+2020-12-07 22:30:57.387 DEBUG 9464 --- [quartzScheduler_Worker-1] c.y.c.m.CommentUserMapper.updateById     : ==> Parameters: 22(Long), 11(Long), true(Boolean), 12(Long)
+2020-12-07 22:30:57.628 DEBUG 9464 --- [quartzScheduler_Worker-1] c.y.c.m.CommentUserMapper.updateById     : <==    Updates: 1
+2020-12-07 22:30:57.628 DEBUG 9464 --- [quartzScheduler_Worker-1] c.y.c.m.CommentUserMapper.selectOne      : ==>  Preparing: SELECT id,comment_id,user_id,status FROM t_comment_user WHERE comment_id=? AND user_id=? 
+2020-12-07 22:30:57.628 DEBUG 9464 --- [quartzScheduler_Worker-1] c.y.c.m.CommentUserMapper.selectOne      : ==> Parameters: 24(Long), 11(Long)
+2020-12-07 22:30:57.644 DEBUG 9464 --- [quartzScheduler_Worker-1] c.y.c.m.CommentUserMapper.selectOne      : <==      Total: 1
+2020-12-07 22:30:57.644 DEBUG 9464 --- [quartzScheduler_Worker-1] c.y.c.m.CommentUserMapper.updateById     : ==>  Preparing: UPDATE t_comment_user SET comment_id=?, user_id=?, status=? WHERE id=? 
+2020-12-07 22:30:57.644 DEBUG 9464 --- [quartzScheduler_Worker-1] c.y.c.m.CommentUserMapper.updateById     : ==> Parameters: 24(Long), 11(Long), true(Boolean), 17(Long)
+2020-12-07 22:30:57.666 DEBUG 9464 --- [quartzScheduler_Worker-1] c.y.c.m.CommentUserMapper.updateById     : <==    Updates: 1
+2020-12-07 22:30:57.679 DEBUG 9464 --- [quartzScheduler_Worker-1] c.y.c.m.CommentUserMapper.selectOne      : ==>  Preparing: SELECT id,comment_id,user_id,status FROM t_comment_user WHERE comment_id=? AND user_id=? 
+2020-12-07 22:30:57.679 DEBUG 9464 --- [quartzScheduler_Worker-1] c.y.c.m.CommentUserMapper.selectOne      : ==> Parameters: 20(Long), 14(Long)
+2020-12-07 22:30:57.688 DEBUG 9464 --- [quartzScheduler_Worker-1] c.y.c.m.CommentUserMapper.selectOne      : <==      Total: 1
+2020-12-07 22:30:57.688 DEBUG 9464 --- [quartzScheduler_Worker-1] c.y.c.m.CommentUserMapper.updateById     : ==>  Preparing: UPDATE t_comment_user SET comment_id=?, user_id=?, status=? WHERE id=? 
+2020-12-07 22:30:57.688 DEBUG 9464 --- [quartzScheduler_Worker-1] c.y.c.m.CommentUserMapper.updateById     : ==> Parameters: 20(Long), 14(Long), false(Boolean), 18(Long)
+2020-12-07 22:30:57.910 DEBUG 9464 --- [quartzScheduler_Worker-1] c.y.c.m.CommentUserMapper.updateById     : <==    Updates: 1
+2020-12-07 22:30:57.926 DEBUG 9464 --- [quartzScheduler_Worker-1] c.y.c.m.CommentUserMapper.selectOne      : ==>  Preparing: SELECT id,comment_id,user_id,status FROM t_comment_user WHERE comment_id=? AND user_id=? 
+2020-12-07 22:30:57.927 DEBUG 9464 --- [quartzScheduler_Worker-1] c.y.c.m.CommentUserMapper.selectOne      : ==> Parameters: 24(Long), 14(Long)
+2020-12-07 22:30:57.941 DEBUG 9464 --- [quartzScheduler_Worker-1] c.y.c.m.CommentUserMapper.selectOne      : <==      Total: 1
+2020-12-07 22:30:57.941 DEBUG 9464 --- [quartzScheduler_Worker-1] c.y.c.m.CommentUserMapper.updateById     : ==>  Preparing: UPDATE t_comment_user SET comment_id=?, user_id=?, status=? WHERE id=? 
+2020-12-07 22:30:57.941 DEBUG 9464 --- [quartzScheduler_Worker-1] c.y.c.m.CommentUserMapper.updateById     : ==> Parameters: 24(Long), 14(Long), true(Boolean), 19(Long)
+2020-12-07 22:30:57.960 DEBUG 9464 --- [quartzScheduler_Worker-1] c.y.c.m.CommentUserMapper.updateById     : <==    Updates: 1
+2020-12-07 22:30:57.960 DEBUG 9464 --- [quartzScheduler_Worker-1] c.y.c.m.CommentUserMapper.selectOne      : ==>  Preparing: SELECT id,comment_id,user_id,status FROM t_comment_user WHERE comment_id=? AND user_id=? 
+2020-12-07 22:30:57.960 DEBUG 9464 --- [quartzScheduler_Worker-1] c.y.c.m.CommentUserMapper.selectOne      : ==> Parameters: 21(Long), 14(Long)
+2020-12-07 22:30:57.960 DEBUG 9464 --- [quartzScheduler_Worker-1] c.y.c.m.CommentUserMapper.selectOne      : <==      Total: 1
+2020-12-07 22:30:57.960 DEBUG 9464 --- [quartzScheduler_Worker-1] c.y.c.m.CommentUserMapper.updateById     : ==>  Preparing: UPDATE t_comment_user SET comment_id=?, user_id=?, status=? WHERE id=? 
+2020-12-07 22:30:57.960 DEBUG 9464 --- [quartzScheduler_Worker-1] c.y.c.m.CommentUserMapper.updateById     : ==> Parameters: 21(Long), 14(Long), true(Boolean), 20(Long)
+2020-12-07 22:30:57.993 DEBUG 9464 --- [quartzScheduler_Worker-1] c.y.c.m.CommentUserMapper.updateById     : <==    Updates: 1
+2020-12-07 22:30:57.993 DEBUG 9464 --- [quartzScheduler_Worker-1] c.y.c.m.CommentUserMapper.selectOne      : ==>  Preparing: SELECT id,comment_id,user_id,status FROM t_comment_user WHERE comment_id=? AND user_id=? 
+2020-12-07 22:30:57.993 DEBUG 9464 --- [quartzScheduler_Worker-1] c.y.c.m.CommentUserMapper.selectOne      : ==> Parameters: 19(Long), 14(Long)
+2020-12-07 22:30:58.218 DEBUG 9464 --- [quartzScheduler_Worker-1] c.y.c.m.CommentUserMapper.selectOne      : <==      Total: 1
+2020-12-07 22:30:58.218 DEBUG 9464 --- [quartzScheduler_Worker-1] c.y.c.m.CommentUserMapper.updateById     : ==>  Preparing: UPDATE t_comment_user SET comment_id=?, user_id=?, status=? WHERE id=? 
+2020-12-07 22:30:58.218 DEBUG 9464 --- [quartzScheduler_Worker-1] c.y.c.m.CommentUserMapper.updateById     : ==> Parameters: 19(Long), 14(Long), true(Boolean), 21(Long)
+2020-12-07 22:30:58.247 DEBUG 9464 --- [quartzScheduler_Worker-1] c.y.c.m.CommentUserMapper.updateById     : <==    Updates: 1
+2020-12-07 22:30:58.248 DEBUG 9464 --- [quartzScheduler_Worker-1] c.y.c.m.CommentUserMapper.selectOne      : ==>  Preparing: SELECT id,comment_id,user_id,status FROM t_comment_user WHERE comment_id=? AND user_id=? 
+2020-12-07 22:30:58.248 DEBUG 9464 --- [quartzScheduler_Worker-1] c.y.c.m.CommentUserMapper.selectOne      : ==> Parameters: 22(Long), 14(Long)
+2020-12-07 22:30:58.252 DEBUG 9464 --- [quartzScheduler_Worker-1] c.y.c.m.CommentUserMapper.selectOne      : <==      Total: 1
+2020-12-07 22:30:58.252 DEBUG 9464 --- [quartzScheduler_Worker-1] c.y.c.m.CommentUserMapper.updateById     : ==>  Preparing: UPDATE t_comment_user SET comment_id=?, user_id=?, status=? WHERE id=? 
+2020-12-07 22:30:58.252 DEBUG 9464 --- [quartzScheduler_Worker-1] c.y.c.m.CommentUserMapper.updateById     : ==> Parameters: 22(Long), 14(Long), true(Boolean), 13(Long)
+2020-12-07 22:30:59.124 DEBUG 9464 --- [quartzScheduler_Worker-1] c.y.c.m.CommentUserMapper.updateById     : <==    Updates: 1
+2020-12-07 22:31:10.161  INFO 9464 --- [http-nio-8888-exec-5] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring DispatcherServlet 'dispatcherServlet'
+2020-12-07 22:31:10.161  INFO 9464 --- [http-nio-8888-exec-5] o.s.web.servlet.DispatcherServlet        : Initializing Servlet 'dispatcherServlet'
+2020-12-07 22:31:10.194  INFO 9464 --- [http-nio-8888-exec-5] o.s.web.servlet.DispatcherServlet        : Completed initialization in 33 ms
+2020-12-07 22:31:53.780 DEBUG 9464 --- [http-nio-8888-exec-7] c.y.exam.mapper.ExamMapper.selectOne     : ==>  Preparing: SELECT id,course_id,title,introduction,create_time,start_time,end_time,question_count,total_score,status,top_num FROM t_exam WHERE (id = ?) 
+2020-12-07 22:31:53.786 DEBUG 9464 --- [http-nio-8888-exec-7] c.y.exam.mapper.ExamMapper.selectOne     : ==> Parameters: 2(Long)
+2020-12-07 22:31:53.962 DEBUG 9464 --- [http-nio-8888-exec-7] c.y.exam.mapper.ExamMapper.selectOne     : <==      Total: 1
+2020-12-07 22:31:53.962 DEBUG 9464 --- [http-nio-8888-exec-7] c.y.e.m.ExamQuestionMapper.selectOne     : ==>  Preparing: SELECT id,exam_id,question_number,question_type,question_id FROM t_exam_question WHERE (exam_id = ? AND question_number = ?) 
+2020-12-07 22:31:53.962 DEBUG 9464 --- [http-nio-8888-exec-7] c.y.e.m.ExamQuestionMapper.selectOne     : ==> Parameters: 2(Long), 6(Long)
+2020-12-07 22:31:53.979 DEBUG 9464 --- [http-nio-8888-exec-7] c.y.e.m.ExamQuestionMapper.selectOne     : <==      Total: 1
+2020-12-07 22:31:53.982 DEBUG 9464 --- [http-nio-8888-exec-7] c.y.e.mapper.ExamQuestionMapper.delete   : ==>  Preparing: DELETE FROM t_exam_question WHERE (exam_id = ? AND question_number = ?) 
+2020-12-07 22:31:53.982 DEBUG 9464 --- [http-nio-8888-exec-7] c.y.e.mapper.ExamQuestionMapper.delete   : ==> Parameters: 2(Long), 6(Long)
+2020-12-07 22:31:54.014 DEBUG 9464 --- [http-nio-8888-exec-7] c.y.e.mapper.ExamQuestionMapper.delete   : <==    Updates: 1

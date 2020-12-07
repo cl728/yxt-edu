@@ -40,5 +40,11 @@ public class ExamController implements ExamControllerApi {
             , @RequestBody InsertQuestion insertQuestion) {
         return this.examService.saveQuestion(examId,teacherId,insertQuestion);
     }
+
+    @Override
+    @DeleteMapping("question/examId/{examId}/questionNumber/{questionNumber}")
+    public CommonResponse deleteQuestion(@PathVariable long examId, @PathVariable long questionNumber) {
+        return this.examService.deleteQuestion(examId,questionNumber);
+    }
 }
 
