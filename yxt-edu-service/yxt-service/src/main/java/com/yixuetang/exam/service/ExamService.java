@@ -1,6 +1,7 @@
 package com.yixuetang.exam.service;
 
 import com.yixuetang.entity.request.exam.InsertExam;
+import com.yixuetang.entity.request.exam.InsertQuestion;
 import com.yixuetang.entity.response.CommonResponse;
 
 /**
@@ -23,4 +24,13 @@ public interface ExamService {
      * @return  响应结果实体类
      */
     CommonResponse examTop(long examId);
+
+    /**
+     * 教师保存题目
+     * @param examId   测试（考试）id
+     * @param teacherId   教师id
+     * @param insertQuestion  新增的题目实体
+     * @return  响应结果实体类
+     */
+    CommonResponse saveQuestion(long examId, long teacherId, InsertQuestion insertQuestion);
 }

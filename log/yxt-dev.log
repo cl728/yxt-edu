@@ -451,3 +451,349 @@
 2020-12-07 20:14:56.216 DEBUG 5560 --- [http-nio-8888-exec-10] c.y.exam.mapper.ExamMapper.updateById    : ==>  Preparing: UPDATE t_exam SET course_id=?, title=?, introduction=?, create_time=?, start_time=?, end_time=?, question_count=?, total_score=?, status=?, top_num=? WHERE id=? 
 2020-12-07 20:14:56.216 DEBUG 5560 --- [http-nio-8888-exec-10] c.y.exam.mapper.ExamMapper.updateById    : ==> Parameters: 35(Long), string(String), string(String), 2020-12-07 17:38:59.0(Timestamp), 2020-12-07 09:38:02.0(Timestamp), 2020-12-07 09:38:02.0(Timestamp), 0(Integer), 0.0(Double), false(Boolean), 0(Integer), 2(Long)
 2020-12-07 20:14:56.249 DEBUG 5560 --- [http-nio-8888-exec-10] c.y.exam.mapper.ExamMapper.updateById    : <==    Updates: 1
+2020-12-07 21:51:58.967  INFO 4168 --- [main] com.yixuetang.YxtServiceApplication      : Starting YxtServiceApplication on SD-20191117RFKO with PID 4168 (E:\projects\yxt-edu\yxt-edu-service\yxt-service\target\classes started by Administrator in E:\projects\yxt-edu)
+2020-12-07 21:51:59.039 DEBUG 4168 --- [main] com.yixuetang.YxtServiceApplication      : Running with Spring Boot v2.2.5.RELEASE, Spring v5.2.4.RELEASE
+2020-12-07 21:51:59.039  INFO 4168 --- [main] com.yixuetang.YxtServiceApplication      : The following profiles are active: dev
+2020-12-07 21:52:08.972  INFO 4168 --- [main] .s.d.r.c.RepositoryConfigurationDelegate : Multiple Spring Data modules found, entering strict repository configuration mode!
+2020-12-07 21:52:08.972  INFO 4168 --- [main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data Redis repositories in DEFAULT mode.
+2020-12-07 21:52:09.073  INFO 4168 --- [main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 42ms. Found 0 Redis repository interfaces.
+2020-12-07 21:52:09.876  INFO 4168 --- [main] ptablePropertiesBeanFactoryPostProcessor : Post-processing PropertySource instances
+2020-12-07 21:52:09.977  INFO 4168 --- [main] c.u.j.EncryptablePropertySourceConverter : Converting PropertySource configurationProperties [org.springframework.boot.context.properties.source.ConfigurationPropertySourcesPropertySource] to AOP Proxy
+2020-12-07 21:52:09.977  INFO 4168 --- [main] c.u.j.EncryptablePropertySourceConverter : Converting PropertySource servletConfigInitParams [org.springframework.core.env.PropertySource$StubPropertySource] to EncryptablePropertySourceWrapper
+2020-12-07 21:52:09.977  INFO 4168 --- [main] c.u.j.EncryptablePropertySourceConverter : Converting PropertySource servletContextInitParams [org.springframework.core.env.PropertySource$StubPropertySource] to EncryptablePropertySourceWrapper
+2020-12-07 21:52:09.977  INFO 4168 --- [main] c.u.j.EncryptablePropertySourceConverter : Converting PropertySource systemProperties [org.springframework.core.env.PropertiesPropertySource] to EncryptableMapPropertySourceWrapper
+2020-12-07 21:52:09.977  INFO 4168 --- [main] c.u.j.EncryptablePropertySourceConverter : Converting PropertySource systemEnvironment [org.springframework.boot.env.SystemEnvironmentPropertySourceEnvironmentPostProcessor$OriginAwareSystemEnvironmentPropertySource] to EncryptableMapPropertySourceWrapper
+2020-12-07 21:52:09.977  INFO 4168 --- [main] c.u.j.EncryptablePropertySourceConverter : Converting PropertySource random [org.springframework.boot.env.RandomValuePropertySource] to EncryptablePropertySourceWrapper
+2020-12-07 21:52:09.977  INFO 4168 --- [main] c.u.j.EncryptablePropertySourceConverter : Converting PropertySource applicationConfig: [classpath:/application-dev.yml] [org.springframework.boot.env.OriginTrackedMapPropertySource] to EncryptableMapPropertySourceWrapper
+2020-12-07 21:52:09.977  INFO 4168 --- [main] c.u.j.EncryptablePropertySourceConverter : Converting PropertySource applicationConfig: [classpath:/application.yml] [org.springframework.boot.env.OriginTrackedMapPropertySource] to EncryptableMapPropertySourceWrapper
+2020-12-07 21:52:10.014  INFO 4168 --- [main] c.u.j.filter.DefaultLazyPropertyFilter   : Property Filter custom Bean not found with name 'encryptablePropertyFilter'. Initializing Default Property Filter
+2020-12-07 21:52:10.783  INFO 4168 --- [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port(s): 8888 (http)
+2020-12-07 21:52:10.799  INFO 4168 --- [main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2020-12-07 21:52:10.799  INFO 4168 --- [main] org.apache.catalina.core.StandardEngine  : Starting Servlet engine: [Apache Tomcat/9.0.31]
+2020-12-07 21:52:11.018  INFO 4168 --- [main] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2020-12-07 21:52:11.033  INFO 4168 --- [main] o.s.web.context.ContextLoader            : Root WebApplicationContext: initialization completed in 11651 ms
+2020-12-07 21:52:11.593  INFO 4168 --- [main] c.u.j.r.DefaultLazyPropertyResolver      : Property Resolver custom Bean not found with name 'encryptablePropertyResolver'. Initializing Default Property Resolver
+2020-12-07 21:52:11.593  INFO 4168 --- [main] c.u.j.d.DefaultLazyPropertyDetector      : Property Detector custom Bean not found with name 'encryptablePropertyDetector'. Initializing Default Property Detector
+2020-12-07 21:52:11.593  INFO 4168 --- [main] c.u.j.encryptor.DefaultLazyEncryptor     : String Encryptor custom Bean not found with name 'jasyptStringEncryptor'. Initializing Default String Encryptor
+2020-12-07 21:52:11.593  INFO 4168 --- [main] c.u.j.encryptor.DefaultLazyEncryptor     : Encryptor config not found for property jasypt.encryptor.algorithm, using default value: PBEWithMD5AndDES
+2020-12-07 21:52:11.593  INFO 4168 --- [main] c.u.j.encryptor.DefaultLazyEncryptor     : Encryptor config not found for property jasypt.encryptor.keyObtentionIterations, using default value: 1000
+2020-12-07 21:52:11.593  INFO 4168 --- [main] c.u.j.encryptor.DefaultLazyEncryptor     : Encryptor config not found for property jasypt.encryptor.poolSize, using default value: 1
+2020-12-07 21:52:11.593  INFO 4168 --- [main] c.u.j.encryptor.DefaultLazyEncryptor     : Encryptor config not found for property jasypt.encryptor.providerName, using default value: null
+2020-12-07 21:52:11.593  INFO 4168 --- [main] c.u.j.encryptor.DefaultLazyEncryptor     : Encryptor config not found for property jasypt.encryptor.providerClassName, using default value: null
+2020-12-07 21:52:11.593  INFO 4168 --- [main] c.u.j.encryptor.DefaultLazyEncryptor     : Encryptor config not found for property jasypt.encryptor.saltGeneratorClassname, using default value: org.jasypt.salt.RandomSaltGenerator
+2020-12-07 21:52:11.593  INFO 4168 --- [main] c.u.j.encryptor.DefaultLazyEncryptor     : Encryptor config not found for property jasypt.encryptor.stringOutputType, using default value: base64
+2020-12-07 21:52:14.537  WARN 4168 --- [main] c.b.m.core.injector.AbstractMethod       : [com.yixuetang.message.mapper.RemindMapper.deleteById] Has been loaded by XML or SqlProvider or Mybatis's Annotation, so ignoring this injection for [class com.baomidou.mybatisplus.core.injector.methods.DeleteById]
+2020-12-07 21:52:15.649  INFO 4168 --- [main] pertySourcedRequestMappingHandlerMapping : Mapped URL path [/v2/api-docs] onto method [springfox.documentation.swagger2.web.Swagger2Controller#getDocumentation(String, HttpServletRequest)]
+2020-12-07 21:52:16.292  INFO 4168 --- [main] o.s.s.concurrent.ThreadPoolTaskExecutor  : Initializing ExecutorService 'applicationTaskExecutor'
+2020-12-07 21:52:17.014  INFO 4168 --- [main] org.quartz.impl.StdSchedulerFactory      : Using default implementation for ThreadExecutor
+2020-12-07 21:52:17.046  INFO 4168 --- [main] org.quartz.core.SchedulerSignalerImpl    : Initialized Scheduler Signaller of type: class org.quartz.core.SchedulerSignalerImpl
+2020-12-07 21:52:17.046  INFO 4168 --- [main] org.quartz.core.QuartzScheduler          : Quartz Scheduler v.2.3.2 created.
+2020-12-07 21:52:17.046  INFO 4168 --- [main] org.quartz.simpl.RAMJobStore             : RAMJobStore initialized.
+2020-12-07 21:52:17.046  INFO 4168 --- [main] org.quartz.core.QuartzScheduler          : Scheduler meta-data: Quartz Scheduler (v2.3.2) 'quartzScheduler' with instanceId 'NON_CLUSTERED'
+  Scheduler class: 'org.quartz.core.QuartzScheduler' - running locally.
+  NOT STARTED.
+  Currently in standby mode.
+  Number of jobs executed: 0
+  Using thread pool 'org.quartz.simpl.SimpleThreadPool' - with 10 threads.
+  Using job-store 'org.quartz.simpl.RAMJobStore' - which does not support persistence. and is not clustered.
+
+2020-12-07 21:52:17.046  INFO 4168 --- [main] org.quartz.impl.StdSchedulerFactory      : Quartz scheduler 'quartzScheduler' initialized from an externally provided properties instance.
+2020-12-07 21:52:17.046  INFO 4168 --- [main] org.quartz.impl.StdSchedulerFactory      : Quartz scheduler version: 2.3.2
+2020-12-07 21:52:17.046  INFO 4168 --- [main] org.quartz.core.QuartzScheduler          : JobFactory set to: org.springframework.scheduling.quartz.SpringBeanJobFactory@4fad51a3
+2020-12-07 21:52:17.046  INFO 4168 --- [main] o.s.s.c.ThreadPoolTaskScheduler          : Initializing ExecutorService 'taskScheduler'
+2020-12-07 21:52:17.345  INFO 4168 --- [main] d.s.w.p.DocumentationPluginsBootstrapper : Context refreshed
+2020-12-07 21:52:17.412  INFO 4168 --- [main] d.s.w.p.DocumentationPluginsBootstrapper : Found 1 custom documentation plugin(s)
+2020-12-07 21:52:17.496  INFO 4168 --- [main] s.d.s.w.s.ApiListingReferenceScanner     : Scanning for api listing references
+2020-12-07 21:52:17.936  INFO 4168 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: findByIdUsingGET_1
+2020-12-07 21:52:18.053  INFO 4168 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: findByIdUsingGET_2
+2020-12-07 21:52:18.071  INFO 4168 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: switchTopUsingPUT_1
+2020-12-07 21:52:18.087  INFO 4168 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: findByCourseIdUsingGET_1
+2020-12-07 21:52:18.118  INFO 4168 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: uploadUsingPOST_1
+2020-12-07 21:52:18.119  INFO 4168 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: delByIdUsingDELETE_1
+2020-12-07 21:52:18.119  INFO 4168 --- [main] .d.s.w.r.o.CachingOperationNameGenerator : Generating unique operation named: findByPageUsingGET_1
+2020-12-07 21:52:18.219  INFO 4168 --- [main] o.s.a.r.c.CachingConnectionFactory       : Attempting to connect to: [42.194.162.66:5672]
+2020-12-07 21:52:18.389  INFO 4168 --- [main] o.s.a.r.c.CachingConnectionFactory       : Created new connection: rabbitConnectionFactory#5efe47fd:0/SimpleConnection@175ac243 [delegate=amqp://colin@42.194.162.66:5672/colin-vhost, localPort= 51843]
+2020-12-07 21:52:18.955  INFO 4168 --- [main] o.s.s.quartz.SchedulerFactoryBean        : Starting Quartz Scheduler now
+2020-12-07 21:52:18.955  INFO 4168 --- [main] org.quartz.core.QuartzScheduler          : Scheduler quartzScheduler_$_NON_CLUSTERED started.
+2020-12-07 21:52:18.971  INFO 4168 --- [quartzScheduler_Worker-1] com.yixuetang.task.LikeTask              : --------LikeTask--------
+2020-12-07 21:52:18.971  INFO 4168 --- [quartzScheduler_Worker-2] c.yixuetang.task.PullSystemMessageTask   : --------PullSystemMessageTask--------
+2020-12-07 21:52:18.973  INFO 4168 --- [quartzScheduler_Worker-1] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2020-12-07 21:52:19.855  INFO 4168 --- [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port(s): 8888 (http) with context path ''
+2020-12-07 21:52:19.986  INFO 4168 --- [main] com.yixuetang.YxtServiceApplication      : Started YxtServiceApplication in 26.538 seconds (JVM running for 35.116)
+2020-12-07 21:52:21.562  INFO 4168 --- [quartzScheduler_Worker-1] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
+2020-12-07 21:52:22.784 DEBUG 4168 --- [quartzScheduler_Worker-2] c.y.m.mapper.MessageMapper.selectList    : ==>  Preparing: SELECT id,receiver_type,publisher_id,receiver_id,status,title,content,publish_time,update_time FROM t_message WHERE (status = ?) 
+2020-12-07 21:52:22.834  INFO 4168 --- [quartzScheduler_Worker-1] io.lettuce.core.EpollProvider            : Starting without optional epoll library
+2020-12-07 21:52:22.866  INFO 4168 --- [quartzScheduler_Worker-1] io.lettuce.core.KqueueProvider           : Starting without optional kqueue library
+2020-12-07 21:52:22.968 DEBUG 4168 --- [quartzScheduler_Worker-2] c.y.m.mapper.MessageMapper.selectList    : ==> Parameters: false(Boolean)
+2020-12-07 21:52:23.083 DEBUG 4168 --- [quartzScheduler_Worker-2] c.y.m.mapper.MessageMapper.selectList    : <==      Total: 0
+2020-12-07 21:52:24.620 DEBUG 4168 --- [quartzScheduler_Worker-1] c.y.c.m.CommentUserMapper.selectOne      : ==>  Preparing: SELECT id,comment_id,user_id,status FROM t_comment_user WHERE comment_id=? AND user_id=? 
+2020-12-07 21:52:24.620 DEBUG 4168 --- [quartzScheduler_Worker-1] c.y.c.m.CommentUserMapper.selectOne      : ==> Parameters: 18(Long), 11(Long)
+2020-12-07 21:52:24.620 DEBUG 4168 --- [quartzScheduler_Worker-1] c.y.c.m.CommentUserMapper.selectOne      : <==      Total: 1
+2020-12-07 21:52:24.620 DEBUG 4168 --- [quartzScheduler_Worker-1] c.y.c.m.CommentUserMapper.updateById     : ==>  Preparing: UPDATE t_comment_user SET comment_id=?, user_id=?, status=? WHERE id=? 
+2020-12-07 21:52:24.620 DEBUG 4168 --- [quartzScheduler_Worker-1] c.y.c.m.CommentUserMapper.updateById     : ==> Parameters: 18(Long), 11(Long), false(Boolean), 14(Long)
+2020-12-07 21:52:24.636 DEBUG 4168 --- [quartzScheduler_Worker-1] c.y.c.m.CommentUserMapper.updateById     : <==    Updates: 1
+2020-12-07 21:52:24.636 DEBUG 4168 --- [quartzScheduler_Worker-1] c.y.c.m.CommentUserMapper.selectOne      : ==>  Preparing: SELECT id,comment_id,user_id,status FROM t_comment_user WHERE comment_id=? AND user_id=? 
+2020-12-07 21:52:24.648 DEBUG 4168 --- [quartzScheduler_Worker-1] c.y.c.m.CommentUserMapper.selectOne      : ==> Parameters: 19(Long), 11(Long)
+2020-12-07 21:52:24.648 DEBUG 4168 --- [quartzScheduler_Worker-1] c.y.c.m.CommentUserMapper.selectOne      : <==      Total: 1
+2020-12-07 21:52:24.648 DEBUG 4168 --- [quartzScheduler_Worker-1] c.y.c.m.CommentUserMapper.updateById     : ==>  Preparing: UPDATE t_comment_user SET comment_id=?, user_id=?, status=? WHERE id=? 
+2020-12-07 21:52:24.648 DEBUG 4168 --- [quartzScheduler_Worker-1] c.y.c.m.CommentUserMapper.updateById     : ==> Parameters: 19(Long), 11(Long), true(Boolean), 15(Long)
+2020-12-07 21:52:24.664 DEBUG 4168 --- [quartzScheduler_Worker-1] c.y.c.m.CommentUserMapper.updateById     : <==    Updates: 1
+2020-12-07 21:52:24.664 DEBUG 4168 --- [quartzScheduler_Worker-1] c.y.c.m.CommentUserMapper.selectOne      : ==>  Preparing: SELECT id,comment_id,user_id,status FROM t_comment_user WHERE comment_id=? AND user_id=? 
+2020-12-07 21:52:24.664 DEBUG 4168 --- [quartzScheduler_Worker-1] c.y.c.m.CommentUserMapper.selectOne      : ==> Parameters: 21(Long), 11(Long)
+2020-12-07 21:52:24.664 DEBUG 4168 --- [quartzScheduler_Worker-1] c.y.c.m.CommentUserMapper.selectOne      : <==      Total: 1
+2020-12-07 21:52:24.664 DEBUG 4168 --- [quartzScheduler_Worker-1] c.y.c.m.CommentUserMapper.updateById     : ==>  Preparing: UPDATE t_comment_user SET comment_id=?, user_id=?, status=? WHERE id=? 
+2020-12-07 21:52:24.680 DEBUG 4168 --- [quartzScheduler_Worker-1] c.y.c.m.CommentUserMapper.updateById     : ==> Parameters: 21(Long), 11(Long), true(Boolean), 11(Long)
+2020-12-07 21:52:24.907 DEBUG 4168 --- [quartzScheduler_Worker-1] c.y.c.m.CommentUserMapper.updateById     : <==    Updates: 1
+2020-12-07 21:52:24.909 DEBUG 4168 --- [quartzScheduler_Worker-1] c.y.c.m.CommentUserMapper.selectOne      : ==>  Preparing: SELECT id,comment_id,user_id,status FROM t_comment_user WHERE comment_id=? AND user_id=? 
+2020-12-07 21:52:24.911 DEBUG 4168 --- [quartzScheduler_Worker-1] c.y.c.m.CommentUserMapper.selectOne      : ==> Parameters: 20(Long), 11(Long)
+2020-12-07 21:52:24.915 DEBUG 4168 --- [quartzScheduler_Worker-1] c.y.c.m.CommentUserMapper.selectOne      : <==      Total: 1
+2020-12-07 21:52:24.919 DEBUG 4168 --- [quartzScheduler_Worker-1] c.y.c.m.CommentUserMapper.updateById     : ==>  Preparing: UPDATE t_comment_user SET comment_id=?, user_id=?, status=? WHERE id=? 
+2020-12-07 21:52:24.938 DEBUG 4168 --- [quartzScheduler_Worker-1] c.y.c.m.CommentUserMapper.updateById     : ==> Parameters: 20(Long), 11(Long), true(Boolean), 16(Long)
+2020-12-07 21:52:24.955 DEBUG 4168 --- [quartzScheduler_Worker-1] c.y.c.m.CommentUserMapper.updateById     : <==    Updates: 1
+2020-12-07 21:52:24.957 DEBUG 4168 --- [quartzScheduler_Worker-1] c.y.c.m.CommentUserMapper.selectOne      : ==>  Preparing: SELECT id,comment_id,user_id,status FROM t_comment_user WHERE comment_id=? AND user_id=? 
+2020-12-07 21:52:24.957 DEBUG 4168 --- [quartzScheduler_Worker-1] c.y.c.m.CommentUserMapper.selectOne      : ==> Parameters: 22(Long), 11(Long)
+2020-12-07 21:52:24.976 DEBUG 4168 --- [quartzScheduler_Worker-1] c.y.c.m.CommentUserMapper.selectOne      : <==      Total: 1
+2020-12-07 21:52:24.978 DEBUG 4168 --- [quartzScheduler_Worker-1] c.y.c.m.CommentUserMapper.updateById     : ==>  Preparing: UPDATE t_comment_user SET comment_id=?, user_id=?, status=? WHERE id=? 
+2020-12-07 21:52:24.978 DEBUG 4168 --- [quartzScheduler_Worker-1] c.y.c.m.CommentUserMapper.updateById     : ==> Parameters: 22(Long), 11(Long), true(Boolean), 12(Long)
+2020-12-07 21:52:24.988 DEBUG 4168 --- [quartzScheduler_Worker-1] c.y.c.m.CommentUserMapper.updateById     : <==    Updates: 1
+2020-12-07 21:52:25.005 DEBUG 4168 --- [quartzScheduler_Worker-1] c.y.c.m.CommentUserMapper.selectOne      : ==>  Preparing: SELECT id,comment_id,user_id,status FROM t_comment_user WHERE comment_id=? AND user_id=? 
+2020-12-07 21:52:25.005 DEBUG 4168 --- [quartzScheduler_Worker-1] c.y.c.m.CommentUserMapper.selectOne      : ==> Parameters: 24(Long), 11(Long)
+2020-12-07 21:52:25.005 DEBUG 4168 --- [quartzScheduler_Worker-1] c.y.c.m.CommentUserMapper.selectOne      : <==      Total: 1
+2020-12-07 21:52:25.005 DEBUG 4168 --- [quartzScheduler_Worker-1] c.y.c.m.CommentUserMapper.updateById     : ==>  Preparing: UPDATE t_comment_user SET comment_id=?, user_id=?, status=? WHERE id=? 
+2020-12-07 21:52:25.005 DEBUG 4168 --- [quartzScheduler_Worker-1] c.y.c.m.CommentUserMapper.updateById     : ==> Parameters: 24(Long), 11(Long), true(Boolean), 17(Long)
+2020-12-07 21:52:25.037 DEBUG 4168 --- [quartzScheduler_Worker-1] c.y.c.m.CommentUserMapper.updateById     : <==    Updates: 1
+2020-12-07 21:52:25.037 DEBUG 4168 --- [quartzScheduler_Worker-1] c.y.c.m.CommentUserMapper.selectOne      : ==>  Preparing: SELECT id,comment_id,user_id,status FROM t_comment_user WHERE comment_id=? AND user_id=? 
+2020-12-07 21:52:25.037 DEBUG 4168 --- [quartzScheduler_Worker-1] c.y.c.m.CommentUserMapper.selectOne      : ==> Parameters: 20(Long), 14(Long)
+2020-12-07 21:52:25.037 DEBUG 4168 --- [quartzScheduler_Worker-1] c.y.c.m.CommentUserMapper.selectOne      : <==      Total: 1
+2020-12-07 21:52:25.052 DEBUG 4168 --- [quartzScheduler_Worker-1] c.y.c.m.CommentUserMapper.updateById     : ==>  Preparing: UPDATE t_comment_user SET comment_id=?, user_id=?, status=? WHERE id=? 
+2020-12-07 21:52:25.052 DEBUG 4168 --- [quartzScheduler_Worker-1] c.y.c.m.CommentUserMapper.updateById     : ==> Parameters: 20(Long), 14(Long), false(Boolean), 18(Long)
+2020-12-07 21:52:25.069 DEBUG 4168 --- [quartzScheduler_Worker-1] c.y.c.m.CommentUserMapper.updateById     : <==    Updates: 1
+2020-12-07 21:52:25.069 DEBUG 4168 --- [quartzScheduler_Worker-1] c.y.c.m.CommentUserMapper.selectOne      : ==>  Preparing: SELECT id,comment_id,user_id,status FROM t_comment_user WHERE comment_id=? AND user_id=? 
+2020-12-07 21:52:25.069 DEBUG 4168 --- [quartzScheduler_Worker-1] c.y.c.m.CommentUserMapper.selectOne      : ==> Parameters: 24(Long), 14(Long)
+2020-12-07 21:52:25.086 DEBUG 4168 --- [quartzScheduler_Worker-1] c.y.c.m.CommentUserMapper.selectOne      : <==      Total: 1
+2020-12-07 21:52:25.089 DEBUG 4168 --- [quartzScheduler_Worker-1] c.y.c.m.CommentUserMapper.updateById     : ==>  Preparing: UPDATE t_comment_user SET comment_id=?, user_id=?, status=? WHERE id=? 
+2020-12-07 21:52:25.089 DEBUG 4168 --- [quartzScheduler_Worker-1] c.y.c.m.CommentUserMapper.updateById     : ==> Parameters: 24(Long), 14(Long), true(Boolean), 19(Long)
+2020-12-07 21:52:25.105 DEBUG 4168 --- [quartzScheduler_Worker-1] c.y.c.m.CommentUserMapper.updateById     : <==    Updates: 1
+2020-12-07 21:52:25.105 DEBUG 4168 --- [quartzScheduler_Worker-1] c.y.c.m.CommentUserMapper.selectOne      : ==>  Preparing: SELECT id,comment_id,user_id,status FROM t_comment_user WHERE comment_id=? AND user_id=? 
+2020-12-07 21:52:25.105 DEBUG 4168 --- [quartzScheduler_Worker-1] c.y.c.m.CommentUserMapper.selectOne      : ==> Parameters: 21(Long), 14(Long)
+2020-12-07 21:52:25.117 DEBUG 4168 --- [quartzScheduler_Worker-1] c.y.c.m.CommentUserMapper.selectOne      : <==      Total: 1
+2020-12-07 21:52:25.117 DEBUG 4168 --- [quartzScheduler_Worker-1] c.y.c.m.CommentUserMapper.updateById     : ==>  Preparing: UPDATE t_comment_user SET comment_id=?, user_id=?, status=? WHERE id=? 
+2020-12-07 21:52:25.117 DEBUG 4168 --- [quartzScheduler_Worker-1] c.y.c.m.CommentUserMapper.updateById     : ==> Parameters: 21(Long), 14(Long), true(Boolean), 20(Long)
+2020-12-07 21:52:25.134 DEBUG 4168 --- [quartzScheduler_Worker-1] c.y.c.m.CommentUserMapper.updateById     : <==    Updates: 1
+2020-12-07 21:52:25.134 DEBUG 4168 --- [quartzScheduler_Worker-1] c.y.c.m.CommentUserMapper.selectOne      : ==>  Preparing: SELECT id,comment_id,user_id,status FROM t_comment_user WHERE comment_id=? AND user_id=? 
+2020-12-07 21:52:25.134 DEBUG 4168 --- [quartzScheduler_Worker-1] c.y.c.m.CommentUserMapper.selectOne      : ==> Parameters: 19(Long), 14(Long)
+2020-12-07 21:52:25.152 DEBUG 4168 --- [quartzScheduler_Worker-1] c.y.c.m.CommentUserMapper.selectOne      : <==      Total: 1
+2020-12-07 21:52:25.152 DEBUG 4168 --- [quartzScheduler_Worker-1] c.y.c.m.CommentUserMapper.updateById     : ==>  Preparing: UPDATE t_comment_user SET comment_id=?, user_id=?, status=? WHERE id=? 
+2020-12-07 21:52:25.152 DEBUG 4168 --- [quartzScheduler_Worker-1] c.y.c.m.CommentUserMapper.updateById     : ==> Parameters: 19(Long), 14(Long), true(Boolean), 21(Long)
+2020-12-07 21:52:25.169 DEBUG 4168 --- [quartzScheduler_Worker-1] c.y.c.m.CommentUserMapper.updateById     : <==    Updates: 1
+2020-12-07 21:52:25.169 DEBUG 4168 --- [quartzScheduler_Worker-1] c.y.c.m.CommentUserMapper.selectOne      : ==>  Preparing: SELECT id,comment_id,user_id,status FROM t_comment_user WHERE comment_id=? AND user_id=? 
+2020-12-07 21:52:25.169 DEBUG 4168 --- [quartzScheduler_Worker-1] c.y.c.m.CommentUserMapper.selectOne      : ==> Parameters: 22(Long), 14(Long)
+2020-12-07 21:52:25.185 DEBUG 4168 --- [quartzScheduler_Worker-1] c.y.c.m.CommentUserMapper.selectOne      : <==      Total: 1
+2020-12-07 21:52:25.185 DEBUG 4168 --- [quartzScheduler_Worker-1] c.y.c.m.CommentUserMapper.updateById     : ==>  Preparing: UPDATE t_comment_user SET comment_id=?, user_id=?, status=? WHERE id=? 
+2020-12-07 21:52:25.185 DEBUG 4168 --- [quartzScheduler_Worker-1] c.y.c.m.CommentUserMapper.updateById     : ==> Parameters: 22(Long), 14(Long), true(Boolean), 13(Long)
+2020-12-07 21:52:25.408 DEBUG 4168 --- [quartzScheduler_Worker-1] c.y.c.m.CommentUserMapper.updateById     : <==    Updates: 1
+2020-12-07 21:53:13.637  INFO 4168 --- [http-nio-8888-exec-1] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring DispatcherServlet 'dispatcherServlet'
+2020-12-07 21:53:13.637  INFO 4168 --- [http-nio-8888-exec-1] o.s.web.servlet.DispatcherServlet        : Initializing Servlet 'dispatcherServlet'
+2020-12-07 21:53:13.637  INFO 4168 --- [http-nio-8888-exec-1] o.s.web.servlet.DispatcherServlet        : Completed initialization in 0 ms
+2020-12-07 21:56:16.005 DEBUG 4168 --- [http-nio-8888-exec-6] c.y.exam.mapper.ExamMapper.selectOne     : ==>  Preparing: SELECT id,course_id,title,introduction,create_time,start_time,end_time,question_count,total_score,status,top_num FROM t_exam WHERE (id = ?) 
+2020-12-07 21:56:16.005 DEBUG 4168 --- [http-nio-8888-exec-6] c.y.exam.mapper.ExamMapper.selectOne     : ==> Parameters: 1(Long)
+2020-12-07 21:56:16.023 DEBUG 4168 --- [http-nio-8888-exec-6] c.y.exam.mapper.ExamMapper.selectOne     : <==      Total: 0
+2020-12-07 21:56:16.088 ERROR 4168 --- [http-nio-8888-exec-6] c.y.utils.exception.ExceptionCatchUtils  : 捕获自定义异常：错误代码：20002, 错误信息：非法请求！
+ 自定义异常：{}
+
+com.yixuetang.entity.exception.CustomException: 错误代码：20002, 错误信息：非法请求！
+	at com.yixuetang.utils.exception.ExceptionThrowUtils.cast(ExceptionThrowUtils.java:16) ~[classes/:na]
+	at com.yixuetang.exam.service.impl.ExamServiceImpl.saveQuestion(ExamServiceImpl.java:122) ~[classes/:na]
+	at com.yixuetang.exam.controller.ExamController.saveQuestion(ExamController.java:41) ~[classes/:na]
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method) ~[na:1.8.0_91]
+	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62) ~[na:1.8.0_91]
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43) ~[na:1.8.0_91]
+	at java.lang.reflect.Method.invoke(Method.java:498) ~[na:1.8.0_91]
+	at org.springframework.web.method.support.InvocableHandlerMethod.doInvoke(InvocableHandlerMethod.java:190) ~[spring-web-5.2.4.RELEASE.jar:5.2.4.RELEASE]
+	at org.springframework.web.method.support.InvocableHandlerMethod.invokeForRequest(InvocableHandlerMethod.java:138) ~[spring-web-5.2.4.RELEASE.jar:5.2.4.RELEASE]
+	at org.springframework.web.servlet.mvc.method.annotation.ServletInvocableHandlerMethod.invokeAndHandle(ServletInvocableHandlerMethod.java:106) ~[spring-webmvc-5.2.4.RELEASE.jar:5.2.4.RELEASE]
+	at org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter.invokeHandlerMethod(RequestMappingHandlerAdapter.java:879) ~[spring-webmvc-5.2.4.RELEASE.jar:5.2.4.RELEASE]
+	at org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter.handleInternal(RequestMappingHandlerAdapter.java:793) ~[spring-webmvc-5.2.4.RELEASE.jar:5.2.4.RELEASE]
+	at org.springframework.web.servlet.mvc.method.AbstractHandlerMethodAdapter.handle(AbstractHandlerMethodAdapter.java:87) ~[spring-webmvc-5.2.4.RELEASE.jar:5.2.4.RELEASE]
+	at org.springframework.web.servlet.DispatcherServlet.doDispatch(DispatcherServlet.java:1040) ~[spring-webmvc-5.2.4.RELEASE.jar:5.2.4.RELEASE]
+	at org.springframework.web.servlet.DispatcherServlet.doService(DispatcherServlet.java:943) ~[spring-webmvc-5.2.4.RELEASE.jar:5.2.4.RELEASE]
+	at org.springframework.web.servlet.FrameworkServlet.processRequest(FrameworkServlet.java:1006) [spring-webmvc-5.2.4.RELEASE.jar:5.2.4.RELEASE]
+	at org.springframework.web.servlet.FrameworkServlet.doPost(FrameworkServlet.java:909) [spring-webmvc-5.2.4.RELEASE.jar:5.2.4.RELEASE]
+	at javax.servlet.http.HttpServlet.service(HttpServlet.java:660) [tomcat-embed-core-9.0.31.jar:9.0.31]
+	at org.springframework.web.servlet.FrameworkServlet.service(FrameworkServlet.java:883) [spring-webmvc-5.2.4.RELEASE.jar:5.2.4.RELEASE]
+	at javax.servlet.http.HttpServlet.service(HttpServlet.java:741) [tomcat-embed-core-9.0.31.jar:9.0.31]
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:231) [tomcat-embed-core-9.0.31.jar:9.0.31]
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:166) [tomcat-embed-core-9.0.31.jar:9.0.31]
+	at org.apache.tomcat.websocket.server.WsFilter.doFilter(WsFilter.java:53) [tomcat-embed-websocket-9.0.31.jar:9.0.31]
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:193) [tomcat-embed-core-9.0.31.jar:9.0.31]
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:166) [tomcat-embed-core-9.0.31.jar:9.0.31]
+	at org.springframework.web.filter.CorsFilter.doFilterInternal(CorsFilter.java:92) [spring-web-5.2.4.RELEASE.jar:5.2.4.RELEASE]
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:119) [spring-web-5.2.4.RELEASE.jar:5.2.4.RELEASE]
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:193) [tomcat-embed-core-9.0.31.jar:9.0.31]
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:166) [tomcat-embed-core-9.0.31.jar:9.0.31]
+	at org.springframework.web.filter.RequestContextFilter.doFilterInternal(RequestContextFilter.java:100) [spring-web-5.2.4.RELEASE.jar:5.2.4.RELEASE]
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:119) [spring-web-5.2.4.RELEASE.jar:5.2.4.RELEASE]
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:193) [tomcat-embed-core-9.0.31.jar:9.0.31]
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:166) [tomcat-embed-core-9.0.31.jar:9.0.31]
+	at org.springframework.web.filter.FormContentFilter.doFilterInternal(FormContentFilter.java:93) [spring-web-5.2.4.RELEASE.jar:5.2.4.RELEASE]
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:119) [spring-web-5.2.4.RELEASE.jar:5.2.4.RELEASE]
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:193) [tomcat-embed-core-9.0.31.jar:9.0.31]
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:166) [tomcat-embed-core-9.0.31.jar:9.0.31]
+	at org.springframework.web.filter.CharacterEncodingFilter.doFilterInternal(CharacterEncodingFilter.java:201) [spring-web-5.2.4.RELEASE.jar:5.2.4.RELEASE]
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:119) [spring-web-5.2.4.RELEASE.jar:5.2.4.RELEASE]
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:193) [tomcat-embed-core-9.0.31.jar:9.0.31]
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:166) [tomcat-embed-core-9.0.31.jar:9.0.31]
+	at org.apache.catalina.core.StandardWrapperValve.invoke(StandardWrapperValve.java:202) [tomcat-embed-core-9.0.31.jar:9.0.31]
+	at org.apache.catalina.core.StandardContextValve.invoke(StandardContextValve.java:96) [tomcat-embed-core-9.0.31.jar:9.0.31]
+	at org.apache.catalina.authenticator.AuthenticatorBase.invoke(AuthenticatorBase.java:541) [tomcat-embed-core-9.0.31.jar:9.0.31]
+	at org.apache.catalina.core.StandardHostValve.invoke(StandardHostValve.java:139) [tomcat-embed-core-9.0.31.jar:9.0.31]
+	at org.apache.catalina.valves.ErrorReportValve.invoke(ErrorReportValve.java:92) [tomcat-embed-core-9.0.31.jar:9.0.31]
+	at org.apache.catalina.core.StandardEngineValve.invoke(StandardEngineValve.java:74) [tomcat-embed-core-9.0.31.jar:9.0.31]
+	at org.apache.catalina.connector.CoyoteAdapter.service(CoyoteAdapter.java:343) [tomcat-embed-core-9.0.31.jar:9.0.31]
+	at org.apache.coyote.http11.Http11Processor.service(Http11Processor.java:367) [tomcat-embed-core-9.0.31.jar:9.0.31]
+	at org.apache.coyote.AbstractProcessorLight.process(AbstractProcessorLight.java:65) [tomcat-embed-core-9.0.31.jar:9.0.31]
+	at org.apache.coyote.AbstractProtocol$ConnectionHandler.process(AbstractProtocol.java:868) [tomcat-embed-core-9.0.31.jar:9.0.31]
+	at org.apache.tomcat.util.net.NioEndpoint$SocketProcessor.doRun(NioEndpoint.java:1639) [tomcat-embed-core-9.0.31.jar:9.0.31]
+	at org.apache.tomcat.util.net.SocketProcessorBase.run(SocketProcessorBase.java:49) [tomcat-embed-core-9.0.31.jar:9.0.31]
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1142) [na:1.8.0_91]
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:617) [na:1.8.0_91]
+	at org.apache.tomcat.util.threads.TaskThread$WrappingRunnable.run(TaskThread.java:61) [tomcat-embed-core-9.0.31.jar:9.0.31]
+	at java.lang.Thread.run(Thread.java:745) [na:1.8.0_91]
+
+2020-12-07 21:56:56.289 DEBUG 4168 --- [http-nio-8888-exec-9] c.y.exam.mapper.ExamMapper.selectOne     : ==>  Preparing: SELECT id,course_id,title,introduction,create_time,start_time,end_time,question_count,total_score,status,top_num FROM t_exam WHERE (id = ?) 
+2020-12-07 21:56:56.297 DEBUG 4168 --- [http-nio-8888-exec-9] c.y.exam.mapper.ExamMapper.selectOne     : ==> Parameters: 1(Long)
+2020-12-07 21:56:56.298 DEBUG 4168 --- [http-nio-8888-exec-9] c.y.exam.mapper.ExamMapper.selectOne     : <==      Total: 0
+2020-12-07 21:56:56.298 ERROR 4168 --- [http-nio-8888-exec-9] c.y.utils.exception.ExceptionCatchUtils  : 捕获自定义异常：错误代码：20002, 错误信息：非法请求！
+ 自定义异常：{}
+
+com.yixuetang.entity.exception.CustomException: 错误代码：20002, 错误信息：非法请求！
+	at com.yixuetang.utils.exception.ExceptionThrowUtils.cast(ExceptionThrowUtils.java:16) ~[classes/:na]
+	at com.yixuetang.exam.service.impl.ExamServiceImpl.saveQuestion(ExamServiceImpl.java:122) ~[classes/:na]
+	at com.yixuetang.exam.controller.ExamController.saveQuestion(ExamController.java:41) ~[classes/:na]
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method) ~[na:1.8.0_91]
+	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62) ~[na:1.8.0_91]
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43) ~[na:1.8.0_91]
+	at java.lang.reflect.Method.invoke(Method.java:498) ~[na:1.8.0_91]
+	at org.springframework.web.method.support.InvocableHandlerMethod.doInvoke(InvocableHandlerMethod.java:190) ~[spring-web-5.2.4.RELEASE.jar:5.2.4.RELEASE]
+	at org.springframework.web.method.support.InvocableHandlerMethod.invokeForRequest(InvocableHandlerMethod.java:138) ~[spring-web-5.2.4.RELEASE.jar:5.2.4.RELEASE]
+	at org.springframework.web.servlet.mvc.method.annotation.ServletInvocableHandlerMethod.invokeAndHandle(ServletInvocableHandlerMethod.java:106) ~[spring-webmvc-5.2.4.RELEASE.jar:5.2.4.RELEASE]
+	at org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter.invokeHandlerMethod(RequestMappingHandlerAdapter.java:879) ~[spring-webmvc-5.2.4.RELEASE.jar:5.2.4.RELEASE]
+	at org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter.handleInternal(RequestMappingHandlerAdapter.java:793) ~[spring-webmvc-5.2.4.RELEASE.jar:5.2.4.RELEASE]
+	at org.springframework.web.servlet.mvc.method.AbstractHandlerMethodAdapter.handle(AbstractHandlerMethodAdapter.java:87) ~[spring-webmvc-5.2.4.RELEASE.jar:5.2.4.RELEASE]
+	at org.springframework.web.servlet.DispatcherServlet.doDispatch(DispatcherServlet.java:1040) ~[spring-webmvc-5.2.4.RELEASE.jar:5.2.4.RELEASE]
+	at org.springframework.web.servlet.DispatcherServlet.doService(DispatcherServlet.java:943) ~[spring-webmvc-5.2.4.RELEASE.jar:5.2.4.RELEASE]
+	at org.springframework.web.servlet.FrameworkServlet.processRequest(FrameworkServlet.java:1006) [spring-webmvc-5.2.4.RELEASE.jar:5.2.4.RELEASE]
+	at org.springframework.web.servlet.FrameworkServlet.doPost(FrameworkServlet.java:909) [spring-webmvc-5.2.4.RELEASE.jar:5.2.4.RELEASE]
+	at javax.servlet.http.HttpServlet.service(HttpServlet.java:660) [tomcat-embed-core-9.0.31.jar:9.0.31]
+	at org.springframework.web.servlet.FrameworkServlet.service(FrameworkServlet.java:883) [spring-webmvc-5.2.4.RELEASE.jar:5.2.4.RELEASE]
+	at javax.servlet.http.HttpServlet.service(HttpServlet.java:741) [tomcat-embed-core-9.0.31.jar:9.0.31]
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:231) [tomcat-embed-core-9.0.31.jar:9.0.31]
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:166) [tomcat-embed-core-9.0.31.jar:9.0.31]
+	at org.apache.tomcat.websocket.server.WsFilter.doFilter(WsFilter.java:53) [tomcat-embed-websocket-9.0.31.jar:9.0.31]
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:193) [tomcat-embed-core-9.0.31.jar:9.0.31]
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:166) [tomcat-embed-core-9.0.31.jar:9.0.31]
+	at org.springframework.web.filter.CorsFilter.doFilterInternal(CorsFilter.java:92) [spring-web-5.2.4.RELEASE.jar:5.2.4.RELEASE]
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:119) [spring-web-5.2.4.RELEASE.jar:5.2.4.RELEASE]
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:193) [tomcat-embed-core-9.0.31.jar:9.0.31]
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:166) [tomcat-embed-core-9.0.31.jar:9.0.31]
+	at org.springframework.web.filter.RequestContextFilter.doFilterInternal(RequestContextFilter.java:100) [spring-web-5.2.4.RELEASE.jar:5.2.4.RELEASE]
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:119) [spring-web-5.2.4.RELEASE.jar:5.2.4.RELEASE]
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:193) [tomcat-embed-core-9.0.31.jar:9.0.31]
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:166) [tomcat-embed-core-9.0.31.jar:9.0.31]
+	at org.springframework.web.filter.FormContentFilter.doFilterInternal(FormContentFilter.java:93) [spring-web-5.2.4.RELEASE.jar:5.2.4.RELEASE]
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:119) [spring-web-5.2.4.RELEASE.jar:5.2.4.RELEASE]
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:193) [tomcat-embed-core-9.0.31.jar:9.0.31]
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:166) [tomcat-embed-core-9.0.31.jar:9.0.31]
+	at org.springframework.web.filter.CharacterEncodingFilter.doFilterInternal(CharacterEncodingFilter.java:201) [spring-web-5.2.4.RELEASE.jar:5.2.4.RELEASE]
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:119) [spring-web-5.2.4.RELEASE.jar:5.2.4.RELEASE]
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:193) [tomcat-embed-core-9.0.31.jar:9.0.31]
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:166) [tomcat-embed-core-9.0.31.jar:9.0.31]
+	at org.apache.catalina.core.StandardWrapperValve.invoke(StandardWrapperValve.java:202) [tomcat-embed-core-9.0.31.jar:9.0.31]
+	at org.apache.catalina.core.StandardContextValve.invoke(StandardContextValve.java:96) [tomcat-embed-core-9.0.31.jar:9.0.31]
+	at org.apache.catalina.authenticator.AuthenticatorBase.invoke(AuthenticatorBase.java:541) [tomcat-embed-core-9.0.31.jar:9.0.31]
+	at org.apache.catalina.core.StandardHostValve.invoke(StandardHostValve.java:139) [tomcat-embed-core-9.0.31.jar:9.0.31]
+	at org.apache.catalina.valves.ErrorReportValve.invoke(ErrorReportValve.java:92) [tomcat-embed-core-9.0.31.jar:9.0.31]
+	at org.apache.catalina.core.StandardEngineValve.invoke(StandardEngineValve.java:74) [tomcat-embed-core-9.0.31.jar:9.0.31]
+	at org.apache.catalina.connector.CoyoteAdapter.service(CoyoteAdapter.java:343) [tomcat-embed-core-9.0.31.jar:9.0.31]
+	at org.apache.coyote.http11.Http11Processor.service(Http11Processor.java:367) [tomcat-embed-core-9.0.31.jar:9.0.31]
+	at org.apache.coyote.AbstractProcessorLight.process(AbstractProcessorLight.java:65) [tomcat-embed-core-9.0.31.jar:9.0.31]
+	at org.apache.coyote.AbstractProtocol$ConnectionHandler.process(AbstractProtocol.java:868) [tomcat-embed-core-9.0.31.jar:9.0.31]
+	at org.apache.tomcat.util.net.NioEndpoint$SocketProcessor.doRun(NioEndpoint.java:1639) [tomcat-embed-core-9.0.31.jar:9.0.31]
+	at org.apache.tomcat.util.net.SocketProcessorBase.run(SocketProcessorBase.java:49) [tomcat-embed-core-9.0.31.jar:9.0.31]
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1142) [na:1.8.0_91]
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:617) [na:1.8.0_91]
+	at org.apache.tomcat.util.threads.TaskThread$WrappingRunnable.run(TaskThread.java:61) [tomcat-embed-core-9.0.31.jar:9.0.31]
+	at java.lang.Thread.run(Thread.java:745) [na:1.8.0_91]
+
+2020-12-07 21:57:26.001 DEBUG 4168 --- [http-nio-8888-exec-5] c.y.exam.mapper.ExamMapper.selectOne     : ==>  Preparing: SELECT id,course_id,title,introduction,create_time,start_time,end_time,question_count,total_score,status,top_num FROM t_exam WHERE (id = ?) 
+2020-12-07 21:57:26.002 DEBUG 4168 --- [http-nio-8888-exec-5] c.y.exam.mapper.ExamMapper.selectOne     : ==> Parameters: 2(Long)
+2020-12-07 21:57:26.077 DEBUG 4168 --- [http-nio-8888-exec-5] c.y.exam.mapper.ExamMapper.selectOne     : <==      Total: 1
+2020-12-07 21:57:26.078 DEBUG 4168 --- [http-nio-8888-exec-5] c.y.c.mapper.CourseMapper.selectOne      : ==>  Preparing: SELECT id,c_name,c_pic,c_code,s_count,create_time,update_time,school_year,semester,class AS clazz,top_num,is_filed FROM t_course WHERE (id = ? AND teacher_id = ?) 
+2020-12-07 21:57:26.078 DEBUG 4168 --- [http-nio-8888-exec-5] c.y.c.mapper.CourseMapper.selectOne      : ==> Parameters: 35(Long), 6(Long)
+2020-12-07 21:57:26.078 DEBUG 4168 --- [http-nio-8888-exec-5] c.y.c.mapper.CourseMapper.selectOne      : <==      Total: 1
+2020-12-07 21:57:26.091 DEBUG 4168 --- [http-nio-8888-exec-5] c.y.e.m.question.SelectMapper.insert     : ==>  Preparing: INSERT INTO t_select ( teacher_id, type, content, choice_a, choice_b, choice_c, choice_d, answer, analysis, score, create_time ) VALUES ( ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ? ) 
+2020-12-07 21:57:26.104 DEBUG 4168 --- [http-nio-8888-exec-5] c.y.e.m.question.SelectMapper.insert     : ==> Parameters: 6(Long), 0(Integer), select(String), 1(String), 2(String), 3(String), 4(String), A(String), analysis(String), 20.0(Double), 2020-12-07 21:57:26.091(Timestamp)
+2020-12-07 21:57:26.116 DEBUG 4168 --- [http-nio-8888-exec-5] c.y.e.m.question.SelectMapper.insert     : <==    Updates: 1
+2020-12-07 21:57:26.133 DEBUG 4168 --- [http-nio-8888-exec-5] c.y.e.mapper.ExamQuestionMapper.insert   : ==>  Preparing: INSERT INTO t_exam_question ( exam_id, question_number, question_type, question_id ) VALUES ( ?, ?, ?, ? ) 
+2020-12-07 21:57:26.133 DEBUG 4168 --- [http-nio-8888-exec-5] c.y.e.mapper.ExamQuestionMapper.insert   : ==> Parameters: 2(Long), 1(Integer), 0(Integer), 1(Long)
+2020-12-07 21:57:26.154 DEBUG 4168 --- [http-nio-8888-exec-5] c.y.e.mapper.ExamQuestionMapper.insert   : <==    Updates: 1
+2020-12-07 21:58:23.456 DEBUG 4168 --- [http-nio-8888-exec-7] c.y.exam.mapper.ExamMapper.selectOne     : ==>  Preparing: SELECT id,course_id,title,introduction,create_time,start_time,end_time,question_count,total_score,status,top_num FROM t_exam WHERE (id = ?) 
+2020-12-07 21:58:23.456 DEBUG 4168 --- [http-nio-8888-exec-7] c.y.exam.mapper.ExamMapper.selectOne     : ==> Parameters: 2(Long)
+2020-12-07 21:58:23.456 DEBUG 4168 --- [http-nio-8888-exec-7] c.y.exam.mapper.ExamMapper.selectOne     : <==      Total: 1
+2020-12-07 21:58:23.470 DEBUG 4168 --- [http-nio-8888-exec-7] c.y.c.mapper.CourseMapper.selectOne      : ==>  Preparing: SELECT id,c_name,c_pic,c_code,s_count,create_time,update_time,school_year,semester,class AS clazz,top_num,is_filed FROM t_course WHERE (id = ? AND teacher_id = ?) 
+2020-12-07 21:58:23.471 DEBUG 4168 --- [http-nio-8888-exec-7] c.y.c.mapper.CourseMapper.selectOne      : ==> Parameters: 35(Long), 6(Long)
+2020-12-07 21:58:23.471 DEBUG 4168 --- [http-nio-8888-exec-7] c.y.c.mapper.CourseMapper.selectOne      : <==      Total: 1
+2020-12-07 21:58:23.471 DEBUG 4168 --- [http-nio-8888-exec-7] c.y.e.m.question.SelectMapper.insert     : ==>  Preparing: INSERT INTO t_select ( teacher_id, type, content, choice_a, choice_b, choice_c, choice_d, answer, analysis, score, create_time ) VALUES ( ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ? ) 
+2020-12-07 21:58:23.471 DEBUG 4168 --- [http-nio-8888-exec-7] c.y.e.m.question.SelectMapper.insert     : ==> Parameters: 6(Long), 1(Integer), select(String), 1(String), 2(String), 3(String), 4(String), AB(String), analysis(String), 20.0(Double), 2020-12-07 21:58:23.471(Timestamp)
+2020-12-07 21:58:23.490 DEBUG 4168 --- [http-nio-8888-exec-7] c.y.e.m.question.SelectMapper.insert     : <==    Updates: 1
+2020-12-07 21:58:23.490 DEBUG 4168 --- [http-nio-8888-exec-7] c.y.e.mapper.ExamQuestionMapper.insert   : ==>  Preparing: INSERT INTO t_exam_question ( exam_id, question_number, question_type, question_id ) VALUES ( ?, ?, ?, ? ) 
+2020-12-07 21:58:23.490 DEBUG 4168 --- [http-nio-8888-exec-7] c.y.e.mapper.ExamQuestionMapper.insert   : ==> Parameters: 2(Long), 1(Integer), 0(Integer), 2(Long)
+2020-12-07 21:58:23.527 DEBUG 4168 --- [http-nio-8888-exec-7] c.y.e.mapper.ExamQuestionMapper.insert   : <==    Updates: 1
+2020-12-07 22:01:24.370 DEBUG 4168 --- [http-nio-8888-exec-10] c.y.exam.mapper.ExamMapper.selectOne     : ==>  Preparing: SELECT id,course_id,title,introduction,create_time,start_time,end_time,question_count,total_score,status,top_num FROM t_exam WHERE (id = ?) 
+2020-12-07 22:01:24.380 DEBUG 4168 --- [http-nio-8888-exec-10] c.y.exam.mapper.ExamMapper.selectOne     : ==> Parameters: 2(Long)
+2020-12-07 22:01:24.392 DEBUG 4168 --- [http-nio-8888-exec-10] c.y.exam.mapper.ExamMapper.selectOne     : <==      Total: 1
+2020-12-07 22:01:24.394 DEBUG 4168 --- [http-nio-8888-exec-10] c.y.c.mapper.CourseMapper.selectOne      : ==>  Preparing: SELECT id,c_name,c_pic,c_code,s_count,create_time,update_time,school_year,semester,class AS clazz,top_num,is_filed FROM t_course WHERE (id = ? AND teacher_id = ?) 
+2020-12-07 22:01:24.395 DEBUG 4168 --- [http-nio-8888-exec-10] c.y.c.mapper.CourseMapper.selectOne      : ==> Parameters: 35(Long), 6(Long)
+2020-12-07 22:01:24.610 DEBUG 4168 --- [http-nio-8888-exec-10] c.y.c.mapper.CourseMapper.selectOne      : <==      Total: 1
+2020-12-07 22:01:24.626 DEBUG 4168 --- [http-nio-8888-exec-10] c.y.e.mapper.question.FillMapper.insert  : ==>  Preparing: INSERT INTO t_fill ( teacher_id, content, answer, analysis, score, create_time ) VALUES ( ?, ?, ?, ?, ?, ? ) 
+2020-12-07 22:01:24.627 DEBUG 4168 --- [http-nio-8888-exec-10] c.y.e.mapper.question.FillMapper.insert  : ==> Parameters: 6(Long), 1+1=(String), 2(String), 1+1=2(String), 10.0(Double), 2020-12-07 22:01:24.61(Timestamp)
+2020-12-07 22:01:24.643 DEBUG 4168 --- [http-nio-8888-exec-10] c.y.e.mapper.question.FillMapper.insert  : <==    Updates: 1
+2020-12-07 22:01:24.643 DEBUG 4168 --- [http-nio-8888-exec-10] c.y.e.mapper.ExamQuestionMapper.insert   : ==>  Preparing: INSERT INTO t_exam_question ( exam_id, question_number, question_type, question_id ) VALUES ( ?, ?, ?, ? ) 
+2020-12-07 22:01:24.643 DEBUG 4168 --- [http-nio-8888-exec-10] c.y.e.mapper.ExamQuestionMapper.insert   : ==> Parameters: 2(Long), 3(Integer), 2(Integer), 1(Long)
+2020-12-07 22:01:24.676 DEBUG 4168 --- [http-nio-8888-exec-10] c.y.e.mapper.ExamQuestionMapper.insert   : <==    Updates: 1
+2020-12-07 22:02:40.917 DEBUG 4168 --- [http-nio-8888-exec-1] c.y.exam.mapper.ExamMapper.selectOne     : ==>  Preparing: SELECT id,course_id,title,introduction,create_time,start_time,end_time,question_count,total_score,status,top_num FROM t_exam WHERE (id = ?) 
+2020-12-07 22:02:40.933 DEBUG 4168 --- [http-nio-8888-exec-1] c.y.exam.mapper.ExamMapper.selectOne     : ==> Parameters: 2(Long)
+2020-12-07 22:02:40.933 DEBUG 4168 --- [http-nio-8888-exec-1] c.y.exam.mapper.ExamMapper.selectOne     : <==      Total: 1
+2020-12-07 22:02:40.933 DEBUG 4168 --- [http-nio-8888-exec-1] c.y.c.mapper.CourseMapper.selectOne      : ==>  Preparing: SELECT id,c_name,c_pic,c_code,s_count,create_time,update_time,school_year,semester,class AS clazz,top_num,is_filed FROM t_course WHERE (id = ? AND teacher_id = ?) 
+2020-12-07 22:02:40.945 DEBUG 4168 --- [http-nio-8888-exec-1] c.y.c.mapper.CourseMapper.selectOne      : ==> Parameters: 35(Long), 6(Long)
+2020-12-07 22:02:40.954 DEBUG 4168 --- [http-nio-8888-exec-1] c.y.c.mapper.CourseMapper.selectOne      : <==      Total: 1
+2020-12-07 22:02:40.954 DEBUG 4168 --- [http-nio-8888-exec-1] c.y.e.m.question.JudgeMapper.insert      : ==>  Preparing: INSERT INTO t_judge ( teacher_id, content, answer, analysis, score, create_time ) VALUES ( ?, ?, ?, ?, ?, ? ) 
+2020-12-07 22:02:40.954 DEBUG 4168 --- [http-nio-8888-exec-1] c.y.e.m.question.JudgeMapper.insert      : ==> Parameters: 6(Long), 1+1=3(String), false(Boolean), 1+1不等于3，等于2(String), 20.0(Double), 2020-12-07 22:02:40.954(Timestamp)
+2020-12-07 22:02:40.987 DEBUG 4168 --- [http-nio-8888-exec-1] c.y.e.m.question.JudgeMapper.insert      : <==    Updates: 1
+2020-12-07 22:02:40.994 DEBUG 4168 --- [http-nio-8888-exec-1] c.y.e.mapper.ExamQuestionMapper.insert   : ==>  Preparing: INSERT INTO t_exam_question ( exam_id, question_number, question_type, question_id ) VALUES ( ?, ?, ?, ? ) 
+2020-12-07 22:02:40.994 DEBUG 4168 --- [http-nio-8888-exec-1] c.y.e.mapper.ExamQuestionMapper.insert   : ==> Parameters: 2(Long), 4(Integer), 1(Integer), 1(Long)
+2020-12-07 22:02:41.016 DEBUG 4168 --- [http-nio-8888-exec-1] c.y.e.mapper.ExamQuestionMapper.insert   : <==    Updates: 1
+2020-12-07 22:03:40.808 DEBUG 4168 --- [http-nio-8888-exec-3] c.y.exam.mapper.ExamMapper.selectOne     : ==>  Preparing: SELECT id,course_id,title,introduction,create_time,start_time,end_time,question_count,total_score,status,top_num FROM t_exam WHERE (id = ?) 
+2020-12-07 22:03:40.808 DEBUG 4168 --- [http-nio-8888-exec-3] c.y.exam.mapper.ExamMapper.selectOne     : ==> Parameters: 2(Long)
+2020-12-07 22:03:40.833 DEBUG 4168 --- [http-nio-8888-exec-3] c.y.exam.mapper.ExamMapper.selectOne     : <==      Total: 1
+2020-12-07 22:03:40.834 DEBUG 4168 --- [http-nio-8888-exec-3] c.y.c.mapper.CourseMapper.selectOne      : ==>  Preparing: SELECT id,c_name,c_pic,c_code,s_count,create_time,update_time,school_year,semester,class AS clazz,top_num,is_filed FROM t_course WHERE (id = ? AND teacher_id = ?) 
+2020-12-07 22:03:40.834 DEBUG 4168 --- [http-nio-8888-exec-3] c.y.c.mapper.CourseMapper.selectOne      : ==> Parameters: 35(Long), 6(Long)
+2020-12-07 22:03:40.846 DEBUG 4168 --- [http-nio-8888-exec-3] c.y.c.mapper.CourseMapper.selectOne      : <==      Total: 1
+2020-12-07 22:03:40.846 DEBUG 4168 --- [http-nio-8888-exec-3] c.y.e.m.question.JudgeMapper.insert      : ==>  Preparing: INSERT INTO t_judge ( teacher_id, content, answer, analysis, score, create_time ) VALUES ( ?, ?, ?, ?, ?, ? ) 
+2020-12-07 22:03:40.846 DEBUG 4168 --- [http-nio-8888-exec-3] c.y.e.m.question.JudgeMapper.insert      : ==> Parameters: 6(Long), 1+1=2(String), true(Boolean), 1+1等于2(String), 20.0(Double), 2020-12-07 22:03:40.846(Timestamp)
+2020-12-07 22:03:40.863 DEBUG 4168 --- [http-nio-8888-exec-3] c.y.e.m.question.JudgeMapper.insert      : <==    Updates: 1
+2020-12-07 22:03:40.872 DEBUG 4168 --- [http-nio-8888-exec-3] c.y.e.mapper.ExamQuestionMapper.insert   : ==>  Preparing: INSERT INTO t_exam_question ( exam_id, question_number, question_type, question_id ) VALUES ( ?, ?, ?, ? ) 
+2020-12-07 22:03:40.872 DEBUG 4168 --- [http-nio-8888-exec-3] c.y.e.mapper.ExamQuestionMapper.insert   : ==> Parameters: 2(Long), 5(Integer), 1(Integer), 2(Long)
+2020-12-07 22:03:41.109 DEBUG 4168 --- [http-nio-8888-exec-3] c.y.e.mapper.ExamQuestionMapper.insert   : <==    Updates: 1
+2020-12-07 22:05:49.800 DEBUG 4168 --- [http-nio-8888-exec-4] c.y.exam.mapper.ExamMapper.selectOne     : ==>  Preparing: SELECT id,course_id,title,introduction,create_time,start_time,end_time,question_count,total_score,status,top_num FROM t_exam WHERE (id = ?) 
+2020-12-07 22:05:49.800 DEBUG 4168 --- [http-nio-8888-exec-4] c.y.exam.mapper.ExamMapper.selectOne     : ==> Parameters: 2(Long)
+2020-12-07 22:05:49.800 DEBUG 4168 --- [http-nio-8888-exec-4] c.y.exam.mapper.ExamMapper.selectOne     : <==      Total: 1
+2020-12-07 22:05:49.816 DEBUG 4168 --- [http-nio-8888-exec-4] c.y.c.mapper.CourseMapper.selectOne      : ==>  Preparing: SELECT id,c_name,c_pic,c_code,s_count,create_time,update_time,school_year,semester,class AS clazz,top_num,is_filed FROM t_course WHERE (id = ? AND teacher_id = ?) 
+2020-12-07 22:05:49.816 DEBUG 4168 --- [http-nio-8888-exec-4] c.y.c.mapper.CourseMapper.selectOne      : ==> Parameters: 35(Long), 6(Long)
+2020-12-07 22:05:49.825 DEBUG 4168 --- [http-nio-8888-exec-4] c.y.c.mapper.CourseMapper.selectOne      : <==      Total: 1
+2020-12-07 22:05:49.826 DEBUG 4168 --- [http-nio-8888-exec-4] c.y.e.mapper.question.QAMapper.insert    : ==>  Preparing: INSERT INTO t_qa ( teacher_id, content, answer, analysis, score, create_time ) VALUES ( ?, ?, ?, ?, ?, ? ) 
+2020-12-07 22:05:49.826 DEBUG 4168 --- [http-nio-8888-exec-4] c.y.e.mapper.question.QAMapper.insert    : ==> Parameters: 6(Long), 1+1为什么大于2(String), 因为。。。。(String), 因为.。。。(String), 50.0(Double), 2020-12-07 22:05:49.826(Timestamp)
+2020-12-07 22:05:49.842 DEBUG 4168 --- [http-nio-8888-exec-4] c.y.e.mapper.question.QAMapper.insert    : <==    Updates: 1
+2020-12-07 22:05:49.859 DEBUG 4168 --- [http-nio-8888-exec-4] c.y.e.mapper.ExamQuestionMapper.insert   : ==>  Preparing: INSERT INTO t_exam_question ( exam_id, question_number, question_type, question_id ) VALUES ( ?, ?, ?, ? ) 
+2020-12-07 22:05:49.859 DEBUG 4168 --- [http-nio-8888-exec-4] c.y.e.mapper.ExamQuestionMapper.insert   : ==> Parameters: 2(Long), 6(Integer), 3(Integer), 1(Long)
+2020-12-07 22:05:49.870 DEBUG 4168 --- [http-nio-8888-exec-4] c.y.e.mapper.ExamQuestionMapper.insert   : <==    Updates: 1

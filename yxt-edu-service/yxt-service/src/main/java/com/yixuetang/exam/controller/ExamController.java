@@ -2,6 +2,7 @@ package com.yixuetang.exam.controller;
 
 import com.yixuetang.api.exam.ExamControllerApi;
 import com.yixuetang.entity.request.exam.InsertExam;
+import com.yixuetang.entity.request.exam.InsertQuestion;
 import com.yixuetang.entity.response.CommonResponse;
 import com.yixuetang.exam.service.ExamService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,6 +32,13 @@ public class ExamController implements ExamControllerApi {
     @PutMapping("topNum/examId/{examId}")
     public CommonResponse examTop(@PathVariable long examId) {
         return this.examService.examTop(examId);
+    }
+
+    @Override
+    @PostMapping("question/examId/{examId}/teacherId/{teacherId}")
+    public CommonResponse saveQuestion(@PathVariable long examId, @PathVariable long teacherId
+            , @RequestBody InsertQuestion insertQuestion) {
+        return this.examService.saveQuestion(examId,teacherId,insertQuestion);
     }
 }
 
