@@ -18,6 +18,6 @@ public class ExamResp extends Exam {
     private Integer uncommittedCount;	// 未提交人数
     private Integer uncorrectedCount;	// 待批改人数
     private Integer correctedCount;		// 已批改人数
-    private Integer status;			    // 学生的作业完成情况
+    private Integer examStudentStatus;	// 学生的测试完成情况
 
 }
