@@ -2,7 +2,7 @@ package com.yixuetang.exam.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.yixuetang.entity.exam.Exam;
-import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.*;
 
 /**
  * @author Colin

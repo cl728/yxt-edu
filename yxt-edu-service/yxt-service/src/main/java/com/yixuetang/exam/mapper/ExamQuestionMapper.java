@@ -3,6 +3,9 @@ package com.yixuetang.exam.mapper;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.yixuetang.entity.exam.ExamQuestion;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Select;
+
+import java.util.List;
 
 /**
  * @author Colin

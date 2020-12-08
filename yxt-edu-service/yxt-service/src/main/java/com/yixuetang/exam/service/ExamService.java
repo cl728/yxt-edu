@@ -11,6 +11,16 @@ import com.yixuetang.entity.response.QueryResponse;
  * @date 2020/12/07 10:25
  */
 public interface ExamService {
+
+
+    /**
+     * 教师删除某一考试（测试）
+     *
+     * @param examId
+     * @return
+     */
+    CommonResponse deleteById(long examId);
+
     /**
      * 教师在某一课程下新建测试
      *
