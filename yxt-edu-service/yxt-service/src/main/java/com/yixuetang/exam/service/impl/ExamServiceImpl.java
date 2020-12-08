@@ -1,6 +1,5 @@
 package com.yixuetang.exam.service.impl;
 
-
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.yixuetang.course.mapper.CourseMapper;
 import com.yixuetang.course.mapper.ScMapper;
@@ -341,18 +340,20 @@ public class ExamServiceImpl implements ExamService {
             }
             // 4. actionType 为 0，代表教师执⾏⾸次发布操作，此时修改 status 为 true
             exam.setStatus(true);
-            this.examMapper.updateStatus(exam);
         } else if (actionType == 1) {
             // 5. actionType 为 1，代表教师执⾏重新发布操作，此时修改 start_time 为 new Date(), end_time为 null
             exam.setStartTime(new Date());
             exam.setEndTime(null);
             exam.setStatus(true);
-            this.examMapper.updateStatus(exam);
         } else if (actionType == 2) {
             // 6. actionType 为 2，代表教师执⾏取消发布操作，此时修改 status 为 false
             exam.setStatus(false);
-            this.examMapper.updateStatus(exam);
+        } else if (actionType == 3) {
+            // 7.actionType 为 3，代表教师执行结束发布操作，此时修改 end_time 为 new Date()
+            exam.setEndTime( new Date() );
         }
+
+        this.examMapper.updateStatus( exam );
 
         return new CommonResponse(CommonCode.SUCCESS);
     }
