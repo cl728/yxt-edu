@@ -64,4 +64,13 @@ public interface ExamService {
      * @return 响应结果实体类
      */
     QueryResponse findListByCourseId(long courseId, long userId);
+
+    /**
+     * 教师发布/重新发布/取消发布测试（考试）
+     *
+     * @param examId     课程id
+     * @param actionType 操作类型，0⾸次发布 1重新发布 2取消发布，路径变量
+     * @return 响应结果实体类
+     */
+    CommonResponse updateStatus(long examId, int actionType);
 }

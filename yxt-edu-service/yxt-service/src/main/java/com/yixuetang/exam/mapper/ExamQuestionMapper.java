@@ -15,4 +15,8 @@ import java.util.List;
  */
 @Mapper
 public interface ExamQuestionMapper extends BaseMapper<ExamQuestion> {
+
+    @Select("select question_id from t_exam_question where exam_id = #{examId}")
+    List<Long> findExamQuestionIds(long examId);
+
 }

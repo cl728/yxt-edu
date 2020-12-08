@@ -22,6 +22,17 @@ public class ExamController implements ExamControllerApi {
     @Autowired
     private ExamService examService;
 
+    @Override
+    @PutMapping("status/examId/{examId}/actionType/{actionType}")
+    public CommonResponse updateStatus(@PathVariable long examId, @PathVariable int actionType) {
+        return this.examService.updateStatus(examId, actionType);
+    }
+
+    @Override
+    @DeleteMapping("examId/{examId}")
+    public CommonResponse deleteById(@PathVariable long examId) {
+        return this.examService.deleteById(examId);
+    }
 
     @Override
     @PostMapping("courseId/{courseId}")
@@ -39,7 +50,7 @@ public class ExamController implements ExamControllerApi {
     @PostMapping("question/examId/{examId}/teacherId/{teacherId}")
     public CommonResponse saveQuestion(@PathVariable long examId, @PathVariable long teacherId
             , @RequestBody InsertQuestion insertQuestion) {
-        return this.examService.saveQuestion( examId, teacherId, insertQuestion );
+        return this.examService.saveQuestion(examId, teacherId, insertQuestion);
     }
 
     @Override

@@ -17,6 +17,21 @@ import io.swagger.annotations.ApiOperation;
  */
 @Api(value = "考试模块管理接口", description = "考试模块管理接口，提供考试的增、删、改、查")
 public interface ExamControllerApi {
+
+    @ApiOperation("教师发布/重新发布/取消发布测试（考试）")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "examId", value = "测试（考试）id", required = true,
+                    paramType = "path", dataType = "long"),
+            @ApiImplicitParam(name = "actionType", value = "操作类型，0⾸次发布 1重新发布 2取消发布，路径变量 ", required = true,
+                    paramType = "path", dataType = "int")
+    })
+    CommonResponse updateStatus(long examId, int actionType);
+
+    @ApiOperation("教师删除某一考试（测试）")
+    @ApiImplicitParam(name = "examId", value = "考试（测试）id", required = true,
+            paramType = "path", dataType = "long")
+    CommonResponse deleteById(long examId);
+
     @ApiOperation("教师在某一课程下新建测试（考试）")
     @ApiImplicitParam(name = "courseId", value = "课程id", required = true,
             paramType = "path", dataType = "long")

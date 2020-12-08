@@ -82,12 +82,12 @@ public class NoticeServiceImpl implements NoticeService {
             return new CommonResponse(NoticeCode.INSERT_NOTICE_FAIL_TITLE_IS_NULL);
         }
 
-        // 0. 公告内容非空判断
+        // 5. 公告内容非空判断
         if (!StringUtils.isNoneBlank(insertNotice.getContent())) {
             return new CommonResponse(NoticeCode.INSERT_NOTICE_FAIL_CONTENT_IS_NULL);
         }
 
-        // 0. 根据课程id创建公告
+        // 6. 根据课程id创建公告
         Notice notice = new Notice();
         notice.setTitle(insertNotice.getTitle());
         notice.setContent(insertNotice.getContent());
@@ -97,10 +97,10 @@ public class NoticeServiceImpl implements NoticeService {
         notice.setTopNum(0);
         this.noticeMapper.insertNotice(notice);
 
-        // 0. 根据课程id查询选修了该课程的所有学生
+        // 7. 根据课程id查询选修了该课程的所有学生
         List<Long> studentIds = this.scMapper.findStudentIdByCourseId(courseId);
 
-        // 0. 根据刚创建的公告id新建公告与用户表的记录
+        // 8. 根据刚创建的公告id新建公告与用户表的记录
         //教师记录
         NoticeUser noticeUserT = new NoticeUser();
         noticeUserT.setUserId(oldTeacher.getId());
