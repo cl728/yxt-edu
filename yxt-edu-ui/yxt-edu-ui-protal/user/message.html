@@ -900,9 +900,11 @@
                 })
             },
             scroll() {
-                var chatBox = document.getElementById('chat-box');
-                // chatBox.scrollTop = 10000000;
-                chatBox.scrollTo(0, 10000000)
+                setTimeout(() => {
+                    var chatBox = document.getElementById('chat-box');
+                    // chatBox.scrollTop = 10000000;
+                    chatBox.scrollTo(0, 10000000)
+                }, 200);
             },
             getClassAvatar(avatar) {
                 if (!avatar) {
