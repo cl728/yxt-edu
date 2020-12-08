@@ -116,23 +116,23 @@ public class ExamServiceImpl implements ExamService {
         // 插入相关记录到 t_exam_student 表中
         this.scMapper.selectList(
                 new QueryWrapper<StudentCourse>()
-                        .eq( "course_id", courseId ) )
+                        .eq("course_id", courseId))
                 .stream()
-                .map( StudentCourse::getStudentId )
-                .collect( Collectors.toList() )
-                .forEach( studentId ->
+                .map(StudentCourse::getStudentId)
+                .collect(Collectors.toList())
+                .forEach(studentId ->
                         this.examStudentMapper.insert(
                                 ExamStudent.builder()
-                                        .id( null )
-                                        .examId( exam.getId() )
-                                        .studentId( studentId )
-                                        .score( null )
-                                        .status( 0 )
-                                        .submitTime( null )
-                                        .build() )
+                                        .id(null)
+                                        .examId(exam.getId())
+                                        .studentId(studentId)
+                                        .score(null)
+                                        .status(0)
+                                        .submitTime(null)
+                                        .build())
                 );
 
-        return new CommonResponse( CommonCode.SUCCESS );
+        return new CommonResponse(CommonCode.SUCCESS);
     }
 
     @Override
@@ -148,8 +148,8 @@ public class ExamServiceImpl implements ExamService {
         } else {
             exam.setTopNum( 0 );
         }
-        examMapper.updateById( exam );
-        return new CommonResponse( CommonCode.SUCCESS );
+        examMapper.updateById(exam);
+        return new CommonResponse(CommonCode.SUCCESS);
     }
 
     @Override
@@ -171,80 +171,80 @@ public class ExamServiceImpl implements ExamService {
         Long questionId = null;
         if (insertQuestion.getQuestionType() == 0) {
             Select select = new Select();
-            select.setTeacherId( teacherId );
-            select.setType( insertQuestion.getSelectType() );
-            select.setContent( insertQuestion.getContent() );
-            select.setChoiceA( insertQuestion.getChoiceA() );
-            select.setChoiceB( insertQuestion.getChoiceB() );
-            select.setChoiceC( insertQuestion.getChoiceC() );
-            select.setChoiceD( insertQuestion.getChoiceD() );
-            select.setAnswer( insertQuestion.getAnswer() );
-            select.setAnalysis( insertQuestion.getAnalysis() );
-            select.setScore( insertQuestion.getScore() );
-            select.setCreateTime( new Date() );
-            selectMapper.insert( select );
+            select.setTeacherId(teacherId);
+            select.setType(insertQuestion.getSelectType());
+            select.setContent(insertQuestion.getContent());
+            select.setChoiceA(insertQuestion.getChoiceA());
+            select.setChoiceB(insertQuestion.getChoiceB());
+            select.setChoiceC(insertQuestion.getChoiceC());
+            select.setChoiceD(insertQuestion.getChoiceD());
+            select.setAnswer(insertQuestion.getAnswer());
+            select.setAnalysis(insertQuestion.getAnalysis());
+            select.setScore(insertQuestion.getScore());
+            select.setCreateTime(new Date());
+            selectMapper.insert(select);
             questionId = select.getId();
         } else if (insertQuestion.getQuestionType() == 1) {
             Judge judge = new Judge();
-            judge.setTeacherId( teacherId );
-            judge.setContent( insertQuestion.getContent() );
-            judge.setAnswer( "true".equals( insertQuestion.getAnswer() ) ? true : false );
-            judge.setAnalysis( insertQuestion.getAnalysis() );
-            judge.setScore( insertQuestion.getScore() );
-            judge.setCreateTime( new Date() );
-            judgeMapper.insert( judge );
+            judge.setTeacherId(teacherId);
+            judge.setContent(insertQuestion.getContent());
+            judge.setAnswer("true".equals(insertQuestion.getAnswer()) ? true : false);
+            judge.setAnalysis(insertQuestion.getAnalysis());
+            judge.setScore(insertQuestion.getScore());
+            judge.setCreateTime(new Date());
+            judgeMapper.insert(judge);
             questionId = judge.getId();
         } else if (insertQuestion.getQuestionType() == 2) {
             Fill fill = new Fill();
-            fill.setTeacherId( teacherId );
-            fill.setContent( insertQuestion.getContent() );
-            fill.setAnswer( insertQuestion.getAnswer() );
-            fill.setAnalysis( insertQuestion.getAnalysis() );
-            fill.setScore( insertQuestion.getScore() );
-            fill.setCreateTime( new Date() );
-            fillMapper.insert( fill );
+            fill.setTeacherId(teacherId);
+            fill.setContent(insertQuestion.getContent());
+            fill.setAnswer(insertQuestion.getAnswer());
+            fill.setAnalysis(insertQuestion.getAnalysis());
+            fill.setScore(insertQuestion.getScore());
+            fill.setCreateTime(new Date());
+            fillMapper.insert(fill);
             questionId = fill.getId();
         } else if (insertQuestion.getQuestionType() == 3) {
             QA qa = new QA();
-            qa.setTeacherId( teacherId );
-            qa.setContent( insertQuestion.getContent() );
-            qa.setAnswer( insertQuestion.getAnswer() );
-            qa.setAnalysis( insertQuestion.getAnalysis() );
-            qa.setScore( insertQuestion.getScore() );
-            qa.setCreateTime( new Date() );
-            qaMapper.insert( qa );
+            qa.setTeacherId(teacherId);
+            qa.setContent(insertQuestion.getContent());
+            qa.setAnswer(insertQuestion.getAnswer());
+            qa.setAnalysis(insertQuestion.getAnalysis());
+            qa.setScore(insertQuestion.getScore());
+            qa.setCreateTime(new Date());
+            qaMapper.insert(qa);
             questionId = qa.getId();
         } else {
-            ExceptionThrowUtils.cast( CommonCode.INVALID_PARAM );
+            ExceptionThrowUtils.cast(CommonCode.INVALID_PARAM);
         }
 
         //保存相关记录到 t_exam_question 表里
         ExamQuestion examQuestion = new ExamQuestion();
-        examQuestion.setExamId( examId );
-        examQuestion.setQuestionNumber( insertQuestion.getQuestionNumber() );
-        examQuestion.setQuestionType( insertQuestion.getQuestionType() );
-        examQuestion.setQuestionId( questionId );
-        examQuestionMapper.insert( examQuestion );
+        examQuestion.setExamId(examId);
+        examQuestion.setQuestionNumber(insertQuestion.getQuestionNumber());
+        examQuestion.setQuestionType(insertQuestion.getQuestionType());
+        examQuestion.setQuestionId(questionId);
+        examQuestionMapper.insert(examQuestion);
 
-        return new CommonResponse( CommonCode.SUCCESS );
+        return new CommonResponse(CommonCode.SUCCESS);
     }
 
     @Override
     public CommonResponse deleteQuestion(long examId, long questionNumber) {
         //测试考试是否存在
-        Exam exam = examMapper.selectOne( new QueryWrapper<Exam>().eq( "id", examId ) );
+        Exam exam = examMapper.selectOne(new QueryWrapper<Exam>().eq("id", examId));
         if (exam == null) {
-            ExceptionThrowUtils.cast( CommonCode.INVALID_PARAM );
+            ExceptionThrowUtils.cast(CommonCode.INVALID_PARAM);
         }
         //题目是否存在
-        ExamQuestion examQuestion = examQuestionMapper.selectOne( new QueryWrapper<ExamQuestion>().eq( "exam_id", examId )
-                .eq( "question_number", questionNumber ) );
+        ExamQuestion examQuestion = examQuestionMapper.selectOne(new QueryWrapper<ExamQuestion>().eq("exam_id", examId)
+                .eq("question_number", questionNumber));
         if (examQuestion == null) {
-            ExceptionThrowUtils.cast( CommonCode.INVALID_PARAM );
+            ExceptionThrowUtils.cast(CommonCode.INVALID_PARAM);
         }
         //根据 examId, questionNumber 删除 t_exam_quesiton 的相关记录
-        examQuestionMapper.delete( new QueryWrapper<ExamQuestion>().eq( "exam_id", examId )
-                .eq( "question_number", questionNumber ) );
+        examQuestionMapper.delete(new QueryWrapper<ExamQuestion>().eq("exam_id", examId)
+                .eq("question_number", questionNumber));
 
         return new CommonResponse( CommonCode.SUCCESS );
     }
