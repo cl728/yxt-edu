@@ -3,6 +3,7 @@ package com.yixuetang.api.exam;
 import com.yixuetang.entity.request.exam.InsertExam;
 import com.yixuetang.entity.request.exam.InsertQuestion;
 import com.yixuetang.entity.response.CommonResponse;
+import com.yixuetang.entity.response.QueryResponse;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
@@ -43,5 +44,14 @@ public interface ExamControllerApi {
                     paramType = "path", dataType = "long")
     })
     CommonResponse deleteQuestion(long examId, long questionNumber);
+
+    @ApiOperation("用户查询某门课程下的测试（考试）列表")
+    @ApiImplicitParams(value = {
+            @ApiImplicitParam(name = "courseId", value = "课程id", required = true,
+                    paramType = "path", dataType = "long"),
+            @ApiImplicitParam(name = "userId", value = "用户id", required = true,
+                    paramType = "path", dataType = "long")
+    })
+    QueryResponse findListByCourseId(long courseId, long userId);
 
 }
