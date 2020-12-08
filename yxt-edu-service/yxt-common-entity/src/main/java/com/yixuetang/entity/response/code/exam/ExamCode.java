@@ -10,9 +10,9 @@ import com.yixuetang.entity.response.code.ResponseCode;
  */
 public enum ExamCode implements ResponseCode {
 
-    INSERT_EXAM_FAIL_TITLE_IS_NULL(false, 80000, "新增测试失败，测试题目不能为空！"),
+    INSERT_EXAM_FAIL_TITLE_IS_NULL(false, 80000, "测试题目不能为空！"),
 
-    INSERT_EXAM_FAIL_INTRODUCTION_IS_NULL(false, 80001, "新增测试失败，测试简介不能为空！"),
+    INSERT_EXAM_FAIL_INTRODUCTION_IS_NULL(false, 80001, "测试简介不能为空！"),
 
     UPDATE_EXAM_STATUS_FAIL_NO_QUESTION(false, 80002, "试卷⾥⾯没有试题，发布失败");
 

@@ -81,4 +81,13 @@ public interface ExamService {
      * @return 响应结果实体类
      */
     CommonResponse updateStatus(long examId, int actionType);
+
+    /**
+     *  修改某个测试（考试）的基本信息
+     *
+     * @param examId        测试（考试）id
+     * @param insertExam    编辑测试实体类
+     * @return  响应结果实体类
+     */
+    CommonResponse updateExam(long examId, InsertExam insertExam);
 }

@@ -71,5 +71,11 @@ public class ExamController implements ExamControllerApi {
                                             @PathVariable("userId") long userId) {
         return this.examService.findListByCourseId(courseId, userId);
     }
+
+    @Override
+    @PutMapping("info/examId/{examId}")
+    public CommonResponse updateExam(@PathVariable long examId, @RequestBody InsertExam insertExam) {
+        return this.examService.updateExam(examId, insertExam);
+    }
 }
 

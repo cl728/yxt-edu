@@ -104,12 +104,12 @@ public class ExamServiceImpl implements ExamService {
 
         // 3. 测试题目非空判断
         if (!StringUtils.isNoneBlank(insertExam.getTitle())) {
-            return new CommonResponse(ExamCode.INSERT_EXAM_FAIL_TITLE_IS_NULL);
+            ExceptionThrowUtils.cast(ExamCode.INSERT_EXAM_FAIL_TITLE_IS_NULL);
         }
 
         // 4. 测试简介非空判断
         if (!StringUtils.isNoneBlank(insertExam.getIntroduction())) {
-            return new CommonResponse(ExamCode.INSERT_EXAM_FAIL_INTRODUCTION_IS_NULL);
+            ExceptionThrowUtils.cast(ExamCode.INSERT_EXAM_FAIL_INTRODUCTION_IS_NULL);
         }
 
         // 5.根据课程id新建测试
@@ -355,6 +355,37 @@ public class ExamServiceImpl implements ExamService {
         }
 
         return new CommonResponse(CommonCode.SUCCESS);
+    }
+
+    @Override
+    public CommonResponse updateExam(long examId, InsertExam insertExam) {
+        // 1.测试考试是否存在
+        Exam exam = examMapper.selectOne(new QueryWrapper<Exam>().eq("id", examId));
+        if (exam == null) {
+            ExceptionThrowUtils.cast(CommonCode.INVALID_PARAM);
+        }
+        // 2. 参数验证
+        if (insertExam == null) {
+            ExceptionThrowUtils.cast(CommonCode.INVALID_PARAM);
+        }
+
+        // 3. 测试题目非空判断
+        if (!StringUtils.isNoneBlank(insertExam.getTitle())) {
+            ExceptionThrowUtils.cast(ExamCode.INSERT_EXAM_FAIL_TITLE_IS_NULL);
+        }
+
+        // 4. 测试简介非空判断
+        if (!StringUtils.isNoneBlank(insertExam.getIntroduction())) {
+            ExceptionThrowUtils.cast(ExamCode.INSERT_EXAM_FAIL_INTRODUCTION_IS_NULL);
+        }
+        // 5.根据课程id新建测试
+        exam.setTitle(insertExam.getTitle());
+        exam.setIntroduction(insertExam.getIntroduction());
+        exam.setStartTime(insertExam.getStartTime());
+        exam.setEndTime(insertExam.getEndTime());
+        examMapper.updateById(exam);
+
+        return new CommonResponse( CommonCode.SUCCESS );
     }
 
     @Transactional

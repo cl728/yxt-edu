@@ -74,4 +74,11 @@ public interface ExamControllerApi {
     })
     QueryResponse findListByCourseId(long courseId, long userId);
 
+    @ApiOperation("修改某个测试（考试）的基本信息")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "examId", value = "测试（考试）id", required = true,
+                    paramType = "path", dataType = "long"),
+    })
+    CommonResponse updateExam(long examId, InsertExam insertExam);
+
 }
