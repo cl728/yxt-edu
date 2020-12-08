@@ -632,7 +632,7 @@
                             <div id="exam-buttons" v-if="user.isTeacher">
                                 <el-row>
                                     <el-col :span="12">
-                                        <el-button type="primary" style="float: left;">
+                                        <el-button type="primary" style="float: left;" @click="showInputExamForm()">
                                             <i class="el-icon-plus"></i>
                                             新建测试（考试）
                                         </el-button>
@@ -660,41 +660,63 @@
                                 <el-row>
                                     <el-col :span="24">
                                         <el-tabs v-model="activeName">
-                                            <el-tab-pane label="全部(4)" name="first">
+                                            <!-- 全部测试 -->
+                                            <el-tab-pane :label="'全部(' + examList.length + ')'" name="first">
                                                 <div class="exam-cards">
-                                                    <el-card class="box-card"
+                                                    <el-card class="box-card" v-for="(exam, index) in examList"
                                                         style="margin-top: 20px;width: 1184px;height: 230px;border-radius: 6px;border-width: 2px">
                                                         <el-row id="course-title" style="height: 30px">
                                                             <el-col :span="14">
                                                                 <div class="homework-create-time" style="float: left">
-                                                                    <el-tag type="danger">未发布</el-tag>
+                                                                    <el-tag type="info" v-show="exam.topNum > 0">置顶
+                                                                    </el-tag>
+                                                                    <el-tag :type="getExamStatusType(exam.examStatus)"
+                                                                        v-text="exam.examStatus">未发布</el-tag>
                                                                     <!-- <span
                                                                         style="padding-left: 30px;font-size: 15px;color: #5F6368">限时：无</span> -->
                                                                     <span
-                                                                        style="padding-left: 30px;font-size: 15px;color: #5F6368">起止时间：2020-11-09
-                                                                        22:17 ~ 2020-11-09 23:17</span>
+                                                                        style="padding-left: 30px;font-size: 15px;color: #5F6368">
+                                                                        起止时间：<span v-text="exam.startTime">2020-11-09
+                                                                            22:17</span> ~
+                                                                        <span
+                                                                            v-text="exam.endTime === null ? '无' : exam.endTime">2020-11-09
+                                                                            23:17</span></span>
                                                                 </div>
                                                             </el-col>
-                                                            <el-col :span="10">
+                                                            <el-col :span="10"
+                                                                v-show="!user.isTeacher && (exam.examStatus === '已发布' || exam.examStatus === '已结束')">
                                                                 <div class="homework-operation" style="float: right">
-                                                                    <el-button type="danger">立即发布</el-button>
+                                                                    <el-button type="primary"
+                                                                        v-show="exam.examStatus === '已发布'">开始答题
+                                                                    </el-button>
+                                                                    <el-button type="success"
+                                                                        v-show="exam.examStatus === '已结束'">查看成绩
+                                                                    </el-button>
                                                                 </div>
+                                                            </el-col>
+                                                            <el-col :span="10" v-show="exam.examStatus === '未开始'">
+                                                                <span
+                                                                    style="color: #FF6E48;font-size: 16px;font-weight: bold;float: right">开始时间
+                                                                    <span v-text="exam.startTime">2020-11-14
+                                                                        24:10</span>
+                                                                </span>
                                                             </el-col>
                                                         </el-row>
-                                                        <el-row id="course-announce" style="height: 130px">
+                                                        <el-row id="course-announce"
+                                                            style="height: 130px; margin-top: 10px;">
                                                             <el-col :span="12">
-                                                                <el-row style="height: 55px">
+                                                                <el-row style="height: 55px;">
                                                                     <el-col :span="24">
                                                                         <el-link :underline="false"
                                                                             style="color: #3B3D45;font-size: 26px;float: left;padding-left: 30px;padding-top: 3px">
-                                                                            <b>未发布_测试（考试）</b>
+                                                                            <b v-text="exam.title">未发布_测试（考试）</b>
                                                                         </el-link>
                                                                     </el-col>
                                                                 </el-row>
                                                                 <el-row style="height: 75px">
                                                                     <el-col :span="24" style="height: 75px">
                                                                         <span style="float: left;padding-left: 30px">
-                                                                            <span
+                                                                            <span v-html="exam.introduction"
                                                                                 style="font-size: 15px;color: #707070">
                                                                                 description试卷描述
                                                                             </span>
@@ -708,175 +730,11 @@
                                                                         <div class="homework-statics"
                                                                             style="height: 130px">
                                                                             <el-row
+                                                                                v-show="exam.examStatus === '未发布' || exam.examStatus === '未开始'"
                                                                                 style="height: 130px;padding-top: 15px">
                                                                             </el-row>
-                                                                        </div>
-                                                                    </el-col>
-                                                                </el-row>
-                                                            </el-col>
-                                                        </el-row>
-                                                        <el-row id="course-message" style="height: 60px">
-                                                            <el-row>
-                                                                <el-col :span="12" style="height: 50px">
-                                                                    <span
-                                                                        style="font-size: 15px;color: #A0A0A0;float: left;padding-left: 30px;padding-top: 10px;padding-bottom: 10px">
-                                                                        创建于2020-11-09 22:17
-                                                                    </span>
-                                                                </el-col>
-                                                                <el-col :span="12">
-                                                                    <div class="exam-finished-buttons"
-                                                                        style="float: right">
-                                                                        <el-button type="primary" plain>编辑基本信息
-                                                                        </el-button>
-                                                                        <el-button type="primary" plain>编辑试题内容
-                                                                        </el-button>
-                                                                        <el-dropdown>
-                                                                            <el-button type="primary">
-                                                                                更多<i
-                                                                                    class="el-icon-arrow-down el-icon--right"></i>
-                                                                            </el-button>
-                                                                            <el-dropdown-menu slot="dropdown">
-                                                                                <el-dropdown-item>保存到备课区
-                                                                                </el-dropdown-item>
-                                                                                <el-dropdown-item>分享试卷给同事
-                                                                                </el-dropdown-item>
-                                                                                <el-dropdown-item>删除</el-dropdown-item>
-                                                                            </el-dropdown-menu>
-                                                                        </el-dropdown>
-                                                                    </div>
-                                                                </el-col>
-                                                            </el-row>
-                                                        </el-row>
-                                                    </el-card>
-                                                    <el-card class="box-card"
-                                                        style="margin-top: 20px;width: 1184px;height: 230px;border-radius: 6px;border-width: 2px">
-                                                        <el-row id="course-title" style="height: 30px">
-                                                            <el-col :span="14">
-                                                                <div class="homework-create-time" style="float: left">
-                                                                    <el-tag type="warning">未开始</el-tag>
-                                                                    <!-- <span
-                                                                        style="padding-left: 30px;font-size: 15px;color: #5F6368">限时：无</span> -->
-                                                                    <span
-                                                                        style="padding-left: 30px;font-size: 15px;color: #5F6368">起止时间：2020-11-09
-                                                                        22:17 ~ 2020-11-09 23:17</span>
-                                                                </div>
-                                                            </el-col>
-                                                            <el-col :span="10">
-                                                                <span
-                                                                    style="color: #FF6E48;font-size: 16px;font-weight: bold;float: right">开始时间2020-11-14
-                                                                    24:10</span>
-                                                            </el-col>
-                                                        </el-row>
-                                                        <el-row id="course-announce" style="height: 130px">
-                                                            <el-col :span="12">
-                                                                <el-row style="height: 55px">
-                                                                    <el-col :span="24">
-                                                                        <el-link :underline="false"
-                                                                            style="color: #3B3D45;font-size: 26px;float: left;padding-left: 30px;padding-top: 3px; margin-top: 8px;">
-                                                                            <b>未开始_测试（考试）</b>
-                                                                        </el-link>
-                                                                    </el-col>
-                                                                </el-row>
-                                                                <el-row style="height: 75px">
-                                                                    <el-col :span="24" style="height: 75px">
-                                                                        <span style="float: left;padding-left: 30px">
-                                                                            <span
-                                                                                style="font-size: 15px;color: #707070">
-                                                                                description试卷描述
-                                                                            </span>
-                                                                        </span>
-                                                                    </el-col>
-                                                                </el-row>
-                                                            </el-col>
-                                                            <el-col :span="12">
-                                                                <el-row>
-                                                                    <el-col :span="12" style="float: right">
-                                                                        <div class="homework-statics"
-                                                                            style="height: 130px">
                                                                             <el-row
-                                                                                style="height: 130px;padding-top: 15px">
-                                                                            </el-row>
-                                                                        </div>
-                                                                    </el-col>
-                                                                </el-row>
-                                                            </el-col>
-                                                        </el-row>
-                                                        <el-row id="course-message" style="height: 60px">
-                                                            <el-row>
-                                                                <el-col :span="12" style="height: 50px">
-                                                                    <span
-                                                                        style="font-size: 15px;color: #A0A0A0;float: left;padding-left: 30px;padding-top: 10px;padding-bottom: 10px">
-                                                                        创建于2020-11-09 22:17
-                                                                    </span>
-                                                                </el-col>
-                                                                <el-col :span="12">
-                                                                    <div class="exam-finished-buttons"
-                                                                        style="float: right">
-                                                                        <el-button type="primary" plain>编辑基本信息
-                                                                        </el-button>
-                                                                        <el-button type="primary" plain>编辑试题内容
-                                                                        </el-button>
-                                                                        <el-dropdown>
-                                                                            <el-button type="primary">
-                                                                                更多<i
-                                                                                    class="el-icon-arrow-down el-icon--right"></i>
-                                                                            </el-button>
-                                                                            <el-dropdown-menu slot="dropdown">
-                                                                                <el-dropdown-item>取消发布
-                                                                                </el-dropdown-item>
-                                                                                <el-dropdown-item>保存到备课区
-                                                                                </el-dropdown-item>
-                                                                                <el-dropdown-item>分享试卷给同事
-                                                                                </el-dropdown-item>
-                                                                                <el-dropdown-item>删除</el-dropdown-item>
-                                                                            </el-dropdown-menu>
-                                                                        </el-dropdown>
-                                                                    </div>
-                                                                </el-col>
-                                                            </el-row>
-                                                        </el-row>
-                                                    </el-card>
-                                                    <el-card class="box-card"
-                                                        style="margin-top: 20px;width: 1184px;height: 230px;border-radius: 6px;border-width: 2px">
-                                                        <el-row id="course-title" style="height: 30px">
-                                                            <el-col :span="14">
-                                                                <div class="homework-create-time" style="float: left">
-                                                                    <el-tag type="success">已发布</el-tag>
-                                                                    <!-- <span
-                                                                        style="padding-left: 30px;font-size: 15px;color: #5F6368">限时：无</span> -->
-                                                                    <span
-                                                                        style="padding-left: 30px;font-size: 15px;color: #5F6368">起止时间：2020-11-09
-                                                                        22:17 ~ 2020-11-09 23:17</span>
-                                                                </div>
-                                                            </el-col>
-                                                        </el-row>
-                                                        <el-row id="course-announce" style="height: 130px">
-                                                            <el-col :span="12">
-                                                                <el-row style="height: 55px">
-                                                                    <el-col :span="24">
-                                                                        <el-link :underline="false"
-                                                                            style="color: #3B3D45;font-size: 26px;float: left;padding-left: 30px;padding-top: 3px; margin-top: 8px;">
-                                                                            <b>已发布_测试（考试）</b>
-                                                                        </el-link>
-                                                                    </el-col>
-                                                                </el-row>
-                                                                <el-row style="height: 75px">
-                                                                    <el-col :span="24" style="height: 75px">
-                                                                        <span style="float: left;padding-left: 30px">
-                                                                            <span
-                                                                                style="font-size: 15px;color: #707070">
-                                                                                description试卷描述
-                                                                            </span>
-                                                                        </span>
-                                                                    </el-col>
-                                                                </el-row>
-                                                            </el-col>
-                                                            <el-col :span="12">
-                                                                <el-row>
-                                                                    <el-col :span="12" style="float: right">
-                                                                        <div class="homework-statics"
-                                                                            style="height: 130px">
-                                                                            <el-row
+                                                                                v-show="user.isTeacher && (exam.examStatus === '已发布' || exam.examStatus === '已结束')"
                                                                                 style="height: 130px;padding-top: 15px">
                                                                                 <el-col :span="8">
                                                                                     <ul style="list-style: none">
@@ -885,6 +743,7 @@
                                                                                             已批</li>
                                                                                         <li>
                                                                                             <el-link :underline="false"
+                                                                                                v-text="exam.correctedCount"
                                                                                                 style="font-size: 30px;color: #32BAF2;font-weight: bold">
                                                                                                 15</el-link>
                                                                                         </li>
@@ -897,6 +756,7 @@
                                                                                             未批</li>
                                                                                         <li>
                                                                                             <el-link :underline="false"
+                                                                                                v-text="exam.uncorrectedCount"
                                                                                                 style="font-size: 30px;color: #707070;font-weight: bold">
                                                                                                 4</el-link>
                                                                                         </li>
@@ -909,6 +769,7 @@
                                                                                             未交</li>
                                                                                         <li>
                                                                                             <el-link :underline="false"
+                                                                                                v-text="exam.uncommittedCount"
                                                                                                 style="font-size: 30px;color: #FF6000;font-weight: bold">
                                                                                                 5</el-link>
                                                                                         </li>
@@ -925,15 +786,64 @@
                                                                 <el-col :span="12" style="height: 50px">
                                                                     <span
                                                                         style="font-size: 15px;color: #A0A0A0;float: left;padding-left: 30px;padding-top: 10px;padding-bottom: 10px">
-                                                                        创建于2020-11-09 22:17
+                                                                        创建于 <span v-text="exam.createTime">2020-11-09
+                                                                            22:17</span>
                                                                     </span>
                                                                 </el-col>
-                                                                <el-col :span="12">
+                                                                <el-col :span="12" v-show="user.isTeacher">
                                                                     <div class="exam-finished-buttons"
                                                                         style="float: right">
-                                                                        <el-button type="primary" plain>编辑基本信息
+                                                                        <el-popconfirm confirmButtonText="确认"
+                                                                            cancelButtonText="取消"
+                                                                            confirmButtonType="danger"
+                                                                            cancelButtonType="success" placement="top"
+                                                                            @onConfirm="updateStatus(exam.id, 0)"
+                                                                            title="确认考试时间、试题等编辑无误后即可发布，确认要发布此测试吗？">
+                                                                            <el-button type="danger" plain
+                                                                                slot="reference"
+                                                                                v-show="exam.examStatus === '未发布'">立即发布
+                                                                            </el-button>
+                                                                        </el-popconfirm>
+                                                                        <el-popconfirm confirmButtonText="确认"
+                                                                            cancelButtonText="取消"
+                                                                            confirmButtonType="danger"
+                                                                            cancelButtonType="success" placement="top"
+                                                                            @onConfirm="updateStatus(exam.id, 1)"
+                                                                            title="确认要重新发布此测试吗？">
+                                                                            <el-button type="primary" plain
+                                                                                slot="reference"
+                                                                                v-show="exam.examStatus === '已结束'">重新发布
+                                                                            </el-button>
+                                                                        </el-popconfirm>
+                                                                        <el-popconfirm confirmButtonText="确认"
+                                                                            cancelButtonText="取消"
+                                                                            confirmButtonType="warning" plain
+                                                                            cancelButtonType="success" placement="top"
+                                                                            @onConfirm="updateStatus(exam.id, 2)"
+                                                                            title="确认要取消发布此测试吗？">
+                                                                            <el-button type="primary" plain
+                                                                                slot="reference"
+                                                                                v-show="exam.examStatus === '未开始'">取消发布
+                                                                            </el-button>
+                                                                        </el-popconfirm>
+                                                                        <el-popconfirm confirmButtonText="确认"
+                                                                            cancelButtonText="取消"
+                                                                            confirmButtonType="warning" plain
+                                                                            cancelButtonType="success" placement="top"
+                                                                            @onConfirm="updateStatus(exam.id, 3)"
+                                                                            title="确认要结束发布此测试吗？">
+                                                                            <el-button type="success" plain
+                                                                                slot="reference"
+                                                                                v-show="exam.examStatus === '已发布'">结束发布
+                                                                            </el-button>
+                                                                        </el-popconfirm>
+                                                                        <el-button type="primary" plain
+                                                                            @click="showEditExamForm(exam.id)">
+                                                                            编辑基本信息
                                                                         </el-button>
-                                                                        <el-button type="primary" plain>编辑试题内容
+                                                                        <el-button type="primary" plain
+                                                                            @click="location.href = 'examPaper.html?id=' + exam.id">
+                                                                            编辑试题内容
                                                                         </el-button>
                                                                         <el-dropdown>
                                                                             <el-button type="primary">
@@ -941,131 +851,32 @@
                                                                                     class="el-icon-arrow-down el-icon--right"></i>
                                                                             </el-button>
                                                                             <el-dropdown-menu slot="dropdown">
-                                                                                <el-dropdown-item>结束发布
-                                                                                </el-dropdown-item>
-                                                                                <el-dropdown-item>保存到备课区
+                                                                                <!-- <el-dropdown-item>保存到备课区
                                                                                 </el-dropdown-item>
                                                                                 <el-dropdown-item>分享试卷给同事
+                                                                                </el-dropdown-item> -->
+                                                                                <el-dropdown-item>
+                                                                                    <el-link v-show="exam.topNum === 0"
+                                                                                        :underline="false"
+                                                                                        @click="switchExamTop(exam.id)">
+                                                                                        置顶</el-link>
+                                                                                    <el-link v-show="exam.topNum > 0"
+                                                                                        :underline="false"
+                                                                                        @click="switchExamTop(exam.id)">
+                                                                                        取消置顶</el-link>
                                                                                 </el-dropdown-item>
-                                                                                <el-dropdown-item>删除</el-dropdown-item>
-                                                                            </el-dropdown-menu>
-                                                                        </el-dropdown>
-                                                                    </div>
-                                                                </el-col>
-                                                            </el-row>
-                                                        </el-row>
-                                                    </el-card>
-                                                    <el-card class="box-card"
-                                                        style="margin-top: 20px;width: 1184px;height: 230px;border-radius: 6px;border-width: 2px">
-                                                        <el-row id="course-title" style="height: 30px">
-                                                            <el-col :span="14">
-                                                                <div class="homework-create-time" style="float: left">
-                                                                    <el-tag>已结束</el-tag>
-                                                                    <!-- <span
-                                                                        style="padding-left: 30px;font-size: 15px;color: #5F6368">限时：无</span> -->
-                                                                    <span
-                                                                        style="padding-left: 30px;font-size: 15px;color: #5F6368">起止时间：2020-11-09
-                                                                        22:17 ~ 2020-11-09 23:17</span>
-                                                                </div>
-                                                            </el-col>
-                                                        </el-row>
-                                                        <el-row id="course-announce" style="height: 130px">
-                                                            <el-col :span="12">
-                                                                <el-row style="height: 55px">
-                                                                    <el-col :span="24">
-                                                                        <el-link :underline="false"
-                                                                            style="color: #3B3D45;font-size: 26px;float: left;padding-left: 30px;padding-top: 3px; margin-top: 8px;">
-                                                                            <b>已结束_测试（考试）</b>
-                                                                        </el-link>
-                                                                    </el-col>
-                                                                </el-row>
-                                                                <el-row style="height: 75px">
-                                                                    <el-col :span="24" style="height: 75px">
-                                                                        <span style="float: left;padding-left: 30px">
-                                                                            <span
-                                                                                style="font-size: 15px;color: #707070">
-                                                                                description试卷描述
-                                                                            </span>
-                                                                        </span>
-                                                                    </el-col>
-                                                                </el-row>
-                                                            </el-col>
-                                                            <el-col :span="12">
-                                                                <el-row>
-                                                                    <el-col :span="12" style="float: right">
-                                                                        <div class="homework-statics"
-                                                                            style="height: 130px">
-                                                                            <el-row
-                                                                                style="height: 130px;padding-top: 15px">
-                                                                                <el-col :span="8">
-                                                                                    <ul style="list-style: none">
-                                                                                        <li
-                                                                                            style="font-size: 14px;color: #202124;font-weight: bold">
-                                                                                            已批</li>
-                                                                                        <li>
-                                                                                            <el-link :underline="false"
-                                                                                                style="font-size: 30px;color: #32BAF2;font-weight: bold">
-                                                                                                15</el-link>
-                                                                                        </li>
-                                                                                    </ul>
-                                                                                </el-col>
-                                                                                <el-col :span="8">
-                                                                                    <ul style="list-style: none">
-                                                                                        <li
-                                                                                            style="font-size: 14px;color: #202124;font-weight: bold">
-                                                                                            未批</li>
-                                                                                        <li>
-                                                                                            <el-link :underline="false"
-                                                                                                style="font-size: 30px;color: #707070;font-weight: bold">
-                                                                                                4</el-link>
-                                                                                        </li>
-                                                                                    </ul>
-                                                                                </el-col>
-                                                                                <el-col :span="8">
-                                                                                    <ul style="list-style: none">
-                                                                                        <li
-                                                                                            style="font-size: 14px;color: #202124;font-weight: bold">
-                                                                                            未交</li>
-                                                                                        <li>
-                                                                                            <el-link :underline="false"
-                                                                                                style="font-size: 30px;color: #FF6000;font-weight: bold">
-                                                                                                5</el-link>
-                                                                                        </li>
-                                                                                    </ul>
-                                                                                </el-col>
-                                                                            </el-row>
-                                                                        </div>
-                                                                    </el-col>
-                                                                </el-row>
-                                                            </el-col>
-                                                        </el-row>
-                                                        <el-row id="course-message" style="height: 60px">
-                                                            <el-row>
-                                                                <el-col :span="12" style="height: 50px">
-                                                                    <span
-                                                                        style="font-size: 15px;color: #A0A0A0;float: left;padding-left: 30px;padding-top: 10px;padding-bottom: 10px">
-                                                                        创建于2020-11-09 22:17
-                                                                    </span>
-                                                                </el-col>
-                                                                <el-col :span="12">
-                                                                    <div class="exam-finished-buttons"
-                                                                        style="float: right">
-                                                                        <el-button type="primary">重新发布</el-button>
-                                                                        <el-button type="primary" plain>编辑基本信息
-                                                                        </el-button>
-                                                                        <el-button type="primary" plain>编辑试题内容
-                                                                        </el-button>
-                                                                        <el-dropdown>
-                                                                            <el-button type="primary">
-                                                                                更多<i
-                                                                                    class="el-icon-arrow-down el-icon--right"></i>
-                                                                            </el-button>
-                                                                            <el-dropdown-menu slot="dropdown">
-                                                                                <el-dropdown-item>保存到备课区
-                                                                                </el-dropdown-item>
-                                                                                <el-dropdown-item>分享试卷给同事
-                                                                                </el-dropdown-item>
-                                                                                <el-dropdown-item>删除</el-dropdown-item>
+                                                                                <el-dropdown-item>
+                                                                                    <el-popconfirm
+                                                                                        confirmButtonText="确认"
+                                                                                        cancelButtonText="取消"
+                                                                                        confirmButtonType="danger"
+                                                                                        cancelButtonType="success"
+                                                                                        placement="top"
+                                                                                        @onConfirm="deleteExam(exam.id)"
+                                                                                        title="确认要删除此测试吗？">
+                                                                                        <el-link slot="reference"
+                                                                                            :underline="false">删除
+                                                                                        </el-link>
                                                                             </el-dropdown-menu>
                                                                         </el-dropdown>
                                                                     </div>
@@ -1075,40 +886,47 @@
                                                     </el-card>
                                                 </div>
                                             </el-tab-pane>
-                                            <el-tab-pane label="未发布(1)" name="second">
+                                            <!-- 未发布 -->
+                                            <el-tab-pane v-if="user.isTeacher"
+                                                :label="'未发布(' + unreleasedExamList.length + ')'" name="second">
                                                 <el-card class="box-card"
-                                                    style="margin-top: 30px;width: 1184px;height: 230px;border-radius: 6px;border-width: 2px">
+                                                    v-for="(unreleasedExam, index) in unreleasedExamList"
+                                                    style="margin-top: 20px;width: 1184px;height: 230px;border-radius: 6px;border-width: 2px">
                                                     <el-row id="course-title" style="height: 30px">
                                                         <el-col :span="14">
                                                             <div class="homework-create-time" style="float: left">
+                                                                <el-tag type="info" v-show="unreleasedExam.topNum > 0">
+                                                                    置顶</el-tag>
                                                                 <el-tag type="danger">未发布</el-tag>
                                                                 <!-- <span
-                                                                    style="padding-left: 30px;font-size: 15px;color: #5F6368">限时：无</span> -->
+                                                                        style="padding-left: 30px;font-size: 15px;color: #5F6368">限时：无</span> -->
                                                                 <span
-                                                                    style="padding-left: 30px;font-size: 15px;color: #5F6368">起止时间：2020-11-09
-                                                                    22:17 ~ 2020-11-09 23:17</span>
-                                                            </div>
-                                                        </el-col>
-                                                        <el-col :span="10">
-                                                            <div class="homework-operation" style="float: right">
-                                                                <el-button type="danger">立即发布</el-button>
+                                                                    style="padding-left: 30px;font-size: 15px;color: #5F6368">
+                                                                    起止时间：<span
+                                                                        v-text="unreleasedExam.startTime">2020-11-09
+                                                                        22:17</span> ~
+                                                                    <span
+                                                                        v-text="unreleasedExam.endTime === null ? '无' : unreleasedExam.endTime">2020-11-09
+                                                                        23:17</span></span>
                                                             </div>
                                                         </el-col>
                                                     </el-row>
-                                                    <el-row id="course-announce" style="height: 130px">
+                                                    <el-row id="course-announce"
+                                                        style="height: 130px; margin-top: 10px;">
                                                         <el-col :span="12">
                                                             <el-row style="height: 55px">
                                                                 <el-col :span="24">
                                                                     <el-link :underline="false"
-                                                                        style="color: #3B3D45;font-size: 26px;float: left;padding-left: 30px;padding-top: 3px; margin-top: 8px;">
-                                                                        <b>未发布_测试（考试）</b>
+                                                                        style="color: #3B3D45;font-size: 26px;float: left;padding-left: 30px;padding-top: 3px">
+                                                                        <b v-text="unreleasedExam.title">未发布_测试（考试）</b>
                                                                     </el-link>
                                                                 </el-col>
                                                             </el-row>
                                                             <el-row style="height: 75px">
                                                                 <el-col :span="24" style="height: 75px">
                                                                     <span style="float: left;padding-left: 30px">
-                                                                        <span style="font-size: 15px;color: #707070">
+                                                                        <span v-html="unreleasedExam.introduction"
+                                                                            style="font-size: 15px;color: #707070">
                                                                             description试卷描述
                                                                         </span>
                                                                     </span>
@@ -1131,22 +949,57 @@
                                                             <el-col :span="12" style="height: 50px">
                                                                 <span
                                                                     style="font-size: 15px;color: #A0A0A0;float: left;padding-left: 30px;padding-top: 10px;padding-bottom: 10px">
-                                                                    创建于2020-11-09 22:17
+                                                                    创建于 <span
+                                                                        v-text="unreleasedExam.createTime">2020-11-09
+                                                                        22:17</span>
                                                                 </span>
                                                             </el-col>
                                                             <el-col :span="12">
                                                                 <div class="exam-finished-buttons" style="float: right">
-                                                                    <el-button type="primary" plain>编辑基本信息</el-button>
-                                                                    <el-button type="primary" plain>编辑试题内容</el-button>
+                                                                    <el-popconfirm confirmButtonText="确认"
+                                                                        cancelButtonText="取消" confirmButtonType="danger"
+                                                                        cancelButtonType="success" placement="top"
+                                                                        @onConfirm="updateStatus(unreleasedExam.id, 0)"
+                                                                        title="确认考试时间、试题等编辑无误后即可发布，确认要发布此测试吗？">
+                                                                        <el-button type="danger" plain slot="reference">
+                                                                            立即发布
+                                                                        </el-button>
+                                                                    </el-popconfirm>
+                                                                    <el-button type="primary" plain
+                                                                        @click="showEditExamForm(unreleasedExam.id)">
+                                                                        编辑基本信息
+                                                                    </el-button>
+                                                                    <el-button type="primary" plain
+                                                                        @click="location.href = 'examPaper.html?id=' + unreleasedExam.id">
+                                                                        编辑试题内容
+                                                                    </el-button>
                                                                     <el-dropdown>
                                                                         <el-button type="primary">
                                                                             更多<i
                                                                                 class="el-icon-arrow-down el-icon--right"></i>
                                                                         </el-button>
                                                                         <el-dropdown-menu slot="dropdown">
-                                                                            <el-dropdown-item>保存到备课区</el-dropdown-item>
-                                                                            <el-dropdown-item>分享试卷给同事</el-dropdown-item>
-                                                                            <el-dropdown-item>删除</el-dropdown-item>
+                                                                            <!-- <el-dropdown-item>保存到备课区
+                                                                                </el-dropdown-item>
+                                                                                <el-dropdown-item>分享试卷给同事
+                                                                                </el-dropdown-item> -->
+                                                                            <el-dropdown-item>
+                                                                                <el-link
+                                                                                    v-show="unreleasedExam.topNum === 0"
+                                                                                    :underline="false"
+                                                                                    @click="switchExamTop(unreleasedExam.id)">
+                                                                                    置顶</el-link>
+                                                                                <el-link
+                                                                                    v-show="unreleasedExam.topNum > 0"
+                                                                                    :underline="false"
+                                                                                    @click="switchExamTop(unreleasedExam.id)">
+                                                                                    取消置顶</el-link>
+                                                                            </el-dropdown-item>
+                                                                            <el-dropdown-item>
+                                                                                <el-link
+                                                                                    @click="deleteExam(unreleasedExam.id)">
+                                                                                    删除</el-link>
+                                                                            </el-dropdown-item>
                                                                         </el-dropdown-menu>
                                                                     </el-dropdown>
                                                                 </div>
@@ -1155,40 +1008,52 @@
                                                     </el-row>
                                                 </el-card>
                                             </el-tab-pane>
-                                            <el-tab-pane label="未开始(1)" name="third">
+                                            <!-- 未开始 -->
+                                            <el-tab-pane v-if="user.isTeacher"
+                                                :label="'未开始('+ unstartedExamList.length +')'" name="third">
                                                 <el-card class="box-card"
+                                                    v-for="(unstartedExam, index) in unstartedExamList" :key="index"
                                                     style="margin-top: 30px;width: 1184px;height: 230px;border-radius: 6px;border-width: 2px">
                                                     <el-row id="course-title" style="height: 30px">
                                                         <el-col :span="14">
                                                             <div class="homework-create-time" style="float: left">
+                                                                <el-tag v-show="unstartedExam.topNum > 0" type="info">置顶
+                                                                </el-tag>
                                                                 <el-tag type="warning">未开始</el-tag>
                                                                 <!-- <span
                                                                     style="padding-left: 30px;font-size: 15px;color: #5F6368">限时：无</span> -->
                                                                 <span
-                                                                    style="padding-left: 30px;font-size: 15px;color: #5F6368">起止时间：2020-11-09
-                                                                    22:17 ~ 2020-11-09 23:17</span>
+                                                                    style="padding-left: 30px;font-size: 15px;color: #5F6368">起止时间：<span
+                                                                        v-text="unstartedExam.startTime">2020-11-09
+                                                                        22:17</span> ~
+                                                                    <span
+                                                                        v-text="unstartedExam.endTime === null ? '无' : unstartedExam.endTime">2020-11-09
+                                                                        23:17</span></span>
                                                             </div>
                                                         </el-col>
                                                         <el-col :span="10">
                                                             <span
-                                                                style="color: #FF6E48;font-size: 16px;font-weight: bold;float: right">开始时间2020-11-14
-                                                                24:10</span>
+                                                                style="color: #FF6E48;font-size: 16px;font-weight: bold;float: right">开始时间
+                                                                <span v-text="unstartedExam.startTime">2020-11-14
+                                                                    24:10</span></span>
                                                         </el-col>
                                                     </el-row>
-                                                    <el-row id="course-announce" style="height: 130px">
+                                                    <el-row id="course-announce"
+                                                        style="height: 130px; margin-top: 10px;">
                                                         <el-col :span="12">
                                                             <el-row style="height: 55px">
                                                                 <el-col :span="24">
                                                                     <el-link :underline="false"
                                                                         style="color: #3B3D45;font-size: 26px;float: left;padding-left: 30px;padding-top: 3px">
-                                                                        <b>未开始_测试（考试）</b>
+                                                                        <b v-text="unstartedExam.title">未开始_测试（考试）</b>
                                                                     </el-link>
                                                                 </el-col>
                                                             </el-row>
                                                             <el-row style="height: 75px">
                                                                 <el-col :span="24" style="height: 75px">
                                                                     <span style="float: left;padding-left: 30px">
-                                                                        <span style="font-size: 15px;color: #707070">
+                                                                        <span style="font-size: 15px;color: #707070"
+                                                                            v-html="unstartedExam.introduction">
                                                                             description试卷描述
                                                                         </span>
                                                                     </span>
@@ -1211,23 +1076,64 @@
                                                             <el-col :span="12" style="height: 50px">
                                                                 <span
                                                                     style="font-size: 15px;color: #A0A0A0;float: left;padding-left: 30px;padding-top: 10px;padding-bottom: 10px">
-                                                                    创建于2020-11-09 22:17
+                                                                    创建于 <span
+                                                                        v-text="unstartedExam.createTime">2020-11-09
+                                                                        22:17</span>
                                                                 </span>
                                                             </el-col>
                                                             <el-col :span="12">
                                                                 <div class="exam-finished-buttons" style="float: right">
-                                                                    <el-button type="primary" plain>编辑基本信息</el-button>
-                                                                    <el-button type="primary" plain>编辑试题内容</el-button>
+                                                                    <el-popconfirm confirmButtonText="确认"
+                                                                        cancelButtonText="取消"
+                                                                        confirmButtonType="warning" plain
+                                                                        cancelButtonType="success" placement="top"
+                                                                        @onConfirm="updateStatus(unstartedExam.id, 2)"
+                                                                        title="确认要取消发布此测试吗？">
+                                                                        <el-button type="primary" plain
+                                                                            slot="reference">取消发布
+                                                                        </el-button>
+                                                                    </el-popconfirm>
+                                                                    <el-button type="primary" plain
+                                                                        @click="showEditExamForm(unstartedExam.id)">
+                                                                        编辑基本信息
+                                                                    </el-button>
+                                                                    <el-button type="primary" plain
+                                                                        @click="location.href = 'examPaper.html?id=' + unstartedExam.id">
+                                                                        编辑试题内容
+                                                                    </el-button>
                                                                     <el-dropdown>
                                                                         <el-button type="primary">
                                                                             更多<i
                                                                                 class="el-icon-arrow-down el-icon--right"></i>
                                                                         </el-button>
                                                                         <el-dropdown-menu slot="dropdown">
-                                                                            <el-dropdown-item>取消发布</el-dropdown-item>
-                                                                            <el-dropdown-item>保存到备课区</el-dropdown-item>
-                                                                            <el-dropdown-item>分享试卷给同事</el-dropdown-item>
-                                                                            <el-dropdown-item>删除</el-dropdown-item>
+                                                                            <!-- <el-dropdown-item>保存到备课区
+                                                                                </el-dropdown-item>
+                                                                                <el-dropdown-item>分享试卷给同事
+                                                                                </el-dropdown-item> -->
+                                                                            <el-dropdown-item>
+                                                                                <el-link
+                                                                                    v-show="unstartedExam.topNum === 0"
+                                                                                    :underline="false"
+                                                                                    @click="switchExamTop(unstartedExam.id)">
+                                                                                    置顶</el-link>
+                                                                                <el-link
+                                                                                    v-show="unstartedExam.topNum > 0"
+                                                                                    :underline="false"
+                                                                                    @click="switchExamTop(unstartedExam.id)">
+                                                                                    取消置顶</el-link>
+                                                                            </el-dropdown-item>
+                                                                            <el-dropdown-item>
+                                                                                <el-popconfirm confirmButtonText="确认"
+                                                                                    cancelButtonText="取消"
+                                                                                    confirmButtonType="danger"
+                                                                                    cancelButtonType="success"
+                                                                                    placement="top"
+                                                                                    @onConfirm="deleteExam(unstartedExam.id)"
+                                                                                    title="确认要删除此测试吗？">
+                                                                                    <el-link slot="reference"
+                                                                                        :underline="false">删除
+                                                                                    </el-link>
                                                                         </el-dropdown-menu>
                                                                     </el-dropdown>
                                                                 </div>
@@ -1236,35 +1142,46 @@
                                                     </el-row>
                                                 </el-card>
                                             </el-tab-pane>
-                                            <el-tab-pane label="已发布(1)" name="fourth">
+                                            <!-- 已发布 -->
+                                            <el-tab-pane v-if="user.isTeacher"
+                                                :label="'已发布('+ releasedExamList.length +')'" name="fourth">
                                                 <el-card class="box-card"
+                                                    v-for="(releasedExam, index) in releasedExamList" :key="index"
                                                     style="margin-top: 30px;width: 1184px;height: 230px;border-radius: 6px;border-width: 2px">
                                                     <el-row id="course-title" style="height: 30px">
                                                         <el-col :span="14">
                                                             <div class="homework-create-time" style="float: left">
+                                                                <el-tag type="info" v-show="releasedExam.topNum > 0">置顶
+                                                                </el-tag>
                                                                 <el-tag type="success">已发布</el-tag>
                                                                 <!-- <span
                                                                     style="padding-left: 30px;font-size: 15px;color: #5F6368">限时：无</span> -->
                                                                 <span
-                                                                    style="padding-left: 30px;font-size: 15px;color: #5F6368">起止时间：2020-11-09
-                                                                    22:17 ~ 2020-11-09 23:17</span>
+                                                                    style="padding-left: 30px;font-size: 15px;color: #5F6368">起止时间：<span
+                                                                        v-text="releasedExam.startTime">2020-11-09
+                                                                        22:17</span> ~
+                                                                    <span
+                                                                        v-text="releasedExam.endTime === null ? '无' : releasedExam.endTime">2020-11-09
+                                                                        23:17</span></span>
                                                             </div>
                                                         </el-col>
                                                     </el-row>
-                                                    <el-row id="course-announce" style="height: 130px">
+                                                    <el-row id="course-announce"
+                                                        style="height: 130px; margin-top: 10px;">
                                                         <el-col :span="12">
                                                             <el-row style="height: 55px">
                                                                 <el-col :span="24">
                                                                     <el-link :underline="false"
                                                                         style="color: #3B3D45;font-size: 26px;float: left;padding-left: 30px;padding-top: 3px">
-                                                                        <b>已发布_测试（考试）</b>
+                                                                        <b v-text="releasedExam.title">已发布_测试（考试）</b>
                                                                     </el-link>
                                                                 </el-col>
                                                             </el-row>
                                                             <el-row style="height: 75px">
                                                                 <el-col :span="24" style="height: 75px">
                                                                     <span style="float: left;padding-left: 30px">
-                                                                        <span style="font-size: 15px;color: #707070">
+                                                                        <span style="font-size: 15px;color: #707070"
+                                                                            v-html="releasedExam.introduction">
                                                                             description试卷描述
                                                                         </span>
                                                                     </span>
@@ -1275,7 +1192,8 @@
                                                             <el-row>
                                                                 <el-col :span="12" style="float: right">
                                                                     <div class="homework-statics" style="height: 130px">
-                                                                        <el-row style="height: 130px;padding-top: 15px">
+                                                                        <el-row v-show="user.isTeacher"
+                                                                            style="height: 130px;padding-top: 15px">
                                                                             <el-col :span="8">
                                                                                 <ul style="list-style: none">
                                                                                     <li
@@ -1283,6 +1201,7 @@
                                                                                         已批</li>
                                                                                     <li>
                                                                                         <el-link :underline="false"
+                                                                                            v-text="releasedExam.correctedCount"
                                                                                             style="font-size: 30px;color: #32BAF2;font-weight: bold">
                                                                                             15</el-link>
                                                                                     </li>
@@ -1295,6 +1214,7 @@
                                                                                         未批</li>
                                                                                     <li>
                                                                                         <el-link :underline="false"
+                                                                                            v-text="releasedExam.uncorrectedCount"
                                                                                             style="font-size: 30px;color: #707070;font-weight: bold">
                                                                                             4</el-link>
                                                                                     </li>
@@ -1307,6 +1227,7 @@
                                                                                         未交</li>
                                                                                     <li>
                                                                                         <el-link :underline="false"
+                                                                                            v-text="releasedExam.uncommittedCount"
                                                                                             style="font-size: 30px;color: #FF6000;font-weight: bold">
                                                                                             5</el-link>
                                                                                     </li>
@@ -1323,23 +1244,64 @@
                                                             <el-col :span="12" style="height: 50px">
                                                                 <span
                                                                     style="font-size: 15px;color: #A0A0A0;float: left;padding-left: 30px;padding-top: 10px;padding-bottom: 10px">
-                                                                    创建于2020-11-09 22:17
+                                                                    创建于 <span
+                                                                        v-text="releasedExam.createTime">2020-11-09
+                                                                        22:17</span>
                                                                 </span>
                                                             </el-col>
                                                             <el-col :span="12">
                                                                 <div class="exam-finished-buttons" style="float: right">
-                                                                    <el-button type="primary" plain>编辑基本信息</el-button>
-                                                                    <el-button type="primary" plain>编辑试题内容</el-button>
+                                                                    <el-popconfirm confirmButtonText="确认"
+                                                                        cancelButtonText="取消"
+                                                                        confirmButtonType="warning" plain
+                                                                        cancelButtonType="success" placement="top"
+                                                                        @onConfirm="updateStatus(releasedExam.id, 3)"
+                                                                        title="确认要结束发布此测试吗？">
+                                                                        <el-button type="success" plain
+                                                                            slot="reference">结束发布
+                                                                        </el-button>
+                                                                    </el-popconfirm>
+                                                                    <el-button type="primary" plain
+                                                                        @click="showEditExamForm(releasedExam.id)">
+                                                                        编辑基本信息
+                                                                    </el-button>
+                                                                    <el-button type="primary" plain
+                                                                        @click="location.href = 'examPaper.html?id=' + releasedExam.id">
+                                                                        编辑试题内容
+                                                                    </el-button>
                                                                     <el-dropdown>
                                                                         <el-button type="primary">
                                                                             更多<i
                                                                                 class="el-icon-arrow-down el-icon--right"></i>
                                                                         </el-button>
                                                                         <el-dropdown-menu slot="dropdown">
-                                                                            <el-dropdown-item>结束发布</el-dropdown-item>
-                                                                            <el-dropdown-item>保存到备课区</el-dropdown-item>
-                                                                            <el-dropdown-item>分享试卷给同事</el-dropdown-item>
-                                                                            <el-dropdown-item>删除</el-dropdown-item>
+                                                                            <!-- <el-dropdown-item>保存到备课区
+                                                                                </el-dropdown-item>
+                                                                                <el-dropdown-item>分享试卷给同事
+                                                                                </el-dropdown-item> -->
+                                                                            <el-dropdown-item>
+                                                                                <el-link
+                                                                                    v-show="releasedExam.topNum === 0"
+                                                                                    :underline="false"
+                                                                                    @click="switchExamTop(releasedExam.id)">
+                                                                                    置顶</el-link>
+                                                                                <el-link
+                                                                                    v-show="releasedExam.topNum > 0"
+                                                                                    :underline="false"
+                                                                                    @click="switchExamTop(releasedExam.id)">
+                                                                                    取消置顶</el-link>
+                                                                            </el-dropdown-item>
+                                                                            <el-dropdown-item>
+                                                                                <el-popconfirm confirmButtonText="确认"
+                                                                                    cancelButtonText="取消"
+                                                                                    confirmButtonType="danger"
+                                                                                    cancelButtonType="success"
+                                                                                    placement="top"
+                                                                                    @onConfirm="deleteExam(releasedExam.id)"
+                                                                                    title="确认要删除此测试吗？">
+                                                                                    <el-link slot="reference"
+                                                                                        :underline="false">删除
+                                                                                    </el-link>
                                                                         </el-dropdown-menu>
                                                                     </el-dropdown>
                                                                 </div>
@@ -1348,35 +1310,46 @@
                                                     </el-row>
                                                 </el-card>
                                             </el-tab-pane>
-                                            <el-tab-pane label="已结束(1)" name="fifth">
-                                                <el-card class="box-card"
+                                            <!-- 已结束 -->
+                                            <el-tab-pane v-if="user.isTeacher"
+                                                :label="'已结束(' + endedExamList.length + ')'" name="fifth">
+                                                <el-card class="box-card" v-for="(endedExam, index) in endedExamList"
+                                                    :key="index"
                                                     style="margin-top: 30px;width: 1184px;height: 230px;border-radius: 6px;border-width: 2px">
                                                     <el-row id="course-title" style="height: 30px">
                                                         <el-col :span="14">
                                                             <div class="homework-create-time" style="float: left">
+                                                                <el-tag type="info" v-show="endedExam.topNum > 0">置顶
+                                                                </el-tag>
                                                                 <el-tag>已结束</el-tag>
                                                                 <!-- <span
                                                                     style="padding-left: 30px;font-size: 15px;color: #5F6368">限时：无</span> -->
                                                                 <span
-                                                                    style="padding-left: 30px;font-size: 15px;color: #5F6368">起止时间：2020-11-09
-                                                                    22:17 ~ 2020-11-09 23:17</span>
+                                                                    style="padding-left: 30px;font-size: 15px;color: #5F6368">起止时间：<span
+                                                                        v-text="endedExam.startTime">2020-11-09
+                                                                        22:17</span> ~
+                                                                    <span
+                                                                        v-text="endedExam.endTime === null ? '无' : endedExam.endTime">2020-11-09
+                                                                        23:17</span></span>
                                                             </div>
                                                         </el-col>
                                                     </el-row>
-                                                    <el-row id="course-announce" style="height: 130px">
+                                                    <el-row id="course-announce"
+                                                        style="height: 130px; margin-top: 10px;">
                                                         <el-col :span="12">
                                                             <el-row style="height: 55px">
                                                                 <el-col :span="24">
                                                                     <el-link :underline="false"
                                                                         style="color: #3B3D45;font-size: 26px;float: left;padding-left: 30px;padding-top: 3px">
-                                                                        <b>已结束_测试（考试）</b>
+                                                                        <b v-text="endedExam.title">已结束_测试（考试）</b>
                                                                     </el-link>
                                                                 </el-col>
                                                             </el-row>
                                                             <el-row style="height: 75px">
                                                                 <el-col :span="24" style="height: 75px">
                                                                     <span style="float: left;padding-left: 30px">
-                                                                        <span style="font-size: 15px;color: #707070">
+                                                                        <span style="font-size: 15px;color: #707070"
+                                                                            v-html="endedExam.introduction">
                                                                             description试卷描述
                                                                         </span>
                                                                     </span>
@@ -1387,7 +1360,8 @@
                                                             <el-row>
                                                                 <el-col :span="12" style="float: right">
                                                                     <div class="homework-statics" style="height: 130px">
-                                                                        <el-row style="height: 130px;padding-top: 15px">
+                                                                        <el-row v-show="user.isTeacher"
+                                                                            style="height: 130px;padding-top: 15px">
                                                                             <el-col :span="8">
                                                                                 <ul style="list-style: none">
                                                                                     <li
@@ -1395,6 +1369,7 @@
                                                                                         已批</li>
                                                                                     <li>
                                                                                         <el-link :underline="false"
+                                                                                            v-text="endedExam.correctedCount"
                                                                                             style="font-size: 30px;color: #32BAF2;font-weight: bold">
                                                                                             15</el-link>
                                                                                     </li>
@@ -1407,6 +1382,7 @@
                                                                                         未批</li>
                                                                                     <li>
                                                                                         <el-link :underline="false"
+                                                                                            v-text="endedExam.uncorrectedCount"
                                                                                             style="font-size: 30px;color: #707070;font-weight: bold">
                                                                                             4</el-link>
                                                                                     </li>
@@ -1419,6 +1395,7 @@
                                                                                         未交</li>
                                                                                     <li>
                                                                                         <el-link :underline="false"
+                                                                                            v-text="endedExam.uncommittedCount"
                                                                                             style="font-size: 30px;color: #FF6000;font-weight: bold">
                                                                                             5</el-link>
                                                                                     </li>
@@ -1435,23 +1412,61 @@
                                                             <el-col :span="12" style="height: 50px">
                                                                 <span
                                                                     style="font-size: 15px;color: #A0A0A0;float: left;padding-left: 30px;padding-top: 10px;padding-bottom: 10px">
-                                                                    创建于2020-11-09 22:17
+                                                                    创建于 <span v-text="endedExam.createTime">2020-11-09
+                                                                        22:17</span>
                                                                 </span>
                                                             </el-col>
                                                             <el-col :span="12">
                                                                 <div class="exam-finished-buttons" style="float: right">
-                                                                    <el-button type="primary">重新发布</el-button>
-                                                                    <el-button type="primary" plain>编辑基本信息</el-button>
-                                                                    <el-button type="primary" plain>编辑试题内容</el-button>
+                                                                    <el-popconfirm confirmButtonText="确认"
+                                                                        cancelButtonText="取消"
+                                                                        confirmButtonType="warning" plain
+                                                                        cancelButtonType="success" placement="top"
+                                                                        @onConfirm="updateStatus(endedExam.id, 1)"
+                                                                        title="确认要重新发布此测试吗？">
+                                                                        <el-button type="primary" plain
+                                                                            slot="reference">重新发布
+                                                                        </el-button>
+                                                                    </el-popconfirm>
+                                                                    <el-button type="primary" plain
+                                                                        @click="showEditExamForm(endedExam.id)">
+                                                                        编辑基本信息
+                                                                    </el-button>
+                                                                    <el-button type="primary" plain
+                                                                        @click="location.href = 'examPaper.html?id=' + endedExam.id">
+                                                                        编辑试题内容
+                                                                    </el-button>
                                                                     <el-dropdown>
                                                                         <el-button type="primary">
                                                                             更多<i
                                                                                 class="el-icon-arrow-down el-icon--right"></i>
                                                                         </el-button>
                                                                         <el-dropdown-menu slot="dropdown">
-                                                                            <el-dropdown-item>保存到备课区</el-dropdown-item>
-                                                                            <el-dropdown-item>分享试卷给同事</el-dropdown-item>
-                                                                            <el-dropdown-item>删除</el-dropdown-item>
+                                                                            <!-- <el-dropdown-item>保存到备课区
+                                                                            </el-dropdown-item>
+                                                                            <el-dropdown-item>分享试卷给同事
+                                                                            </el-dropdown-item> -->
+                                                                            <el-dropdown-item>
+                                                                                <el-link v-show="endedExam.topNum === 0"
+                                                                                    :underline="false"
+                                                                                    @click="switchExamTop(endedExam.id)">
+                                                                                    置顶</el-link>
+                                                                                <el-link v-show="endedExam.topNum > 0"
+                                                                                    :underline="false"
+                                                                                    @click="switchExamTop(endedExam.id)">
+                                                                                    取消置顶</el-link>
+                                                                            </el-dropdown-item>
+                                                                            <el-dropdown-item>
+                                                                                <el-popconfirm confirmButtonText="确认"
+                                                                                    cancelButtonText="取消"
+                                                                                    confirmButtonType="danger"
+                                                                                    cancelButtonType="success"
+                                                                                    placement="top"
+                                                                                    @onConfirm="deleteExam(endedExam.id)"
+                                                                                    title="确认要删除此测试吗？">
+                                                                                    <el-link slot="reference"
+                                                                                        :underline="false">删除
+                                                                                    </el-link>
                                                                         </el-dropdown-menu>
                                                                     </el-dropdown>
                                                                 </div>
@@ -1617,8 +1632,8 @@
         </el-dialog>
 
         <!-- 发布/编辑公告表单 -->
-        <el-dialog :title="isEditNotice ? '编辑' + '公告' : '发布' + '公告'" :visible.sync="noticeFormVisible"
-            @opened="initNoticeEditor()" @closed="destroyNoticeEditor()">
+        <el-dialog :title="isEditNotice ? '编辑公告' : '发布公告'" :visible.sync="noticeFormVisible"
+            @opened="initNoticeEditor()" @closed="destroyNoticeEditor()" destroy-on-close>
             <el-form :model="noticeForm" :rules="noticeRule" ref="inputOrEditNoticeForm">
                 <el-form-item prop="title">
                     <el-input placeholder="请输入公告标题" v-model="noticeForm.title" clearable>
@@ -1633,6 +1648,38 @@
                         </el-button>
                         <el-button type="primary"
                             @click="isEditNotice ? editNotice('inputOrEditNoticeForm') : inputNotice('inputOrEditNoticeForm')">
+                            确定
+                        </el-button>
+                    </div>
+                </el-form-item>
+            </el-form>
+        </el-dialog>
+
+        <!-- 新建/编辑测试（考试）基本信息表单 -->
+        <el-dialog :title="isEditExam ? '编辑测试（考试）基本信息' : '新建测试（考试）基本信息'" :visible.sync="examFormVisible"
+            @opened="initExamEditor()" @closed="destroyExamEditor()" destroy-on-close>
+            <el-form :model="examForm" :rules="examRule" ref="inputOrEditExamForm">
+                <el-form-item prop="title">
+                    <el-input placeholder="请输入测试（考试）标题" v-model="examForm.title" clearable>
+                    </el-input>
+                </el-form-item>
+                <el-form-item>
+                    <div id="examEditor"></div>
+                </el-form-item>
+                <el-form-item prop="startTime">
+                    <el-date-picker v-model="examForm.startTime" type="datetime" placeholder="考试开始时间">
+                    </el-date-picker>
+                </el-form-item>
+                <el-form-item>
+                    <el-date-picker v-model="examForm.endTime" type="datetime" placeholder="考试结束时间">
+                    </el-date-picker>
+                </el-form-item>
+                <el-form-item>
+                    <div id="notice-button" style="float: right;padding-top: 10px">
+                        <el-button type="primary" plain @click="examFormVisible = false">取消
+                        </el-button>
+                        <el-button type="primary"
+                            @click="isEditExam ? editExam('inputOrEditExamForm') : inputExam('inputOrEditExamForm')">
                             确定
                         </el-button>
                     </div>
@@ -1675,11 +1722,6 @@
             activeIndex: '1',
             activeIndex2: '1',
             activeName: 'first',
-            indexBannerPics: [
-                "https://prepc.ketangpai.com/img/banner-home01.9994acf5.jpg",
-                "https://prepc.ketangpai.com/img/banner-home02.ebb3d690.png",
-                "https://prepc.ketangpai.com/img/banner-home03.6c319494.png"
-            ],
             user: {
                 id: -1,
                 username: "",
@@ -1738,6 +1780,15 @@
                 title: "",
                 content: "",
             },
+            unreleasedExamList: [],
+            unstartedExamList: [],
+            releasedExamList: [],
+            endedExamList: [],
+            examList: [],
+            examEditor: null,
+            isEditExam: false,
+            examFormVisible: false,
+            examForm: {},
             resourceForm: {},
             updateCourseForm: {
                 clazz: "",
@@ -1804,6 +1855,10 @@
             },
             noticeRule: {
                 title: [{ required: true, message: '请输入公告标题', trigger: 'blur' }],
+            },
+            examRule: {
+                title: [{ required: true, message: '请输入测试（考试）标题', trigger: 'blur' }],
+                startTime: [{ required: true, message: '请输入考试开始时间', trigger: 'blur' }]
             },
             resourceRule: {
                 name: [{ required: true, message: '请输入资源名称', trigger: 'blur' }],
@@ -1927,6 +1982,51 @@
                     this.noticeEditor.txt.html(this.noticeForm.content);
                 }
             },
+            initExamEditor() {
+                const editor = new wangEditor(`#examEditor`)
+                // 配置 onchange 回调函数，将数据同步到 vue 中
+                editor.config.onchange = (newHtml) => {
+                    this.examForm.introduction = newHtml
+                }
+                // 配置菜单
+                editor.config.menus = [
+                    'bold',
+                    'underline',
+                    'italic',
+                    'strikeThrough',
+                    'quote',
+                    'foreColor',
+                    'backColor',
+                    'fontSize',
+                    'fontName',
+                    'justify',
+                    'code',
+                    'image',
+                    'video',
+                    'indent',
+                    'lineHeight',
+                    'link',
+                    'list',
+                    'emoticon',
+                    'table',
+                    'undo',
+                    'redo',
+                ]
+                // 配置 placeholder
+                editor.config.placeholder = '请编辑测试（考试）简介'
+                // 配置 server 上传图片接口地址
+                editor.config.uploadImgServer = 'http://api.yixuetang.com/api/resource/upload/editor/userId/' + this.user.id
+                // 配置上传文件参数名
+                editor.config.uploadFileName = 'file';
+                // 创建编辑器
+                editor.create()
+                this.examEditor = editor
+
+                // 如果是编辑已建的测试（考试），需要回显数据
+                if (this.isEditExam) {
+                    this.examEditor.txt.html(this.examForm.introduction);
+                }
+            },
             destroyHomeworkEditor() {
                 // 调用销毁 API 对当前编辑器实例进行销毁
                 this.homeworkEditor.destroy()
@@ -1936,6 +2036,11 @@
                 // 调用销毁 API 对当前编辑器实例进行销毁
                 this.noticeEditor.destroy()
                 this.noticeEditor = null
+            },
+            destroyExamEditor() {
+                // 调用销毁 API 对当前编辑器实例进行销毁
+                this.examEditor.destroy()
+                this.examEditor = null
             },
             inputHomework(formName) {
                 this.$refs[formName].validate((valid) => {
@@ -1980,6 +2085,32 @@
                     }
                 });
             },
+            inputExam(formName) {
+                this.$refs[formName].validate((valid) => {
+                    if (valid) {
+                        let t = this.examForm.startTime;
+                        this.examForm.startTime = yxt.formatDate(t);
+                        if (this.examForm.endTime !== undefined) {
+                            let t2 = this.examForm.endTime;
+                            this.examForm.endTime = yxt.formatDate(t2);
+                        }
+                        yxt.http.post("/exam/courseId/" + this.course.id, this.examForm).then(({ data }) => {
+                            if (data.success) {
+                                this.$message.success(data.message);
+                                this.getExamData();
+                            } else {
+                                this.$message.error(data.message);
+                            }
+                            this.examFormVisible = false;
+                            this.examForm = {};
+                        }).catch(() => {
+                            this.$message.error("服务器繁忙，请稍后再试！");
+                            this.examFormVisible = false;
+                            this.examForm = {};
+                        })
+                    }
+                });
+            },
             showInputHomeworkForm() {
                 this.homeworkFormVisible = true
                 this.isEditHomework = false
@@ -1989,6 +2120,22 @@
                 this.noticeFormVisible = true
                 this.isEditNotice = false
                 this.noticeForm = {}
+            },
+            showInputExamForm() {
+                this.examFormVisible = true
+                this.isEditExam = false
+                this.examForm = {}
+            },
+            showEditExamForm(examId) {
+                yxt.http.get("/exam/info/examId/" + examId).then(({ data }) => {
+                    if (data.success) {
+                        this.examForm = data.queryResult.data[0];
+                        this.examFormVisible = true;
+                        this.isEditExam = true;
+                    } else {
+                        this.$message.error(data.message);
+                    }
+                })
             },
             showEditNoticeForm(noticeId) {
                 yxt.http.get("/notice/noticeId/" + noticeId).then(({ data }) => {
@@ -2061,11 +2208,45 @@
                     }
                 });
             },
+            editExam(formName) {
+                this.$refs[formName].validate((valid) => {
+                    if (valid) {
+                        yxt.http.put("/exam/info/examId/" + this.examForm.id, this.examForm).then(({ data }) => {
+                            if (data.success) {
+                                this.$message.success(data.message);
+                                this.getExamData();
+                            } else {
+                                this.$message.error(data.message);
+                            }
+                            this.isEditExam = false;
+                            this.examFormVisible = false;
+                            this.examForm = {};
+                        }).catch(() => {
+                            this.$message.error("服务器繁忙，请稍后再试！");
+                            this.isEditExam = false;
+                            this.examFormVisible = false;
+                            this.examForm = {};
+                        })
+                    }
+                });
+            },
             deleteNotice(noticeId) {
                 yxt.http.delete("/notice/courseId/" + noticeId).then(({ data }) => {
                     if (data.success) {
                         this.$message.success(data.message);
                         this.getNoticeData();
+                    } else {
+                        this.$message.error(data.message);
+                    }
+                }).catch(() => {
+                    this.$message.error("服务器繁忙，请稍候再试！")
+                });
+            },
+            deleteExam(examId) {
+                yxt.http.delete("/exam/examId/" + examId).then(({ data }) => {
+                    if (data.success) {
+                        this.$message.success(data.message);
+                        this.getExamData();
                     } else {
                         this.$message.error(data.message);
                     }
@@ -2104,10 +2285,34 @@
                     }
                 });
             },
+            updateStatus(examId, actionType) {
+                yxt.http.put("exam/status/examId/" + examId + "/actionType/" + actionType).then(({ data }) => {
+                    if (data.success) {
+                        this.$message.success(data.message);
+                        this.getExamData();
+                    } else {
+                        this.$message.error(data.message);
+                    }
+                }).catch(() => {
+                    this.$message.error("服务器繁忙，请稍候再试一次！")
+                })
+            },
             switchNoticeTop(noticeId) {
                 yxt.http.put("/notice/topNum/noticeId/" + noticeId).then(({ data }) => {
                     if (data.success) {
                         this.getNoticeData();
+                        this.$message.success(data.message);
+                    } else {
+                        this.$message.error(data.message);
+                    }
+                }).catch(() => {
+                    this.$message.error("服务器繁忙，请稍候再试！")
+                })
+            },
+            switchExamTop(examId) {
+                yxt.http.put("/exam/topNum/examId/" + examId).then(({ data }) => {
+                    if (data.success) {
+                        this.getExamData();
                         this.$message.success(data.message);
                     } else {
                         this.$message.error(data.message);
@@ -2144,6 +2349,7 @@
                         this.getHomeworkData();
                         this.getUnreadMessageCount();
                         this.getStudentHomeworkData();
+                        this.getExamData();
                     } else {
                         location.href = "../index.html"
                     }
@@ -2205,41 +2411,11 @@
                 return this.getResourceSrc(resourceName.substring(resourceName.lastIndexOf(".") + 1));
             },
             getResourceSrc(ext) {
-                switch (ext) {
-                    case 'jpg':
-                        return "https://www.ketangpai.com/Public/Common/img/fileicon/file_ext_big_jpg.png";
-                        break;
-                    case 'png':
-                        return "https://www.ketangpai.com/Public/Common/img/fileicon/file_ext_big_png.png";
-                        break;
-                    case 'doc':
-                        return "https://www.ketangpai.com/Public/Common/img/fileicon/file_ext_big_doc.png";
-                        break;
-                    case 'ppt':
-                        return "https://www.ketangpai.com/Public/Common/img/fileicon/file_ext_big_ppt.png";
-                        break;
-                    case 'pptx':
-                        return "https://www.ketangpai.com/Public/Common/img/fileicon/file_ext_big_pptx.png";
-                        break;
-                    case 'mp4':
-                        return "https://www.ketangpai.com/Public/Common/img/fileicon/file_ext_big_mp4.png";
-                        break;
-                    case 'pdf':
-                        return "https://www.ketangpai.com/Public/Common/img/fileicon/file_ext_big_pdf.png";
-                        break;
-                    case 'xlsx':
-                        return "https://www.ketangpai.com/Public/Common/img/fileicon/file_ext_big_xlsx.png";
-                        break;
-                    case 'txt':
-                        return "https://www.ketangpai.com/Public/Common/img/fileicon/file_ext_big_txt.png";
-                        break;
-                    case 'zip':
-                        return "https://www.ketangpai.com/Public/Common/img/fileicon/file_ext_big_zip.png";
-                        break;
-                    default:
-                        return "https://www.ketangpai.com/Public/Common/img/fileicon/file_ext_big_folder.png";
-                        break;
+                let extList = ['jpg', 'png', 'doc', 'ppt', 'pptx', 'mp4', 'pdf', 'xlsx', 'txt', 'zip']
+                if (extList.includes(ext)) {
+                    return "https://www.ketangpai.com/Public/Common/img/fileicon/file_ext_big_" + ext + ".png";
                 }
+                return "https://www.ketangpai.com/Public/Common/img/fileicon/file_ext_big_folder.png";
             },
             previewOrGetResourceData(resourceId, type, name) {
                 if (type === 0) { // 文件类型是目录，获取其子级资源
@@ -2458,7 +2634,58 @@
                 }).catch(() => {
                     this.$message.error("服务器繁忙，请稍候再试！")
                 })
-            }
+            },
+            getExamData() {
+                yxt.http.get("exam/courseId/" + yxt.getUrlParam("id") + "/userId/" + this.user.id).then(({ data }) => {
+                    if (data.success) {
+                        this.examList = data.queryResult.data;
+                        this.examList.forEach(exam => {
+                            exam.examStatus = this.getExamStatus(exam);
+                        });
+                        this.unreleasedExamList = this.examList.filter(exam => !exam.status);
+                        let releasedExamList = this.examList.filter(exam => exam.status);
+                        this.unstartedExamList = releasedExamList.filter(exam => new Date().valueOf() < new Date(exam.startTime).valueOf());
+                        this.releasedExamList = releasedExamList.filter(exam => new Date().valueOf() >= new Date(exam.startTime).valueOf() &&
+                            (exam.endTime === null || new Date().valueOf <= new Date(exam.endTime).valueOf()));
+                        this.endedExamList = releasedExamList.filter(exam => exam.endTime !== null && new Date().valueOf() > new Date(exam.endTime).valueOf());
+                    }
+                })
+            },
+            getExamStatus(exam) {
+                if (!exam.status) {
+                    return "未发布";
+                } else {
+                    if (new Date().valueOf() < new Date(exam.startTime).valueOf()) {
+                        return "未开始";
+                    } else if (new Date().valueOf() >= new Date(exam.startTime).valueOf() &&
+                        (exam.endTime === null || new Date().valueOf <= new Date(exam.endTime).valueOf())) {
+                        return "已发布";
+                    } else if (exam.endTime !== null && new Date().valueOf() > new Date(exam.endTime).valueOf()) {
+                        return "已结束";
+                    } else {
+                        return "未知测试状态"
+                    }
+                }
+            },
+            getExamStatusType(examStatus) {
+                switch (examStatus) {
+                    case "未发布":
+                        return "danger";
+                        break;
+                    case "未开始":
+                        return "warning";
+                        break;
+                    case "已发布":
+                        return "success";
+                        break;
+                    case "已结束":
+                        return "";
+                        break;
+                    default:
+                        return "info";
+                        break;
+                }
+            },
         },
         created() {
             this.verify();
@@ -2484,7 +2711,7 @@
                     totalCount += this.unreadMessageCount[key];
                 }
                 return totalCount;
-            }
+            },
         },
     })
 </script>
