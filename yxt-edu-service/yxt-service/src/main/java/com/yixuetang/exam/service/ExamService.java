@@ -30,6 +30,14 @@ public interface ExamService {
     CommonResponse newExam(long courseId, InsertExam insertExam);
 
     /**
+     * 查询某一测试（考试）的基本信息
+     *
+     * @param examId    测试（考试）id
+     * @return
+     */
+    QueryResponse findExamById(long examId);
+
+    /**
      * 教师置顶/取消置顶测试（考试）
      *
      * @param examId 测试（考试）id

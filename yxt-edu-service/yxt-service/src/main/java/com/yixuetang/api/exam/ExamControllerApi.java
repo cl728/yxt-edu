@@ -27,6 +27,11 @@ public interface ExamControllerApi {
     })
     CommonResponse updateStatus(long examId, int actionType);
 
+    @ApiOperation("查询某一考试（测试）的基本信息")
+    @ApiImplicitParam(name = "examId", value = "考试（测试）id", required = true,
+            paramType = "path", dataType = "long")
+    QueryResponse findExamById(long examId);
+
     @ApiOperation("教师删除某一考试（测试）")
     @ApiImplicitParam(name = "examId", value = "考试（测试）id", required = true,
             paramType = "path", dataType = "long")

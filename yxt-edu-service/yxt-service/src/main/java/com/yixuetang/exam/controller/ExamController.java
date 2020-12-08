@@ -29,6 +29,12 @@ public class ExamController implements ExamControllerApi {
     }
 
     @Override
+    @GetMapping("info/examId/{examId}")
+    public QueryResponse findExamById(@PathVariable long examId) {
+        return this.examService.findExamById( examId );
+    }
+
+    @Override
     @DeleteMapping("examId/{examId}")
     public CommonResponse deleteById(@PathVariable long examId) {
         return this.examService.deleteById(examId);

@@ -42,6 +42,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -141,6 +142,17 @@ public class ExamServiceImpl implements ExamService {
                 );
 
         return new CommonResponse(CommonCode.SUCCESS);
+    }
+
+    @Override
+    public QueryResponse findExamById(long examId) {
+        //测试考试是否存在
+        Exam exam = examMapper.selectOne(new QueryWrapper<Exam>().eq("id", examId));
+        if (exam == null) {
+            ExceptionThrowUtils.cast(CommonCode.INVALID_PARAM);
+        }
+
+        return new QueryResponse(CommonCode.SUCCESS, new QueryResult<>( Collections.singletonList( exam ), 1 ));
     }
 
     @Override
