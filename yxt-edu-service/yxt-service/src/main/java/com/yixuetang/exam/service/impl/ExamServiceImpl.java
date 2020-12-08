@@ -2,7 +2,9 @@ package com.yixuetang.exam.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.yixuetang.course.mapper.CourseMapper;
+import com.yixuetang.course.mapper.ScMapper;
 import com.yixuetang.entity.course.Course;
+import com.yixuetang.entity.course.StudentCourse;
 import com.yixuetang.entity.exam.Exam;
 import com.yixuetang.entity.exam.ExamQuestion;
 import com.yixuetang.entity.exam.ExamStudent;
@@ -38,6 +40,7 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * @author Curits
@@ -70,6 +73,9 @@ public class ExamServiceImpl implements ExamService {
 
     @Autowired
     private UserMapper userMapper;
+
+    @Autowired
+    private ScMapper scMapper;
 
     @Autowired
     private ExamStudentMapper examStudentMapper;
@@ -106,6 +112,25 @@ public class ExamServiceImpl implements ExamService {
         exam.setEndTime( insertExam.getEndTime() );
         exam.setCreateTime( new Date() );
         examMapper.insert( exam );
+
+        // 插入相关记录到 t_exam_student 表中
+        this.scMapper.selectList(
+                new QueryWrapper<StudentCourse>()
+                        .eq( "course_id", courseId ) )
+                .stream()
+                .map( StudentCourse::getStudentId )
+                .collect( Collectors.toList() )
+                .forEach( studentId ->
+                        this.examStudentMapper.insert(
+                                ExamStudent.builder()
+                                        .id( null )
+                                        .examId( exam.getId() )
+                                        .studentId( studentId )
+                                        .score( null )
+                                        .status( 0 )
+                                        .submitTime( null )
+                                        .build() )
+                );
 
         return new CommonResponse( CommonCode.SUCCESS );
     }
