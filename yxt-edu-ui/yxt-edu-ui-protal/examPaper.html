@@ -1,0 +1,936 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8">
+	<title>编辑试题</title>
+	<link rel="stylesheet" href="https://cdn.bootcss.com/element-ui/2.13.2/theme-chalk/index.css">
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css">
+	<link rel="stylesheet" href="css/comment.css">
+	<style>
+		#exam-question-preview>.el-card__body {
+			padding: 0 20px 5px 20px;
+		}
+
+		#select-radio-group>.item {
+			padding: 0
+		}
+
+		#select-input-answer>.el-input__inner {
+			border: aliceblue;
+		}
+	</style>
+</head>
+
+<body>
+	<div id="app">
+		<el-menu default-active="1" class="el-menu-demo" mode="horizontal" @select="switchKeyPath">
+			<el-menu-item style="float: left;">
+				<el-button type="text" @click="location.href = 'courseDetail.html?id=' + exam.course.id">
+					<i class="el-icon-back"></i></el-button>
+				<el-button type="primary" round @click="location.href = 'courseDetail.html?id=' + exam.course.id">
+					<span v-text="exam.course.cname">数据结构</span></el-button>
+			</el-menu-item>
+
+			<el-menu-item index="1" style="font-size: 20px;margin-left: 550px;">试题编辑</el-menu-item>
+			<el-menu-item index="2" style="font-size: 20px;">试题预览</el-menu-item>
+			<el-menu-item index="3" style="font-size: 20px;">批阅测试</el-menu-item>
+
+			<el-menu-item style="float: right;">
+				<el-dropdown trigger="click">
+					<span class="el-dropdown-link" style="font-size: 15px;">
+						<i class="el-icon-suitcase"></i>工具
+					</span>
+					<el-dropdown-menu slot="dropdown">
+						<el-dropdown-item>论文查重</el-dropdown-item>
+						<el-dropdown-item>学术存证</el-dropdown-item>
+						<el-dropdown-item>邀请教师</el-dropdown-item>
+					</el-dropdown-menu>
+				</el-dropdown>
+
+				<el-popover placement="bottom" title="通知信息:" width="200" trigger="click" content="暂无通知">
+					<el-button slot="reference" type="text" icon="el-icon-bell" style="padding-inline: 10px;">
+					</el-button>
+				</el-popover>
+
+				<el-avatar :src="user.avatar"></el-avatar>
+			</el-menu-item>
+		</el-menu>
+
+		<!-- 试题编辑 -->
+		<div v-show="activeIndex === '1'">
+			<el-container style="width: 1400px; margin-left: 300px; margin-top: 10px;">
+				<!-- 试题概览 -->
+				<div style="position: fixed; left: 300px; top: 80px">
+					<el-card class="box-card" shadow="never" id="exam-question-preview"
+						style="margin-top: 40px;width: 260px;height: 88px;border-radius: 10px;border-width: 2px">
+						<h5 style="font-size: 14px;"> <i class="el-icon-caret-bottom"></i> 试题概览 </h5>
+						<div style="font-weight: 700; margin: -12px 0 0; font-size: 14px;">
+							共 <span style="color: #32BAF0; padding: 0 3px;" v-text="exam.questionCount">0</span> 题，总共
+							<span style="color: #32BAF0; padding: 0 3px;" v-text="exam.totalScore">0</span> 分</div>
+					</el-card>
+					<!-- 添加试题类型 -->
+					<el-card class="box-card" shadow="never" id="exam-question-preview"
+						style="margin-top: 20px;width: 260px;height: 220px;border-radius: 10px;border-width: 2px">
+						<h5 style="font-size: 14px;"><i class="el-icon-caret-bottom"></i> 添加试题类型</h5>
+						<div>
+							<!-- 单选、多选 -->
+							<el-row>
+								<el-col :span="12">
+									<el-button icon="el-icon-search" type="primary" plain
+										@click="addQuestionType(0, '单选题')">单选题
+									</el-button>
+								</el-col>
+								<el-col :span="12">
+									<el-button icon="el-icon-circle-check" type="primary" plain
+										@click="addQuestionType(0, '多选题')">
+										多选题</el-button>
+								</el-col>
+							</el-row>
+							<!-- 判断、填空 -->
+							<el-row style="margin-top: 10px;">
+								<el-col :span="12">
+									<el-button icon="el-icon-check" type="primary" plain
+										@click="addQuestionType(1, '判断题')">
+										判断题
+									</el-button>
+								</el-col>
+								<el-col :span="12">
+									<el-button icon="el-icon-edit" type="primary" plain
+										@click="addQuestionType(2, '填空题')">
+										填空题
+									</el-button>
+								</el-col>
+							</el-row>
+							<!-- 问答 -->
+							<el-row style="margin-top: 10px;">
+								<el-col :span="12">
+									<el-button icon="el-icon-edit-outline" type="primary" plain
+										@click="addQuestionType(3, '问答题')">
+										问答题</el-button>
+								</el-col>
+							</el-row>
+						</div>
+					</el-card>
+				</div>
+				<div style="margin-left: 300px;">
+					<el-main>
+						<!-- 测试的基本信息 -->
+						<el-card class="box-card" shadow="never"
+							style="margin-top: 20px;width: 900px;height: auto;border-radius: 10px;border-width: 2px">
+							<el-row id="course-title" style="height: 30px;">
+								<el-col :span="14">
+									<div class="homework-create-time" style="float: left">
+										<el-tag :type="getExamStatusType(exam.examStatus)" v-text="exam.examStatus">未发布
+										</el-tag>
+										<span style="padding-left: 30px;font-size: 15px;color: #5F6368">起止时间：<span
+												v-text="exam.startTime">2020-11-09
+												22:17</span> ~
+											<span v-text="exam.endTime === null ? '无' : exam.endTime">2020-11-09
+												23:17</span></span>
+									</div>
+								</el-col>
+							</el-row>
+							<el-row id="course-announce" style="height: 90px">
+								<el-col :span="12">
+									<el-row style="height: 40px">
+										<el-col :span="24">
+											<el-link :underline="false"
+												style="color: #3B3D45;font-size: 22px;float: left;padding-left: 30px;padding-top: 3px; margin-top: 10px;">
+												<b v-text="exam.title">未发布_测试（考试）</b>
+											</el-link>
+										</el-col>
+									</el-row>
+									<el-row style="height: auto">
+										<el-col :span="24" style="height: auto">
+											<span style="float: left;padding-left: 30px;margin-top: 8px;">
+												<span style="font-size: 15px;color: #666" v-html="exam.introduction">
+													description试卷描述
+												</span>
+											</span>
+										</el-col>
+									</el-row>
+									<el-row id="course-message" style="height: 50px">
+										<el-col :span="12" style="height: 20px;">
+											<span
+												style="font-size: 13px;color: #999;float: left;padding-left: 30px;padding-top: 10px;padding-bottom: 10px">
+												创建于 <span v-text="exam.createTime">2020-11-09 22:17</span>
+											</span>
+										</el-col>
+									</el-row>
+								</el-col>
+							</el-row>
+						</el-card>
+						<!-- 试卷题目列表 -->
+						<el-card shadow="hover" v-for="(examQuestion, examQuestionIndex) in examQuestionList"
+							:key="examQuestionIndex" v-if="examQuestionList.length > 0"
+							:id="'question' + examQuestion.questionNumber"
+							@click.native="examQuestionCardMapStatus = true"
+							style="margin-top: 10px;width: 900px;height: auto; overflow-y: auto; border-radius: 10px;border-width: 2px;padding: 0;">
+							<!-- 题号、题目类型名称、分值、上移、下移、删除 -->
+							<el-row>
+								<el-col :span="12">
+									<b style="font-size: 14px;" v-text="examQuestionIndex + 1">1</b>.
+									<span style="margin-left: 10px; margin-right: 10px;"
+										v-text="examQuestion.questionTypeName">单选题</span>
+									<el-input-number v-model="examQuestion.score" style="width: 130px;" :min="0.5"
+										:step="0.5">
+									</el-input-number>
+									<span style="margin-left: 5px;">分</span>
+								</el-col>
+								<!-- <el-col :span="12" :push="8">
+									<el-button type="primary" size="small" plain icon="el-icon-top" circle></el-button>
+									<el-button type="success" size="small" plain icon="el-icon-bottom" circle></el-button>
+									<el-button type="danger" size="small" plain icon="el-icon-delete" circle></el-button>
+								</el-col> -->
+							</el-row>
+							<!-- 题干 -->
+							<el-row style="margin-top: 10px;">
+								<div :id="'questionContentEditorFor' + examQuestion.questionNumber"></div>
+								<!-- <div id="questionContentEditorFor1"></div> -->
+								<!-- <el-input type="textarea" :autosize="{ minRows: 2, maxRows: 4}" v-model="examQuestion.content"
+									placeholder="请输入题干"></el-input> -->
+							</el-row>
+							<!-- 选项 -->
+							<!-- 1. 单选题 -->
+							<div v-show="examQuestion.questionTypeName === '单选题'">
+								<el-row style="margin-top: 10px;"
+									v-for="(choice, choiceIndex) in examQuestion.selectChoices" :key="choiceIndex">
+									<el-col :span="2" id="select-radio-group">
+										<el-tooltip class="item" effect="light" content="设为答案" placement="left">
+											<el-radio-group v-model="examQuestion.singleSelectAnswer">
+												<el-radio-button style="width: 50px;" :label="choice.name">
+												</el-radio-button>
+											</el-radio-group>
+										</el-tooltip>
+									</el-col>
+									<el-col :span="22">
+										<el-input v-model="choice.value"></el-input>
+									</el-col>
+								</el-row>
+								<el-row style="margin-top: 10px;" v-if="examQuestionCardMapStatus">
+									<el-col :span="2" :push="11">
+										<el-button @click="addSelectChoice(examQuestionIndex)" type="success"
+											size="mini" plain icon="el-icon-plus" circle></el-button>
+									</el-col>
+									<el-col :span="2" :push="10">
+										<el-button
+											@click="removeSelectChoice(examQuestionIndex, examQuestion.questionTypeName)"
+											type="danger" size="mini" plain icon="el-icon-delete" circle></el-button>
+									</el-col>
+								</el-row>
+							</div>
+							<!-- 2. 多选题 -->
+							<div v-show="examQuestion.questionTypeName === '多选题'">
+								<el-row style="margin-top: 10px;" v-for="(choice, index) in examQuestion.selectChoices"
+									:key="index">
+									<el-col :span="2" id="select-radio-group">
+										<el-tooltip class="item" effect="light" content="设为答案" placement="left">
+											<el-checkbox-group v-model="examQuestion.multiSelectAnswer">
+												<el-checkbox-button style="width: 50px;" :label="choice.name">
+												</el-checkbox-button>
+											</el-checkbox-group>
+										</el-tooltip>
+									</el-col>
+									<el-col :span="20">
+										<el-input v-model="choice.value"></el-input>
+									</el-col>
+									<!-- <el-col :span="2" :push="1">
+										<el-button type="danger" size="mini" plain icon="el-icon-delete" circle></el-button>
+									</el-col> -->
+								</el-row>
+								<el-row style="margin-top: 10px;" v-if="examQuestionCardMapStatus">
+									<el-col :span="2" :push="11">
+										<el-button @click="addSelectChoice(examQuestionIndex)" type="success"
+											size="mini" plain icon="el-icon-plus" circle></el-button>
+									</el-col>
+									<el-col :span="2" :push="10">
+										<el-button
+											@click="removeSelectChoice(examQuestionIndex, examQuestion.questionTypeName)"
+											type="danger" size="mini" plain icon="el-icon-delete" circle></el-button>
+									</el-col>
+								</el-row>
+							</div>
+							<!-- 3.判断题 -->
+							<div v-show="examQuestion.questionTypeName === '判断题'">
+								<el-row style="margin-top: 10px;" v-for="(choice, index) in examQuestion.judgeChoices"
+									:key="index">
+									<el-col :span="2">
+										<el-tooltip class="item" effect="light" content="设为答案" placement="left">
+											<el-radio-group v-model="examQuestion.judgeAnswer">
+												<el-radio border style="width: 80px;" :label="choice.value">
+													{{choice.name}}
+												</el-radio>
+											</el-radio-group>
+										</el-tooltip>
+									</el-col>
+									<!-- <el-col :span="2" :push="1">
+										<el-button type="danger" size="mini" plain icon="el-icon-delete" circle></el-button>
+									</el-col> -->
+								</el-row>
+							</div>
+							<!-- 4.填空题 -->
+							<div v-show="examQuestion.questionTypeName === '填空题'">
+								<el-row style="margin-top: 10px;">
+									<div style="font-size: 12px; margin-bottom: 8px; color: #90CADF;">参考答案：</div>
+									<div :id="'fillPossibleAnswerEditorFor' + examQuestion.questionNumber"></div>
+								</el-row>
+							</div>
+							<!-- 5.问答题 -->
+							<div v-show="examQuestion.questionTypeName === '问答题'">
+								<el-row style="margin-top: 10px;">
+									<div style="font-size: 12px; margin-bottom: 8px; color: #90CADF;">参考答案：</div>
+									<div :id="'QAPossibleAnswerEditorFor' + examQuestion.questionNumber"></div>
+								</el-row>
+							</div>
+							<!-- 试题解析 -->
+							<el-row style="margin-top: 10px;">
+								<div style="font-size: 12px; margin-bottom: 8px; color: #008000;">试题解析：</div>
+								<div :id="'questionAnalysisEditorFor' + examQuestion.questionNumber"></div>
+							</el-row>
+							<!-- 取消、确定按钮 -->
+							<div style="background-color:#F1F3F4; width: 900px; height: 80px; margin-top: 20px;"
+								v-if="examQuestionCardMapStatus">
+								<el-row></el-row>
+								<el-row style="margin-top: 20px;">
+									<el-col :span="6" :push="18">
+										<el-button @click="setStatusToFalseOrRemove(examQuestion)" plain>取消</el-button>
+										<el-button type="primary" @click="save(examQuestion)">保存</el-button>
+									</el-col>
+								</el-row>
+							</div>
+						</el-card>
+						<el-card class="box-card" v-if="examQuestionList.length === 0" shadow="hover"
+							style="margin-top: 20px;width: 900px;height: 220px;border-radius: 10px;border-width: 2px">
+							<el-row>
+								<p style="text-align: center; font-size: 15px; color: black; line-height: 160px;">
+									点击左侧按钮添加题目</p>
+							</el-row>
+						</el-card>
+					</el-main>
+				</div>
+			</el-container>
+		</div>
+
+		<!-- 试题预览 -->
+		<div v-show="activeIndex === '2'">
+			<el-container style="width: 1200px; margin-left: 100px; margin-top: 10px;">
+				<div style="margin-left: 300px;">
+					<el-main>
+						<!-- 试卷题目列表 -->
+						<el-card shadow="hover" v-if="examQuestionList.length > 0"
+							style="margin-top: 10px;width: 1200px;height: auto; overflow-y: auto; border-radius: 10px;border-width: 2px;padding: 0;">
+							<div v-for="(examQuestion, index) in examQuestionList" :key="index">
+								<!-- 题号、题目类型名称、分值 -->
+								<el-row>
+									<el-col :span="12">
+										<b style="font-size: 14px;" v-text="index + 1">1</b>.
+										<span style="margin-left: 10px; margin-right: 10px;"
+											v-text="examQuestion.questionTypeName">单选题</span>
+										<span style="margin-left: 5px;" v-text="examQuestion.score"></span> 分
+									</el-col>
+								</el-row>
+								<!-- 题干 -->
+								<el-row style="margin-top: 10px;">
+									<div v-html="examQuestion.content"></div>
+								</el-row>
+								<!-- 选项 -->
+								<!-- 1. 单选题 -->
+								<div v-show="examQuestion.questionTypeName === '单选题'">
+									<el-row style="margin-top: 10px;"
+										v-for="(choice, index) in examQuestion.selectChoices" :key="index">
+										<el-col :span="2" id="select-radio-group" style="width: 5.8%;">
+											<el-radio-group>
+												<el-radio-button style="width: 50px;" :label="choice.name" disabled>
+												</el-radio-button>
+											</el-radio-group>
+										</el-col>
+										<el-col :span="20">
+											<div v-text="choice.value" style="line-height: 12px; margin-top: 12px;">
+												hello</div>
+										</el-col>
+									</el-row>
+									<el-row style="margin-top: 20px;">
+										<div style="font-size: 12px; margin-bottom: 8px; color: #90CADF;">参考答案：</div>
+										<div v-text="examQuestion.singleSelectAnswer"></div>
+									</el-row>
+								</div>
+								<!-- 2. 多选题 -->
+								<div v-show="examQuestion.questionTypeName === '多选题'">
+									<el-row style="margin-top: 10px;"
+										v-for="(choice, index) in examQuestion.selectChoices" :key="index">
+										<el-col :span="2" id="select-radio-group" style="width: 5.8%;">
+											<el-checkbox-group v-model="examQuestion.multiSelectAnswer">
+												<el-checkbox-button style="width: 50px;" :label="choice.name" disabled>
+												</el-checkbox-button>
+											</el-checkbox-group>
+										</el-col>
+										<el-col :span="20">
+											<div style="line-height: 12px; margin-top: 12px;" v-text="choice.value">
+											</div>
+										</el-col>
+									</el-row>
+									<el-row style="margin-top: 20px;">
+										<div style="font-size: 12px; margin-bottom: 8px; color: #90CADF;">参考答案：</div>
+										<div v-text="examQuestion.multiSelectAnswerStr"></div>
+									</el-row>
+								</div>
+								<!-- 3.判断题 -->
+								<div v-show="examQuestion.questionTypeName === '判断题'">
+									<el-row style="margin-top: 10px;"
+										v-for="(choice, index) in examQuestion.judgeChoices" :key="index">
+										<el-col :span="2">
+											<el-radio-group>
+												<el-radio border style="width: 80px;" :label="choice.value" disabled>
+													{{choice.name}}
+												</el-radio>
+											</el-radio-group>
+										</el-col>
+									</el-row>
+									<el-row style="margin-top: 20px;">
+										<div style="font-size: 12px; margin-bottom: 8px; color: #90CADF;">参考答案：</div>
+										<div v-text="examQuestion.judgeAnswer ? '对' : '错'"></div>
+									</el-row>
+								</div>
+								<!-- 4.填空题 -->
+								<div v-show="examQuestion.questionTypeName === '填空题'">
+									<el-row style="margin-top: 10px;" v-show="examQuestion.fillAnswer !== ''">
+										<div style="font-size: 12px; margin-bottom: 8px; color: #90CADF;">参考答案：</div>
+										<div v-html="examQuestion.fillAnswer" v-show="examQuestion.fillAnswer !== ''">
+										</div>
+										<div v-show="examQuestion.fillAnswer === ''">暂无</div>
+									</el-row>
+								</div>
+								<!-- 5.问答题 -->
+								<div v-show="examQuestion.questionTypeName === '问答题'">
+									<el-row style="margin-top: 10px;">
+										<div style="font-size: 12px; margin-bottom: 8px; color: #90CADF;">参考答案：</div>
+										<div v-html="examQuestion.questionAndAnswer"
+											v-show="examQuestion.questionAndAnswer !== ''"></div>
+										<div v-show="examQuestion.questionAndAnswer === ''">暂无</div>
+									</el-row>
+								</div>
+								<!-- 试题解析 -->
+								<el-row style="margin-top: 20px;">
+									<div style="font-size: 12px; margin-bottom: 8px; color: #008000;">试题解析：</div>
+									<div v-html="examQuestion.analysis" v-show="examQuestion.analysis !== ''"></div>
+									<div v-show="examQuestion.analysis === ''">暂无</div>
+								</el-row>
+								<el-divider></el-divider>
+							</div>
+						</el-card>
+						<el-card class="box-card" v-if="examQuestionList.length === 0" shadow="hover"
+							style="margin-top: 20px;width: 1200px;height: 220px;border-radius: 10px;border-width: 2px">
+							<el-row>
+								<p style="text-align: center; font-size: 15px; color: black; line-height: 160px;">
+									该试卷没有任何题目，请先前往试题编辑页面添加试题</p>
+							</el-row>
+						</el-card>
+					</el-main>
+				</div>
+			</el-container>
+		</div>
+
+		<!-- 批阅测试 -->
+		<div v-show="activeIndex === '3'">
+
+		</div>
+	</div>
+</body>
+<script src="https://cdn.bootcss.com/vue/2.6.11/vue.min.js"></script>
+<script src="https://cdn.bootcss.com/axios/0.19.2/axios.min.js"></script>
+<script src="https://cdn.bootcss.com/element-ui/2.13.2/index.js"></script>
+<script src="./js/common.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/wangeditor@4.5.0/dist/wangEditor.min.js"></script>
+
+<script>
+	new Vue({
+		el: '#app',
+		data: {
+			activeIndex: '1',
+			user: {},
+			exam: {
+				course: {},
+			},
+			score: 5,
+			examQuestionList: [],
+			contentEditorMap: new Map(),
+			analysisEditorMap: new Map(),
+			fillPossibleAnswerEditorMap: new Map(),
+			QAPossibleAnswerEditorMap: new Map(),
+			examQuestionCardMapStatus: false,
+			originalExamQuestionList: []
+		},
+		methods: {
+			switchKeyPath(key, keyPath) {
+				if (key != null) {
+					this.activeIndex = key;
+				}
+			},
+			verify() {
+				yxt.http.get("/auth/verify/2").then(({ data }) => {
+					if (data.success) {
+						this.user = data.queryResult.data[0];
+						this.getExamQuestionData();
+					} else {
+						location.href = "../index.html"
+					}
+				}).catch(() => {
+					location.href = "../index.html";
+				});
+			},
+			addQuestionType(questionType, questionTypeName) {
+				this.examQuestionCardMapStatus = true;
+				this.examQuestionList.push({
+					questionNumber: this.examQuestionList.length + 1, // 题号 
+					questionType: questionType, // 题目类型
+					questionTypeName: questionTypeName, // 题目类型名称
+					score: undefined, // 题目分值
+					content: "", // 题干
+					singleSelectAnswer: "",	// 单选题题目答案
+					multiSelectAnswer: [], // 多选题题目答案
+					judgeAnswer: undefined, // 判断题题目答案
+					fillAnswer: "", // 填空题题目参考答案
+					questionAndAnswer: "",	// 问答题题目参考答案
+					analysis: "",	// 题目解析
+					selectChoices: [
+						{ name: 'A', value: '' },
+						{ name: 'B', value: '' },
+						{ name: 'C', value: '' },
+						{ name: 'D', value: '' }
+					],
+					judgeChoices: [
+						{ name: '对', value: true },
+						{ name: '错', value: false }
+					]
+				});
+				setTimeout(() => {
+					this.initQuestionAnalysisEditor(this.examQuestionList.length);
+					if (questionType === 2) {
+						this.initFillPossibleAnswerEditor(this.examQuestionList.length);
+					}
+					if (questionType === 3) {
+						this.initQAPossibleAnswerEditor(this.examQuestionList.length);
+					}
+					this.initQuestionContentEditor(this.examQuestionList.length);
+					window.scrollTo(0, 100000000)
+				}, 70);
+			},
+			initQuestionContentEditor(questionNumber, content) {
+				const editor = new wangEditor(`#questionContentEditorFor` + questionNumber)
+				// 配置 onchange 回调函数，将数据同步到 vue 中
+				editor.config.onchange = (newHtml) => {
+					this.examQuestionList[questionNumber - 1].content = newHtml
+				}
+				// 配置菜单
+				editor.config.menus = [
+					'bold',
+					'underline',
+					'italic',
+					'strikeThrough',
+					'quote',
+					'foreColor',
+					'backColor',
+					'fontSize',
+					'fontName',
+					'justify',
+					'code',
+					'image',
+					'video',
+					'indent',
+					'lineHeight',
+					'link',
+					'list',
+					'table',
+					'undo',
+					'redo'
+				]
+				// 设置编辑区域高度为 100px
+				editor.config.height = 100
+				// 配置 placeholder
+				editor.config.placeholder = '请输入题干'
+				// 配置 server 上传图片接口地址
+				editor.config.uploadImgServer = 'http://api.yixuetang.com/api/resource/upload/editor/userId/' + this.user.id
+				// 配置上传文件参数名
+				editor.config.uploadFileName = 'file';
+				// 创建编辑器
+				editor.create()
+
+				// 将编辑器存放到 contentEditorMap 中
+				this.contentEditorMap.set(questionNumber, editor);
+
+				if (content) {
+					this.contentEditorMap.get(questionNumber).txt.html(content);
+				}
+			},
+			initQuestionAnalysisEditor(questionNumber, analysis) {
+				const editor = new wangEditor(`#questionAnalysisEditorFor` + questionNumber)
+				// 配置 onchange 回调函数，将数据同步到 vue 中
+				editor.config.onchange = (newHtml) => {
+					this.examQuestionList[questionNumber - 1].analysis = newHtml
+				}
+				// 配置菜单
+				editor.config.menus = [
+					'bold',
+					'underline',
+					'italic',
+					'strikeThrough',
+					'quote',
+					'foreColor',
+					'backColor',
+					'fontSize',
+					'fontName',
+					'justify',
+					'code',
+					'image',
+					'video',
+					'indent',
+					'lineHeight',
+					'link',
+					'list',
+					'table',
+					'undo',
+					'redo'
+				]
+				// 设置编辑区域高度为 100px
+				editor.config.height = 100
+				// 配置 placeholder
+				editor.config.placeholder = '如有试题解析，请在此输入'
+				// 配置 server 上传图片接口地址
+				editor.config.uploadImgServer = 'http://api.yixuetang.com/api/resource/upload/editor/userId/' + this.user.id
+				// 配置上传文件参数名
+				editor.config.uploadFileName = 'file';
+				// 创建编辑器
+				editor.create()
+
+				// 将编辑器存放到 analysisEditorMap 中
+				this.analysisEditorMap.set(questionNumber, editor);
+
+				if (analysis) {
+					this.analysisEditorMap.get(questionNumber).txt.html(analysis);
+				}
+			},
+			initFillPossibleAnswerEditor(questionNumber, fillAnswer) {
+				const editor = new wangEditor(`#fillPossibleAnswerEditorFor` + questionNumber)
+				// 配置 onchange 回调函数，将数据同步到 vue 中
+				editor.config.onchange = (newHtml) => {
+					this.examQuestionList[questionNumber - 1].fillAnswer = newHtml
+				}
+				// 配置菜单
+				editor.config.menus = [
+					'bold',
+					'underline',
+					'italic',
+					'strikeThrough',
+					'quote',
+					'foreColor',
+					'backColor',
+					'fontSize',
+					'fontName',
+					'justify',
+					'code',
+					'image',
+					'video',
+					'indent',
+					'lineHeight',
+					'link',
+					'list',
+					'table',
+					'undo',
+					'redo'
+				]
+				// 设置编辑区域高度为 100px
+				editor.config.height = 100
+				// 配置 placeholder
+				editor.config.placeholder = '如有参考答案，请在此输入。若为多空填空题，则输入时答案之间以#隔开，如 aaa#bbb#ccc'
+				// 配置 server 上传图片接口地址
+				editor.config.uploadImgServer = 'http://api.yixuetang.com/api/resource/upload/editor/userId/' + this.user.id
+				// 配置上传文件参数名
+				editor.config.uploadFileName = 'file';
+				// 创建编辑器
+				editor.create()
+
+				// 将编辑器存放到 fillPossibleAnswerEditorMap 中
+				this.fillPossibleAnswerEditorMap.set(questionNumber, editor);
+
+				if (fillAnswer) {
+					this.fillPossibleAnswerEditorMap.get(questionNumber).txt.html(fillAnswer);
+				}
+			},
+			initQAPossibleAnswerEditor(questionNumber, qaPossibleAnswer) {
+				const editor = new wangEditor(`#QAPossibleAnswerEditorFor` + questionNumber)
+				// 配置 onchange 回调函数，将数据同步到 vue 中
+				editor.config.onchange = (newHtml) => {
+					this.examQuestionList[questionNumber - 1].questionAndAnswer = newHtml
+				}
+				// 配置菜单
+				editor.config.menus = [
+					'bold',
+					'underline',
+					'italic',
+					'strikeThrough',
+					'quote',
+					'foreColor',
+					'backColor',
+					'fontSize',
+					'fontName',
+					'justify',
+					'code',
+					'image',
+					'video',
+					'indent',
+					'lineHeight',
+					'link',
+					'list',
+					'table',
+					'undo',
+					'redo'
+				]
+				// 设置编辑区域高度为 100px
+				editor.config.height = 100
+				// 配置 placeholder
+				editor.config.placeholder = '如有参考答案，请在此输入'
+				// 配置 server 上传图片接口地址
+				editor.config.uploadImgServer = 'http://api.yixuetang.com/api/resource/upload/editor/userId/' + this.user.id
+				// 配置上传文件参数名
+				editor.config.uploadFileName = 'file';
+				// 创建编辑器
+				editor.create()
+
+				// 将编辑器存放到 QAPossibleAnswerEditorMap 中
+				this.QAPossibleAnswerEditorMap.set(questionNumber, editor);
+
+				if (qaPossibleAnswer) {
+					this.QAPossibleAnswerEditorMap.get(questionNumber).txt.html(qaPossibleAnswer);
+				}
+			},
+			remove(examQuestion) {
+				// 销毁 editor 实例
+				this.contentEditorMap.get(examQuestion.questionNumber).destroy();
+				this.analysisEditorMap.get(examQuestion.questionNumber).destroy();
+				if (examQuestion.questionType === 2) {
+					this.fillPossibleAnswerEditorMap.get(examQuestion.questionNumber).destroy();
+				}
+				if (examQuestion.questionType === 3) {
+					this.QAPossibleAnswerEditorMap.get(examQuestion.questionNumber).destroy();
+				}
+
+				// 从 editorMap 中移除 editor
+				this.contentEditorMap.delete(examQuestion.questionNumber);
+				this.analysisEditorMap.delete(examQuestion.questionNumber);
+				if (examQuestion.questionType === 2) {
+					this.fillPossibleAnswerEditorMap.delete(examQuestion.questionNumber);
+				}
+				if (examQuestion.questionType === 3) {
+					this.QAPossibleAnswerEditorMap.delete(examQuestion.questionNumber);
+				}
+
+				// 从 examQuestionList 中移除
+				let index = this.examQuestionList.indexOf(examQuestion)
+				if (index !== -1) {
+					this.examQuestionList.splice(index, 1)
+				}
+			},
+			save(examQuestion) {
+				// 校验分值
+				if (examQuestion.score === undefined || examQuestion.score <= 0.5) {
+					this.$message.error("请设置题目分值！")
+					return;
+				}
+				// 校验题干
+				if (examQuestion.content === '') {
+					this.$message.error("请输入题干！")
+					return;
+				}
+				// 单选题
+				switch (examQuestion.questionType) {
+					case 0:	// 选择题
+						// 校验答案、选项
+						if (!this.checkSelectAnswer(examQuestion) || !this.checkSelectChoice(examQuestion)) {
+							return;
+						}
+						break;
+					case 1: // 判断题
+						// 校验答案
+						if (examQuestion.judgeAnswer === undefined) {
+							this.$message.error("请设置一个选项作为答案！")
+							return;
+						}
+						break;
+					default:
+						break;
+				}
+				yxt.http.post("exam/question/examId/" + yxt.getUrlParam("id") + "/teacherId/" + this.user.id, examQuestion).then(({ data }) => {
+					if (data.success) {
+						this.$message.success(data.message);
+						this.examQuestionCardMapStatus = false;
+					} else {
+						this.$message.error(data.message);
+					}
+				}).catch(() => {
+					this.$message.error("服务器繁忙，请稍候再试！")
+				})
+			},
+			checkSelectAnswer(examQuestion) {
+				let flag = true;
+				if (examQuestion.questionTypeName === '单选题') {
+					if (examQuestion.singleSelectAnswer === '') {
+						this.$message.error("请设置一个选项作为答案！")
+						flag = false;
+					}
+				} else {
+					if (examQuestion.multiSelectAnswer.length === 0) {
+						this.$message.error("请至少设置一个选项作为答案！")
+						flag = false;
+					}
+				}
+				return flag;
+			},
+			checkSelectChoice(examQuestion) {
+				let flag = true;
+				for (let selectChoice of examQuestion.selectChoices) {
+					if (selectChoice.value === '') {
+						this.$message.error("请输入选项" + selectChoice.name + "的内容！")
+						flag = false;
+						break;
+					}
+				}
+				return flag;
+			},
+			getSimpleText(html) {
+				let re1 = new RegExp("<.+?>", "g"); // 匹配 html 标签的正则表达式，"g"是搜索匹配多个符合的内容
+				return html.replace(re1, '');
+			},
+			removeSelectChoice(examQuestionIndex, questionTypeName) {
+				let length = this.examQuestionList[examQuestionIndex].selectChoices.length;
+				if (length === 3 && questionTypeName === '多选题') {
+					this.$message.error("请至少保留三个选项！");
+					return;
+				}
+				if (length === 2 && questionTypeName === '单选题') {
+					this.$message.error("请至少保留两个选项！");
+					return;
+				}
+				this.examQuestionList[examQuestionIndex].selectChoices.splice(length - 1, 1)
+			},
+			addSelectChoice(examQuestionIndex) {
+				let letters = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N',
+					'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'];
+				let letterLength = this.examQuestionList[examQuestionIndex].selectChoices.length;
+				let lastChoice = this.examQuestionList[examQuestionIndex].selectChoices[letterLength - 1];
+				let letterIndex = letters.indexOf(lastChoice.name);
+				this.examQuestionList[examQuestionIndex].selectChoices.push({
+					name: letters[letterIndex + 1],
+					value: ''
+				})
+			},
+			setStatusToFalseOrRemove(examQuestion) {
+				if (!this.originalExamQuestionList.includes(examQuestion)) {
+					this.remove(examQuestion);
+					return;
+				}
+				setTimeout(() => {
+					this.examQuestionCardMapStatus = false;
+				}, 20);
+			},
+			getExamQuestionData() {
+				yxt.http.get("exam/question/examId/" + yxt.getUrlParam("id") + "/teacherId/" + this.user.id).then(({ data }) => {
+					if (data.success) {
+						this.examQuestionList = data.queryResult.data;
+						this.originalExamQuestionList = data.queryResult.data;
+						this.examQuestionList.forEach(examQuestion => {
+							if (examQuestion.questionType === 1) {
+								examQuestion.judgeChoices =
+									[{ name: '对', value: true },
+									{ name: '错', value: false }];
+							}
+							if (examQuestion.questionTypeName === "多选题") {
+								examQuestion.multiSelectAnswerStr = this.getMultiSelectAnswerStr(examQuestion.multiSelectAnswer)
+							}
+							setTimeout(() => {
+								this.initQuestionAnalysisEditor(examQuestion.questionNumber, examQuestion.analysis);
+								if (examQuestion.questionType === 2) {
+									this.initFillPossibleAnswerEditor(examQuestion.questionNumber, examQuestion.fillAnswer);
+								}
+								if (examQuestion.questionType === 3) {
+									this.initQAPossibleAnswerEditor(examQuestion.questionNumber, examQuestion.questionAndAnswer);
+								}
+								this.initQuestionContentEditor(examQuestion.questionNumber, examQuestion.content);
+							}, 20);
+						})
+					}
+				})
+			},
+			getMultiSelectAnswerStr(multiSelectAnswer) {
+				multiSelectAnswer.sort();
+				let answerStr = "";
+				for (let answer of multiSelectAnswer) {
+					answerStr += answer;
+				}
+				return answerStr;
+			},
+			getExamData() {
+				yxt.http.get("exam/info/examId/" + yxt.getUrlParam("id")).then(({ data }) => {
+					if (data.success) {
+						this.exam = data.queryResult.data[0];
+						this.exam.examStatus = this.getExamStatus(this.exam);
+					}
+				})
+			},
+			getExamStatus(exam) {
+				if (!exam.status) {
+					return "未发布";
+				} else {
+					if (new Date().valueOf() < new Date(exam.startTime).valueOf()) {
+						return "未开始";
+					} else if (new Date().valueOf() >= new Date(exam.startTime).valueOf() &&
+						(exam.endTime === null || new Date().valueOf <= new Date(exam.endTime).valueOf())) {
+						return "已发布";
+					} else if (exam.endTime !== null && new Date().valueOf() > new Date(exam.endTime).valueOf()) {
+						return "已结束";
+					} else {
+						return "未知测试状态"
+					}
+				}
+			},
+			getExamStatusType(examStatus) {
+				switch (examStatus) {
+					case "未发布":
+						return "danger";
+						break;
+					case "未开始":
+						return "warning";
+						break;
+					case "已发布":
+						return "success";
+						break;
+					case "已结束":
+						return "";
+						break;
+					default:
+						return "info";
+						break;
+				}
+			},
+		},
+		created() {
+			this.verify();
+			this.getExamData();
+		},
+		watch: {
+			examQuestionList: {
+				deep: true,
+				handler() {
+					this.exam.questionCount = this.examQuestionList.length;
+					let totalScore = 0;
+					this.examQuestionList.forEach(examQuestion => {
+						totalScore += isNaN(examQuestion.score) ? 0 : examQuestion.score;
+					})
+					this.exam.totalScore = isNaN(totalScore) ? 0 : totalScore;
+				}
+			}
+		}
+	})
+</script>
+
+</html>
