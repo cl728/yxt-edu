@@ -821,7 +821,7 @@
                                                                             cancelButtonType="success" placement="top"
                                                                             @onConfirm="updateStatus(exam.id, 2)"
                                                                             title="确认要取消发布此测试吗？">
-                                                                            <el-button type="primary" plain
+                                                                            <el-button type="warning" plain
                                                                                 slot="reference"
                                                                                 v-show="exam.examStatus === '未开始'">取消发布
                                                                             </el-button>
