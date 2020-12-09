@@ -2,6 +2,7 @@ package com.yixuetang.exam.service.impl;
 
 import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.yixuetang.course.mapper.CourseMapper;
 import com.yixuetang.course.mapper.ScMapper;
@@ -17,7 +18,6 @@ import com.yixuetang.entity.exam.question.QA;
 import com.yixuetang.entity.exam.question.Select;
 import com.yixuetang.entity.request.exam.InsertExam;
 import com.yixuetang.entity.request.exam.question.ExamQuestionRequest;
-import com.yixuetang.entity.request.exam.question.JudgeChoice;
 import com.yixuetang.entity.request.exam.question.SelectChoice;
 import com.yixuetang.entity.response.CommonResponse;
 import com.yixuetang.entity.response.QueryResponse;
@@ -146,11 +146,26 @@ public class ExamServiceImpl implements ExamService {
 
     @Override
     public QueryResponse findExamById(long examId) {
-        //测试考试是否存在
+        // 测试考试是否存在
         Exam exam = examMapper.selectOne( new QueryWrapper<Exam>().eq( "id", examId ) );
         if (exam == null) {
             ExceptionThrowUtils.cast( CommonCode.INVALID_PARAM );
         }
+
+        // 统计测试的总题数
+        QueryWrapper<ExamQuestion> examQuestionQueryWrapper = new QueryWrapper<ExamQuestion>().eq( "exam_id", examId );
+        exam.setQuestionCount( this.examQuestionMapper.selectCount( examQuestionQueryWrapper ) );
+
+        // 统计测试的总分数
+        double score = 0.0;
+        for (ExamQuestion examQuestion : this.examQuestionMapper.selectList( examQuestionQueryWrapper )) {
+            Double questionScore = getQuestionScore( examQuestion.getQuestionType(), examQuestion.getQuestionId() );
+            score += ObjectUtils.isEmpty( questionScore ) ? 0.0 : questionScore;
+        }
+        exam.setTotalScore( score );
+
+        // 查询关联的课程
+        exam.setCourse( this.courseMapper.selectById( exam.getCourseId() ) );
 
         return new QueryResponse( CommonCode.SUCCESS, new QueryResult<>( Collections.singletonList( exam ), 1 ) );
     }
@@ -187,62 +202,84 @@ public class ExamServiceImpl implements ExamService {
             ExceptionThrowUtils.cast( CommonCode.INVALID_PARAM );
         }
 
+        // 查询是否已有相关记录
+        ExamQuestion question = this.examQuestionMapper.selectOne( new QueryWrapper<ExamQuestion>().eq( "exam_id", examId ).eq( "question_number", examQuestionRequest.getQuestionNumber() ) );
+        boolean isNoneExist = ObjectUtils.isEmpty( question );
+
         // 根据 question_type 将题目保存到相应的表里
         // 插入数据后返回主键id
         Long questionId = null;
         if (examQuestionRequest.getQuestionType() == 0) {
             Select select = new Select();
-            select.setTeacherId( teacherId );
             select.setType( StringUtils.equals( examQuestionRequest.getQuestionTypeName(), "单选题" ) ? 0 : 1 );
             select.setContent( examQuestionRequest.getContent() );
             select.setChoices( JSONObject.toJSONString( examQuestionRequest.getSelectChoices() ) );
             select.setAnswer( select.getType() == 0 ? examQuestionRequest.getSingleSelectAnswer() : JSONObject.toJSONString( examQuestionRequest.getMultiSelectAnswer() ) );
             select.setAnalysis( examQuestionRequest.getAnalysis() );
             select.setScore( examQuestionRequest.getScore() );
-            select.setCreateTime( new Date() );
-            selectMapper.insert( select );
+            if (isNoneExist) {
+                select.setTeacherId( teacherId );
+                select.setCreateTime( new Date() );
+                selectMapper.insert( select );
+            } else {
+                selectMapper.update( select, new UpdateWrapper<Select>().eq( "id", question.getQuestionId() ) );
+            }
             questionId = select.getId();
         } else if (examQuestionRequest.getQuestionType() == 1) {
             Judge judge = new Judge();
-            judge.setTeacherId( teacherId );
             judge.setContent( examQuestionRequest.getContent() );
             judge.setAnswer( examQuestionRequest.getJudgeAnswer() );
             judge.setAnalysis( examQuestionRequest.getAnalysis() );
             judge.setScore( examQuestionRequest.getScore() );
-            judge.setCreateTime( new Date() );
-            judgeMapper.insert( judge );
+            if (isNoneExist) {
+                judge.setTeacherId( teacherId );
+                judge.setCreateTime( new Date() );
+                judgeMapper.insert( judge );
+            } else {
+                judgeMapper.update( judge, new UpdateWrapper<Judge>().eq( "id", question.getQuestionId() ) );
+            }
             questionId = judge.getId();
         } else if (examQuestionRequest.getQuestionType() == 2) {
             Fill fill = new Fill();
-            fill.setTeacherId( teacherId );
             fill.setContent( examQuestionRequest.getContent() );
             fill.setAnswer( examQuestionRequest.getFillAnswer() );
             fill.setAnalysis( examQuestionRequest.getAnalysis() );
             fill.setScore( examQuestionRequest.getScore() );
-            fill.setCreateTime( new Date() );
-            fillMapper.insert( fill );
+            if (isNoneExist) {
+                fill.setTeacherId( teacherId );
+                fill.setCreateTime( new Date() );
+                fillMapper.insert( fill );
+            } else {
+                fillMapper.update( fill, new UpdateWrapper<Fill>().eq( "id", question.getQuestionId() ) );
+            }
             questionId = fill.getId();
         } else if (examQuestionRequest.getQuestionType() == 3) {
             QA qa = new QA();
-            qa.setTeacherId( teacherId );
             qa.setContent( examQuestionRequest.getContent() );
             qa.setAnswer( examQuestionRequest.getQuestionAndAnswer() );
             qa.setAnalysis( examQuestionRequest.getAnalysis() );
             qa.setScore( examQuestionRequest.getScore() );
-            qa.setCreateTime( new Date() );
-            qaMapper.insert( qa );
+            if (isNoneExist) {
+                qa.setTeacherId( teacherId );
+                qa.setCreateTime( new Date() );
+                qaMapper.insert( qa );
+            } else {
+                qaMapper.update( qa, new UpdateWrapper<QA>().eq( "id", question.getQuestionId() ) );
+            }
             questionId = qa.getId();
         } else {
             ExceptionThrowUtils.cast( CommonCode.INVALID_PARAM );
         }
 
         // 保存相关记录到 t_exam_question 表里
-        ExamQuestion examQuestion = new ExamQuestion();
-        examQuestion.setExamId( examId );
-        examQuestion.setQuestionNumber( examQuestionRequest.getQuestionNumber() );
-        examQuestion.setQuestionType( examQuestionRequest.getQuestionType() );
-        examQuestion.setQuestionId( questionId );
-        examQuestionMapper.insert( examQuestion );
+        if (isNoneExist) {
+            ExamQuestion examQuestion = new ExamQuestion();
+            examQuestion.setExamId( examId );
+            examQuestion.setQuestionNumber( examQuestionRequest.getQuestionNumber() );
+            examQuestion.setQuestionType( examQuestionRequest.getQuestionType() );
+            examQuestion.setQuestionId( questionId );
+            examQuestionMapper.insert( examQuestion );
+        }
 
         return new CommonResponse( CommonCode.SUCCESS );
     }

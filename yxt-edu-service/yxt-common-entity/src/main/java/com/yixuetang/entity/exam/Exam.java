@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
+import com.yixuetang.entity.course.Course;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -43,11 +44,14 @@ public class Exam {
     @TableField("end_time")
     private Date endTime;       // 测试结束时间
 
-    @TableField("question_count")
-    private Integer questionCount;  // 测试包含的题目数量，默认为0
+    @TableField(exist = false)
+    private Integer questionCount;  // 测试包含的题目数量
 
-    @TableField("total_score")
+    @TableField(exist = false)
     private Double totalScore;  // 测试的总分
+
+    @TableField(exist = false)
+    private Course course;      // 关联的课程
 
     private Boolean status;     // 测试是否已发布，true 是 false 不是，默认为 false
 
