@@ -1,11 +1,15 @@
 package com.yixuetang.exam.controller;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.yixuetang.api.exam.ExamControllerApi;
 import com.yixuetang.entity.request.exam.InsertExam;
-import com.yixuetang.entity.request.exam.InsertQuestion;
+import com.yixuetang.entity.request.exam.question.ExamQuestionRequest;
 import com.yixuetang.entity.response.CommonResponse;
 import com.yixuetang.entity.response.QueryResponse;
+import com.yixuetang.entity.response.code.CommonCode;
 import com.yixuetang.exam.service.ExamService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -21,6 +25,8 @@ public class ExamController implements ExamControllerApi {
 
     @Autowired
     private ExamService examService;
+
+    private static final Logger LOGGER = LoggerFactory.getLogger( ExamController.class );
 
     @Override
     @PutMapping("status/examId/{examId}/actionType/{actionType}")
@@ -54,9 +60,15 @@ public class ExamController implements ExamControllerApi {
 
     @Override
     @PostMapping("question/examId/{examId}/teacherId/{teacherId}")
-    public CommonResponse saveQuestion(@PathVariable long examId, @PathVariable long teacherId
-            , @RequestBody InsertQuestion insertQuestion) {
-        return this.examService.saveQuestion(examId, teacherId, insertQuestion);
+    public CommonResponse saveQuestion(@PathVariable long examId,
+                                       @PathVariable long teacherId,
+                                       @RequestBody ExamQuestionRequest examQuestionRequest) {
+        try {
+            return this.examService.saveQuestion(examId, teacherId, examQuestionRequest );
+        } catch (JsonProcessingException e) {
+            LOGGER.error( "JSON解析发生异常！异常原因：{}", e );
+            return new CommonResponse( CommonCode.FAIL );
+        }
     }
 
     @Override
@@ -76,6 +88,13 @@ public class ExamController implements ExamControllerApi {
     @PutMapping("info/examId/{examId}")
     public CommonResponse updateExam(@PathVariable long examId, @RequestBody InsertExam insertExam) {
         return this.examService.updateExam(examId, insertExam);
+    }
+
+    @Override
+    @GetMapping("question/examId/{examId}/teacherId/{userId}")
+    public QueryResponse findListByExamId(@PathVariable("examId") long examId,
+                                          @PathVariable("userId") long userId) {
+        return this.examService.findListByExamId( examId, userId );
     }
 }
 

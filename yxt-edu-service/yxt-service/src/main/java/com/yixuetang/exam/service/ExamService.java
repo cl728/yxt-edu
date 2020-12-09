@@ -1,7 +1,8 @@
 package com.yixuetang.exam.service;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.yixuetang.entity.request.exam.InsertExam;
-import com.yixuetang.entity.request.exam.InsertQuestion;
+import com.yixuetang.entity.request.exam.question.ExamQuestionRequest;
 import com.yixuetang.entity.response.CommonResponse;
 import com.yixuetang.entity.response.QueryResponse;
 
@@ -32,7 +33,7 @@ public interface ExamService {
     /**
      * 查询某一测试（考试）的基本信息
      *
-     * @param examId    测试（考试）id
+     * @param examId 测试（考试）id
      * @return
      */
     QueryResponse findExamById(long examId);
@@ -48,12 +49,12 @@ public interface ExamService {
     /**
      * 教师保存题目
      *
-     * @param examId         测试（考试）id
-     * @param teacherId      教师id
-     * @param insertQuestion 新增的题目实体
+     * @param examId              测试（考试）id
+     * @param teacherId           教师id
+     * @param examQuestionRequest 新增的题目实体
      * @return 响应结果实体类
      */
-    CommonResponse saveQuestion(long examId, long teacherId, InsertQuestion insertQuestion);
+    CommonResponse saveQuestion(long examId, long teacherId, ExamQuestionRequest examQuestionRequest) throws JsonProcessingException;
 
     /**
      * 教师删除试卷的某道题目
@@ -83,11 +84,20 @@ public interface ExamService {
     CommonResponse updateStatus(long examId, int actionType);
 
     /**
-     *  修改某个测试（考试）的基本信息
+     * 修改某个测试（考试）的基本信息
      *
-     * @param examId        测试（考试）id
-     * @param insertExam    编辑测试实体类
-     * @return  响应结果实体类
+     * @param examId     测试（考试）id
+     * @param insertExam 编辑测试实体类
+     * @return 响应结果实体类
      */
     CommonResponse updateExam(long examId, InsertExam insertExam);
+
+    /**
+     * 用户查询某次测试（考试）下的试题列表
+     *
+     * @param examId 测试（考试）id
+     * @param userId 用户id
+     * @return 响应结果实体类
+     */
+    QueryResponse findListByExamId(long examId, long userId);
 }

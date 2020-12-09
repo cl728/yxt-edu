@@ -34,17 +34,7 @@ public class Select {
 
     private String content;     // 题目内容
 
-    @TableField("choice_a")
-    private String choiceA;     // 选项A
-
-    @TableField("choice_b")
-    private String choiceB;     // 选项B
-
-    @TableField("choice_c")
-    private String choiceC;     // 选项C
-
-    @TableField("choice_d")
-    private String choiceD;     // 选项D
+    private String choices;     // 选项列表的JSON字符串
 
     private String answer;      // 参考答案，如果是单选题，则答案为A、B、C 或 D，如果是多选题，则答案为 A、B、C、D 的组合，并以英文逗号隔开
 

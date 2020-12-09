@@ -1,7 +1,7 @@
 package com.yixuetang.api.exam;
 
 import com.yixuetang.entity.request.exam.InsertExam;
-import com.yixuetang.entity.request.exam.InsertQuestion;
+import com.yixuetang.entity.request.exam.question.ExamQuestionRequest;
 import com.yixuetang.entity.response.CommonResponse;
 import com.yixuetang.entity.response.QueryResponse;
 import io.swagger.annotations.Api;
@@ -54,7 +54,7 @@ public interface ExamControllerApi {
             @ApiImplicitParam(name = "teacherId", value = "出题教师id", required = true,
                     paramType = "path", dataType = "long")
     })
-    CommonResponse saveQuestion(long examId, long teacherId, InsertQuestion insertQuestion);
+    CommonResponse saveQuestion(long examId, long teacherId, ExamQuestionRequest examQuestionRequest);
 
     @ApiOperation("教师删除试卷的某道题目")
     @ApiImplicitParams({
@@ -80,5 +80,14 @@ public interface ExamControllerApi {
                     paramType = "path", dataType = "long"),
     })
     CommonResponse updateExam(long examId, InsertExam insertExam);
+
+    @ApiOperation("用户查询某次测试（考试）下的试题列表")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "examId", value = "测试（考试）id", required = true,
+                    paramType = "path", dataType = "long"),
+            @ApiImplicitParam(name = "userId", value = "用户id", required = true,
+                    paramType = "path", dataType = "long")
+    })
+    QueryResponse findListByExamId(long examId, long userId);
 
 }
