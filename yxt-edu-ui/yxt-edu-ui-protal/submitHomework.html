@@ -65,7 +65,12 @@
 						<!-- <div style="border-radius: 10px;border: 1px gainsboro solid; height: 60px;width: 100%;">
 							</div><br /> -->
 						<el-row>
-							<h3 style="margin-left: 30px;margin-top: 0" v-text="homework.title">作业标题</h3>
+							<el-col :span="6">
+								<h3 style="margin-left: 30px;margin-top: 0" v-text="homework.title">作业标题</h3>
+							</el-col>
+							<el-col :span="2" style="float: right;" v-show="homeworkStudent.status === 2">
+								成绩：<span v-text="homeworkStudent.score" style="color: red;">100</span>
+							</el-col>
 						</el-row>
 						<el-row style="height: 24px">
 							<el-col :span="6">
@@ -198,6 +203,16 @@
 												您未提交本次作业</p>
 										</el-row>
 									</el-main>
+
+									<el-divider></el-divider>
+
+									<el-row style="margin: 0 10px 10px 10px;" v-show="homeworkStudent.status === 2">
+										<div
+											style="font-size: 15px; line-height: 15px; margin-bottom: 8px; color: #008000;">
+											教师批语：</div>
+										<div v-text="homeworkStudent.message === '' ? '暂无批语' : homeworkStudent.message">
+										</div>
+									</el-row>
 								</el-container>
 							</el-card>
 						</el-row>
@@ -371,41 +386,11 @@
 				return new Date().valueOf() >= new Date(deadline).valueOf();
 			},
 			getResourceSrc(ext) {
-				switch (ext) {
-					case 'jpg':
-						return "https://www.ketangpai.com/Public/Common/img/fileicon/file_ext_big_jpg.png";
-						break;
-					case 'png':
-						return "https://www.ketangpai.com/Public/Common/img/fileicon/file_ext_big_png.png";
-						break;
-					case 'doc':
-						return "https://www.ketangpai.com/Public/Common/img/fileicon/file_ext_big_doc.png";
-						break;
-					case 'ppt':
-						return "https://www.ketangpai.com/Public/Common/img/fileicon/file_ext_big_ppt.png";
-						break;
-					case 'pptx':
-						return "https://www.ketangpai.com/Public/Common/img/fileicon/file_ext_big_pptx.png";
-						break;
-					case 'mp4':
-						return "https://www.ketangpai.com/Public/Common/img/fileicon/file_ext_big_mp4.png";
-						break;
-					case 'pdf':
-						return "https://www.ketangpai.com/Public/Common/img/fileicon/file_ext_big_pdf.png";
-						break;
-					case 'xlsx':
-						return "https://www.ketangpai.com/Public/Common/img/fileicon/file_ext_big_xlsx.png";
-						break;
-					case 'txt':
-						return "https://www.ketangpai.com/Public/Common/img/fileicon/file_ext_big_txt.png";
-						break;
-					case 'zip':
-						return "https://www.ketangpai.com/Public/Common/img/fileicon/file_ext_big_zip.png";
-						break;
-					default:
-						return "https://www.ketangpai.com/Public/Common/img/fileicon/file_ext_big_folder.png";
-						break;
+				let extList = ['jpg', 'png', 'doc', 'ppt', 'pptx', 'mp4', 'pdf', 'xlsx', 'txt', 'zip']
+				if (extList.includes(ext)) {
+					return "https://www.ketangpai.com/Public/Common/img/fileicon/file_ext_big_" + ext + ".png";
 				}
+				return "https://www.ketangpai.com/Public/Common/img/fileicon/file_ext_big_folder.png";
 			},
 			previewResourceData(resourceId, type, name) {
 				if (type === 1) { // 文件类型是文件，打开文件预览页面

@@ -46,7 +46,8 @@
                     <!-- 菜单功能 -->
                     <el-col :span="16">
                         <el-menu mode="horizontal" @select="handleSelect">
-                            <el-menu-item index="1" class="header-text" @click="location.href = './homePage.html'">课堂</el-menu-item>
+                            <el-menu-item index="1" class="header-text" @click="location.href = './homePage.html'">课堂
+                            </el-menu-item>
                             <el-menu-item index="2" class="header-text">精品课程</el-menu-item>
                             <el-menu-item index="3" class="header-text">本校课程</el-menu-item>
                             <el-menu-item index="4" class="header-text">我的精品</el-menu-item>
@@ -115,7 +116,9 @@
                                 <el-link type="primary" slot-scope="scope" v-if="scope.row.homeworkStudent.status===0">
                                     催交
                                 </el-link>
-                                <el-link type="primary" v-else>进入批阅</el-link>
+                                <el-link type="primary" v-else
+                                    @click="showPreviewHomeworkList(scope.row)">
+                                    批阅</el-link>
                             </el-table-column>
                         </el-table>
                         <el-row>
@@ -127,6 +130,74 @@
                     </div>
                 </div>
             </el-main>
+            <el-dialog :title="'批阅 ' + previewingStudentName + ' 的作业'" :visible.sync="previewHomeworkVisible"
+                destroy-on-close>
+                <el-container>
+                    <el-card class="box-card" id="homework-resources-card" shadow="never"
+                        style="margin-top: 10px;width: 850px;height: auto; border-radius: 6px;border-width: 2px;padding: 0;">
+                        <el-header style="background-color:#F1F3F4; width: 850px; height: 42px; line-height: 20px;">
+                            <span style="float: left;">
+                                <el-button type="text" v-text="previewingStudentName + ' 提交的作业'">提交的作业</el-button>
+                            </span>
+                        </el-header>
+                        <!-- 提交的作业列表 -->
+                        <el-main>
+                            <el-row type="flex" justify="space-start" :gutter="5" style="margin: 10px;">
+                                <el-col :span="3" style="margin-right: 25px;"
+                                    @mouseover.native="showDownloadResourceId = resource.id"
+                                    @mouseout.native="showDownloadResourceId = -1"
+                                    v-for="(resource, innerindex) in homeworkList" :key="resource.id">
+                                    <el-row>
+                                        <el-button style="height: 110px; width: 95px; padding: 12px 0;"
+                                            @click="previewResourceData(resource.id, resource.type, resource.name)">
+                                            <el-row style="margin-bottom: 15px;">
+                                                <img :src="getResourceSrc(resource.ext)" alt="" srcset=""
+                                                    style="height: 36px; width: 36px;">
+                                            </el-row>
+                                            <el-row>
+                                                <el-tooltip :content="resource.name" placement="bottom" effect="light">
+                                                    <span style="font-size: 6px;"
+                                                        v-text="resource.name.length > 6 ? resource.name.substring(0, 6) + '...': resource.name">实验</span>
+                                                </el-tooltip>
+                                            </el-row>
+                                        </el-button>
+                                    </el-row>
+                                    <el-row>
+                                        <el-col :span="8" :push="8">
+                                            <el-button type="text" size="small"
+                                                @click="postDownloadRequestToServer(resource.id)">
+                                                <span
+                                                    v-show="resource.type === 1 && resource.id === showDownloadResourceId">下载</span>
+                                            </el-button>
+                                        </el-col>
+                                    </el-row>
+                                </el-col>
+                            </el-row>
+                        </el-main>
+
+                        <el-divider></el-divider>
+
+                        <el-form style="margin: 20px 0;" :model="homeworkScoreForm" ref="homeworkScoreForm"
+                            label-width="60px" class="demo-ruleForm">
+                            <el-form-item label="评分" prop="score" :rules="[
+                                { required: true, message: '分数不能为空'},
+                                { type: 'number', message: '分数必须为数字值'}
+                              ]">
+                                <el-input-number v-model="homeworkScoreForm.score" :min="0" :max="homework.totalScore">
+                                </el-input-number>
+                            </el-form-item>
+                            <el-form-item label="批语" prop="message">
+                                <el-input type="textarea" style="width: 200px; height: 50px;"
+                                    v-model="homeworkScoreForm.message"></el-input>
+                            </el-form-item>
+                            <el-form-item>
+                                <el-button type="primary" @click="submitForm('homeworkScoreForm')">确定</el-button>
+                                <el-button @click="clear()">取消</el-button>
+                            </el-form-item>
+                        </el-form>
+                    </el-card>
+                </el-container>
+            </el-dialog>
             <!-- 底部 -->
             <el-footer>
                 <el-row type="flex" justify="center">
@@ -168,6 +239,12 @@
                 search: ""
             },
             homework: {},
+            homeworkList: [],
+            previewHomeworkVisible: false,
+            previewingStudentName: "",
+            previewingStudentId: -1,
+            showDownloadResourceId: -1,
+            homeworkScoreForm: {}
         },
         methods: {
             nameStyle(column) {
@@ -246,6 +323,100 @@
             currentChange(clickPage) {
                 this.pageData.currentPage = clickPage;
             },
+            showPreviewHomeworkList(obj) {
+                let studentId = obj.homeworkStudent.studentId;
+                let realName = obj.realName;
+                yxt.http.get("resource/homeworkId/" + yxt.getUrlParam("id") + "/studentId/" + studentId).then(({ data }) => {
+                    if (data.success) {
+                        this.homeworkList = data.queryResult.data;
+                        this.previewHomeworkVisible = true;
+                        this.previewingStudentName = realName;
+                        this.previewingStudentId = studentId;
+                        this.homeworkScoreForm.score = obj.homeworkStudent.score;
+                        this.homeworkScoreForm.message = obj.homeworkStudent.message;
+                    } else {
+                        this.$message.error(data.message);
+                    }
+                }).catch(() => {
+                    this.$message.error("服务器繁忙，请稍候再试！")
+                })
+            },
+            getResourceSrc(ext) {
+                let extList = ['jpg', 'png', 'doc', 'ppt', 'pptx', 'mp4', 'pdf', 'xlsx', 'txt', 'zip']
+                if (extList.includes(ext)) {
+                    return "https://www.ketangpai.com/Public/Common/img/fileicon/file_ext_big_" + ext + ".png";
+                }
+                return "https://www.ketangpai.com/Public/Common/img/fileicon/file_ext_big_folder.png";
+            },
+            previewResourceData(resourceId, type, name) {
+                if (type === 1) { // 文件类型是文件，打开文件预览页面
+                    yxt.http.get("resource/resourceId/" + resourceId)
+                        .then(({ data }) => {
+                            if (data.success) {
+                                let url = data.queryResult.data[0].location;
+                                window.open("http://www.pava.run/preview/onlinePreview?url=" + encodeURIComponent(url))
+                            } else {
+                                this.$message.error(data.message);
+                            }
+                        })
+                        .catch(() => {
+                            this.$message.error("服务器繁忙，请稍候再试！")
+                        })
+                } else {
+                    this.$message.error("服务器繁忙，请稍候再试！")
+                }
+            },
+            postDownloadRequestToServer(resourceId) {
+                yxt.http.get("resource/download/resourceId/" + resourceId, {
+                    responseType: 'blob'
+                }).then(resp => {
+                    yxt.http.get("resource/resourceId/" + resourceId)
+                        .then(({ data }) => {
+                            if (data.success) {
+                                let fileName = data.queryResult.data[0].name;
+                                this.download(resp.data, fileName);
+                            } else {
+                                this.$message.error(data.message);
+                            }
+                        })
+                        .catch(() => {
+                            this.$message.error("服务器繁忙，请稍候再试！")
+                        })
+                }).catch("服务器繁忙，请稍候再试！")
+            },
+            download(data, fileName) {
+                let url = window.URL.createObjectURL(data)
+                let link = document.createElement('a')
+                link.style.display = 'none'
+                link.href = url
+                link.download = fileName // 设置文件名
+                document.body.appendChild(link)
+                link.click()
+                window.URL.revokeObjectURL(link.href);
+            },
+            submitForm(formName) {
+                this.$refs[formName].validate((valid) => {
+                    if (valid) {
+                        yxt.http.put("homework/homeworkId/" + yxt.getUrlParam("id") + "/studentId/" + this.previewingStudentId, this.homeworkScoreForm).then(({ data }) => {
+                            if (data.success) {
+                                this.$message.success(data.message);
+                                this.clear();
+                                this.getHomeworkStudentData();
+                            } else {
+                                this.$message.error(data.message);
+                            }
+                        }).catch(() => {
+                            this.$message.error("服务器繁忙，请稍候再试！")
+                        })
+                    }
+                });
+            },
+            clear() {
+                this.previewHomeworkVisible = false;
+                this.previewingStudentName = "";
+                this.previewingStudentId = -1;
+                this.homeworkScoreForm = {}
+            }
         },
         created() {
             this.verify();
@@ -253,13 +424,13 @@
             this.getHomeworkStudentData();
         },
         watch: {
-			pageData: {
-				deep: true,
-				handler() {
-					this.getHomeworkStudentData();
-				}
-			}
-		},
+            pageData: {
+                deep: true,
+                handler() {
+                    this.getHomeworkStudentData();
+                }
+            }
+        }
     })
 </script>
 
