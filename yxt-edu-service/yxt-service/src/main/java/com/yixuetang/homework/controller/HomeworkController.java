@@ -1,6 +1,7 @@
 package com.yixuetang.homework.controller;
 
 import com.yixuetang.api.homework.HomeworkControllerApi;
+import com.yixuetang.entity.homework.ScoreStudentHomework;
 import com.yixuetang.entity.request.homework.InsertHomework;
 import com.yixuetang.entity.request.homework.SubmitHomework;
 import com.yixuetang.entity.response.CommonResponse;
@@ -73,20 +74,20 @@ public class HomeworkController implements HomeworkControllerApi {
 
     @Override
     @PutMapping("homeworkId/{homeworkId}/studentId/{studentId}")
-    public CommonResponse scoreHomework(@PathVariable long homeworkId, @PathVariable long studentId, @RequestBody double score) {
-        return homeworkService.scoreHomework( homeworkId, studentId, score );
+    public CommonResponse scoreHomework(@PathVariable long homeworkId, @PathVariable long studentId, @RequestBody ScoreStudentHomework scoreStudentHomework) {
+        return homeworkService.scoreHomework( homeworkId, studentId, scoreStudentHomework );
     }
 
     @Override
     @GetMapping("homeworkId/{homeworkId}/studentId/{studentId}")
     public QueryResponse findStudentHomeworkSubmit(@PathVariable long homeworkId, @PathVariable long studentId) {
-        return homeworkService.findStudentHomeworkSubmit(homeworkId, studentId);
+        return homeworkService.findStudentHomeworkSubmit( homeworkId, studentId );
     }
 
     @Override
     @GetMapping("courseId/{courseId}/studentId/{studentId}")
     public QueryResponse findStudentCourseHomework(@PathVariable long courseId, @PathVariable long studentId) {
-        return homeworkService.findStudentCourseHomework(courseId, studentId);
+        return homeworkService.findStudentCourseHomework( courseId, studentId );
     }
 
 }

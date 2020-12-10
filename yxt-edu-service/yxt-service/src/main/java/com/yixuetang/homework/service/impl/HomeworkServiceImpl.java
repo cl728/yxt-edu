@@ -8,6 +8,7 @@ import com.yixuetang.entity.course.StudentCourse;
 import com.yixuetang.entity.homework.Homework;
 import com.yixuetang.entity.homework.HomeworkResource;
 import com.yixuetang.entity.homework.HomeworkStudent;
+import com.yixuetang.entity.homework.ScoreStudentHomework;
 import com.yixuetang.entity.notice.NoticeUser;
 import com.yixuetang.entity.request.homework.InsertHomework;
 import com.yixuetang.entity.response.CommonResponse;
@@ -24,7 +25,6 @@ import com.yixuetang.homework.mapper.HomeworkResourceMapper;
 import com.yixuetang.homework.mapper.HomeworkStudentMapper;
 import com.yixuetang.homework.service.HomeworkService;
 import com.yixuetang.mq.AmqpUtils;
-import com.yixuetang.notice.mapper.NoticeMapper;
 import com.yixuetang.notice.mapper.NoticeUserMapper;
 import com.yixuetang.user.mapper.UserMapper;
 import com.yixuetang.utils.exception.ExceptionThrowUtils;
@@ -394,7 +394,7 @@ public class HomeworkServiceImpl implements HomeworkService {
     }
 
     @Override
-    public CommonResponse scoreHomework(long homeworkId, long studentId, double score) {
+    public CommonResponse scoreHomework(long homeworkId, long studentId, ScoreStudentHomework scoreStudentHomework) {
         //判断作业是否存在
         Homework homework = homeworkMapper.selectOne( new QueryWrapper<Homework>().eq( "id", homeworkId ) );
         HomeworkStudent homeworkStudent = homeworkStudentMapper.selectOne( new QueryWrapper<HomeworkStudent>().eq( "homework_id", homeworkId )
@@ -402,19 +402,22 @@ public class HomeworkServiceImpl implements HomeworkService {
         if (homework == null) {
             ExceptionThrowUtils.cast( CommonCode.INVALID_PARAM );
         }
-        //判断学生是否有该作业
+        // 判断学生是否有该作业
         if (homeworkStudent == null) {
             ExceptionThrowUtils.cast( HomeworkCode.STUDENT_HOMEWORK_NOT_EXIST );
         }
-        //判断评分分值是否超出范围
-        if (score < 0) {
+        // 判断评分分值是否超出范围
+        if (scoreStudentHomework.getScore() < 0) {
             ExceptionThrowUtils.cast( HomeworkCode.THE_SCORE_CAN_NOT_BE_LOWER_THAN_ZERO );
         }
-        if (score > homework.getTotalScore()) {
+        if (scoreStudentHomework.getScore() > homework.getTotalScore()) {
             ExceptionThrowUtils.cast( HomeworkCode.THE_SCORE_EXCEEDS_THE_MAXIMUM );
         }
 
-        homeworkStudent.setScore( score );
+        homeworkStudent.setScore( scoreStudentHomework.getScore() );
+        if (StringUtils.isNoneBlank( scoreStudentHomework.getMessage() )) {
+            homeworkStudent.setMessage( scoreStudentHomework.getMessage() );
+        }
         homeworkStudent.setStatus( 2 );
         homeworkStudent.setCorrectCount( homeworkStudent.getCorrectCount() + 1 );
         homeworkStudentMapper.updateById( homeworkStudent );

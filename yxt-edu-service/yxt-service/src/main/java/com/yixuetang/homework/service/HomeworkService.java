@@ -1,10 +1,9 @@
 package com.yixuetang.homework.service;
 
+import com.yixuetang.entity.homework.ScoreStudentHomework;
 import com.yixuetang.entity.request.homework.InsertHomework;
 import com.yixuetang.entity.response.CommonResponse;
 import com.yixuetang.entity.response.QueryResponse;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
 
 import java.util.List;
 
@@ -80,36 +79,39 @@ public interface HomeworkService {
 
     /**
      * 学生提交作业
+     *
      * @param homeworkId  作业id
      * @param studentId   学生id
-     * @param resourceIds  资源id
+     * @param resourceIds 资源id
      * @return 通用响应实体类
      */
     CommonResponse submitHomework(long homeworkId, long studentId, List<Long> resourceIds);
 
     /**
-     *  学生作业评分
+     * 学生作业评分
      *
-     * @param homeworkId    作业id
-     * @param studentId     学生id
-     * @param score         作业评分分数
+     * @param homeworkId           作业id
+     * @param studentId            学生id
+     * @param scoreStudentHomework 教师评分作业实体类
      * @return
      */
-    CommonResponse scoreHomework(long homeworkId, long studentId, double score);
+    CommonResponse scoreHomework(long homeworkId, long studentId, ScoreStudentHomework scoreStudentHomework);
 
     /**
      * 查询某个学生某次作业的提交情况
-     * @param homeworkId    作业id
-     * @param studentId     学生id
-     * @return  通用响应实体类
+     *
+     * @param homeworkId 作业id
+     * @param studentId  学生id
+     * @return 通用响应实体类
      */
     QueryResponse findStudentHomeworkSubmit(long homeworkId, long studentId);
 
     /**
      * 查询某个学生在某个课程下的作业完成情况
-     * @param courseId   课程id
-     * @param studentId  学生id
-     * @return  通用响应实体类
+     *
+     * @param courseId  课程id
+     * @param studentId 学生id
+     * @return 通用响应实体类
      */
     QueryResponse findStudentCourseHomework(long courseId, long studentId);
 }

@@ -41,4 +41,6 @@ public class HomeworkStudent {
     @TableField("correct_count")
     private Integer correctCount; // 教师批阅次数
 
+    private String message; // 教师批语
+
 }

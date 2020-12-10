@@ -434,8 +434,10 @@ public class ExamServiceImpl implements ExamService {
         }
 
         // 学生不允许查看未开始的测试
-        if (!exam.getStatus() || new Date().getTime() < exam.getStartTime().getTime()) {
-            ExceptionThrowUtils.cast( CommonCode.INVALID_PARAM );
+        if (user.getRole().getId() == 3) {
+            if (!exam.getStatus() || new Date().getTime() < exam.getStartTime().getTime()) {
+                ExceptionThrowUtils.cast( CommonCode.INVALID_PARAM );
+            }
         }
 
         List<ExamQuestionRequest> examQuestionRespList = new ArrayList<>();

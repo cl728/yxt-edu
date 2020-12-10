@@ -1,5 +1,6 @@
 package com.yixuetang.api.homework;
 
+import com.yixuetang.entity.homework.ScoreStudentHomework;
 import com.yixuetang.entity.request.homework.InsertHomework;
 import com.yixuetang.entity.request.homework.SubmitHomework;
 import com.yixuetang.entity.response.CommonResponse;
@@ -87,7 +88,7 @@ public interface HomeworkControllerApi {
             @ApiImplicitParam(name = "studentId", value = "学生id", required = true,
                     paramType = "path", dataType = "long"),
     })
-    CommonResponse scoreHomework(long homeworkId, long studentId, double score);
+    CommonResponse scoreHomework(long homeworkId, long studentId, ScoreStudentHomework scoreStudentHomework);
 
     @ApiOperation("查询某个学生某次作业的提交情况")
     @ApiImplicitParams(value = {
