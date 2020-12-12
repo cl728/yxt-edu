@@ -291,20 +291,23 @@ public class ExamServiceImpl implements ExamService {
     @Transactional
     @Override
     public CommonResponse deleteQuestion(long examId, long questionNumber) {
-        //测试考试是否存在
+        // 测试考试是否存在
         Exam exam = examMapper.selectOne( new QueryWrapper<Exam>().eq( "id", examId ) );
         if (exam == null) {
             ExceptionThrowUtils.cast( CommonCode.INVALID_PARAM );
         }
-        //题目是否存在
+        // 题目是否存在
         ExamQuestion examQuestion = examQuestionMapper.selectOne( new QueryWrapper<ExamQuestion>().eq( "exam_id", examId )
                 .eq( "question_number", questionNumber ) );
         if (examQuestion == null) {
             ExceptionThrowUtils.cast( CommonCode.INVALID_PARAM );
         }
-        //根据 examId, questionNumber 删除 t_exam_quesiton 的相关记录
+        // 根据 examId, questionNumber 删除 t_exam_question 的相关记录
         examQuestionMapper.delete( new QueryWrapper<ExamQuestion>().eq( "exam_id", examId )
                 .eq( "question_number", questionNumber ) );
+
+        // 更新题号：比该题目题号大的题目需要减一
+        examQuestionMapper.updateQuestionNumberLargerThanDeleted(examId, questionNumber);
 
         return new CommonResponse( CommonCode.SUCCESS );
     }

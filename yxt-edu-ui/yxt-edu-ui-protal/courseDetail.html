@@ -693,11 +693,17 @@
                                                             <el-col :span="10"
                                                                 v-show="!user.isTeacher && (exam.examStatus === '已发布' || exam.examStatus === '已结束')">
                                                                 <div class="homework-operation" style="float: right">
-                                                                    <el-button type="primary"
-                                                                        v-show="exam.examStatus === '已发布'">开始答题
+                                                                    <el-button type="primary" plain
+                                                                        @click="location.href='answerPage.html?id=' + exam.id"
+                                                                        v-show="exam.examStatus === '已发布' && exam.examStudentStatus === 0">
+                                                                        开始答题
                                                                     </el-button>
-                                                                    <el-button type="success"
-                                                                        v-show="exam.examStatus === '已结束'">查看成绩
+                                                                    <el-button type="info" plain
+                                                                        v-show="(exam.examStatus === '已发布' && exam.examStudentStatus === 1) || 
+                                                                        (exam.examStatus === '已结束' && 2 > exam.examStudentStatus)">查看完成情况
+                                                                    </el-button>
+                                                                    <el-button type="success" plain
+                                                                        v-show="exam.examStudentStatus === 2">查看成绩
                                                                     </el-button>
                                                                 </div>
                                                             </el-col>

@@ -178,11 +178,17 @@
 									</el-input-number>
 									<span style="margin-left: 5px;">分</span>
 								</el-col>
-								<!-- <el-col :span="12" :push="8">
-									<el-button type="primary" size="small" plain icon="el-icon-top" circle></el-button>
-									<el-button type="success" size="small" plain icon="el-icon-bottom" circle></el-button>
-									<el-button type="danger" size="small" plain icon="el-icon-delete" circle></el-button>
-								</el-col> -->
+								<el-col :span="12" :push="11" v-if="examQuestionCardMapStatus">
+									<!-- <el-button type="primary" size="small" plain icon="el-icon-top" circle></el-button>
+									<el-button type="success" size="small" plain icon="el-icon-bottom" circle></el-button> -->
+									<el-popconfirm confirmButtonText="确认" cancelButtonText="取消"
+										confirmButtonType="danger" cancelButtonType="success" placement="right"
+										@onConfirm="deleteExamQuestion(examQuestion)" title="确认要删除这道题目吗？">
+										<el-button type="danger" size="small" slot="reference" plain
+											icon="el-icon-delete" circle>
+										</el-button>
+									</el-popconfirm>
+								</el-col>
 							</el-row>
 							<!-- 题干 -->
 							<el-row style="margin-top: 10px;">
@@ -216,7 +222,7 @@
 									<el-col :span="2" :push="10">
 										<el-button
 											@click="removeSelectChoice(examQuestionIndex, examQuestion.questionTypeName)"
-											type="danger" size="mini" plain icon="el-icon-delete" circle></el-button>
+											type="danger" size="mini" plain icon="el-icon-minus" circle></el-button>
 									</el-col>
 								</el-row>
 							</div>
@@ -413,8 +419,8 @@
 								<!-- 试题解析 -->
 								<el-row style="margin-top: 20px;">
 									<div style="font-size: 12px; margin-bottom: 8px; color: #008000;">试题解析：</div>
-									<div v-html="examQuestion.analysis" v-show="examQuestion.analysis !== ''"></div>
-									<div v-show="examQuestion.analysis === ''">暂无</div>
+									<div v-html="examQuestion.analysis" v-if="examQuestion.analysis !== ''"></div>
+									<div v-if="examQuestion.analysis === ''">暂无</div>
 								</el-row>
 								<el-divider></el-divider>
 							</div>
@@ -439,7 +445,7 @@
 </body>
 <script src="https://cdn.bootcss.com/vue/2.6.11/vue.min.js"></script>
 <script src="https://cdn.bootcss.com/axios/0.19.2/axios.min.js"></script>
-<script src="https://cdn.bootcss.com/element-ui/2.13.2/index.js"></script>
+<script src="./js/index.js"></script>
 <script src="./js/common.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/wangeditor@4.5.0/dist/wangEditor.min.js"></script>
 
@@ -465,12 +471,20 @@
 			switchKeyPath(key, keyPath) {
 				if (key != null) {
 					this.activeIndex = key;
+					this.examQuestionList.forEach(examQuestion => {
+						if (examQuestion.questionTypeName === "填空题") {
+							examQuestion.fillAnswer = this.getFillAnswerStr(examQuestion.fillAnswer)
+						}
+					})
 				}
 			},
 			verify() {
 				yxt.http.get("/auth/verify/2").then(({ data }) => {
 					if (data.success) {
 						this.user = data.queryResult.data[0];
+						if (!this.user.isTeacher) {
+							location.href = '../index.html';
+						}
 						this.getExamQuestionData();
 					} else {
 						location.href = "../index.html"
@@ -642,7 +656,7 @@
 				// 设置编辑区域高度为 100px
 				editor.config.height = 100
 				// 配置 placeholder
-				editor.config.placeholder = '如有参考答案，请在此输入。若为多空填空题，则输入时答案之间以#隔开，如 aaa#bbb#ccc'
+				editor.config.placeholder = '如有参考答案，请在此输入。若为多空填空题，则输入时每个答案需占一行'
 				// 配置 server 上传图片接口地址
 				editor.config.uploadImgServer = 'http://api.yixuetang.com/api/resource/upload/editor/userId/' + this.user.id
 				// 配置上传文件参数名
@@ -757,6 +771,23 @@
 							return;
 						}
 						break;
+					case 2: // 填空题
+						// 处理 fillAnswer
+						if (examQuestion.fillAnswer !== '') {
+							let fillAnswerStr = examQuestion.fillAnswer.replace(new RegExp("<p>", "g"), "");
+							let fillAnswers = fillAnswerStr.split("</p>");
+							fillAnswers.splice(fillAnswers.length - 1, 1);
+							let returnVal = "";
+							for (let i = 0; i < fillAnswers.length; i++) {
+								if (i < fillAnswers.length - 1) {
+									returnVal += fillAnswers[i] + "#";
+								} else {
+									returnVal += fillAnswers[i];
+								}
+							}
+							examQuestion.fillAnswer = returnVal;
+						}
+						break;
 					default:
 						break;
 				}
@@ -764,6 +795,7 @@
 					if (data.success) {
 						this.$message.success(data.message);
 						this.examQuestionCardMapStatus = false;
+						this.originalExamQuestionList.push(examQuestion)
 					} else {
 						this.$message.error(data.message);
 					}
@@ -825,7 +857,8 @@
 				})
 			},
 			setStatusToFalseOrRemove(examQuestion) {
-				if (!this.originalExamQuestionList.includes(examQuestion)) {
+				let arr = this.originalExamQuestionList.filter(question => question.questionNumber === examQuestion.questionNumber)
+				if (arr.length !== 1) {
 					this.remove(examQuestion);
 					return;
 				}
@@ -837,7 +870,7 @@
 				yxt.http.get("exam/question/examId/" + yxt.getUrlParam("id") + "/teacherId/" + this.user.id).then(({ data }) => {
 					if (data.success) {
 						this.examQuestionList = data.queryResult.data;
-						this.originalExamQuestionList = data.queryResult.data;
+						this.originalExamQuestionList = JSON.parse(JSON.stringify(this.examQuestionList))
 						this.examQuestionList.forEach(examQuestion => {
 							if (examQuestion.questionType === 1) {
 								examQuestion.judgeChoices =
@@ -846,6 +879,9 @@
 							}
 							if (examQuestion.questionTypeName === "多选题") {
 								examQuestion.multiSelectAnswerStr = this.getMultiSelectAnswerStr(examQuestion.multiSelectAnswer)
+							}
+							if (examQuestion.questionTypeName === "填空题") {
+								examQuestion.fillAnswer = this.getFillAnswerStr(examQuestion.fillAnswer)
 							}
 							setTimeout(() => {
 								this.initQuestionAnalysisEditor(examQuestion.questionNumber, examQuestion.analysis);
@@ -868,6 +904,14 @@
 					answerStr += answer;
 				}
 				return answerStr;
+			},
+			getFillAnswerStr(fillAnswer) {
+				let returnVal = "";
+				let answerStrs = fillAnswer.split("#");
+				for (let answer of answerStrs) {
+					returnVal += "<p>" + answer + "</p>";
+				}
+				return returnVal;
 			},
 			getExamData() {
 				yxt.http.get("exam/info/examId/" + yxt.getUrlParam("id")).then(({ data }) => {
@@ -912,6 +956,19 @@
 						break;
 				}
 			},
+			deleteExamQuestion(examQuestion) {
+				yxt.http.delete("exam/question/examId/" + yxt.getUrlParam("id") + "/questionNumber/" + examQuestion.questionNumber).then(({ data }) => {
+					if (data.success) {
+						this.$message.success(data.message);
+						this.remove(examQuestion);
+						this.getExamQuestionData();
+					} else {
+						this.$message.error(data.message);
+					}
+				}).catch(() => {
+					this.$message.error('服务器繁忙，请稍候再试！')
+				})
+			}
 		},
 		created() {
 			this.verify();
@@ -927,6 +984,12 @@
 						totalScore += isNaN(examQuestion.score) ? 0 : examQuestion.score;
 					})
 					this.exam.totalScore = isNaN(totalScore) ? 0 : totalScore;
+				}
+			},
+			originalExamQuestionList: {
+				deep: true,
+				handler() {
+					console.log(this.originalExamQuestionList)
 				}
 			}
 		}
