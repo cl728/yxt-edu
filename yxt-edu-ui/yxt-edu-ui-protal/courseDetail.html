@@ -117,6 +117,7 @@
             <!-- 中间 -->
             <el-container style="width: 1224px;margin: auto">
                 <el-main style="margin-top: 60px;">
+                    <!-- 课程基本信息 -->
                     <div id="course-header"
                         style="border-radius: 10px;margin: auto;height: 200px;width:1224px;background-image: url('https://assets.ketangpai.com/theme/teacher/big/20.png')">
                         <el-row style="height: 200px">
@@ -297,6 +298,7 @@
                             </el-col>
                         </el-row>
                     </div>
+                    <!-- 课程子模块菜单 -->
                     <div id="course-menu">
                         <el-menu :default-active="activeIndex2" mode="horizontal" @select="handleSelect2">
                             <el-menu-item index="1" style="width: 200px">
@@ -313,6 +315,7 @@
                             </el-menu-item>
                         </el-menu>
                     </div>
+                    <!-- 作业模块 -->
                     <div id="course-homework" v-if="activeIndex2=='1'" style="margin-top: 30px">
                         <!-- 发布作业按钮 -->
                         <div id="course-homework-menubar" v-if="user.isTeacher">
@@ -457,6 +460,8 @@
                                                             v-show="studentHomework[homework.id] === 0">未完成</el-tag>
                                                         <el-tag type="success"
                                                             v-show="studentHomework[homework.id] === 1">已提交</el-tag>
+                                                        <el-tag type="primary"
+                                                            v-show="studentHomework[homework.id] === 2">已批改</el-tag>
                                                     </el-col>
                                                 </el-row>
                                             </div>
@@ -486,6 +491,7 @@
                             </div>
                         </div>
                     </div>
+                    <!-- 资源模块 -->
                     <div id="course-resources" v-if="activeIndex2=='2'" style="margin-top: 30px">
                         <div v-if="user.isTeacher">
                             <el-row>
@@ -627,6 +633,7 @@
                         </div>
 
                     </div>
+                    <!-- 测试（考试）模块 -->
                     <div id="course-exam" v-if="activeIndex2=='3'">
                         <div id="course-exam-box" style="margin-top: 30px">
                             <div id="exam-buttons" v-if="user.isTeacher">
@@ -1089,7 +1096,7 @@
                                                                         cancelButtonType="success" placement="top"
                                                                         @onConfirm="updateStatus(unstartedExam.id, 2)"
                                                                         title="确认要取消发布此测试吗？">
-                                                                        <el-button type="primary" plain
+                                                                        <el-button type="warning" plain
                                                                             slot="reference">取消发布
                                                                         </el-button>
                                                                     </el-popconfirm>
@@ -1481,6 +1488,7 @@
                             </div>
                         </div>
                     </div>
+                    <!-- 公告模块 -->
                     <div id="course-notice" v-if="activeIndex2=='4'">
                         <div id="course-notice-box">
                             <!-- 发布公告按钮 -->
@@ -1591,6 +1599,24 @@
                     </div>
                 </el-main>
             </el-container>
+
+            <!-- 底部 -->
+            <el-footer style="padding-top: 50px">
+                <el-row type="flex" justify="center">
+                    <el-col :span="8"></el-col>
+                    <el-col :span="8" push="1">
+                        <el-menu mode="horizontal">
+                            <el-menu-item>关于我们</el-menu-item>
+                            <el-menu-item>联系我们</el-menu-item>
+                            <el-menu-item>服务条款</el-menu-item>
+                            <el-menu-item>浏览器下载</el-menu-item>
+                            <el-menu-item>更新动态</el-menu-item>
+                        </el-menu>
+                    </el-col>
+                    <el-col :span="8"></el-col>
+                </el-row>
+                <span class="foot-text">Copyright © 2020 yixuetang.com All Rights Reserved. </span>
+            </el-footer>
         </el-container>
 
         <!-- 发布/编辑作业表单 -->
@@ -1687,24 +1713,6 @@
             </el-form>
         </el-dialog>
 
-        <!-- 底部 -->
-        <el-footer style="padding-top: 50px">
-            <el-row type="flex" justify="center">
-                <el-col :span="8"></el-col>
-                <el-col :span="8" push="1">
-                    <el-menu mode="horizontal">
-                        <el-menu-item>关于我们</el-menu-item>
-                        <el-menu-item>联系我们</el-menu-item>
-                        <el-menu-item>服务条款</el-menu-item>
-                        <el-menu-item>浏览器下载</el-menu-item>
-                        <el-menu-item>更新动态</el-menu-item>
-                    </el-menu>
-                </el-col>
-                <el-col :span="8"></el-col>
-            </el-row>
-            <span class="foot-text">Copyright © 2020 yixuetang.com All Rights Reserved. </span>
-        </el-footer>
-        </el-container>
     </div>
 </body>
 <script src="https://cdn.bootcss.com/vue/2.6.11/vue.min.js"></script>
@@ -2211,6 +2219,12 @@
             editExam(formName) {
                 this.$refs[formName].validate((valid) => {
                     if (valid) {
+                        let t = this.examForm.startTime;
+                        this.examForm.startTime = yxt.formatDate(t);
+                        if (this.examForm.endTime !== undefined) {
+                            let t2 = this.examForm.endTime;
+                            this.examForm.endTime = yxt.formatDate(t2);
+                        }
                         yxt.http.put("/exam/info/examId/" + this.examForm.id, this.examForm).then(({ data }) => {
                             if (data.success) {
                                 this.$message.success(data.message);
@@ -2286,7 +2300,7 @@
                 });
             },
             updateStatus(examId, actionType) {
-                yxt.http.put("exam/status/examId/" + examId + "/actionType/" + actionType).then(({ data }) => {
+                yxt.http.put("exam/status/examId/" + examId + "/teacherId/" + this.user.id + "/actionType/" + actionType).then(({ data }) => {
                     if (data.success) {
                         this.$message.success(data.message);
                         this.getExamData();

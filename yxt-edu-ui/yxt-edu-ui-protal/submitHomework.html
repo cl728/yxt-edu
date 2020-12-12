@@ -210,7 +210,8 @@
 										<div
 											style="font-size: 15px; line-height: 15px; margin-bottom: 8px; color: #008000;">
 											教师批语：</div>
-										<div v-text="homeworkStudent.message === '' ? '暂无批语' : homeworkStudent.message">
+										<div v-text="homeworkStudent.message === null ? '暂无批语' : homeworkStudent.message"
+										style="font-size: 12px;">
 										</div>
 									</el-row>
 								</el-container>
