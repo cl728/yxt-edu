@@ -35,6 +35,7 @@ import com.yixuetang.exam.mapper.question.JudgeMapper;
 import com.yixuetang.exam.mapper.question.QAMapper;
 import com.yixuetang.exam.mapper.question.SelectMapper;
 import com.yixuetang.exam.service.ExamService;
+import com.yixuetang.mq.AmqpUtils;
 import com.yixuetang.user.mapper.UserMapper;
 import com.yixuetang.utils.exception.ExceptionThrowUtils;
 import org.apache.commons.lang3.ObjectUtils;
@@ -87,6 +88,9 @@ public class ExamServiceImpl implements ExamService {
 
     @Autowired
     private ExamQuestionStudentMapper examQuestionStudentMapper;
+
+    @Autowired
+    private AmqpUtils amqpUtils;
 
     @Transactional
     @Override
@@ -357,7 +361,7 @@ public class ExamServiceImpl implements ExamService {
 
     @Transactional
     @Override
-    public CommonResponse updateStatus(long examId, int actionType) {
+    public CommonResponse updateStatus(long examId, long teacherId, int actionType) {
 
         // 1. 参数验证
         if (!ObjectUtils.allNotNull( examId, actionType )) {
@@ -389,6 +393,13 @@ public class ExamServiceImpl implements ExamService {
         }
 
         this.examMapper.updateStatus( exam );
+
+        // 如果 actionType 为 0 和 1，发送异步事件提醒，告知学生教师发布了新测试
+        if (actionType == 0 || actionType == 1) {
+            Long courseId = this.courseMapper.selectById( exam.getCourseId() ).getId();
+            this.amqpUtils.sendCourseRemind( teacherId, courseId, examId, "测试（考试）", "发布",
+                    "http://www.yixuetang.com/courseDetail.html?id=" + courseId );
+        }
 
         return new CommonResponse( CommonCode.SUCCESS );
     }

@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.yixuetang.comment.mapper.CommentMapper;
 import com.yixuetang.entity.comment.Comment;
+import com.yixuetang.entity.exam.Exam;
 import com.yixuetang.entity.homework.Homework;
 import com.yixuetang.entity.message.EventRemind;
 import com.yixuetang.entity.message.Message;
@@ -22,6 +23,7 @@ import com.yixuetang.entity.response.result.EventRemindResp;
 import com.yixuetang.entity.response.result.QueryResult;
 import com.yixuetang.entity.response.result.UnreadCountResp;
 import com.yixuetang.entity.user.User;
+import com.yixuetang.exam.mapper.ExamMapper;
 import com.yixuetang.homework.mapper.HomeworkMapper;
 import com.yixuetang.message.mapper.MessageMapper;
 import com.yixuetang.message.mapper.RemindMapper;
@@ -80,6 +82,9 @@ public class MessageServiceImpl implements MessageService {
 
     @Autowired
     private CommentMapper commentMapper;
+
+    @Autowired
+    private ExamMapper examMapper;
 
     @Override
     @Transactional
@@ -384,6 +389,10 @@ public class MessageServiceImpl implements MessageService {
                     case "资源":  // 发布资源，查询新资源的名称:
                         Resource resource = this.resourceMapper.selectById(sourceId);
                         sourceContent = resource == null ? "[该资源已被删除]" : resource.getName();
+                        break;
+                    case "测试（考试）":  // 发布测试（考试），查询新测试（考试）的名称:
+                        Exam exam = this.examMapper.selectById(sourceId);
+                        sourceContent = exam == null ? "[该测试（考试）已被删除]" : exam.getTitle();
                         break;
                     case "公告":  // 发布公告，查询新公告的标题
                         Notice notice = this.noticeMapper.selectById(sourceId);

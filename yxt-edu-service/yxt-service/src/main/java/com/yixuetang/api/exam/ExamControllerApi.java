@@ -22,10 +22,12 @@ public interface ExamControllerApi {
     @ApiImplicitParams({
             @ApiImplicitParam(name = "examId", value = "测试（考试）id", required = true,
                     paramType = "path", dataType = "long"),
-            @ApiImplicitParam(name = "actionType", value = "操作类型，0⾸次发布 1重新发布 2取消发布，路径变量 ", required = true,
+            @ApiImplicitParam(name = "teacherId", value = "教师id", required = true,
+                    paramType = "path", dataType = "long"),
+            @ApiImplicitParam(name = "actionType", value = "操作类型，0⾸次发布 1重新发布 2取消发布 3结束发布，路径变量 ", required = true,
                     paramType = "path", dataType = "int")
     })
-    CommonResponse updateStatus(long examId, int actionType);
+    CommonResponse updateStatus(long examId, long teacherId, int actionType);
 
     @ApiOperation("查询某一考试（测试）的基本信息")
     @ApiImplicitParam(name = "examId", value = "考试（测试）id", required = true,

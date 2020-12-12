@@ -21,14 +21,12 @@ public interface ExamMapper extends BaseMapper<Exam> {
             @Result(column = "create_time", property = "createTime"),
             @Result(column = "start_time", property = "startTime"),
             @Result(column = "end_time", property = "endTime"),
-            @Result(column = "question_count", property = "questionCount"),
-            @Result(column = "total_score", property = "totalScore"),
             @Result(column = "status", property = "status"),
             @Result(column = "top_num", property = "topNum"),
     })
     @Select("select * from t_exam where id = #{examId}")
     Exam findExamById(@Param("examId") long examId);
 
-    @Update("update t_exam set status=#{exam.status},course_id=#{exam.courseId},title=#{exam.title},introduction=#{exam.introduction},create_time=#{exam.createTime},start_time=#{exam.startTime},end_time=#{exam.endTime},question_count=#{exam.questionCount},total_score=#{exam.totalScore},top_num=#{exam.topNum} where id=#{exam.id}")
+    @Update("update t_exam set status=#{exam.status},course_id=#{exam.courseId},title=#{exam.title},introduction=#{exam.introduction},create_time=#{exam.createTime},start_time=#{exam.startTime},end_time=#{exam.endTime},top_num=#{exam.topNum} where id=#{exam.id}")
     void updateStatus(@Param("exam") Exam exam);
 }
