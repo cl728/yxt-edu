@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.yixuetang.entity.exam.ExamStudent;
 import com.yixuetang.entity.homework.HomeworkStudent;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -63,6 +64,9 @@ public class User {
 
     @TableField(exist = false)
     private HomeworkStudent homeworkStudent;
+
+    @TableField(exist = false)
+    private ExamStudent examStudent;
 
     @TableField(exist = false)
     private String courseName;  // 这是为了展示私信聊天页面用户所在课程名称而增设的字段

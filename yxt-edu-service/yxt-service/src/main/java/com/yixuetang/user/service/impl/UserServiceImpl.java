@@ -8,6 +8,8 @@ import com.yixuetang.course.mapper.ScMapper;
 import com.yixuetang.entity.auth.UserInfo;
 import com.yixuetang.entity.course.Course;
 import com.yixuetang.entity.course.StudentCourse;
+import com.yixuetang.entity.exam.Exam;
+import com.yixuetang.entity.exam.ExamStudent;
 import com.yixuetang.entity.homework.Homework;
 import com.yixuetang.entity.homework.HomeworkStudent;
 import com.yixuetang.entity.request.auth.LoginUser;
@@ -22,6 +24,8 @@ import com.yixuetang.entity.response.result.UserResp;
 import com.yixuetang.entity.user.Role;
 import com.yixuetang.entity.user.School;
 import com.yixuetang.entity.user.User;
+import com.yixuetang.exam.mapper.ExamMapper;
+import com.yixuetang.exam.mapper.ExamStudentMapper;
 import com.yixuetang.homework.mapper.HomeworkMapper;
 import com.yixuetang.homework.mapper.HomeworkStudentMapper;
 import com.yixuetang.user.mapper.RoleMapper;
@@ -33,6 +37,7 @@ import com.yixuetang.utils.auth.JwtConfig;
 import com.yixuetang.utils.auth.JwtUtils;
 import com.yixuetang.utils.exception.ExceptionThrowUtils;
 import com.yixuetang.utils.user.*;
+import org.apache.commons.lang3.ObjectUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -58,38 +63,63 @@ import java.util.stream.Collectors;
 @Service
 public class UserServiceImpl implements UserService {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger( UserServiceImpl.class );
-    private static final String LOGIN_KEY_PREFIX = "user:code:login:";
-    private static final String REGISTER_KEY_PREFIX = "user:code:register:";
-    private static final String MODIFY_KEY_PREFIX = "user:code:modify:";
-    private static final String CHANGE_KEY_PREFIX = "user:code:change:";
-    private final List<Integer> SEND_TYPE = new ArrayList<>( Arrays.asList( 1, 2 ) );
-    private final List<Long> ROLE_ID_LIST = new ArrayList<>( Arrays.asList( 1L, 2L, 3L ) );
-    private final List<Integer> CODE_TYPE = new ArrayList<>( Arrays.asList( 1, 2, 3, 4 ) );
     @Autowired
     private UserMapper userMapper;
+
     @Autowired
     private RoleMapper roleMapper;
+
     @Autowired
     private SchoolMapper schoolMapper;
+
     @Autowired
     private MailUtils mailUtils;
+
     @Autowired
     private SmsUtils smsUtils;
+
     @Autowired
     private SmsConfig smsConfig;
+
     @Autowired
     private StringRedisTemplate redisTemplate;
+
     @Autowired
     private ScMapper scMapper;
+
     @Autowired
     private CourseMapper courseMapper;
+
     @Autowired
     private JwtConfig config;
+
     @Autowired
     private HomeworkMapper homeworkMapper;
+
     @Autowired
     private HomeworkStudentMapper homeworkStudentMapper;
+
+    @Autowired
+    private ExamMapper examMapper;
+
+    @Autowired
+    private ExamStudentMapper examStudentMapper;
+
+    private static final Logger LOGGER = LoggerFactory.getLogger( UserServiceImpl.class );
+
+    private static final String LOGIN_KEY_PREFIX = "user:code:login:";
+
+    private static final String REGISTER_KEY_PREFIX = "user:code:register:";
+
+    private static final String MODIFY_KEY_PREFIX = "user:code:modify:";
+
+    private static final String CHANGE_KEY_PREFIX = "user:code:change:";
+
+    private final List<Integer> SEND_TYPE = new ArrayList<>( Arrays.asList( 1, 2 ) );
+
+    private final List<Long> ROLE_ID_LIST = new ArrayList<>( Arrays.asList( 1L, 2L, 3L ) );
+
+    private final List<Integer> CODE_TYPE = new ArrayList<>( Arrays.asList( 1, 2, 3, 4 ) );
 
     @Override
     public QueryResponse findOneUser(long id) {
@@ -582,6 +612,57 @@ public class UserServiceImpl implements UserService {
 
         return new QueryResponse( CommonCode.SUCCESS,
                 new QueryResult<>( courseUserRespList, courseUserRespList.size() ) );
+    }
+
+    @Override
+    public QueryResponse findPageByExamId(long examId, long currentPage, long pageSize, String search) {
+        // examId 不合法
+        Exam exam = this.examMapper.selectById( examId );
+        if (ObjectUtils.isEmpty( exam )) {
+            ExceptionThrowUtils.cast( CommonCode.INVALID_PARAM );
+        }
+
+        QueryWrapper<ExamStudent> queryWrapper = new QueryWrapper<ExamStudent>().eq( "exam_id", examId );
+        List<Long> ids = this.examStudentMapper.selectList( queryWrapper
+                .select( "student_id" ) )
+                .stream()
+                .map( ExamStudent::getStudentId )
+                .collect( Collectors.toList() );
+
+        // 如果 search 字段不为空，先在 User 总表里查询出符合条件的 User 列表，再将其中不是该次测试（考试）成员的 User 过滤掉
+        // 得到的 filterUsers 即为符合搜索条件且为该次作业的成员列表
+        List<User> filterUsers = new ArrayList<>();
+        if (StringUtils.isNoneBlank( search )) {
+            QueryWrapper<User> userQueryWrapper =
+                    new QueryWrapper<User>()
+                            .like( "real_name", search )
+                            .or()
+                            .like( "ts_no", search );
+            filterUsers = this.userMapper
+                    .selectList( userQueryWrapper )
+                    .stream()
+                    .filter( user -> ids.contains( user.getId() ) )
+                    .collect( Collectors.toList() );
+            search = "%" + search + "%";
+        }
+
+        // 查询该次测试（考试）下的学生
+        List<User> studentList = this.userMapper.findPageByExamId( new Page<>( currentPage, pageSize ), examId, search );
+
+        if (!CollectionUtils.isEmpty( studentList )) {
+            studentList.forEach(
+                    student -> student.setExamStudent( this.examStudentMapper
+                            .selectOne(
+                                    new QueryWrapper<ExamStudent>()
+                                            .eq( "exam_id", examId )
+                                            .eq( "student_id", student.getId() ) ) ) );
+        }
+
+        return new QueryResponse( CommonCode.SUCCESS,
+                new QueryResult<>( studentList,
+                        StringUtils.isBlank( search )
+                                ? ids.size() // 如果搜索字段为空，则 total 为总的作业成员
+                                : filterUsers.size() ) ); // 否则为过滤后的成员
     }
 
     private void getCourseUserRespList(List<CourseUserResp> courseUserRespList, List<Long> courseIds) {

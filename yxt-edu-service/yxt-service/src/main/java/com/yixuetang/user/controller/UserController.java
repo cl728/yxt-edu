@@ -148,7 +148,16 @@ public class UserController implements UserControllerApi {
     @Override
     @GetMapping("courseUser/userId/{userId}")
     public QueryResponse findCourseUsers(@PathVariable long userId) {
-        return this.userService.findCourseUsers( userId);
+        return this.userService.findCourseUsers( userId );
+    }
+
+    @Override
+    @GetMapping("examId/{examId}/{currentPage}/{pageSize}")
+    public QueryResponse findPageByExamId(@PathVariable long examId,
+                                          @PathVariable long currentPage,
+                                          @PathVariable long pageSize,
+                                          @RequestParam(required = false) String search) {
+        return this.userService.findPageByExamId( examId, currentPage, pageSize, search );
     }
 
     private boolean checkIdIfInvalid(@PathVariable long id, HttpServletRequest request) {

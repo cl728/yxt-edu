@@ -34,7 +34,7 @@
 				</el-button>
 			</el-menu-item>
 
-			<el-menu-item index="1" style="font-size: 20px;margin-left: 550px;">试题编辑</el-menu-item>
+			<el-menu-item index="1" style="font-size: 20px;margin-left: 450px;">试题编辑</el-menu-item>
 			<el-menu-item index="2" style="font-size: 20px;">试题预览</el-menu-item>
 			<el-menu-item index="3" style="font-size: 20px;">批阅测试</el-menu-item>
 
@@ -123,7 +123,7 @@
 							style="margin-top: 20px;width: 900px;height: auto;border-radius: 10px;border-width: 2px">
 							<el-row id="course-title" style="height: 30px;">
 								<el-col :span="14">
-									<div class="homework-create-time" style="float: left">
+									<div class="exam-create-time" style="float: left">
 										<el-tag :type="getExamStatusType(exam.examStatus)" v-text="exam.examStatus">未发布
 										</el-tag>
 										<span style="padding-left: 30px;font-size: 15px;color: #5F6368">起止时间：<span
@@ -442,7 +442,68 @@
 
 		<!-- 批阅测试 -->
 		<div v-show="activeIndex === '3'">
-
+			<el-container style="width: 1200px; margin-left: 100px; margin-top: 10px;">
+				<div style="margin-left: 300px;">
+					<el-main style="margin-top: 40px">
+						<!-- 外边框 -->
+						<div style="border: 1px solid #c8c8c8;width: 1020px;margin: auto">
+							<!-- 测试基本信息 -->
+							<div style="border-bottom: 1px solid #c8c8c8;width: 960px;height: 80px;padding: 30px">
+								<h3 style="text-align: left;margin: 0px 0px 25px 0px" v-text="exam.title">范例_第一次测试
+								</h3>
+								<div>
+									<div style="float: left;text-align: left;background-color: #f2f2f2">
+										<div style="padding: 5px 20px 5px 20px"><span
+												style="padding-left: 30px;font-size: 15px;color: #5F6368">起止时间：<span
+													v-text="exam.startTime">2020-11-09
+													22:17</span> ~
+												<span v-text="exam.endTime === null ? '无' : exam.endTime">2020-11-09
+													23:17</span></span>
+										</div>
+									</div>
+									<div style="float: right">
+										<el-input v-model="pageData.search" suffix-icon="el-icon-search"
+											placeholder="学号，姓名">
+										</el-input>
+									</div>
+								</div>
+							</div>
+							<!-- 测试提交情况列表 -->
+							<div style="border: 1px  #c8c8c8;width: 960px;height: auto; padding: 30px">
+								<el-table ref="multipleTable" :data="examStudentList" tooltip-effect="dark"
+									style="width: 100%" :cell-style="nameStyle" style="height: auto;"
+									:default-sort="{prop: 'tsNo', order: 'ascending'}">
+									<el-table-column prop="tsNo" label="学号" sortable width="200">
+									</el-table-column>
+									<el-table-column prop="realName" label="姓名" sortable width="200">
+									</el-table-column>
+									<el-table-column prop="score" :formatter="formatScore" label="成绩" sortable
+										width="150">
+									</el-table-column>
+									<el-table-column label="提交日期" prop="examStudent.submitTime" align="center" sortable
+										width="200" :formatter="formatSubmitTime">
+									</el-table-column>
+									<el-table-column width="150">
+										<el-link type="primary" slot-scope="scope"
+											v-if="scope.row.examStudent.status===0">
+											催交
+										</el-link>
+										<el-link type="primary" v-else>
+											批阅</el-link>
+									</el-table-column>
+								</el-table>
+								<el-row>
+									<el-pagination @size-change="pageSizeChange" @current-change="currentChange"
+										:current-page="pageData.currentPage" :page-sizes="[5, 10, 15, 20]"
+										:page-size="pageData.pageSize" layout="total, sizes, prev, pager, next, jumper"
+										:total="pageData.pageTotal" style="float: left; margin-top: 25px">
+									</el-pagination>
+								</el-row>
+							</div>
+						</div>
+					</el-main>
+				</div>
+			</el-container>
 		</div>
 	</div>
 </body>
@@ -468,7 +529,15 @@
 			fillPossibleAnswerEditorMap: new Map(),
 			QAPossibleAnswerEditorMap: new Map(),
 			examQuestionCardMapStatus: false,
-			originalExamQuestionList: []
+			originalExamQuestionList: [],
+			pageData: {
+				currentPage: 1,
+				pageSize: 10,
+				pageTotal: 4,
+				search: ""
+			},
+			examStudentList: [],
+
 		},
 		methods: {
 			switchKeyPath(key, keyPath) {
@@ -974,11 +1043,53 @@
 				}).catch(() => {
 					this.$message.error('服务器繁忙，请稍候再试！')
 				})
-			}
+			},
+			nameStyle(column) {
+				if (column.columnIndex === 2) {
+					return "font-weight: bold";
+				}
+			},
+			formatScore(row) {
+				let status = row.examStudent.status;
+				let totalScore = this.exam.totalScore;
+				switch (status) {
+					case 0:
+						return "未交";
+						break;
+					case 1:
+						return "未批/" + totalScore;
+						break;
+					case 2:
+						return row.examStudent.score + "/" + totalScore;
+						break;
+				}
+			},
+			formatSubmitTime(row) {
+				return row.examStudent.status === 0 ? "-" : row.examStudent.submitTime
+			},
+			pageSizeChange(pageSize) {
+				this.pageData.pageSize = pageSize;
+			},
+			currentChange(clickPage) {
+				this.pageData.currentPage = clickPage;
+			},
+			getExamStudentData() {
+				yxt.http.get("users/examId/" + yxt.getUrlParam("id") + "/"
+					+ this.pageData.currentPage + "/"
+					+ this.pageData.pageSize + "?search="
+					+ this.pageData.search)
+					.then(({ data }) => {
+						if (data.success) {
+							this.examStudentList = data.queryResult.data;
+							this.pageData.pageTotal = data.queryResult.total;
+						}
+					})
+			},
 		},
 		created() {
 			this.verify();
 			this.getExamData();
+			this.getExamStudentData();
 		},
 		watch: {
 			examQuestionList: {
@@ -991,7 +1102,13 @@
 					})
 					this.exam.totalScore = isNaN(totalScore) ? 0 : totalScore;
 				}
-			}
+			},
+			pageData: {
+                deep: true,
+                handler() {
+                    this.getExamStudentData();
+                }
+            }
 		}
 	})
 </script>

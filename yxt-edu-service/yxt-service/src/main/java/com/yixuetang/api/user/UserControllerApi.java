@@ -127,4 +127,17 @@ public interface UserControllerApi {
     @ApiImplicitParam(name = "userId", value = "用户id", required = true,
             paramType = "path", dataType = "long")
     QueryResponse findCourseUsers(long userId);
+
+    @ApiOperation("分页条件查询某次测试（考试）下的成员")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "examId", value = "测试（考试）id", required = true,
+                    paramType = "path", dataType = "long"),
+            @ApiImplicitParam(name = "currentPage", value = "当前页码数", required = true,
+                    paramType = "path", dataType = "long"),
+            @ApiImplicitParam(name = "pageSize", value = "每页显示条数", required = true,
+                    paramType = "path", dataType = "long"),
+            @ApiImplicitParam(name = "search", value = "搜索字段（学号、姓名）",
+                    paramType = "query", dataType = "String")
+    })
+    QueryResponse findPageByExamId(long examId, long currentPage, long pageSize, String search);
 }

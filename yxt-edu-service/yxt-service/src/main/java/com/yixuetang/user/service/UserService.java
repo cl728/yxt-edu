@@ -161,4 +161,15 @@ public interface UserService {
      * @return 响应结果实体类
      */
     QueryResponse findCourseUsers(long userId);
+
+    /**
+     * 分页条件查询某次作业下的成员
+     *
+     * @param examId      测试（考试）id
+     * @param currentPage 当前页码数
+     * @param pageSize    每页显示条数
+     * @param search      搜索字段（学号、姓名）
+     * @return 响应结果实体类
+     */
+    QueryResponse findPageByExamId(long examId, long currentPage, long pageSize, String search);
 }
