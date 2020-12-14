@@ -4,6 +4,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.yixuetang.api.exam.ExamControllerApi;
 import com.yixuetang.entity.request.exam.InsertExam;
 import com.yixuetang.entity.request.exam.question.ExamQuestionRequest;
+import com.yixuetang.entity.request.exam.question.ExamQuestionStudentRequest;
 import com.yixuetang.entity.response.CommonResponse;
 import com.yixuetang.entity.response.QueryResponse;
 import com.yixuetang.entity.response.code.CommonCode;
@@ -93,10 +94,41 @@ public class ExamController implements ExamControllerApi {
     }
 
     @Override
-    @GetMapping("question/examId/{examId}/teacherId/{userId}")
+    @GetMapping("question/examId/{examId}/userId/{userId}")
     public QueryResponse findListByExamId(@PathVariable("examId") long examId,
                                           @PathVariable("userId") long userId) {
         return this.examService.findListByExamId( examId, userId );
+    }
+
+    @Override
+    @GetMapping("question/examQuestionStudent/examId/{examId}/questionNumber/{questionNumber}/studentId/{studentId}")
+    public QueryResponse getExamQuestionStudent(@PathVariable("examId") long examId,
+                                                @PathVariable("questionNumber") int questionNumber,
+                                                @PathVariable("studentId") long studentId) {
+        return this.examService.getExamQuestionStudent( examId, questionNumber, studentId );
+    }
+
+    @Override
+    @PostMapping("question/examQuestionStudent/examId/{examId}/questionNumber/{questionNumber}/studentId/{studentId}")
+    public CommonResponse saveExamQuestionStudent(@PathVariable("examId") long examId,
+                                                  @PathVariable("questionNumber") int questionNumber,
+                                                  @PathVariable("studentId") long studentId,
+                                                  @RequestBody ExamQuestionStudentRequest examQuestionStudentRequest) {
+        return this.examService.saveExamQuestionStudent( examId, questionNumber, studentId, examQuestionStudentRequest );
+    }
+
+    @Override
+    @PostMapping("examId/{examId}/studentId/{studentId}")
+    public CommonResponse submitExam(@PathVariable("examId") long examId,
+                                     @PathVariable("studentId") long studentId) {
+        return this.examService.submitExam( examId, studentId );
+    }
+
+    @Override
+    @GetMapping("examStudent/examId/{examId}/studentId/{studentId}")
+    public QueryResponse getExamStudent(@PathVariable("examId") long examId,
+                                        @PathVariable("studentId") long studentId) {
+        return this.examService.getExamStudent( examId, studentId );
     }
 }
 

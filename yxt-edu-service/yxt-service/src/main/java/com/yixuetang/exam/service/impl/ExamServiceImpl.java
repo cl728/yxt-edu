@@ -18,6 +18,7 @@ import com.yixuetang.entity.exam.question.QA;
 import com.yixuetang.entity.exam.question.Select;
 import com.yixuetang.entity.request.exam.InsertExam;
 import com.yixuetang.entity.request.exam.question.ExamQuestionRequest;
+import com.yixuetang.entity.request.exam.question.ExamQuestionStudentRequest;
 import com.yixuetang.entity.request.exam.question.SelectChoice;
 import com.yixuetang.entity.response.CommonResponse;
 import com.yixuetang.entity.response.QueryResponse;
@@ -44,6 +45,7 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.CollectionUtils;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -218,7 +220,11 @@ public class ExamServiceImpl implements ExamService {
             select.setType( StringUtils.equals( examQuestionRequest.getQuestionTypeName(), "单选题" ) ? 0 : 1 );
             select.setContent( examQuestionRequest.getContent() );
             select.setChoices( JSONObject.toJSONString( examQuestionRequest.getSelectChoices() ) );
-            select.setAnswer( select.getType() == 0 ? examQuestionRequest.getSingleSelectAnswer() : JSONObject.toJSONString( examQuestionRequest.getMultiSelectAnswer() ) );
+            List<String> multiSelectAnswer = examQuestionRequest.getMultiSelectAnswer();
+            if (!CollectionUtils.isEmpty( multiSelectAnswer )) {
+                Collections.sort( multiSelectAnswer );
+            }
+            select.setAnswer( select.getType() == 0 ? examQuestionRequest.getSingleSelectAnswer() : JSONObject.toJSONString( multiSelectAnswer ) );
             select.setAnalysis( examQuestionRequest.getAnalysis() );
             select.setScore( examQuestionRequest.getScore() );
             if (isNoneExist) {
@@ -307,7 +313,7 @@ public class ExamServiceImpl implements ExamService {
                 .eq( "question_number", questionNumber ) );
 
         // 更新题号：比该题目题号大的题目需要减一
-        examQuestionMapper.updateQuestionNumberLargerThanDeleted(examId, questionNumber);
+        examQuestionMapper.updateQuestionNumberLargerThanDeleted( examId, questionNumber );
 
         return new CommonResponse( CommonCode.SUCCESS );
     }
@@ -447,12 +453,23 @@ public class ExamServiceImpl implements ExamService {
             ExceptionThrowUtils.cast( CommonCode.INVALID_PARAM );
         }
 
-        // 学生不允许查看未开始的测试
-        if (user.getRole().getId() == 3) {
+        long roleId = user.getRole().getId();
+        int examStudentStatus = 0;
+        if (roleId == 3) {
+            // 获取该名学生的答题情况
+            examStudentStatus = examStudentMapper.selectOne(
+                    new QueryWrapper<ExamStudent>()
+                            .eq( "exam_id", examId )
+                            .eq( "student_id", userId ) )
+                    .getStatus();
+            // 学生不允许查看未开始的测试
             if (!exam.getStatus() || new Date().getTime() < exam.getStartTime().getTime()) {
                 ExceptionThrowUtils.cast( CommonCode.INVALID_PARAM );
             }
         }
+
+        // 当且仅当查询者为学生，并且其未提交测试时，禁止查看参考答案和解析
+        boolean isForbidden = roleId == 3 && examStudentStatus == 0;
 
         List<ExamQuestionRequest> examQuestionRespList = new ArrayList<>();
 
@@ -468,17 +485,19 @@ public class ExamServiceImpl implements ExamService {
                             .questionTypeName( getQuestionTypeName( questionType, questionId ) )
                             .score( getQuestionScore( questionType, questionId ) )
                             .content( getQuestionContent( questionType, questionId ) )
-                            .singleSelectAnswer( getQuestionSingleSelectAnswer( questionType, questionId ) )
-                            .multiSelectAnswer( getQuestionMultiSelectAnswer( questionType, questionId ) )
-                            .judgeAnswer( getQuestionJudgeAnswer( questionType, questionId ) )
-                            .fillAnswer( getQuestionFillAnswer( questionType, questionId ) )
-                            .questionAndAnswer( getQuestionAndAnswer( questionType, questionId ) )
-                            .analysis( getQuestionAnalysis( questionType, questionId ) )
+                            .singleSelectAnswer( isForbidden ? null : getQuestionSingleSelectAnswer( questionType, questionId ) )
+                            .multiSelectAnswer( isForbidden ? null : getQuestionMultiSelectAnswer( questionType, questionId ) )
+                            .judgeAnswer( isForbidden ? null : getQuestionJudgeAnswer( questionType, questionId ) )
+                            .fillAnswer( isForbidden ? null : getQuestionFillAnswer( questionType, questionId ) )
+                            .questionAndAnswer( isForbidden ? null : getQuestionAndAnswer( questionType, questionId ) )
+                            .analysis( isForbidden ? null : getQuestionAnalysis( questionType, questionId ) )
                             .selectChoices( getQuestionSelectChoices( questionType, questionId ) )
                             .build();
 
                     examQuestionRespList.add( examQuestionRequest );
                 } );
+
+        examQuestionRespList.sort( Comparator.comparing( ExamQuestionRequest::getQuestionNumber ) );
 
         return new QueryResponse( CommonCode.SUCCESS, new QueryResult<>( examQuestionRespList, examQuestionRespList.size() ) );
     }
@@ -511,6 +530,211 @@ public class ExamServiceImpl implements ExamService {
         this.examMapper.deleteById( examId );
 
         return new CommonResponse( CommonCode.SUCCESS );
+    }
+
+    @Override
+    public QueryResponse getExamQuestionStudent(long examId, int questionNumber, long studentId) {
+
+        ExamQuestion examQuestion = checkParamsAndGetExamQuestion( examId, questionNumber, studentId );
+
+        long examQuestionId = examQuestion.getId();
+
+        ExamQuestionStudent examQuestionStudent = getExamQuestionStudent( studentId, examQuestionId );
+
+        List<ExamQuestionStudent> examQuestionStudents =
+                examQuestionStudent == null
+                        ? new ArrayList<>()
+                        : Collections.singletonList( examQuestionStudent );
+
+        return new QueryResponse( CommonCode.SUCCESS,
+                new QueryResult<>( examQuestionStudents, examQuestionStudents.size() ) );
+    }
+
+    @Override
+    @Transactional
+    public CommonResponse saveExamQuestionStudent(long examId, int questionNumber, long studentId, ExamQuestionStudentRequest examQuestionStudentRequest) {
+
+        ExamQuestion examQuestion = checkParamsAndGetExamQuestion( examId, questionNumber, studentId );
+
+        long examQuestionId = examQuestion.getId();
+
+        ExamQuestionStudent foundExamQuestionStudent = getExamQuestionStudent( studentId, examQuestionId );
+
+        if (ObjectUtils.isEmpty( foundExamQuestionStudent )) {
+            ExamQuestionStudent examQuestionStudent = ExamQuestionStudent.builder()
+                    .id( null )
+                    .examQuestionId( examQuestionId )
+                    .studentId( studentId )
+                    .answer( getStudentAnswer( examQuestionStudentRequest ) )
+                    .score( getStudentScore( examQuestionStudentRequest, examId ) )
+                    .build();
+            examQuestionStudentMapper.insert( examQuestionStudent );
+        } else {
+            foundExamQuestionStudent.setAnswer( getStudentAnswer( examQuestionStudentRequest ) );
+            foundExamQuestionStudent.setScore( getStudentScore( examQuestionStudentRequest, examId ) );
+            examQuestionStudentMapper.updateById( foundExamQuestionStudent );
+        }
+
+        return CommonResponse.SUCCESS();
+    }
+
+    @Override
+    @Transactional
+    public CommonResponse submitExam(long examId, long studentId) {
+        checkParams( examId, studentId );
+
+        // 将学生的测试状态改为1：待批改
+        ExamStudent examStudent = examStudentMapper.selectOne(
+                new QueryWrapper<ExamStudent>()
+                        .eq( "exam_id", examId )
+                        .eq( "student_id", studentId ) );
+        examStudent.setStatus( 1 );
+        examStudent.setSubmitTime( new Date() );
+
+        Set<Long> examQuestionIdSet = examQuestionMapper.selectList(
+                new QueryWrapper<ExamQuestion>()
+                        .eq( "exam_id", examId ) )
+                .stream()
+                .map( ExamQuestion::getId )
+                .collect( Collectors.toSet() );
+
+        // 试卷总题数
+        int totalQuestionCount = examQuestionMapper.selectCount( new QueryWrapper<ExamQuestion>().eq( "exam_id", examId ) );
+
+        // 该名学生已有分数的题目数
+        int scoredCount =
+                examQuestionStudentMapper.selectList(
+                        new QueryWrapper<ExamQuestionStudent>()
+                                .eq( "student_id", studentId ) )
+                        .stream()
+                        .filter( examQuestionStudent ->
+                                examQuestionIdSet.contains( examQuestionStudent.getExamQuestionId() )
+                                        && examQuestionStudent.getScore() != null )
+                        .collect( Collectors.toList() )
+                        .size();
+
+        // 在此基础上，如果所有题目都有分数，将学生的测试状态改为2：已批改
+        if (scoredCount == totalQuestionCount) {
+            examStudent.setStatus( 2 );
+
+            // 计算该名学生的总得分
+            double totalScore = 0.0;
+            List<Double> scoreList = examQuestionStudentMapper.selectList(
+                    new QueryWrapper<ExamQuestionStudent>()
+                            .eq( "student_id", studentId ) )
+                    .stream()
+                    .filter( examQuestionStudent -> examQuestionIdSet.contains( examQuestionStudent.getExamQuestionId() ) )
+                    .map( ExamQuestionStudent::getScore )
+                    .collect( Collectors.toList() );
+            for (double score : scoreList) {
+                totalScore += score;
+            }
+            examStudent.setScore( totalScore );
+        }
+
+        // 执行更新操作
+        examStudentMapper.update( examStudent,
+                new UpdateWrapper<ExamStudent>()
+                        .eq( "exam_id", examId )
+                        .eq( "student_id", studentId ) );
+
+        return CommonResponse.SUCCESS();
+    }
+
+    @Override
+    public QueryResponse getExamStudent(long examId, long studentId) {
+        checkParams( examId, studentId );
+
+        ExamStudent examStudent = examStudentMapper.selectOne(
+                new QueryWrapper<ExamStudent>()
+                        .eq( "exam_id", examId )
+                        .eq( "student_id", studentId ) );
+
+        return new QueryResponse( CommonCode.SUCCESS,
+                new QueryResult<>( Collections.singletonList( examStudent ), 1 ) );
+    }
+
+    private void checkParams(long examId, long studentId) {
+        // 参数校验
+        Exam exam = examMapper.selectById( examId );
+
+        User user = userMapper.selectById( studentId );
+
+        if (!ObjectUtils.allNotNull( exam, user )) {
+            ExceptionThrowUtils.cast( CommonCode.INVALID_PARAM );
+        }
+    }
+
+    private Double getStudentScore(ExamQuestionStudentRequest examQuestionStudentRequest, long examId) {
+        String questionTypeName = examQuestionStudentRequest.getQuestionTypeName();
+        ExamQuestion examQuestion = examQuestionMapper.selectOne(
+                new QueryWrapper<ExamQuestion>()
+                        .eq( "exam_id", examId )
+                        .eq( "question_number", examQuestionStudentRequest.getQuestionNumber() ) );
+        long examQuestionId = examQuestion.getQuestionId();
+        switch (questionTypeName) {
+            case "单选题":
+                Select singleSelect = selectMapper.selectById( examQuestionId );
+                String studentSingleSelectAnswer = examQuestionStudentRequest.getStudentSingleSelectAnswer();
+                if (Objects.equals( studentSingleSelectAnswer, singleSelect.getAnswer() )) {
+                    return singleSelect.getScore();
+                }
+                return 0.0;
+            case "多选题":
+                Select multiSelect = selectMapper.selectById( examQuestionId );
+                List<String> studentMultiSelectAnswer = examQuestionStudentRequest.getStudentMultiSelectAnswer();
+                Collections.sort( studentMultiSelectAnswer );
+                if (multiSelect.getAnswer().equals( JSONObject.toJSONString( studentMultiSelectAnswer ) )) {
+                    return multiSelect.getScore();
+                }
+                return 0.0;
+            case "判断题":
+                Judge judge = judgeMapper.selectById( examQuestionId );
+                Boolean studentJudgeAnswer = examQuestionStudentRequest.getStudentJudgeAnswer();
+                if (Objects.equals( studentJudgeAnswer, judge.getAnswer() )) {
+                    return judge.getScore();
+                }
+                return 0.0;
+            case "填空题":
+                Fill fill = fillMapper.selectById( examQuestionId );
+                if (StringUtils.isNoneBlank( fill.getAnswer() )) {
+                    String studentFillAnswer = examQuestionStudentRequest.getStudentFillAnswer();
+                    if (Objects.equals( studentFillAnswer, fill.getAnswer() )) {
+                        return fill.getScore();
+                    }
+                    return 0.0;
+                }
+                return null;
+            default:
+                return null;
+        }
+    }
+
+    private String getStudentAnswer(ExamQuestionStudentRequest examQuestionStudentRequest) {
+        String questionTypeName = examQuestionStudentRequest.getQuestionTypeName();
+        switch (questionTypeName) {
+            case "单选题":
+                return examQuestionStudentRequest.getStudentSingleSelectAnswer();
+            case "多选题":
+                List<String> studentMultiSelectAnswer = examQuestionStudentRequest.getStudentMultiSelectAnswer();
+                Collections.sort( studentMultiSelectAnswer );
+                return JSONObject.toJSONString( studentMultiSelectAnswer );
+            case "判断题":
+                return JSONObject.toJSONString( examQuestionStudentRequest.getStudentJudgeAnswer() );
+            case "填空题":
+                return examQuestionStudentRequest.getStudentFillAnswer();
+            case "问答题":
+                return examQuestionStudentRequest.getStudentQuestionAndAnswer();
+            default:
+                return null;
+        }
+    }
+
+    private ExamQuestionStudent getExamQuestionStudent(long studentId, long examQuestionId) {
+        return examQuestionStudentMapper.selectOne(
+                new QueryWrapper<ExamQuestionStudent>()
+                        .eq( "exam_question_id", examQuestionId )
+                        .eq( "student_id", studentId ) );
     }
 
     private Integer getCount(int status, Long examId) {
@@ -617,4 +841,20 @@ public class ExamServiceImpl implements ExamService {
                 : null;
     }
 
+    private ExamQuestion checkParamsAndGetExamQuestion(long examId, int questionNumber, long studentId) {
+        Exam exam = examMapper.selectById( examId );
+
+        ExamQuestion examQuestion = examQuestionMapper.selectOne(
+                new QueryWrapper<ExamQuestion>()
+                        .eq( "exam_id", examId )
+                        .eq( "question_number", questionNumber ) );
+
+        User user = userMapper.selectById( studentId );
+
+        // 参数校验
+        if (!ObjectUtils.allNotNull( exam, examQuestion, user )) {
+            ExceptionThrowUtils.cast( CommonCode.INVALID_PARAM );
+        }
+        return examQuestion;
+    }
 }

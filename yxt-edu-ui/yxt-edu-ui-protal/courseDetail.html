@@ -533,7 +533,8 @@
                                         default-expand-all draggable @node-drop="handleDrop">
                                         <span class="custom-tree-node" slot-scope="{ node, data }">
                                             <span><img :src="getResourceSrcByName(node.label)" alt="" srcset=""
-                                                    style="height: 16px; width: 16px; margin-right: 5px;">{{ node.label }}</span>
+                                                    style="height: 16px; width: 16px; margin-right: 5px;">{{ node.label
+                                                }}</span>
                                             <span>
                                                 <el-button type="text" size="mini"
                                                     @click="showRenameResourceForm(node, data)">
@@ -679,6 +680,10 @@
                                                                     </el-tag>
                                                                     <el-tag :type="getExamStatusType(exam.examStatus)"
                                                                         v-text="exam.examStatus">未发布</el-tag>
+                                                                    <el-tag :type="getExamStatusType(exam.examStatus)"
+                                                                        v-if="exam.examStudentStatus > 0"
+                                                                        v-text="exam.examStudentStatus === 2 ? '已批改' : '未批改'">
+                                                                    </el-tag>
                                                                     <!-- <span
                                                                         style="padding-left: 30px;font-size: 15px;color: #5F6368">限时：无</span> -->
                                                                     <span
@@ -698,7 +703,7 @@
                                                                         v-show="exam.examStatus === '已发布' && exam.examStudentStatus === 0">
                                                                         开始答题
                                                                     </el-button>
-                                                                    <el-button type="info" plain
+                                                                    <el-button type="primary" plain
                                                                         v-show="(exam.examStatus === '已发布' && exam.examStudentStatus === 1) || 
                                                                         (exam.examStatus === '已结束' && 2 > exam.examStudentStatus)">查看完成情况
                                                                     </el-button>

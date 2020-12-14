@@ -27,9 +27,11 @@
 		<el-menu default-active="1" class="el-menu-demo" mode="horizontal" @select="switchKeyPath">
 			<el-menu-item style="float: left;">
 				<el-button type="text" @click="location.href = 'courseDetail.html?id=' + exam.course.id">
-					<i class="el-icon-back"></i></el-button>
+					<i class="el-icon-back"></i>
+				</el-button>
 				<el-button type="primary" round @click="location.href = 'courseDetail.html?id=' + exam.course.id">
-					<span v-text="exam.course.cname">数据结构</span></el-button>
+					<span v-text="exam.course.cname">数据结构</span>
+				</el-button>
 			</el-menu-item>
 
 			<el-menu-item index="1" style="font-size: 20px;margin-left: 550px;">试题编辑</el-menu-item>
@@ -67,7 +69,8 @@
 						<h5 style="font-size: 14px;"> <i class="el-icon-caret-bottom"></i> 试题概览 </h5>
 						<div style="font-weight: 700; margin: -12px 0 0; font-size: 14px;">
 							共 <span style="color: #32BAF0; padding: 0 3px;" v-text="exam.questionCount">0</span> 题，总共
-							<span style="color: #32BAF0; padding: 0 3px;" v-text="exam.totalScore">0</span> 分</div>
+							<span style="color: #32BAF0; padding: 0 3px;" v-text="exam.totalScore">0</span> 分
+						</div>
 					</el-card>
 					<!-- 添加试题类型 -->
 					<el-card class="box-card" shadow="never" id="exam-question-preview"
@@ -774,18 +777,7 @@
 					case 2: // 填空题
 						// 处理 fillAnswer
 						if (examQuestion.fillAnswer !== '') {
-							let fillAnswerStr = examQuestion.fillAnswer.replace(new RegExp("<p>", "g"), "");
-							let fillAnswers = fillAnswerStr.split("</p>");
-							fillAnswers.splice(fillAnswers.length - 1, 1);
-							let returnVal = "";
-							for (let i = 0; i < fillAnswers.length; i++) {
-								if (i < fillAnswers.length - 1) {
-									returnVal += fillAnswers[i] + "#";
-								} else {
-									returnVal += fillAnswers[i];
-								}
-							}
-							examQuestion.fillAnswer = returnVal;
+							examQuestion.fillAnswer = this.getFillAnswerSplitBySharp(examQuestion.fillAnswer);
 						}
 						break;
 					default:
@@ -867,7 +859,7 @@
 				}, 20);
 			},
 			getExamQuestionData() {
-				yxt.http.get("exam/question/examId/" + yxt.getUrlParam("id") + "/teacherId/" + this.user.id).then(({ data }) => {
+				yxt.http.get("exam/question/examId/" + yxt.getUrlParam("id") + "/userId/" + this.user.id).then(({ data }) => {
 					if (data.success) {
 						this.examQuestionList = data.queryResult.data;
 						this.originalExamQuestionList = JSON.parse(JSON.stringify(this.examQuestionList))
@@ -910,6 +902,20 @@
 				let answerStrs = fillAnswer.split("#");
 				for (let answer of answerStrs) {
 					returnVal += "<p>" + answer + "</p>";
+				}
+				return returnVal;
+			},
+			getFillAnswerSplitBySharp(fillAnswer) {
+				let fillAnswerStr = fillAnswer.replace(new RegExp("<p>", "g"), "");
+				let fillAnswers = fillAnswerStr.split("</p>");
+				fillAnswers.splice(fillAnswers.length - 1, 1);
+				let returnVal = "";
+				for (let i = 0; i < fillAnswers.length; i++) {
+					if (i < fillAnswers.length - 1) {
+						returnVal += fillAnswers[i] + "#";
+					} else {
+						returnVal += fillAnswers[i];
+					}
 				}
 				return returnVal;
 			},
@@ -984,12 +990,6 @@
 						totalScore += isNaN(examQuestion.score) ? 0 : examQuestion.score;
 					})
 					this.exam.totalScore = isNaN(totalScore) ? 0 : totalScore;
-				}
-			},
-			originalExamQuestionList: {
-				deep: true,
-				handler() {
-					console.log(this.originalExamQuestionList)
 				}
 			}
 		}

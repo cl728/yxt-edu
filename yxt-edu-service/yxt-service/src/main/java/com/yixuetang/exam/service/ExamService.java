@@ -3,6 +3,7 @@ package com.yixuetang.exam.service;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.yixuetang.entity.request.exam.InsertExam;
 import com.yixuetang.entity.request.exam.question.ExamQuestionRequest;
+import com.yixuetang.entity.request.exam.question.ExamQuestionStudentRequest;
 import com.yixuetang.entity.response.CommonResponse;
 import com.yixuetang.entity.response.QueryResponse;
 
@@ -101,4 +102,44 @@ public interface ExamService {
      * @return 响应结果实体类
      */
     QueryResponse findListByExamId(long examId, long userId);
+
+    /**
+     * 查询某个用户某次测试（考试）下的某道题的完成情况
+     *
+     * @param examId         测试（考试）id
+     * @param questionNumber 题号
+     * @param studentId      学生id
+     * @return 响应结果实体类
+     */
+    QueryResponse getExamQuestionStudent(long examId, int questionNumber, long studentId);
+
+    /**
+     * 保存某个用户某次测试（考试）下的某道题的完成情况
+     *
+     * @param examId                     测试（考试）id
+     * @param questionNumber             题号
+     * @param studentId                  学生id
+     * @param examQuestionStudentRequest 学生答题请求实体
+     * @return 响应结果实体类
+     */
+    CommonResponse saveExamQuestionStudent(long examId, int questionNumber, long studentId, ExamQuestionStudentRequest examQuestionStudentRequest);
+
+    /**
+     * 学生提交测试（考试）
+     *
+     * @param examId    测试（考试）id
+     * @param studentId 学生id
+     * @return 响应结果实体类
+     */
+    CommonResponse submitExam(long examId, long studentId);
+
+    /**
+     * 获取学生某次考试情况
+     *
+     * @param examId    测试（考试）id
+     * @param studentId 学生id
+     * @return 响应结果实体类
+     */
+    QueryResponse getExamStudent(long examId, long studentId);
+
 }
