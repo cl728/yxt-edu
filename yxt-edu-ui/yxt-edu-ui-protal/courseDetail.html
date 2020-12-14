@@ -703,11 +703,11 @@
                                                                         v-show="exam.examStatus === '已发布' && exam.examStudentStatus === 0">
                                                                         开始答题
                                                                     </el-button>
-                                                                    <el-button type="primary" plain
+                                                                    <el-button type="primary" plain @click="location.href = 'examDetail.html?id=' + exam.id"
                                                                         v-show="(exam.examStatus === '已发布' && exam.examStudentStatus === 1) || 
                                                                         (exam.examStatus === '已结束' && 2 > exam.examStudentStatus)">查看完成情况
                                                                     </el-button>
-                                                                    <el-button type="success" plain
+                                                                    <el-button type="success" plain @click="location.href = 'examDetail.html?id=' + exam.id"
                                                                         v-show="exam.examStudentStatus === 2">查看成绩
                                                                     </el-button>
                                                                 </div>
@@ -725,7 +725,7 @@
                                                             <el-col :span="12">
                                                                 <el-row style="height: 55px;">
                                                                     <el-col :span="24">
-                                                                        <el-link :underline="false"
+                                                                        <el-link :underline="false" :href="'examPaper.html?id=' + exam.id"
                                                                             style="color: #3B3D45;font-size: 26px;float: left;padding-left: 30px;padding-top: 3px">
                                                                             <b v-text="exam.title">未发布_测试（考试）</b>
                                                                         </el-link>

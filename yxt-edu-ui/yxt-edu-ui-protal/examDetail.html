@@ -1,0 +1,419 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8">
+	<title>测试详情</title>
+	<link rel="stylesheet" href="https://cdn.bootcss.com/element-ui/2.13.2/theme-chalk/index.css">
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css">
+	<link rel="stylesheet" href="css/comment.css">
+	<style>
+		#exam-question-preview>.el-card__body {
+			padding: 0 20px 5px 20px;
+		}
+
+		#select-radio-group>.item {
+			padding: 0
+		}
+
+		.el-checkbox-button.is-checked .el-checkbox-button__inner {
+			background-color: #F2F6FC;
+		}
+	</style>
+</head>
+
+<body>
+	<div id="app">
+		<el-menu default-active="1" class="el-menu-demo" mode="horizontal">
+			<el-menu-item style="float: left;">
+				<el-button type="text" @click="location.href = 'courseDetail.html?id=' + exam.course.id">
+					<i class="el-icon-back"></i>
+				</el-button>
+				<el-button type="primary" round @click="location.href = 'courseDetail.html?id=' + exam.course.id">
+					<span v-text="exam.course.cname">数据结构</span>
+				</el-button>
+			</el-menu-item>
+
+			<el-menu-item index="1" style="font-size: 20px;margin-left: 650px;">测试详情</el-menu-item>
+
+			<el-menu-item style="float: right;">
+				<el-dropdown trigger="click">
+					<span class="el-dropdown-link" style="font-size: 15px;">
+						<i class="el-icon-suitcase"></i>工具
+					</span>
+					<el-dropdown-menu slot="dropdown">
+						<el-dropdown-item>论文查重</el-dropdown-item>
+						<el-dropdown-item>学术存证</el-dropdown-item>
+						<el-dropdown-item>邀请教师</el-dropdown-item>
+					</el-dropdown-menu>
+				</el-dropdown>
+
+				<el-popover placement="bottom" title="通知信息:" width="200" trigger="click" content="暂无通知">
+					<el-button slot="reference" type="text" icon="el-icon-bell" style="padding-inline: 10px;">
+					</el-button>
+				</el-popover>
+
+				<el-avatar :src="user.avatar"></el-avatar>
+			</el-menu-item>
+		</el-menu>
+
+		<!-- 测试详情 -->
+		<div v-show="activeIndex === '1'">
+			<el-container style="width: 1200px; margin-left: 100px; margin-top: 10px;">
+				<div style="margin-left: 300px;">
+					<el-main>
+						<!-- 测试（考试）标题及成绩 -->
+						<el-row>
+							<el-col :span="4" style="color: #3B3D45;font-size: 22px;" v-text="exam.title">hello</el-col>
+							<el-col :span="2" style="float: right;" v-if="examStudent.status === 2">
+								<span style="color: #9facb2; font-size: large;">成绩：</span>
+								<span style="color: red; font-size: larger;" v-text="examStudent.score">5</span>
+							</el-col>
+						</el-row>
+						<!-- 试卷题目列表 -->
+						<el-card shadow="hover"
+							style="margin-top: 10px;width: 1200px;height: auto; overflow-y: auto; border-radius: 10px;border-width: 2px;padding: 0;">
+							<div v-for="(examQuestion, questionIndex) in examQuestionList" :key="questionIndex">
+								<!-- 题号、题目类型名称、分值 -->
+								<el-row>
+									<el-col :span="12">
+										<b style="font-size: 14px;" v-text="examQuestion.questionNumber">1</b>.
+										<span style="margin-left: 10px; margin-right: 10px;"
+											v-text="examQuestion.questionTypeName">单选题</span>
+										<span style="margin-left: 5px;" v-text="examQuestion.score"></span> 分
+									</el-col>
+									<el-col :span="2" style="float: right;" v-if="examStudent.status === 2">
+										<span style="color: #9facb2">得分：</span>
+										<span style="color: red;"
+											v-text="examStudentAnswerList[questionIndex].studentScore">5</span>
+									</el-col>
+								</el-row>
+								<!-- 题干 -->
+								<el-row style="margin-top: 10px;">
+									<div v-html="examQuestion.content"></div>
+								</el-row>
+								<!-- 选项 -->
+								<!-- 1. 单选题 -->
+								<div v-show="examQuestion.questionTypeName === '单选题'">
+									<el-row style="margin-top: 10px;"
+										v-for="(choice, index) in examQuestion.selectChoices" :key="index">
+										<el-col :span="2" id="select-radio-group" style="width: 5.8%;">
+											<el-radio-group
+												v-model="examStudentAnswerList[questionIndex].studentSingleSelectAnswer">
+												<el-radio-button style="width: 50px;" :label="choice.name" disabled>
+												</el-radio-button>
+											</el-radio-group>
+										</el-col>
+										<el-col :span="20">
+											<div v-text="choice.value" style="line-height: 12px; margin-top: 12px;">
+												hello</div>
+										</el-col>
+									</el-row>
+									<el-row style="margin-top: 20px;" v-if="examStudent.status === 2">
+										<div style="font-size: 12px; margin-bottom: 8px; color: #90CADF;">参考答案：</div>
+										<div v-text="examQuestion.singleSelectAnswer"></div>
+									</el-row>
+								</div>
+								<!-- 2. 多选题 -->
+								<div v-show="examQuestion.questionTypeName === '多选题'">
+									<el-row style="margin-top: 10px;"
+										v-for="(choice, index) in examQuestion.selectChoices" :key="index">
+										<el-col :span="2" id="select-radio-group" style="width: 5.8%;">
+											<el-checkbox-group
+												v-model="examStudentAnswerList[questionIndex].studentMultiSelectAnswer">
+												<el-checkbox-button style="width: 50px;" :label="choice.name" disabled>
+												</el-checkbox-button>
+											</el-checkbox-group>
+										</el-col>
+										<el-col :span="20">
+											<div style="line-height: 12px; margin-top: 12px;" v-text="choice.value">
+											</div>
+										</el-col>
+									</el-row>
+									<el-row style="margin-top: 20px;" v-if="examStudent.status === 2">
+										<div style="font-size: 12px; margin-bottom: 8px; color: #90CADF;">参考答案：</div>
+										<div v-text="examQuestion.multiSelectAnswerStr"></div>
+									</el-row>
+								</div>
+								<!-- 3.判断题 -->
+								<div v-show="examQuestion.questionTypeName === '判断题'">
+									<el-row style="margin-top: 10px;"
+										v-for="(choice, index) in examQuestion.judgeChoices" :key="index">
+										<el-col :span="2">
+											<el-radio-group disabled
+												v-model="examStudentAnswerList[questionIndex].studentJudgeAnswer">
+												<el-radio border style="width: 80px;" :label="choice.value">
+													{{choice.name}}
+												</el-radio>
+											</el-radio-group>
+										</el-col>
+									</el-row>
+									<el-row style="margin-top: 20px;" v-if="examStudent.status === 2">
+										<div style="font-size: 12px; margin-bottom: 8px; color: #90CADF;">参考答案：</div>
+										<div v-text="examQuestion.judgeAnswer ? '对' : '错'"></div>
+									</el-row>
+								</div>
+								<!-- 4.填空题 -->
+								<div v-show="examQuestion.questionTypeName === '填空题'">
+									<el-row style="margin-top: 10px;" v-show="examQuestion.fillAnswer !== ''">
+										<el-row style="margin-top: 10px;">
+											<div style="font-size: 12px; margin-bottom: 8px; color: #9facb2;">我的作答：
+											</div>
+											<div v-html="examStudentAnswerList[questionIndex].studentFillAnswer"
+												v-show="examStudentAnswerList[questionIndex].studentFillAnswer !== ''">
+											</div>
+											<div v-show="examStudentAnswerList[questionIndex].studentFillAnswer === ''">
+												本题您没有作答</div>
+										</el-row>
+										<el-row style="margin-top: 10px;" v-if="examStudent.status === 2">
+											<div style="font-size: 12px; margin-bottom: 8px; color: #90CADF;">参考答案：
+											</div>
+											<div v-html="examQuestion.fillAnswer"
+												v-show="examQuestion.fillAnswer !== ''">
+											</div>
+											<div v-show="examQuestion.fillAnswer === ''">暂无</div>
+										</el-row>
+									</el-row>
+								</div>
+								<!-- 5.问答题 -->
+								<div v-show="examQuestion.questionTypeName === '问答题'">
+									<el-row style="margin-top: 10px;">
+										<el-row style="margin-top: 10px;">
+											<div style="font-size: 12px; margin-bottom: 8px; color: #9facb2;">我的作答：
+											</div>
+											<div v-html="examStudentAnswerList[questionIndex].studentQuestionAndAnswer"
+												v-show="examStudentAnswerList[questionIndex].studentQuestionAndAnswer !== ''">
+											</div>
+											<div
+												v-show="examStudentAnswerList[questionIndex].studentQuestionAndAnswer === ''">
+												本题您没有作答</div>
+										</el-row>
+										<el-row style="margin-top: 10px;" v-if="examStudent.status === 2">
+											<div style="font-size: 12px; margin-bottom: 8px; color: #90CADF;">参考答案：
+											</div>
+											<div v-html="examQuestion.questionAndAnswer"
+												v-show="examQuestion.questionAndAnswer !== ''"></div>
+											<div v-show="examQuestion.questionAndAnswer === ''">暂无</div>
+										</el-row>
+									</el-row>
+								</div>
+								<!-- 试题解析 -->
+								<el-row style="margin-top: 20px;" v-if="examStudent.status === 2">
+									<div style="font-size: 12px; margin-bottom: 8px; color: #008000;">试题解析：</div>
+									<div v-html="examQuestion.analysis" v-if="examQuestion.analysis !== ''"></div>
+									<div v-if="examQuestion.analysis === ''">暂无</div>
+								</el-row>
+								<el-divider></el-divider>
+							</div>
+						</el-card>
+					</el-main>
+				</div>
+			</el-container>
+		</div>
+
+	</div>
+	</div>
+</body>
+<script src="https://cdn.bootcss.com/vue/2.6.11/vue.min.js"></script>
+<script src="https://cdn.bootcss.com/axios/0.19.2/axios.min.js"></script>
+<script src="./js/index.js"></script>
+<script src="./js/common.js"></script>
+
+<script>
+	new Vue({
+		el: '#app',
+		data: {
+			activeIndex: '1',
+			user: {},
+			exam: {
+				course: {},
+			},
+			examQuestionList: [],
+			examStudentAnswerList: [],
+			studentAnswerMap: new Map(),
+			examStudent: {}
+		},
+		methods: {
+			verify() {
+				yxt.http.get("/auth/verify/2").then(({ data }) => {
+					if (data.success) {
+						this.user = data.queryResult.data[0];
+						this.getExamQuestionData();
+					} else {
+						location.href = "../index.html"
+					}
+				}).catch(() => {
+					location.href = "../index.html";
+				});
+			},
+			getExamQuestionData() {
+				yxt.http.get("exam/question/examId/" + yxt.getUrlParam("id") + "/userId/" + this.user.id).then(({ data }) => {
+					if (data.success) {
+						this.examQuestionList = data.queryResult.data;
+						for (let i = 0; i < this.examQuestionList.length; i++) {
+							if (this.examQuestionList[i].questionType === 1) {
+								this.examQuestionList[i].judgeChoices =
+									[{ name: '对', value: true },
+									{ name: '错', value: false }];
+							}
+							if (this.examQuestionList[i].questionTypeName === "多选题") {
+								this.examQuestionList[i].multiSelectAnswerStr = this.getMultiSelectAnswerStr(this.examQuestionList[i].multiSelectAnswer)
+							}
+							if (this.examQuestionList[i].questionTypeName === "填空题") {
+								this.examQuestionList[i].fillAnswer = this.getFillAnswerStr(this.examQuestionList[i].fillAnswer)
+							}
+							yxt.http.get("exam/question/examQuestionStudent/examId/" + yxt.getUrlParam("id")
+								+ "/questionNumber/" + this.examQuestionList[i].questionNumber
+								+ "/studentId/" + this.user.id).then(({ data }) => {
+									if (data.success) {
+										if (data.queryResult.data.length === 0) {
+											this.examStudentAnswerList.push({
+												questionNumber: this.examQuestionList[i].questionNumber,
+												questionTypeName: this.examQuestionList[i].questionTypeName,
+												studentSingleSelectAnswer: '',
+												studentMultiSelectAnswer: [],
+												studentJudgeAnswer: undefined,
+												studentFillAnswer: '',
+												studentQuestionAndAnswer: '',
+												studentScore: 0
+											})
+										} else {
+											let studentAnswer = data.queryResult.data[0].answer;
+											let studentScore = data.queryResult.data[0].score;
+											switch (this.examQuestionList[i].questionTypeName) {
+												case '单选题':
+													this.examStudentAnswerList.push({
+														questionNumber: this.examQuestionList[i].questionNumber,
+														questionTypeName: this.examQuestionList[i].questionTypeName,
+														studentSingleSelectAnswer: studentAnswer,
+														studentMultiSelectAnswer: [],
+														studentJudgeAnswer: undefined,
+														studentFillAnswer: '',
+														studentQuestionAndAnswer: '',
+														studentScore: studentScore
+													});
+													break;
+												case '多选题':
+													this.examStudentAnswerList.push({
+														questionNumber: this.examQuestionList[i].questionNumber,
+														questionTypeName: this.examQuestionList[i].questionTypeName,
+														studentSingleSelectAnswer: '',
+														studentMultiSelectAnswer: JSON.parse(studentAnswer),
+														studentJudgeAnswer: undefined,
+														studentFillAnswer: '',
+														studentQuestionAndAnswer: '',
+														studentScore: studentScore
+													});
+													break;
+												case '判断题':
+													this.examStudentAnswerList.push({
+														questionNumber: this.examQuestionList[i].questionNumber,
+														questionTypeName: this.examQuestionList[i].questionTypeName,
+														studentSingleSelectAnswer: '',
+														studentMultiSelectAnswer: [],
+														studentJudgeAnswer: JSON.parse(studentAnswer),
+														studentFillAnswer: '',
+														studentQuestionAndAnswer: '',
+														studentScore: studentScore
+													});
+													break;
+												case '填空题':
+													studentAnswer = this.getFillAnswerStr(studentAnswer)
+													this.examStudentAnswerList.push({
+														questionNumber: this.examQuestionList[i].questionNumber,
+														questionTypeName: this.examQuestionList[i].questionTypeName,
+														studentSingleSelectAnswer: '',
+														studentMultiSelectAnswer: [],
+														studentJudgeAnswer: undefined,
+														studentFillAnswer: studentAnswer,
+														studentQuestionAndAnswer: '',
+														studentScore: studentScore
+													});
+													break;
+												case '问答题':
+													this.examStudentAnswerList.push({
+														questionNumber: this.examQuestionList[i].questionNumber,
+														questionTypeName: this.examQuestionList[i].questionTypeName,
+														studentSingleSelectAnswer: '',
+														studentMultiSelectAnswer: [],
+														studentJudgeAnswer: undefined,
+														studentFillAnswer: '',
+														studentQuestionAndAnswer: studentAnswer,
+														studentScore: studentScore
+													});
+													break;
+											}
+										}
+										this.examStudentAnswerList.sort((obj1, obj2) => {
+											return obj1.questionNumber - obj2.questionNumber;
+										})
+									}
+								})
+						}
+					}
+				})
+			},
+			getExamData() {
+				yxt.http.get("exam/info/examId/" + yxt.getUrlParam("id")).then(({ data }) => {
+					if (data.success) {
+						this.exam = data.queryResult.data[0];
+						yxt.http.get("exam/examStudent/examId/" + yxt.getUrlParam("id")
+							+ "/studentId/" + this.user.id)
+							.then(({ data }) => {
+								if (data.success) {
+									this.examStudent = data.queryResult.data[0]
+								}
+							})
+					}
+				})
+			},
+			getExamStudent() {
+				yxt.http.get("exam/examStudent/examId/" + yxt.getUrlParam("id")
+					+ "/studentId/" + this.user.id)
+					.then(({ data }) => {
+						if (data.success) {
+							this.examStudent = data.queryResult.data[0];
+						}
+					})
+			},
+			getMultiSelectAnswerStr(multiSelectAnswer) {
+				let answerStr = "";
+				for (let answer of multiSelectAnswer) {
+					answerStr += answer;
+				}
+				return answerStr;
+			},
+			getFillAnswerStr(fillAnswer) {
+				let returnVal = "";
+				let answerStrs = fillAnswer.split("#");
+				for (let answer of answerStrs) {
+					returnVal += "<p>" + answer + "</p>";
+				}
+				return returnVal;
+			},
+			getFillAnswerSplitBySharp(fillAnswer) {
+				if (fillAnswer !== '') {
+					let fillAnswerStr = fillAnswer.replace(new RegExp("<p>", "g"), "");
+					let fillAnswers = fillAnswerStr.split("</p>");
+					fillAnswers.splice(fillAnswers.length - 1, 1);
+					let returnVal = "";
+					for (let i = 0; i < fillAnswers.length; i++) {
+						if (i < fillAnswers.length - 1) {
+							returnVal += fillAnswers[i] + "#";
+						} else {
+							returnVal += fillAnswers[i];
+						}
+					}
+					return returnVal;
+				}
+				return ''
+			},
+		},
+		created() {
+			this.verify();
+			this.getExamData();
+		}
+	})
+</script>
+
+</html>
