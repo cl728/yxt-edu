@@ -1,6 +1,7 @@
 package com.yixuetang.exam.service;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.yixuetang.entity.request.exam.EditStudentScoreRequest;
 import com.yixuetang.entity.request.exam.InsertExam;
 import com.yixuetang.entity.request.exam.question.ExamQuestionRequest;
 import com.yixuetang.entity.request.exam.question.ExamQuestionStudentRequest;
@@ -141,5 +142,13 @@ public interface ExamService {
      * @return 响应结果实体类
      */
     QueryResponse getExamStudent(long examId, long studentId);
+
+    /**
+     * 修改学生某道题的得分
+     *
+     * @param editStudentScoreRequest 修改学生某道题的得分请求实体类
+     * @return 响应结果实体类
+     */
+    CommonResponse editStudentScore(EditStudentScoreRequest editStudentScoreRequest);
 
 }

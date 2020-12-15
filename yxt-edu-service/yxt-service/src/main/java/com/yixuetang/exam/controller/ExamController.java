@@ -2,6 +2,7 @@ package com.yixuetang.exam.controller;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.yixuetang.api.exam.ExamControllerApi;
+import com.yixuetang.entity.request.exam.EditStudentScoreRequest;
 import com.yixuetang.entity.request.exam.InsertExam;
 import com.yixuetang.entity.request.exam.question.ExamQuestionRequest;
 import com.yixuetang.entity.request.exam.question.ExamQuestionStudentRequest;
@@ -129,6 +130,12 @@ public class ExamController implements ExamControllerApi {
     public QueryResponse getExamStudent(@PathVariable("examId") long examId,
                                         @PathVariable("studentId") long studentId) {
         return this.examService.getExamStudent( examId, studentId );
+    }
+
+    @Override
+    @PutMapping("examQuestionStudent/score")
+    public CommonResponse editStudentScore(@RequestBody EditStudentScoreRequest editStudentScoreRequest) {
+        return this.examService.editStudentScore( editStudentScoreRequest );
     }
 }
 

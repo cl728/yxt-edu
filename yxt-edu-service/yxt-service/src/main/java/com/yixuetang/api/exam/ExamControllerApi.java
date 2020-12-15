@@ -1,5 +1,6 @@
 package com.yixuetang.api.exam;
 
+import com.yixuetang.entity.request.exam.EditStudentScoreRequest;
 import com.yixuetang.entity.request.exam.InsertExam;
 import com.yixuetang.entity.request.exam.question.ExamQuestionRequest;
 import com.yixuetang.entity.request.exam.question.ExamQuestionStudentRequest;
@@ -129,4 +130,7 @@ public interface ExamControllerApi {
                     paramType = "path", dataType = "long")
     })
     QueryResponse getExamStudent(long examId, long studentId);
+
+    @ApiOperation("修改学生某道题的得分")
+    CommonResponse editStudentScore(EditStudentScoreRequest editStudentScoreRequest);
 }

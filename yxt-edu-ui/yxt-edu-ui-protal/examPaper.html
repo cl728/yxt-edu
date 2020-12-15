@@ -484,11 +484,12 @@
 										width="200" :formatter="formatSubmitTime">
 									</el-table-column>
 									<el-table-column width="150">
-										<el-link type="primary" slot-scope="scope"
+										<el-link slot-scope="scope" type="primary"
 											v-if="scope.row.examStudent.status===0">
 											催交
 										</el-link>
-										<el-link type="primary" v-else>
+										<el-link slot-scope="scope" target="_blank" type="primary" :href="'examStudentDetail.html?examId=' + exam.id 
+										+ '&studentId=' + scope.row.examStudent.studentId" v-else>
 											批阅</el-link>
 									</el-table-column>
 								</el-table>
@@ -1104,11 +1105,11 @@
 				}
 			},
 			pageData: {
-                deep: true,
-                handler() {
-                    this.getExamStudentData();
-                }
-            }
+				deep: true,
+				handler() {
+					this.getExamStudentData();
+				}
+			}
 		}
 	})
 </script>
