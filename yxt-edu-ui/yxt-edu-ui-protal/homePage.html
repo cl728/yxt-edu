@@ -149,7 +149,8 @@
                                         <el-link :underline="false" type="info"
                                             :href="'courseDetail.html?id='+topCourse.id"
                                             style="float: left; font-size: larger; padding: 0px 0px 5px 15px; color: rgb(252, 249, 249);">
-                                            <span v-text="topCourse.cname">Web编程与设计</span></el-link>
+                                            <span v-text="topCourse.cname">Web编程与设计</span>
+                                        </el-link>
                                     </el-row>
                                     <el-row><span v-text="topCourse.clazz"
                                             style="float: left; font-size: large; padding: 0 15px; color: rgb(252, 249, 249);">17网工5班</span>
@@ -231,6 +232,10 @@
                         </el-card>
                     </el-col>
                 </el-row>
+                <el-row v-if="topCourseListRows.length === 0">
+                    <p style="text-align: center; font-size: 15px; color: black; line-height: 160px;">
+                        暂无置顶课程</p>
+                </el-row>
                 <!-- 其他课程 -->
                 <el-row>
                     <el-col :span="2" style="float: left;"><strong>其他课程</strong></el-col>
@@ -253,7 +258,8 @@
                                         <el-link :underline="false" type="info"
                                             :href="'courseDetail.html?id='+otherCourse.id"
                                             style="float: left; font-size: larger; padding: 0px 0px 5px 15px; color: rgb(252, 249, 249);">
-                                            <span v-text="otherCourse.cname">Web编程与设计</span></el-link>
+                                            <span v-text="otherCourse.cname">Web编程与设计</span>
+                                        </el-link>
                                     </el-row>
                                     <el-row><span v-text="otherCourse.clazz"
                                             style="float: left; font-size: large; padding: 0 15px; color: rgb(252, 249, 249);">17网工5班</span>
@@ -336,6 +342,10 @@
                         </el-card>
                     </el-col>
                 </el-row>
+                <el-row v-if="otherCourseListRows.length === 0">
+                    <p style="text-align: center; font-size: 15px; color: black; line-height: 160px;">
+                        暂无其他课程</p>
+                </el-row>
                 <!-- 归档管理 -->
                 <el-dialog title="归档管理" :visible.sync="filedCourseListVisable" center>
                     <el-row type="flex" justify="space-start" :gutter="20" style="margin: 40px;"
@@ -353,7 +363,8 @@
                                         <el-row>
                                             <el-link :underline="false" type="info"
                                                 style="float: left; font-size: larger; padding: 0px 0px 5px 10px; color: rgb(252, 249, 249); margin: 5px;">
-                                                <span v-text="filedCourse.cname">Web编程与设计</span></el-link>
+                                                <span v-text="filedCourse.cname">Web编程与设计</span>
+                                            </el-link>
                                         </el-row>
                                         <el-row>
                                             <el-col :span="12" style="float: left; margin: 5px;">

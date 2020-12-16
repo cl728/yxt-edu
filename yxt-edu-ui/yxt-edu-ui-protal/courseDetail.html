@@ -672,6 +672,7 @@
                                             <el-tab-pane :label="'全部(' + examList.length + ')'" name="first">
                                                 <div class="exam-cards">
                                                     <el-card class="box-card" v-for="(exam, index) in examList"
+                                                        v-if="examList.length > 0"
                                                         style="margin-top: 20px;width: 1184px;height: 230px;border-radius: 6px;border-width: 2px">
                                                         <el-row id="course-title" style="height: 30px">
                                                             <el-col :span="14">
@@ -703,11 +704,14 @@
                                                                         v-show="exam.examStatus === '已发布' && exam.examStudentStatus === 0">
                                                                         开始答题
                                                                     </el-button>
-                                                                    <el-button type="primary" plain @click="location.href = 'examDetail.html?id=' + exam.id"
+                                                                    <el-button type="primary" plain
+                                                                        @click="location.href = 'examDetail.html?id=' + exam.id"
                                                                         v-show="(exam.examStatus === '已发布' && exam.examStudentStatus === 1) || 
-                                                                        (exam.examStatus === '已结束' && 2 > exam.examStudentStatus)">查看完成情况
+                                                                        (exam.examStatus === '已结束' && 2 > exam.examStudentStatus)">
+                                                                        查看完成情况
                                                                     </el-button>
-                                                                    <el-button type="success" plain @click="location.href = 'examDetail.html?id=' + exam.id"
+                                                                    <el-button type="success" plain
+                                                                        @click="location.href = 'examDetail.html?id=' + exam.id"
                                                                         v-show="exam.examStudentStatus === 2">查看成绩
                                                                     </el-button>
                                                                 </div>
@@ -725,7 +729,8 @@
                                                             <el-col :span="12">
                                                                 <el-row style="height: 55px;">
                                                                     <el-col :span="24">
-                                                                        <el-link :underline="false" :href="'examPaper.html?id=' + exam.id"
+                                                                        <el-link :underline="false"
+                                                                            :href="'examPaper.html?id=' + exam.id"
                                                                             style="color: #3B3D45;font-size: 26px;float: left;padding-left: 30px;padding-top: 3px">
                                                                             <b v-text="exam.title">未发布_测试（考试）</b>
                                                                         </el-link>
@@ -900,6 +905,15 @@
                                                                     </div>
                                                                 </el-col>
                                                             </el-row>
+                                                        </el-row>
+                                                    </el-card>
+
+                                                    <el-card class="box-card" v-if="examList.length === 0"
+                                                        style="margin-top: 20px;width: 1184px;height: 220px;border-radius: 6px;border-width: 2px">
+                                                        <el-row>
+                                                            <p
+                                                                style="text-align: center; font-size: 15px; color: black; line-height: 160px;">
+                                                                该课程暂无测试（考试）</p>
                                                         </el-row>
                                                     </el-card>
                                                 </div>
@@ -1513,6 +1527,7 @@
                             <!-- 公告列表 -->
                             <div id="notice-cards" style="margin-top: 30px">
                                 <el-card class="box-card" v-for="(notice, index) in noticeList" :key="index"
+                                    v-if="noticeList.length > 0"
                                     style="margin-top: 20px;width: 1184px;height: 220px;border-radius: 6px;border-width: 2px">
                                     <el-row id="course-title" style="height: 30px">
                                         <el-col :span="12">
@@ -1603,6 +1618,15 @@
                                                 </span>
                                             </el-col>
                                         </el-row>
+                                    </el-row>
+                                </el-card>
+
+                                <el-card class="box-card" v-if="noticeList.length === 0"
+                                    style="margin-top: 20px;width: 1184px;height: 220px;border-radius: 6px;border-width: 2px">
+                                    <el-row>
+                                        <p
+                                            style="text-align: center; font-size: 15px; color: black; line-height: 160px;">
+                                            该课程暂无公告</p>
                                     </el-row>
                                 </el-card>
                             </div>

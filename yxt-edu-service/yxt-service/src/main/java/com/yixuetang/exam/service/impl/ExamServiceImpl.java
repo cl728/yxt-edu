@@ -661,7 +661,9 @@ public class ExamServiceImpl implements ExamService {
         if (setStatusToCompletedIfNeeded( examId, studentId, examStudent )) {
             Double totalScore = examStudent.getScore();
             if (totalScore != null) {
-                totalScore -= originalScore; // 先减掉原先的得分
+                if (originalScore != null) {
+                    totalScore -= originalScore; // 先减掉原先的得分
+                }
                 totalScore += studentScore; // 再加上更新的得分
             }
             examStudent.setScore( totalScore );

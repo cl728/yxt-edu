@@ -505,11 +505,11 @@
                                                     </span>
                                                 </el-row>
                                                 <el-divider></el-divider>
-                                                <div style="height: 400px; width: 850px; overflow-y: auto;"
+                                                <div style="height: 400px; width: 870px; overflow-y: auto;"
                                                     id="chat-box">
                                                     <el-row v-for="(content, index) in chat.messageList" :key="index"
                                                         style="line-height: 40px;">
-                                                        <span style="float: right; margin-right: 10px;"
+                                                        <span style="float: right;"
                                                             v-show="content.from.id === user.id">
                                                             <span v-text="content.time"
                                                                 style="position: relative; font-size: 12px; color: #aaa">
