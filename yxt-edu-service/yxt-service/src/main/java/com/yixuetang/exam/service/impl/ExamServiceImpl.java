@@ -37,6 +37,7 @@ import com.yixuetang.exam.mapper.question.JudgeMapper;
 import com.yixuetang.exam.mapper.question.QAMapper;
 import com.yixuetang.exam.mapper.question.SelectMapper;
 import com.yixuetang.exam.service.ExamService;
+import com.yixuetang.exam.util.ExamUtils;
 import com.yixuetang.mq.AmqpUtils;
 import com.yixuetang.user.mapper.UserMapper;
 import com.yixuetang.utils.exception.ExceptionThrowUtils;
@@ -94,6 +95,9 @@ public class ExamServiceImpl implements ExamService {
 
     @Autowired
     private AmqpUtils amqpUtils;
+
+    @Autowired
+    private ExamUtils examUtils;
 
     @Transactional
     @Override
@@ -582,19 +586,6 @@ public class ExamServiceImpl implements ExamService {
             examQuestionStudentMapper.updateById( foundExamQuestionStudent );
         }
 
-        // 更新该名学生该次测试的总分
-        if (studentScore != null) {
-            ExamStudent examStudent = examStudentMapper.selectOne(
-                    new QueryWrapper<ExamStudent>()
-                            .eq( "exam_id", examId )
-                            .eq( "student_id", studentId ) );
-            if (examStudent.getScore() != null) {
-                studentScore += examStudent.getScore();
-            }
-            examStudent.setScore( studentScore );
-            examStudentMapper.updateById( examStudent );
-        }
-
         return CommonResponse.SUCCESS();
     }
 
@@ -626,10 +617,14 @@ public class ExamServiceImpl implements ExamService {
     public QueryResponse getExamStudent(long examId, long studentId) {
         checkParams( examId, studentId );
 
+        double totalScore = examUtils.getTotalScore( examId, studentId );
+
         ExamStudent examStudent = examStudentMapper.selectOne(
                 new QueryWrapper<ExamStudent>()
                         .eq( "exam_id", examId )
                         .eq( "student_id", studentId ) );
+
+        examStudent.setScore( totalScore );
 
         return new QueryResponse( CommonCode.SUCCESS,
                 new QueryResult<>( Collections.singletonList( examStudent ), 1 ) );
@@ -649,24 +644,15 @@ public class ExamServiceImpl implements ExamService {
                 new QueryWrapper<ExamQuestionStudent>()
                         .eq( "exam_question_id", examQuestion.getId() )
                         .eq( "student_id", studentId ) );
-        Double originalScore = examQuestionStudent.getScore(); // 记录原先的得分
         examQuestionStudent.setScore( studentScore );
         examQuestionStudentMapper.updateById( examQuestionStudent );
 
-        // 更新总分和学生测试状态码
+        // 更新学生测试状态码
         ExamStudent examStudent = examStudentMapper.selectOne(
                 new QueryWrapper<ExamStudent>()
                         .eq( "exam_id", examId )
                         .eq( "student_id", studentId ) );
         if (setStatusToCompletedIfNeeded( examId, studentId, examStudent )) {
-            Double totalScore = examStudent.getScore();
-            if (totalScore != null) {
-                if (originalScore != null) {
-                    totalScore -= originalScore; // 先减掉原先的得分
-                }
-                totalScore += studentScore; // 再加上更新的得分
-            }
-            examStudent.setScore( totalScore );
             examStudentMapper.updateById( examStudent );
             return new CommonResponse( ExamCode.CORRECTION_COMPLETED );
         }
@@ -879,27 +865,13 @@ public class ExamServiceImpl implements ExamService {
     }
 
     private boolean setStatusToCompletedIfNeeded(long examId, long studentId, ExamStudent examStudent) {
-        Set<Long> examQuestionIdSet = examQuestionMapper.selectList(
-                new QueryWrapper<ExamQuestion>()
-                        .eq( "exam_id", examId ) )
-                .stream()
-                .map( ExamQuestion::getId )
-                .collect( Collectors.toSet() );
+        Set<Long> examQuestionIdSet = examUtils.getExamQuestionIdSet( examId );
 
         // 试卷总题数
         int totalQuestionCount = examQuestionMapper.selectCount( new QueryWrapper<ExamQuestion>().eq( "exam_id", examId ) );
 
         // 该名学生已有分数的题目数
-        int scoredCount =
-                examQuestionStudentMapper.selectList(
-                        new QueryWrapper<ExamQuestionStudent>()
-                                .eq( "student_id", studentId ) )
-                        .stream()
-                        .filter( examQuestionStudent ->
-                                examQuestionIdSet.contains( examQuestionStudent.getExamQuestionId() )
-                                        && examQuestionStudent.getScore() != null )
-                        .collect( Collectors.toList() )
-                        .size();
+        int scoredCount = examUtils.getExamQuestionStudentList( studentId, examQuestionIdSet ).size();
 
         // 如果所有题目都有分数，将学生的测试状态改为2：已批改
         if (scoredCount == totalQuestionCount) {

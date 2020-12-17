@@ -2704,12 +2704,15 @@
                 if (!exam.status) {
                     return "未发布";
                 } else {
-                    if (new Date().valueOf() < new Date(exam.startTime).valueOf()) {
+                    let currentTime = new Date().valueOf();
+                    let examStartTime = new Date(exam.startTime).valueOf();
+                    let examEndTime = exam.endTime === null ? null : new Date(exam.endTime).valueOf();
+                    if (currentTime < examStartTime) {
                         return "未开始";
-                    } else if (new Date().valueOf() >= new Date(exam.startTime).valueOf() &&
-                        (exam.endTime === null || new Date().valueOf <= new Date(exam.endTime).valueOf())) {
+                    } else if (currentTime >= examStartTime &&
+                        (examEndTime === null || currentTime <= examEndTime)) {
                         return "已发布";
-                    } else if (exam.endTime !== null && new Date().valueOf() > new Date(exam.endTime).valueOf()) {
+                    } else if (exam.endTime !== null && currentTime > examEndTime) {
                         return "已结束";
                     } else {
                         return "未知测试状态"

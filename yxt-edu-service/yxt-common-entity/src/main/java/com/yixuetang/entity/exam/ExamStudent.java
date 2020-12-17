@@ -33,6 +33,7 @@ public class ExamStudent {
     @TableField("student_id")
     private Long studentId;     // 学生id
 
+    @TableField(exist = false)
     private Double score;       // 学生得分
 
     private Integer status;     // 测试（考试）状态 0待完成 1待批改 2已批改

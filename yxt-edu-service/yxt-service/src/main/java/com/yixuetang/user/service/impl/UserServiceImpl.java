@@ -26,6 +26,7 @@ import com.yixuetang.entity.user.School;
 import com.yixuetang.entity.user.User;
 import com.yixuetang.exam.mapper.ExamMapper;
 import com.yixuetang.exam.mapper.ExamStudentMapper;
+import com.yixuetang.exam.util.ExamUtils;
 import com.yixuetang.homework.mapper.HomeworkMapper;
 import com.yixuetang.homework.mapper.HomeworkStudentMapper;
 import com.yixuetang.user.mapper.RoleMapper;
@@ -104,6 +105,9 @@ public class UserServiceImpl implements UserService {
 
     @Autowired
     private ExamStudentMapper examStudentMapper;
+
+    @Autowired
+    private ExamUtils examUtils;
 
     private static final Logger LOGGER = LoggerFactory.getLogger( UserServiceImpl.class );
 
@@ -651,11 +655,17 @@ public class UserServiceImpl implements UserService {
 
         if (!CollectionUtils.isEmpty( studentList )) {
             studentList.forEach(
-                    student -> student.setExamStudent( this.examStudentMapper
-                            .selectOne(
-                                    new QueryWrapper<ExamStudent>()
-                                            .eq( "exam_id", examId )
-                                            .eq( "student_id", student.getId() ) ) ) );
+                    student -> {
+                        Long studentId = student.getId();
+                        ExamStudent examStudent = this.examStudentMapper
+                                .selectOne(
+                                        new QueryWrapper<ExamStudent>()
+                                                .eq( "exam_id", examId )
+                                                .eq( "student_id", studentId ) );
+                        double totalScore = examUtils.getTotalScore( examId, studentId );
+                        examStudent.setScore( totalScore );
+                        student.setExamStudent( examStudent );
+                    } );
         }
 
         return new QueryResponse( CommonCode.SUCCESS,
@@ -664,6 +674,7 @@ public class UserServiceImpl implements UserService {
                                 ? ids.size() // 如果搜索字段为空，则 total 为总的作业成员
                                 : filterUsers.size() ) ); // 否则为过滤后的成员
     }
+
 
     private void getCourseUserRespList(List<CourseUserResp> courseUserRespList, List<Long> courseIds) {
         if (!CollectionUtils.isEmpty( courseIds )) {
