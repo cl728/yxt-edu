@@ -5,6 +5,10 @@ import com.yixuetang.entity.exam.ExamQuestion;
 import com.yixuetang.entity.exam.ExamQuestionStudent;
 import com.yixuetang.exam.mapper.ExamQuestionMapper;
 import com.yixuetang.exam.mapper.ExamQuestionStudentMapper;
+import com.yixuetang.exam.mapper.question.FillMapper;
+import com.yixuetang.exam.mapper.question.JudgeMapper;
+import com.yixuetang.exam.mapper.question.QAMapper;
+import com.yixuetang.exam.mapper.question.SelectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -27,6 +31,25 @@ public class ExamUtils {
     @Autowired
     private ExamQuestionStudentMapper examQuestionStudentMapper;
 
+    @Autowired
+    private SelectMapper selectMapper;
+
+    @Autowired
+    private JudgeMapper judgeMapper;
+
+    @Autowired
+    private FillMapper fillMapper;
+
+    @Autowired
+    private QAMapper qaMapper;
+
+    /**
+     * 获取某个学生在某次测试中的得分
+     *
+     * @param examId    测试id
+     * @param studentId 学生id
+     * @return 学生在某次测试中的得分
+     */
     public double getTotalScore(long examId, long studentId) {
         Set<Long> examQuestionIdSet = getExamQuestionIdSet( examId );
 
@@ -58,5 +81,40 @@ public class ExamUtils {
                         examQuestionIdSet.contains( examQuestionStudent.getExamQuestionId() )
                                 && examQuestionStudent.getScore() != null )
                 .collect( Collectors.toList() );
+    }
+
+    /**
+     * 获取某次测试的总分（满分）
+     *
+     * @param examId 测试id
+     * @return 测试的总分（满分）
+     */
+    public Double getExamTotalScore(Long examId) {
+        double examTotalScore = 0.0;
+
+        List<ExamQuestion> examQuestionList = examQuestionMapper.selectList(
+                new QueryWrapper<ExamQuestion>()
+                        .eq( "exam_id", examId ) );
+
+        for (ExamQuestion examQuestion : examQuestionList) {
+            examTotalScore += this.getQuestionScore( examQuestion.getQuestionType(), examQuestion.getQuestionId() );
+        }
+
+        return examTotalScore;
+    }
+
+    public Double getQuestionScore(Integer questionType, Long questionId) {
+        switch (questionType) {
+            case 0:
+                return this.selectMapper.selectById( questionId ).getScore();
+            case 1:
+                return this.judgeMapper.selectById( questionId ).getScore();
+            case 2:
+                return this.fillMapper.selectById( questionId ).getScore();
+            case 3:
+                return this.qaMapper.selectById( questionId ).getScore();
+            default:
+                return null;
+        }
     }
 }

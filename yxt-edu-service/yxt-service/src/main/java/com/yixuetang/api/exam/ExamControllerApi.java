@@ -133,4 +133,13 @@ public interface ExamControllerApi {
 
     @ApiOperation("修改学生某道题的得分")
     CommonResponse editStudentScore(EditStudentScoreRequest editStudentScoreRequest);
+
+    @ApiOperation("获取某门课程下的所有学生测试成绩统计")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "courseId", value = "课程id", required = true,
+                    paramType = "path", dataType = "long"),
+            @ApiImplicitParam(name = "teacherId", value = "教师id", required = true,
+                    paramType = "path", dataType = "long")
+    })
+    QueryResponse getExamStudentScores(long courseId, long teacherId);
 }

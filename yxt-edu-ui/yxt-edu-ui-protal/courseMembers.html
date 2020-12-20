@@ -19,14 +19,15 @@
 		<el-menu :default-active="activeIndex" class="el-menu-demo" mode="horizontal" @select="handleSelectFirst">
 
 			<el-menu-item style="float: left;">
-				<el-button type="text" onclick="location.href = 'courseDetail.html?id=' + yxt.getUrlParam('courseId')">
-					<i class="el-icon-back"></i></el-button>
-				<el-button type="primary" round><span v-text="course.cname">数据结构</span></el-button>
+				<el-button type="text" @click="location.href = 'courseDetail.html?id=' + course.id">
+					<i class="el-icon-back"></i>
+				</el-button>
+				<el-button type="primary" round @click="location.href = 'courseDetail.html?id=' + course.id">
+					<span v-text="course.cname">数据结构</span>
+				</el-button>
 			</el-menu-item>
 
-
-			<el-menu-item index="1" style="font-size: 20px;margin-left: 400px;">成员</el-menu-item>
-			<el-menu-item index="2" style="font-size: 20px;">学生分组</el-menu-item>
+			<el-menu-item index="1" style="font-size: 20px;margin-left: 550px;">成员管理</el-menu-item>
 			<el-menu-item index="3" style="font-size: 20px;">成绩管理</el-menu-item>
 
 			<el-menu-item style="float: right;">
@@ -42,8 +43,8 @@
 				</el-dropdown>
 
 				<el-popover placement="bottom" title="通知信息:" width="200" trigger="click" content="暂无通知">
-					<el-button slot="reference" @click="open" type="text" icon="el-icon-bell"
-						style="padding-inline: 10px;"></el-button>
+					<el-button slot="reference" type="text" icon="el-icon-bell" style="padding-inline: 10px;">
+					</el-button>
 				</el-popover>
 
 				<el-avatar :src="user.avatar"></el-avatar>
@@ -52,7 +53,7 @@
 		<div class="line"></div><br />
 		<!-- 成员管理 -->
 		<div v-show="activeIndex == '1'">
-			<el-row :gutter="20">
+			<!-- <el-row :gutter="20">
 				<el-col :span="6" :offset="2">
 					<el-button type="primary">导入成员</el-button>
 					</el-button>
@@ -77,10 +78,11 @@
 				<el-col :offset="2" :span="20">
 					<el-divider></el-divider>
 				</el-col>
-			</el-row>
+			</el-row> -->
 
+			<br />
 			<el-row>
-				<el-col :offset="2" :span="20">
+				<el-col :offset="5" :span="15">
 					<el-container style="height: 800px; border: 1px solid #eee">
 						<el-aside width="300px" style="background-color: white">
 							<el-menu :default-active="index" @select="handleSelect">
@@ -98,9 +100,9 @@
 						<el-container v-show="index == 1">
 							<el-header style="font-size: 20px">
 								<span>教师团队（1) </span>
-								<span style="float: right;">
+								<!-- <span style="float: right;">
 									<el-button type="primary" icon="el-icon-user">添加助教/老师</el-button>
-								</span>
+								</span> -->
 							</el-header>
 
 							<el-main>
@@ -114,7 +116,7 @@
 									</el-table-column>
 									<el-table-column prop="username" label="用户名" width="350">
 									</el-table-column>
-									<el-table-column fixed="right" label="操作" width="100">
+									<!-- <el-table-column fixed="right" label="操作" width="100">
 										<template slot-scope="scope">
 
 											<el-button type="text" icon="el-icon-chat-dot-round size"
@@ -130,10 +132,10 @@
 												</el-dropdown-menu>
 											</el-dropdown>
 
-											<!-- <el-button @click="handleClick(scope.row)" type="text" size="small">查看</el-button>
-							        <el-button type="text" size="small">编辑</el-button> -->
+											<el-button @click="handleClick(scope.row)" type="text" size="small">查看</el-button>
+							        <el-button type="text" size="small">编辑</el-button>
 										</template>
-									</el-table-column>
+									</el-table-column> -->
 								</el-table>
 							</el-main>
 						</el-container>
@@ -141,21 +143,21 @@
 						<el-container v-show="index == 2">
 							<el-header style="font-size: 20px">
 								<span>全部学生（{{pageData.pageTotal}}) </span>
-								<span style="float: right;">
+								<!-- <span style="float: right;">
 									<el-switch v-model="NoExitCourse" active-color="#13ce66" inactive-color="#ff4949"
 										active-text="不允许退课">
 									</el-switch>
-								</span>
+								</span> -->
 							</el-header>
 
 							<el-main>
 								<el-row>
-									<el-col :span="6">
+									<!-- <el-col :span="6">
 										<sapn style="margin-left: 10px;margin-right: 10px;">当前已选中 {{selectStudentConut}}
 											人
 										</sapn>
 										<el-button type="primary">删除选中成员</el-button>
-									</el-col>
+									</el-col> -->
 									<el-col :span="6" style="float: right;">
 										<el-input style="float: right;" placeholder="学号,姓名" suffix-icon="el-icon-search"
 											v-model="pageData.search">
@@ -165,7 +167,7 @@
 								<div class="line"></div><br />
 								<el-table :data="studentData" ref="multipleTable"
 									@selection-change="handleSelectionChange">
-									<el-table-column type="selection" width="50"></el-table-column>
+									<!-- <el-table-column type="selection" width="50"></el-table-column> -->
 									<el-table-column label="头像" width="100">
 										<template slot-scope="scope">
 											<el-avatar :src="scope.row.avatar"></el-avatar>
@@ -181,7 +183,7 @@
 									</el-table-column>
 									<el-table-column prop="joinTime" label="加课日期" width="155">
 									</el-table-column>
-									<el-table-column fixed="right" label="操作" width="100">
+									<!-- <el-table-column fixed="right" label="操作" width="100">
 										<template slot-scope="scope">
 
 											<el-button type="text" icon="el-icon-chat-dot-round size"
@@ -197,11 +199,10 @@
 												</el-dropdown-menu>
 											</el-dropdown>
 
-
-											<!-- <el-button @click="handleClick(scope.row)" type="text" size="small">查看</el-button>
-					  						        <el-button type="text" size="small">编辑</el-button> -->
+											<el-button @click="handleClick(scope.row)" type="text" size="small">查看</el-button>
+					  						        <el-button type="text" size="small">编辑</el-button>
 										</template>
-									</el-table-column>
+									</el-table-column> -->
 								</el-table>
 								<el-pagination @size-change="pageSizeChange" @current-change="currentChange"
 									:current-page="pageData.currentPage" :page-sizes="[5, 10, 15, 20]"
@@ -209,14 +210,12 @@
 									:total="pageData.pageTotal" style="margin-top: 10px"></el-pagination>
 							</el-main>
 						</el-container>
-
-
 					</el-container>
 				</el-col>
 			</el-row>
 		</div>
 
-		<div v-show="activeIndex == '2'">
+		<!-- <div v-show="activeIndex == '2'">
 			<br />
 			<el-row>
 				<el-col :span="18" :offset="3">
@@ -240,12 +239,13 @@
 					<el-button style="float: right;" type="primary" icon="el-icon-plus">新建分组任务</el-button>
 				</el-col>
 			</el-row>
-		</div>
+		</div> -->
 
+		<!-- 成绩管理 -->
 		<div v-show="activeIndex == '3'">
 			<br />
 			<el-row>
-				<el-col :span="18" :offset="3">
+				<el-col :span="14" :offset="5">
 					<div style="box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1); width: 100%;padding: 10px;height: 700px;">
 						<div style="text-align: center;">
 							<el-radio-group v-model="activeName" style="margin-top: 10px;">
@@ -264,7 +264,6 @@
 							<el-main>
 								<div style="text-align: center;color: darkgrey;">
 									暂无记录 ！
-
 								</div>
 							</el-main>
 						</el-container>
@@ -294,10 +293,10 @@
 											</span>
 										</el-dialog>
 									</el-col>
-									<el-col :span="6" :offset="12">
-										<el-input placeholder="学号,姓名" suffix-icon="el-icon-search" v-model="search5">
+									<!-- <el-col :span="6" style="float: right;">
+										<el-input placeholder="学号,姓名" style="width: 200px;" suffix-icon="el-icon-search" v-model="search5">
 										</el-input>
-									</el-col>
+									</el-col> -->
 								</el-row>
 								<el-table :data="totalScore" style="width: 100%" max-height="1000" stripe="true">
 									<el-table-column fixed prop="sno,studentName" label="全部成员" width="200">
@@ -320,8 +319,8 @@
 									</el-table-column>
 									<el-table-column prop="finalScore,test,usualScore,hw" label="最终成绩" width="150">
 										<template slot-scope="scope">
-											{{(scope.row.finalScore * finalWeight  +
-											scope.row.test * testWeight  +
+											{{(scope.row.finalScore * finalWeight +
+											scope.row.test * testWeight +
 											scope.row.usualScore * UsualWeight +
 											scope.row.hw * hwWeight) * 0.01.toFixed(2)}}
 										</template>
@@ -334,12 +333,12 @@
 						<!--作业成绩-->
 						<el-container v-show="activeName == 2">
 							<el-main>
-								<el-row>
+								<!-- <el-row>
 									<el-col :span="6" :offset="18">
 										<el-input placeholder="学号,姓名" suffix-icon="el-icon-search" v-model="search2">
 										</el-input>
 									</el-col>
-								</el-row>
+								</el-row> -->
 								<el-table :data="computedHwScore" style="width: 100%" max-height="1000" stripe="true">
 									<el-table-column fixed prop="tsNo, realName" label="全部成员" width="200"
 										align="center">
@@ -348,8 +347,9 @@
 												style="font-weight: 500;color: black;">{{scope.row.realName}}</span>
 										</template>
 									</el-table-column>
-									<el-table-column prop="hw" :label="item.length > 5 ? item.substring(0, 5) + '...' : item" width="150" align="center"
-										v-for="(item, index) in hwTitle" :key=index>
+									<el-table-column prop="hw"
+										:label="item.length > 5 ? item.substring(0, 5) + '...' : item" width="150"
+										align="center" v-for="(item, index) in hwTitle" :key=index>
 										<template slot-scope="scope">
 											<span v-show="scope.row.hw[index].status === 0"
 												style="color: red;">未交</span>
@@ -357,7 +357,7 @@
 												v-show="scope.row.hw[index].status === 1">未批/{{scope.row.hw[index].totalScore}}</span>
 											<span v-show="scope.row.hw[index].status === 2"
 												style="font-weight: 1000;">{{scope.row.hw[index].score}}
-												<span>&nbsp; /{{scope.row.hw[index].totalScore}}</span>
+												<span>/{{scope.row.hw[index].totalScore}}</span>
 											</span>
 										</template>
 									</el-table-column>
@@ -368,26 +368,32 @@
 						<!--测试成绩-->
 						<el-container v-show="activeName == 3">
 							<el-main>
-								<el-row>
+								<!-- <el-row>
 									<el-col :span="6" :offset="18">
 										<el-input placeholder="学号,姓名" suffix-icon="el-icon-search" v-model="search3">
 										</el-input>
 									</el-col>
-								</el-row>
-								<el-table :data="testScore" style="width: 100%" max-height="1000" stripe="true">
-									<el-table-column fixed prop="sno,studentName" label="全部成员" width="200">
+								</el-row> -->
+								<el-table :data="examStudentScoresData" style="width: 100%" max-height="1000"
+									stripe="true">
+									<el-table-column fixed prop="tsNo, realName" label="全部成员" width="200">
 										<template slot-scope="scope">
-											{{scope.row.sno}} &nbsp; <span
-												style="font-weight: 500;color: black;">{{scope.row.studentName}}</span>
+											{{scope.row.tsNo}} &nbsp; <span
+												style="font-weight: 500;color: black;">{{scope.row.realName}}</span>
 										</template>
 									</el-table-column>
-									<el-table-column prop="test" :label="item" width="150"
-										v-for="(item,index) in testTitle" :key=index>
+									<el-table-column prop="examStudentRespList"
+										:label="item.length > 5 ? item.substring(0, 5) + '...' : item" width="150"
+										align="center" v-for="(item, index) in examTitle" :key="index">
 										<template slot-scope="scope">
-											<span v-if="scope.row.test[index].status > 0"
-												style="font-weight: 1000;">{{scope.row.test[index].score}}</span>
-											<span v-else style="color: red;">未交</span>
-											<span>&nbsp; /{{scope.row.test[index].totalScore}}</span>
+											<span v-if="scope.row.examStudentRespList[index].status === 0"
+												style="color: red;">未交</span>
+											<span
+												v-if="scope.row.examStudentRespList[index].status === 1">未批/{{scope.row.examStudentRespList[index].totalScore}}</span>
+											<span v-if="scope.row.examStudentRespList[index].status === 2"
+												style="font-weight: 1000;">{{scope.row.examStudentRespList[index].studentScore}}
+												<span>/{{scope.row.examStudentRespList[index].totalScore}}</span>
+											</span>
 										</template>
 									</el-table-column>
 								</el-table>
@@ -398,12 +404,12 @@
 						<!--期末成绩-->
 						<el-container v-show="activeName == 7">
 							<el-main>
-								<el-row>
+								<!-- <el-row>
 									<el-col :span="6" :offset="18">
 										<el-input placeholder="学号,姓名" suffix-icon="el-icon-search" v-model="search4">
 										</el-input>
 									</el-col>
-								</el-row>
+								</el-row> -->
 								<el-table :data="finalGradeData" style="width: 100%" max-height="1000" stripe="true">
 									<el-table-column fixed prop="sno,studentName" label="全部成员" width="200">
 										<template slot-scope="scope">
@@ -425,7 +431,7 @@
 
 	</div>
 </body>
-<script src="https://unpkg.com/vue/dist/vue.js"></script>
+<script src="https://cdn.bootcss.com/vue/2.6.11/vue.min.js"></script>
 <script src="https://cdn.bootcss.com/axios/0.19.2/axios.min.js"></script>
 <script src="https://cdn.bootcss.com/element-ui/2.13.2/index.js"></script>
 <script src="./js/common.js"></script>
@@ -488,45 +494,15 @@
 			},
 			//作业成绩模块数据
 			search2: '',
-			
+
 			//测试成绩模块数据
 			search3: '',
-			testTitle: [],
-			testScore: [{
-				sno: '12370393456',
-				studentName: '王小虎',
-				test: [
-					{
-						title: '第一次测试',
-						score: 96,
-						totalScore: 100,
-						status: 1
-					}, {
-						title: '第二次测试',
-						score: 1,
-						totalScore: 23,
-						status: 0
-					}
-				]
-
-			}, {
-				sno: '20170390413',
-				studentName: '王虎',
-				test: [
-					{
-						title: '第一次测试',
-						score: 1,
-						totalScore: 23,
-						status: 0
-					}, {
-						title: '第二次测试',
-						score: 1,
-						totalScore: 23,
-						status: 0
-					}
-				]
-
-			}],
+			examStudentScoresData: [
+				{
+					examStudentRespList: [{ status: -1, title: '', studentScore: -1, totalScore: -1 }]
+				}
+			],
+			examTitle: [],
 
 			//期末成绩模块数据
 			search4: '',
@@ -630,6 +606,7 @@
 					if (data.success) {
 						this.user = data.queryResult.data[0];
 						this.getHomeworkScoresData();
+						this.getExamScoresData();
 					} else {
 						location.href = "../index.html"
 					}
@@ -659,31 +636,26 @@
 				}
 			},
 
-			//测试成绩表标题数据初始化
-			initTestTitle() {
-				//将testScore里的作业标题title，赋值到testTitie ，前提是testScore已经更新了数据，所以更新testScore之后记得执行这段代码
-				this.testTitle = this.temp;
-				for (let i = 0; i < this.testScore[0].test.length; i++) {
-					this.testTitle.push(this.testScore[0].test[i].title);
-				}
-				this.temp = [];
-			},
-
 			getHomeworkScoresData() {
-				yxt.http.get("homework/scores/courseId/" + yxt.getUrlParam("courseId") + "/" + this.user.id).then(({data}) => {
+				yxt.http.get("homework/scores/courseId/" + yxt.getUrlParam("courseId") + "/" + this.user.id).then(({ data }) => {
 					this.homeworkScoresData = data.queryResult.data[0]
 				})
-			}
+			},
+
+			getExamScoresData() {
+				yxt.http.get("exam/examStudentScores/courseId/" + yxt.getUrlParam("courseId")
+					+ "/teacherId/" + this.user.id)
+					.then(({ data }) => {
+						this.examStudentScoresData = data.queryResult.data;
+						this.examTitle = this.examStudentScoresData[0].examStudentRespList.map(examStudentResp => examStudentResp.title);
+					})
+			},
 
 		},
 		created() {
 			this.verify();
 			this.getCourseMemberData();
 			this.getCourseData();
-
-			//testScore更新之后记得执行这个方法
-			this.initTestTitle();
-
 		},
 		watch: {
 			pageData: {

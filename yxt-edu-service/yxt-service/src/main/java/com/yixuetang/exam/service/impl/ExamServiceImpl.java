@@ -26,6 +26,8 @@ import com.yixuetang.entity.response.QueryResponse;
 import com.yixuetang.entity.response.code.CommonCode;
 import com.yixuetang.entity.response.code.exam.ExamCode;
 import com.yixuetang.entity.response.result.ExamResp;
+import com.yixuetang.entity.response.result.ExamStudentResp;
+import com.yixuetang.entity.response.result.ExamStudentScoreResp;
 import com.yixuetang.entity.response.result.QueryResult;
 import com.yixuetang.entity.user.User;
 import com.yixuetang.exam.mapper.ExamMapper;
@@ -170,7 +172,7 @@ public class ExamServiceImpl implements ExamService {
         // 统计测试的总分数
         double score = 0.0;
         for (ExamQuestion examQuestion : this.examQuestionMapper.selectList( examQuestionQueryWrapper )) {
-            Double questionScore = getQuestionScore( examQuestion.getQuestionType(), examQuestion.getQuestionId() );
+            Double questionScore = examUtils.getQuestionScore( examQuestion.getQuestionType(), examQuestion.getQuestionId() );
             score += ObjectUtils.isEmpty( questionScore ) ? 0.0 : questionScore;
         }
         exam.setTotalScore( score );
@@ -488,7 +490,7 @@ public class ExamServiceImpl implements ExamService {
                             .questionNumber( examQuestion.getQuestionNumber() )
                             .questionType( questionType )
                             .questionTypeName( getQuestionTypeName( questionType, questionId ) )
-                            .score( getQuestionScore( questionType, questionId ) )
+                            .score( examUtils.getQuestionScore( questionType, questionId ) )
                             .content( getQuestionContent( questionType, questionId ) )
                             .singleSelectAnswer( isForbidden ? null : getQuestionSingleSelectAnswer( questionType, questionId ) )
                             .multiSelectAnswer( isForbidden ? null : getQuestionMultiSelectAnswer( questionType, questionId ) )
@@ -660,6 +662,59 @@ public class ExamServiceImpl implements ExamService {
         return CommonResponse.SUCCESS();
     }
 
+    @Override
+    public QueryResponse getExamStudentScores(long courseId, long teacherId) {
+
+        // 参数校验
+        Course course = courseMapper.findById( courseId );
+        if (ObjectUtils.isEmpty( course ) || !Objects.equals( course.getTeacher().getId(), teacherId )) {
+            ExceptionThrowUtils.cast( CommonCode.INVALID_PARAM );
+        }
+
+        List<ExamStudentScoreResp> examStudentScoreRespList = new ArrayList<>();
+
+        scMapper.selectList(
+                new QueryWrapper<StudentCourse>()
+                        .eq( "course_id", courseId ) )
+                .stream()
+                .map( StudentCourse::getStudentId )
+                .collect( Collectors.toList() )
+                .forEach( studentId -> {
+                    User student = userMapper.selectOne( new QueryWrapper<User>().eq( "id", studentId ).select( "ts_no", "real_name" ) );
+                    ExamStudentScoreResp examStudentScoreResp = ExamStudentScoreResp.builder()
+                            .tsNo( student.getTsNo() )
+                            .realName( student.getRealName() )
+                            .examStudentRespList( getExamStudentRespList( courseId, studentId ) )
+                            .build();
+                    examStudentScoreRespList.add( examStudentScoreResp );
+                } );
+
+        return new QueryResponse( CommonCode.SUCCESS,
+                new QueryResult<>( examStudentScoreRespList, examStudentScoreRespList.size() ) );
+    }
+
+    private List<ExamStudentResp> getExamStudentRespList(long courseId, Long studentId) {
+        List<ExamStudentResp> examStudentRespList = new ArrayList<>();
+        examMapper.selectList(
+                new QueryWrapper<Exam>()
+                        .eq( "course_id", courseId ) )
+                .stream()
+                .map( Exam::getId )
+                .collect( Collectors.toList() )
+                .forEach( examId -> {
+                    Exam exam = examMapper.selectOne( new QueryWrapper<Exam>().eq( "id", examId ).select( "title" ) );
+                    ExamStudent examStudent = examStudentMapper.selectOne( new QueryWrapper<ExamStudent>().eq( "exam_id", examId ).eq( "student_id", studentId ).select( "status" ) );
+                    ExamStudentResp examStudentResp = ExamStudentResp.builder()
+                            .title( exam.getTitle() )
+                            .status( examStudent.getStatus() )
+                            .totalScore( examUtils.getExamTotalScore( examId ) )
+                            .studentScore( examUtils.getTotalScore( examId, studentId ) )
+                            .build();
+                    examStudentRespList.add( examStudentResp );
+                } );
+        return examStudentRespList;
+    }
+
     private void checkParams(long examId, long studentId) {
         // 参数校验
         Exam exam = examMapper.selectById( examId );
@@ -761,21 +816,6 @@ public class ExamServiceImpl implements ExamService {
                 return "填空题";
             case 3:
                 return "问答题";
-            default:
-                return null;
-        }
-    }
-
-    private Double getQuestionScore(Integer questionType, Long questionId) {
-        switch (questionType) {
-            case 0:
-                return this.selectMapper.selectById( questionId ).getScore();
-            case 1:
-                return this.judgeMapper.selectById( questionId ).getScore();
-            case 2:
-                return this.fillMapper.selectById( questionId ).getScore();
-            case 3:
-                return this.qaMapper.selectById( questionId ).getScore();
             default:
                 return null;
         }

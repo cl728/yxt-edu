@@ -151,4 +151,13 @@ public interface ExamService {
      */
     CommonResponse editStudentScore(EditStudentScoreRequest editStudentScoreRequest);
 
+    /**
+     * 获取某门课程下的所有学生测试成绩统计
+     *
+     * @param courseId  课程id
+     * @param teacherId 该门课程的教师id
+     * @return 响应结果实体类
+     */
+    QueryResponse getExamStudentScores(long courseId, long teacherId);
+
 }

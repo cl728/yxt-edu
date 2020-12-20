@@ -137,5 +137,11 @@ public class ExamController implements ExamControllerApi {
     public CommonResponse editStudentScore(@RequestBody EditStudentScoreRequest editStudentScoreRequest) {
         return this.examService.editStudentScore( editStudentScoreRequest );
     }
+
+    @Override
+    @GetMapping("examStudentScores/courseId/{courseId}/teacherId/{teacherId}")
+    public QueryResponse getExamStudentScores(@PathVariable long courseId, @PathVariable long teacherId) {
+        return this.examService.getExamStudentScores( courseId, teacherId );
+    }
 }
 
