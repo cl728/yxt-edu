@@ -25,9 +25,9 @@ import com.yixuetang.entity.response.CommonResponse;
 import com.yixuetang.entity.response.QueryResponse;
 import com.yixuetang.entity.response.code.CommonCode;
 import com.yixuetang.entity.response.code.exam.ExamCode;
-import com.yixuetang.entity.response.result.ExamResp;
-import com.yixuetang.entity.response.result.ExamStudentResp;
-import com.yixuetang.entity.response.result.ExamStudentScoreResp;
+import com.yixuetang.entity.response.result.exam.ExamResp;
+import com.yixuetang.entity.response.result.exam.ExamStudentResp;
+import com.yixuetang.entity.response.result.exam.ExamStudentScoreResp;
 import com.yixuetang.entity.response.result.QueryResult;
 import com.yixuetang.entity.user.User;
 import com.yixuetang.exam.mapper.ExamMapper;
@@ -133,6 +133,13 @@ public class ExamServiceImpl implements ExamService {
         exam.setStartTime( insertExam.getStartTime() );
         exam.setEndTime( insertExam.getEndTime() );
         exam.setCreateTime( new Date() );
+
+        // 期末测试唯一性校验
+        if (isFinalExists( courseId, -1L )) {
+            return new CommonResponse( ExamCode.FINAL_EXAM_EXISTS );
+        }
+
+        exam.setFinalExam( insertExam.getFinalExam() );
         examMapper.insert( exam );
 
         // 插入相关记录到 t_exam_student 表中
@@ -446,6 +453,13 @@ public class ExamServiceImpl implements ExamService {
         exam.setIntroduction( insertExam.getIntroduction() );
         exam.setStartTime( insertExam.getStartTime() );
         exam.setEndTime( insertExam.getEndTime() );
+
+        // 期末测试唯一性校验
+        if (isFinalExists( exam.getCourseId(), examId )) {
+            return new CommonResponse( ExamCode.FINAL_EXAM_EXISTS );
+        }
+
+        exam.setFinalExam( insertExam.getFinalExam() );
         examMapper.updateById( exam );
 
         return new CommonResponse( CommonCode.SUCCESS );
@@ -675,7 +689,8 @@ public class ExamServiceImpl implements ExamService {
 
         scMapper.selectList(
                 new QueryWrapper<StudentCourse>()
-                        .eq( "course_id", courseId ) )
+                        .eq( "course_id", courseId )
+                        .orderByAsc( "student_id" ))
                 .stream()
                 .map( StudentCourse::getStudentId )
                 .collect( Collectors.toList() )
@@ -702,10 +717,11 @@ public class ExamServiceImpl implements ExamService {
                 .map( Exam::getId )
                 .collect( Collectors.toList() )
                 .forEach( examId -> {
-                    Exam exam = examMapper.selectOne( new QueryWrapper<Exam>().eq( "id", examId ).select( "title" ) );
+                    Exam exam = examMapper.selectOne( new QueryWrapper<Exam>().eq( "id", examId ).select( "title", "final_exam" ) );
                     ExamStudent examStudent = examStudentMapper.selectOne( new QueryWrapper<ExamStudent>().eq( "exam_id", examId ).eq( "student_id", studentId ).select( "status" ) );
                     ExamStudentResp examStudentResp = ExamStudentResp.builder()
                             .title( exam.getTitle() )
+                            .finalExam( exam.getFinalExam() )
                             .status( examStudent.getStatus() )
                             .totalScore( examUtils.getExamTotalScore( examId ) )
                             .studentScore( examUtils.getTotalScore( examId, studentId ) )
@@ -920,6 +936,18 @@ public class ExamServiceImpl implements ExamService {
         }
 
         return false;
+    }
+
+    /**
+     * 该课程是否存在期末测试
+     *
+     * @param courseId 课程id
+     * @param examId   测试id
+     * @return true: 存在，false: 不存在
+     */
+    private boolean isFinalExists(long courseId, long examId) {
+        Exam exam = examMapper.selectOne( new QueryWrapper<Exam>().eq( "course_id", courseId ).eq( "final_exam", true ) );
+        return !ObjectUtils.isEmpty( exam ) && (examId == -1 || exam.getId() != examId);
     }
 
 }

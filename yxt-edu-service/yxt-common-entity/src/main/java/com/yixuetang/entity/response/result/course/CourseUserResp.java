@@ -1,4 +1,4 @@
-package com.yixuetang.entity.response.result;
+package com.yixuetang.entity.response.result.course;
 
 import com.yixuetang.entity.user.User;
 import lombok.Builder;

@@ -23,6 +23,9 @@ public class InsertExam {
     @ApiModelProperty(value = "测试开始时间", required = true, dataType = "String")
     private Date startTime;
 
-    @ApiModelProperty(value = "测试结束时间", required = false, dataType = "String")
+    @ApiModelProperty(value = "测试结束时间", dataType = "String")
     private Date endTime;
+
+    @ApiModelProperty(value = "是否为期末测试", dataType = "Boolean")
+    private Boolean finalExam;
 }

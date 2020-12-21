@@ -16,7 +16,7 @@ import com.yixuetang.entity.response.code.CommonCode;
 import com.yixuetang.entity.response.code.comment.CommentCode;
 import com.yixuetang.entity.response.code.notice.NoticeCode;
 import com.yixuetang.entity.response.code.user.UserCode;
-import com.yixuetang.entity.response.result.CommentVoteUpCountResp;
+import com.yixuetang.entity.response.result.comment.CommentVoteUpCountResp;
 import com.yixuetang.entity.response.result.QueryResult;
 import com.yixuetang.entity.user.User;
 import com.yixuetang.mq.AmqpUtils;

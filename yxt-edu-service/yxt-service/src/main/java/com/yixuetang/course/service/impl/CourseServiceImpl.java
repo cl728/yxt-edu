@@ -22,6 +22,7 @@ import com.yixuetang.entity.response.code.CommonCode;
 import com.yixuetang.entity.response.code.course.CourseCode;
 import com.yixuetang.entity.response.code.user.UserCode;
 import com.yixuetang.entity.response.result.QueryResult;
+import com.yixuetang.entity.response.result.course.StudentCourseResp;
 import com.yixuetang.entity.user.Role;
 import com.yixuetang.entity.user.User;
 import com.yixuetang.exam.mapper.ExamMapper;
@@ -346,6 +347,36 @@ public class CourseServiceImpl implements CourseService {
         return new CommonResponse( CommonCode.SUCCESS );
     }
 
+    @Override
+    public QueryResponse findStudentCourseList(long courseId) {
+
+        // 参数校验
+        if (ObjectUtils.isEmpty( courseMapper.selectById( courseId ) )) {
+            ExceptionThrowUtils.cast( CommonCode.INVALID_PARAM );
+        }
+
+        List<StudentCourseResp> studentCourseRespList = new ArrayList<>();
+
+        scMapper.selectList(
+                new QueryWrapper<StudentCourse>()
+                        .eq( "course_id", courseId )
+                        .orderByAsc( "student_id" ) )
+                .forEach( studentCourse -> {
+                    User student = userMapper.selectById( studentCourse.getStudentId() );
+                    StudentCourseResp studentCourseResp = StudentCourseResp
+                            .builder()
+                            .studentId( studentCourse.getStudentId() )
+                            .tsNo( student.getTsNo() )
+                            .realName( student.getRealName() )
+                            .usualScore( studentCourse.getUsualScore() )
+                            .build();
+                    studentCourseRespList.add( studentCourseResp );
+                } );
+
+        return new QueryResponse( CommonCode.SUCCESS,
+                new QueryResult<>( studentCourseRespList, studentCourseRespList.size() ) );
+    }
+
     @Transactional
     @Override
     public CommonResponse transferCourses(Long courseId, Long teacherId, TransferCourse transferCourse) {
@@ -567,6 +598,31 @@ public class CourseServiceImpl implements CourseService {
         }
 
         return new CommonResponse( CommonCode.SUCCESS );
+    }
+
+    @Override
+    public CommonResponse updateStudentUsualScore(EditStudentUsualScoreRequest editStudentUsualScoreRequest) {
+
+        Long courseId = editStudentUsualScoreRequest.getCourseId();
+        Long studentId = editStudentUsualScoreRequest.getStudentId();
+        Double usualScore = editStudentUsualScoreRequest.getStudentScore();
+
+        Course course = courseMapper.selectById( courseId );
+        StudentCourse studentCourse = scMapper.selectOne(
+                new QueryWrapper<StudentCourse>()
+                        .eq( "course_id", courseId )
+                        .eq( "student_id", studentId ) );
+
+        // 参数校验
+        if (!ObjectUtils.allNotNull( course, studentCourse )) {
+            ExceptionThrowUtils.cast( CommonCode.INVALID_PARAM );
+        }
+
+        studentCourse.setUsualScore( usualScore );
+
+        scMapper.updateById( studentCourse );
+
+        return CommonResponse.SUCCESS();
     }
 
     private void screen(QueryPageRequestCourse queryPageRequestCourse, QueryWrapper<Course> queryWrapper) {

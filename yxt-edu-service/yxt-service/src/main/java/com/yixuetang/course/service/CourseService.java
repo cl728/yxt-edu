@@ -1,9 +1,6 @@
 package com.yixuetang.course.service;
 
-import com.yixuetang.entity.request.course.InsertCourse;
-import com.yixuetang.entity.request.course.QueryPageRequestCourse;
-import com.yixuetang.entity.request.course.TransferCourse;
-import com.yixuetang.entity.request.course.UpdateCourse;
+import com.yixuetang.entity.request.course.*;
 import com.yixuetang.entity.request.user.DelCourseUser;
 import com.yixuetang.entity.response.CommonResponse;
 import com.yixuetang.entity.response.QueryResponse;
@@ -124,8 +121,24 @@ public interface CourseService {
     /**
      * 重置加课码
      *
-     * @param courseId  课程id
-     * @return  响应结果实体类
+     * @param courseId 课程id
+     * @return 响应结果实体类
      */
     CommonResponse resetCourseCode(long courseId);
+
+    /**
+     * 查询某门课程下学生列表
+     *
+     * @param courseId 课程id
+     * @return 响应结果实体类
+     */
+    QueryResponse findStudentCourseList(long courseId);
+
+    /**
+     * 教师修改学生平时成绩
+     *
+     * @param editStudentUsualScoreRequest 修改学生平时成绩请求实体类
+     * @return 响应结果实体类
+     */
+    CommonResponse updateStudentUsualScore(EditStudentUsualScoreRequest editStudentUsualScoreRequest);
 }

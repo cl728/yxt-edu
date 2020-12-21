@@ -1,7 +1,7 @@
 package com.yixuetang.message.ws.remind;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.yixuetang.entity.response.result.UnreadCountResp;
+import com.yixuetang.entity.response.result.message.UnreadCountResp;
 import com.yixuetang.message.service.MessageService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

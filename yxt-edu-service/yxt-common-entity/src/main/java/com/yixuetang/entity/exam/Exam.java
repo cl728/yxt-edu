@@ -58,4 +58,7 @@ public class Exam {
     @TableField("top_num")
     private Integer topNum;     // 测试置顶字段，数字越大，置顶等级越高，默认为0
 
+    @TableField("final_exam")
+    private Boolean finalExam;  // 是否为期末测试，true 是 false 不是
+
 }

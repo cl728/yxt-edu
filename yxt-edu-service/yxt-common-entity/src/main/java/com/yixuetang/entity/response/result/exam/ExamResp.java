@@ -1,4 +1,4 @@
-package com.yixuetang.entity.response.result;
+package com.yixuetang.entity.response.result.exam;
 
 import com.yixuetang.entity.exam.Exam;
 import com.yixuetang.entity.homework.Homework;

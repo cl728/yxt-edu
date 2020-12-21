@@ -1,4 +1,4 @@
-package com.yixuetang.entity.response.result;
+package com.yixuetang.entity.response.result.homework;
 
 import com.yixuetang.entity.homework.Homework;
 import lombok.Data;

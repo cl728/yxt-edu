@@ -16,7 +16,9 @@ public enum ExamCode implements ResponseCode {
 
     UPDATE_EXAM_STATUS_FAIL_NO_QUESTION( false, 80002, "试卷⾥⾯没有试题，发布失败" ),
 
-    CORRECTION_COMPLETED( true, 80003, "该试卷已经批改完毕" );
+    CORRECTION_COMPLETED( true, 80003, "该试卷已经批改完毕" ),
+
+    FINAL_EXAM_EXISTS( false, 80004, "该课程已存在期末测试！" );
 
     private boolean success;
     private int code;

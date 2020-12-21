@@ -679,6 +679,8 @@
                                                                 <div class="homework-create-time" style="float: left">
                                                                     <el-tag type="info" v-show="exam.topNum > 0">置顶
                                                                     </el-tag>
+                                                                    <el-tag type="info" v-show="exam.finalExam">期末测试
+                                                                    </el-tag>
                                                                     <el-tag :type="getExamStatusType(exam.examStatus)"
                                                                         v-text="exam.examStatus">未发布</el-tag>
                                                                     <el-tag :type="getExamStatusType(exam.examStatus)"
@@ -1735,6 +1737,9 @@
                     <el-date-picker v-model="examForm.endTime" type="datetime" placeholder="考试结束时间">
                     </el-date-picker>
                 </el-form-item>
+                <el-form-item label="是否为期末测试">
+                    <el-switch v-model="examForm.finalExam" active-color="#13ce66"></el-switch>
+                </el-form-item>
                 <el-form-item>
                     <div id="notice-button" style="float: right;padding-top: 10px">
                         <el-button type="primary" plain @click="examFormVisible = false">取消
@@ -2140,12 +2145,12 @@
                         yxt.http.post("/exam/courseId/" + this.course.id, this.examForm).then(({ data }) => {
                             if (data.success) {
                                 this.$message.success(data.message);
+                                this.examFormVisible = false;
+                                this.examForm = {};
                                 this.getExamData();
                             } else {
                                 this.$message.error(data.message);
                             }
-                            this.examFormVisible = false;
-                            this.examForm = {};
                         }).catch(() => {
                             this.$message.error("服务器繁忙，请稍后再试！");
                             this.examFormVisible = false;

@@ -1,4 +1,4 @@
-package com.yixuetang.entity.response.result;
+package com.yixuetang.entity.response.result.exam;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -24,5 +24,7 @@ public class ExamStudentResp {
     private Double totalScore;
 
     private Integer status;
+
+    private Boolean finalExam;
 
 }

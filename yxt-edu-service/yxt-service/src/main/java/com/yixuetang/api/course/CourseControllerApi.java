@@ -1,9 +1,6 @@
 package com.yixuetang.api.course;
 
-import com.yixuetang.entity.request.course.InsertCourse;
-import com.yixuetang.entity.request.course.QueryPageRequestCourse;
-import com.yixuetang.entity.request.course.TransferCourse;
-import com.yixuetang.entity.request.course.UpdateCourse;
+import com.yixuetang.entity.request.course.*;
 import com.yixuetang.entity.request.user.DelCourseUser;
 import com.yixuetang.entity.response.CommonResponse;
 import com.yixuetang.entity.response.QueryResponse;
@@ -109,4 +106,12 @@ public interface CourseControllerApi {
     @ApiImplicitParam(name = "courseId", value = "课程id", required = true,
             paramType = "path", dataType = "long")
     CommonResponse resetCourseCode(long courseId);
+
+    @ApiOperation("查询某门课程下学生列表")
+    @ApiImplicitParam(name = "courseId", value = "课程id", required = true,
+            paramType = "path", dataType = "long")
+    QueryResponse findStudentCourseList(long courseId);
+
+    @ApiOperation("教师修改学生平时成绩")
+    CommonResponse updateStudentUsualScore(EditStudentUsualScoreRequest editStudentUsualScoreRequest);
 }

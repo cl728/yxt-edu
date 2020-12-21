@@ -36,7 +36,7 @@ public class StudentCourse {
     private Long courseId; // 课程主键id
 
     @TableField("final_grade")
-    private String finalGrade;  // 最终成绩
+    private Double finalGrade;  // 最终成绩
 
     @TableField("top_num")
     private Integer topNum; // 置顶字段
@@ -46,6 +46,9 @@ public class StudentCourse {
 
     @TableField("join_time")
     private Date joinTime;  // 加课时间
+
+    @TableField("usual_score")
+    private Double usualScore;  // 平时成绩
 
     @TableField(exist = false)
     private Course course;

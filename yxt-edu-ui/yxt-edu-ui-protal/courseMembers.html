@@ -254,13 +254,13 @@
 								<el-radio-button label="3">测试成绩</el-radio-button>
 								<!-- <el-radio-button label="4">考勤统计</el-radio-button> -->
 								<!-- <el-radio-button label="5">表现统计</el-radio-button> -->
-								<!-- <el-radio-button label="6">平时成绩</el-radio-button> -->
+								<el-radio-button label="6">平时成绩</el-radio-button>
 								<el-radio-button label="7">期末成绩</el-radio-button>
 							</el-radio-group>
 						</div>
 						<el-divider></el-divider>
 
-						<el-container v-show="activeName == 4 ||activeName == 5||activeName == 6">
+						<el-container v-show="activeName === 4 || activeName === 5">
 							<el-main>
 								<div style="text-align: center;color: darkgrey;">
 									暂无记录 ！
@@ -328,7 +328,6 @@
 								</el-table>
 							</el-main>
 						</el-container>
-
 
 						<!--作业成绩-->
 						<el-container v-show="activeName == 2">
@@ -400,6 +399,57 @@
 							</el-main>
 						</el-container>
 
+						<!--平时成绩-->
+						<el-container v-show="activeName == 6">
+							<el-main>
+								<!-- <el-row>
+									<el-col :span="6" :offset="18">
+										<el-input placeholder="学号,姓名" suffix-icon="el-icon-search" v-model="search4">
+										</el-input>
+									</el-col>
+								</el-row> -->
+								<el-table :data="courseStudentData" style="width: 100%" max-height="1000" stripe="true">
+									<el-table-column fixed prop="tsNo, realName" label="全部成员" width="200">
+										<template slot-scope="scope">
+											{{scope.row.tsNo}} &nbsp; <span
+												style="font-weight: 500;color: black;">{{scope.row.realName}}</span>
+										</template>
+									</el-table-column>
+									<el-table-column prop="usualScore" label="平时成绩" width="120" align="center">
+										<template slot-scope="scope">
+											{{scope.row.usualScore === null ? '暂无' : scope.row.usualScore}}
+										</template>
+									</el-table-column>
+									<el-table-column label="操作" width="120" align="center">
+										<template slot-scope="scope">
+											<el-button size="mini" type="success" icon="el-icon-edit"
+												@click="showEditScoreForm(scope.row.studentId, scope.row.usualScore)">
+											</el-button>
+										</template>
+									</el-table-column>
+								</el-table>
+
+								<!-- 编辑学生平时成绩表单 -->
+								<el-dialog title="修改学生平时成绩" :visible.sync="editScoreFormVisible" width="30%" center
+									destroy-on-close @close="editScoreForm = {}">
+									<el-form style="margin: 20px 0;" :model="editScoreForm" ref="editScoreForm"
+										label-width="60px" class="demo-ruleForm">
+										<el-form-item label="平时成绩" prop="score" :rules="[
+											{ required: true, message: '分数不能为空', trigger: 'blur'},
+											{ type: 'number', message: '分数必须为数字值', trigger: 'blur'}
+										]">
+											<el-input-number v-model="editScoreForm.studentScore" :min="0"
+												:max="editScoreForm.questionScore">
+											</el-input-number>
+										</el-form-item>
+									</el-form>
+									<div slot="footer">
+										<el-button @click="editScoreFormVisible = false">取 消</el-button>
+										<el-button type="primary" @click="editScore()">确 定</el-button>
+									</div>
+								</el-dialog>
+							</el-main>
+						</el-container>
 
 						<!--期末成绩-->
 						<el-container v-show="activeName == 7">
@@ -410,14 +460,27 @@
 										</el-input>
 									</el-col>
 								</el-row> -->
-								<el-table :data="finalGradeData" style="width: 100%" max-height="1000" stripe="true">
-									<el-table-column fixed prop="sno,studentName" label="全部成员" width="200">
+								<el-table :data="examStudentScoresData" style="width: 100%" max-height="1000"
+									stripe="true">
+									<el-table-column fixed prop="tsNo, realName" label="全部成员" width="200">
 										<template slot-scope="scope">
-											{{scope.row.sno}} &nbsp; <span
-												style="font-weight: 500;color: black;">{{scope.row.studentName}}</span>
+											{{scope.row.tsNo}} &nbsp; <span
+												style="font-weight: 500;color: black;">{{scope.row.realName}}</span>
 										</template>
 									</el-table-column>
-									<el-table-column prop="finalGrade" label="期末成绩" width="150">
+									<el-table-column prop="finalExamStudentRespList"
+										:label="item.length > 35 ? item.substring(0, 35) + '...' : item" width="150"
+										align="center" v-for="(item, index) in finalExamTitle" :key="index">
+										<template slot-scope="scope">
+											<span v-if="scope.row.examStudentRespList[index].status === 0"
+												style="color: red;">未交</span>
+											<span
+												v-if="scope.row.examStudentRespList[index].status === 1">未批/{{scope.row.examStudentRespList[index].totalScore}}</span>
+											<span v-if="scope.row.examStudentRespList[index].status === 2"
+												style="font-weight: 1000;">{{scope.row.examStudentRespList[index].studentScore}}
+												<span>/{{scope.row.examStudentRespList[index].totalScore}}</span>
+											</span>
+										</template>
 									</el-table-column>
 								</el-table>
 							</el-main>
@@ -450,31 +513,8 @@
 			NoExitCourse: true,
 			selectStudentConut: 0,
 			search: '',
-			teacherData: [
-				{
-					avator: 'https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg',
-					realName: 'qqweq',
-					username: 'sasaf'
-				}
-			],
-			studentData: [
-				{
-					avator: 'https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png',
-					sno: '20145',
-					realName: 'qqweq',
-					username: 'sasaf',
-					class: '12asda34',
-					joinTime: '2as1d3a'
-				},
-				{
-					avator: 'https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg',
-					sno: '2014asd5',
-					realName: 'qqasdaweq',
-					username: 'saasdsaf',
-					class: '12asddsaaa34',
-					joinTime: '2adsas1d3a'
-				}
-			],
+			teacherData: [],
+			studentData: [],
 			pageData: {
 				currentPage: 1,
 				pageSize: 5,
@@ -497,12 +537,14 @@
 
 			//测试成绩模块数据
 			search3: '',
-			examStudentScoresData: [
-				{
-					examStudentRespList: [{ status: -1, title: '', studentScore: -1, totalScore: -1 }]
-				}
-			],
+			examStudentScoresData: [{ examStudentRespList: [], finalExamStudentRespList: [] }],
 			examTitle: [],
+			finalExamTitle: [],
+
+			// 平时成绩模块数据
+			courseStudentData: [],
+			editScoreForm: {},
+			editScoreFormVisible: false,
 
 			//期末成绩模块数据
 			search4: '',
@@ -646,16 +688,53 @@
 				yxt.http.get("exam/examStudentScores/courseId/" + yxt.getUrlParam("courseId")
 					+ "/teacherId/" + this.user.id)
 					.then(({ data }) => {
-						this.examStudentScoresData = data.queryResult.data;
-						this.examTitle = this.examStudentScoresData[0].examStudentRespList.map(examStudentResp => examStudentResp.title);
+						if (data.success) {
+							this.examStudentScoresData = data.queryResult.data;
+							this.examTitle = this.examStudentScoresData[0].examStudentRespList.filter(examStudentResp => !examStudentResp.finalExam).map(examStudentResp => examStudentResp.title);
+							this.examStudentScoresData.finalExamStudentRespList =
+								this.examStudentScoresData[0].examStudentRespList.filter(resp => resp.finalExam)
+							this.finalExamTitle = this.examStudentScoresData[0].examStudentRespList.filter(examStudentResp => examStudentResp.finalExam).map(examStudentResp => examStudentResp.title);
+						}
 					})
 			},
+
+			getCourseStudentData() {
+				yxt.http.get("courses/studentCourse/courseId/" + yxt.getUrlParam("courseId"))
+					.then(({ data }) => {
+						if (data.success) {
+							this.courseStudentData = data.queryResult.data;
+						}
+					})
+			},
+
+			showEditScoreForm(studentId, studentScore) {
+				this.editScoreFormVisible = true;
+				this.editScoreForm.studentId = studentId;
+				this.editScoreForm.studentScore = studentScore;
+				this.editScoreForm.courseId = yxt.getUrlParam("courseId");
+			},
+
+			editScore() {
+				yxt.http.put("courses/studentCourse/usualScore", this.editScoreForm).then(({ data }) => {
+					if (data.success) {
+						this.$message.success(data.message);
+						this.editScoreForm = {};
+						this.editScoreFormVisible = false;
+						this.getCourseStudentData();
+					} else {
+						this.$message.error(data.message);
+					}
+				}).catch(() => {
+					this.$message.error("服务器繁忙，请稍候再试！")
+				})
+			}
 
 		},
 		created() {
 			this.verify();
 			this.getCourseMemberData();
 			this.getCourseData();
+			this.getCourseStudentData();
 		},
 		watch: {
 			pageData: {

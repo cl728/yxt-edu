@@ -1,4 +1,4 @@
-package com.yixuetang.entity.response.result;
+package com.yixuetang.entity.response.result.message;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
