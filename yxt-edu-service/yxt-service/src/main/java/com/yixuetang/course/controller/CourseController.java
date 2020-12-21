@@ -112,4 +112,10 @@ public class CourseController implements CourseControllerApi {
     public CommonResponse updateStudentUsualScore(@RequestBody EditStudentUsualScoreRequest editStudentUsualScoreRequest) {
         return courseService.updateStudentUsualScore( editStudentUsualScoreRequest );
     }
+
+    @Override
+    @GetMapping("studentCourseScore/courseId/{courseId}")
+    public QueryResponse findStudentCourseScoreList(@PathVariable long courseId) {
+        return courseService.findStudentCourseScoreList( courseId );
+    }
 }

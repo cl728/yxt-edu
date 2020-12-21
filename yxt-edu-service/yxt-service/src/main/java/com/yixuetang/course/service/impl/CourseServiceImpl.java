@@ -22,11 +22,13 @@ import com.yixuetang.entity.response.code.CommonCode;
 import com.yixuetang.entity.response.code.course.CourseCode;
 import com.yixuetang.entity.response.code.user.UserCode;
 import com.yixuetang.entity.response.result.QueryResult;
+import com.yixuetang.entity.response.result.course.StudentCourseGradeResp;
 import com.yixuetang.entity.response.result.course.StudentCourseResp;
 import com.yixuetang.entity.user.Role;
 import com.yixuetang.entity.user.User;
 import com.yixuetang.exam.mapper.ExamMapper;
 import com.yixuetang.exam.mapper.ExamStudentMapper;
+import com.yixuetang.exam.util.ExamUtils;
 import com.yixuetang.homework.mapper.HomeworkMapper;
 import com.yixuetang.homework.mapper.HomeworkStudentMapper;
 import com.yixuetang.notice.mapper.NoticeMapper;
@@ -43,6 +45,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.text.DecimalFormat;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -84,6 +87,9 @@ public class CourseServiceImpl implements CourseService {
 
     @Autowired
     private NoticeUserMapper noticeUserMapper;
+
+    @Autowired
+    private ExamUtils examUtils;
 
     private static final Logger LOGGER = LoggerFactory.getLogger( CourseServiceImpl.class );
 
@@ -553,6 +559,7 @@ public class CourseServiceImpl implements CourseService {
     }
 
     @Override
+    @Transactional
     public CommonResponse updateTopCourse(long courseId, long userId) {
         //判断课程是否存在
         Course course = courseMapper.selectById( courseId );
@@ -601,6 +608,7 @@ public class CourseServiceImpl implements CourseService {
     }
 
     @Override
+    @Transactional
     public CommonResponse updateStudentUsualScore(EditStudentUsualScoreRequest editStudentUsualScoreRequest) {
 
         Long courseId = editStudentUsualScoreRequest.getCourseId();
@@ -623,6 +631,82 @@ public class CourseServiceImpl implements CourseService {
         scMapper.updateById( studentCourse );
 
         return CommonResponse.SUCCESS();
+    }
+
+    @Override
+    public QueryResponse findStudentCourseScoreList(long courseId) {
+
+        // 参数校验
+        Course course = courseMapper.selectById( courseId );
+        if (ObjectUtils.isEmpty( course )) {
+            ExceptionThrowUtils.cast( CommonCode.INVALID_PARAM );
+        }
+
+        List<StudentCourseGradeResp> studentCourseGradeRespList = new ArrayList<>();
+
+        scMapper.selectList(
+                new QueryWrapper<StudentCourse>()
+                        .eq( "course_id", courseId )
+                        .orderByAsc( "student_id" ))
+                .stream()
+                .map( StudentCourse::getStudentId )
+                .forEach( studentId -> {
+                    User student = userMapper.selectById( studentId );
+                    StudentCourse studentCourse = scMapper.selectOne( new QueryWrapper<StudentCourse>().eq( "student_id", studentId ).eq( "course_id", courseId ) );
+                    Map<String, Double> scoreMap = getStudentCourseScoreMap( courseId, studentId );
+                    StudentCourseGradeResp studentCourseGradeResp = StudentCourseGradeResp.builder()
+                            .sno( student.getTsNo() )
+                            .studentName( student.getRealName() )
+                            .usualScore( studentCourse.getUsualScore() )
+                            .hwScore( scoreMap.get( "hwAverageScore" ) )
+                            .examScore( scoreMap.get( "examAverageScore" ) )
+                            .finalScore( scoreMap.get( "finalScore" ) )
+                            .build();
+                    studentCourseGradeRespList.add( studentCourseGradeResp );
+                } );
+
+        return new QueryResponse( CommonCode.SUCCESS,
+                new QueryResult<>( studentCourseGradeRespList, studentCourseGradeRespList.size() ) );
+    }
+
+    private Map<String, Double> getStudentCourseScoreMap(long courseId, long studentId) {
+
+        List<Exam> examList = examMapper.selectList( new QueryWrapper<Exam>().eq( "course_id", courseId ) );
+
+        DecimalFormat df = new DecimalFormat( "#.00" );
+
+        Map<String, Double> scoreMap = new HashMap<>();
+
+        // 获取作业平均分
+        List<Long> homeworkIds = homeworkMapper.selectList(
+                new QueryWrapper<Homework>()
+                        .eq( "course_id", courseId ) )
+                .stream()
+                .map( Homework::getId )
+                .collect( Collectors.toList() );
+        double totalHomeworkScore = 0.0;
+        for (Long homeworkId : homeworkIds) {
+            totalHomeworkScore += homeworkStudentMapper.selectOne( new QueryWrapper<HomeworkStudent>().eq( "homework_id", homeworkId ).eq( "student_id", studentId ) ).getScore();
+        }
+        double hwAverageScore = Double.parseDouble( df.format( totalHomeworkScore / homeworkIds.size() ) );
+
+        // 获取测试平均分
+        List<Exam> exams = examList.stream().filter( exam -> !exam.getStatus() ).collect( Collectors.toList() );
+        double totalExamScore = 0.0;
+        for (Exam exam : exams) {
+            totalExamScore += examUtils.getTotalScore( exam.getId(), studentId );
+        }
+        double examAverageScore = Double.parseDouble( df.format( totalExamScore / exams.size() ) );
+
+        // 获取期末分数
+        Exam exam = examList.stream().filter( Exam::getStatus ).collect( Collectors.toList() ).get( 0 );
+        double finalScore = examUtils.getTotalScore( exam.getId(), studentId );
+
+        scoreMap.put( "hwAverageScore", hwAverageScore );
+        scoreMap.put( "examAverageScore", examAverageScore );
+        scoreMap.put( "finalScore", finalScore );
+
+        return scoreMap;
     }
 
     private void screen(QueryPageRequestCourse queryPageRequestCourse, QueryWrapper<Course> queryWrapper) {

@@ -141,4 +141,12 @@ public interface CourseService {
      * @return 响应结果实体类
      */
     CommonResponse updateStudentUsualScore(EditStudentUsualScoreRequest editStudentUsualScoreRequest);
+
+    /**
+     * 查询某门课程下学生的作业、测试、平时、期末分数列表
+     *
+     * @param courseId 课程id
+     * @return 响应结果实体类
+     */
+    QueryResponse findStudentCourseScoreList(long courseId);
 }

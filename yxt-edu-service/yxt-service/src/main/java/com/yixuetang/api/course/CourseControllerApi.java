@@ -114,4 +114,9 @@ public interface CourseControllerApi {
 
     @ApiOperation("教师修改学生平时成绩")
     CommonResponse updateStudentUsualScore(EditStudentUsualScoreRequest editStudentUsualScoreRequest);
+
+    @ApiOperation("查询某门课程下学生的作业、测试、平时、期末分数列表")
+    @ApiImplicitParam(name = "courseId", value = "课程id", required = true,
+            paramType = "path", dataType = "long")
+    QueryResponse findStudentCourseScoreList(long courseId);
 }

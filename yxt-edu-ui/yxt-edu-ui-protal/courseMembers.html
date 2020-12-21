@@ -281,9 +281,9 @@
 												@blur="isNiceWeight"><template slot="append">%</template></el-input>
 											作业成绩权重：<el-input v-model="hwWeight" placeholder="请输入内容"
 												@blur="isNiceWeight"><template slot="append">%</template></el-input>
-											平时成绩权重：<el-input v-model="UsualWeight" placeholder="请输入内容"
+											平时成绩权重：<el-input v-model="usualWeight" placeholder="请输入内容"
 												@blur="isNiceWeight"><template slot="append">%</template></el-input>
-											测试成绩权重：<el-input v-model="testWeight" placeholder="请输入内容"
+											测试成绩权重：<el-input v-model="examWeight" placeholder="请输入内容"
 												@blur="isNiceWeight"><template slot="append">%</template></el-input>
 											<span style="color: red;">{{weightMsg}}</span>
 											<span slot="footer" class="dialog-footer">
@@ -298,31 +298,24 @@
 										</el-input>
 									</el-col> -->
 								</el-row>
-								<el-table :data="totalScore" style="width: 100%" max-height="1000" stripe="true">
-									<el-table-column fixed prop="sno,studentName" label="全部成员" width="200">
+								<el-table :data="studentCourseGradeData" style="width: 100%" max-height="1000"
+									stripe="true">
+									<el-table-column fixed prop="sno, studentName" label="全部成员" width="200" align="center">
 										<template slot-scope="scope">
 											{{scope.row.sno}} &nbsp; <span
 												style="font-weight: 500;color: black;">{{scope.row.studentName}}</span>
 										</template>
 									</el-table-column>
-									<el-table-column prop="hw" label="作业" width="150">
-
-									</el-table-column>
-									<el-table-column prop="test" label="测试" width="150">
-
-									</el-table-column>
-									<el-table-column prop="usualScore" label="平时成绩" width="150">
-
-									</el-table-column>
-									<el-table-column prop="finalScore" label="期末成绩成绩" width="150">
-
-									</el-table-column>
-									<el-table-column prop="finalScore,test,usualScore,hw" label="最终成绩" width="150">
+									<el-table-column prop="hwScore" label="作业" width="150" align="center"></el-table-column>
+									<el-table-column prop="examScore" label="测试" width="150" align="center"></el-table-column>
+									<el-table-column prop="usualScore" label="平时成绩" width="150" align="center"></el-table-column>
+									<el-table-column prop="finalScore" label="期末成绩成绩" width="150" align="center"></el-table-column>
+									<el-table-column label="最终成绩" width="150" align="center">
 										<template slot-scope="scope">
-											{{(scope.row.finalScore * finalWeight +
-											scope.row.test * testWeight +
-											scope.row.usualScore * UsualWeight +
-											scope.row.hw * hwWeight) * 0.01.toFixed(2)}}
+											{{(scope.row.finalScore * finalWeight * 0.01 +
+											scope.row.examScore * examWeight * 0.01 +
+											scope.row.usualScore * usualWeight * 0.01 +
+											scope.row.hwScore * hwWeight * 0.01).toFixed(2)}}
 										</template>
 									</el-table-column>
 								</el-table>
@@ -375,7 +368,7 @@
 								</el-row> -->
 								<el-table :data="examStudentScoresData" style="width: 100%" max-height="1000"
 									stripe="true">
-									<el-table-column fixed prop="tsNo, realName" label="全部成员" width="200">
+									<el-table-column fixed prop="tsNo, realName" label="全部成员" width="200" align="center">
 										<template slot-scope="scope">
 											{{scope.row.tsNo}} &nbsp; <span
 												style="font-weight: 500;color: black;">{{scope.row.realName}}</span>
@@ -409,7 +402,7 @@
 									</el-col>
 								</el-row> -->
 								<el-table :data="courseStudentData" style="width: 100%" max-height="1000" stripe="true">
-									<el-table-column fixed prop="tsNo, realName" label="全部成员" width="200">
+									<el-table-column fixed prop="tsNo, realName" label="全部成员" width="200" align="center">
 										<template slot-scope="scope">
 											{{scope.row.tsNo}} &nbsp; <span
 												style="font-weight: 500;color: black;">{{scope.row.realName}}</span>
@@ -462,7 +455,7 @@
 								</el-row> -->
 								<el-table :data="examStudentScoresData" style="width: 100%" max-height="1000"
 									stripe="true">
-									<el-table-column fixed prop="tsNo, realName" label="全部成员" width="200">
+									<el-table-column fixed prop="tsNo, realName" label="全部成员" width="200" align="center">
 										<template slot-scope="scope">
 											{{scope.row.tsNo}} &nbsp; <span
 												style="font-weight: 500;color: black;">{{scope.row.realName}}</span>
@@ -561,24 +554,24 @@
 			//总成绩模块数据
 			//权重
 			hwWeight: 10,
-			testWeight: 10,
-			UsualWeight: 10,
+			examWeight: 10,
+			usualWeight: 10,
 			finalWeight: 70,
 			dialogVisible: false,
 			weightMsg: '',
 			search5: '', //搜索
-			totalScore: [{
+			studentCourseGradeData: [{
 				sno: '12370393456',
 				studentName: '王小虎',
-				hw: 86,    //作业平均成绩
-				test: 89,   //测试平均成绩
+				hwScore: 86,    //作业平均成绩
+				examScore: 89,   //测试平均成绩
 				usualScore: 12,   //平时成绩
 				finalScore: 45    //期末成绩
 			}, {
 				sno: '20170390413',
 				studentName: '王虎',
-				hw: 86,
-				test: 89,
+				hwScore: 86,
+				examScore: 89,
 				usualScore: 12,
 				finalScore: 45
 			}]
@@ -666,12 +659,12 @@
 			},
 			isNiceWeight() {
 				var hwWeight = parseInt(this.hwWeight);
-				var testWeight = parseInt(this.testWeight);
+				var examWeight = parseInt(this.examWeight);
 				var finalWeight = parseInt(this.finalWeight);
-				var UsualWeight = parseInt(this.UsualWeight);
-				if ((hwWeight + testWeight + finalWeight + UsualWeight) > 100) {
+				var usualWeight = parseInt(this.usualWeight);
+				if ((hwWeight + examWeight + finalWeight + usualWeight) > 100) {
 					this.weightMsg = "总权重超过100，请重新分配";
-				} else if ((hwWeight + testWeight + finalWeight + UsualWeight) < 100) {
+				} else if ((hwWeight + examWeight + finalWeight + usualWeight) < 100) {
 					this.weightMsg = "总权重小于100，请重新分配";
 				} else {
 					this.weightMsg = "";
@@ -727,6 +720,15 @@
 				}).catch(() => {
 					this.$message.error("服务器繁忙，请稍候再试！")
 				})
+			},
+
+			getStudentCourseGradeData() {
+				yxt.http.get("courses/studentCourseScore/courseId/" + yxt.getUrlParam("courseId"))
+					.then(({ data }) => {
+						if (data.success) {
+							this.studentCourseGradeData = data.queryResult.data;
+						}
+					})
 			}
 
 		},
@@ -735,6 +737,7 @@
 			this.getCourseMemberData();
 			this.getCourseData();
 			this.getCourseStudentData();
+			this.getStudentCourseGradeData();
 		},
 		watch: {
 			pageData: {
