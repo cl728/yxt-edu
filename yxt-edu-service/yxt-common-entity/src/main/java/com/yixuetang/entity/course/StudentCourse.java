@@ -35,9 +35,6 @@ public class StudentCourse {
     @TableField("course_id")
     private Long courseId; // 课程主键id
 
-    @TableField("final_grade")
-    private Double finalGrade;  // 最终成绩
-
     @TableField("top_num")
     private Integer topNum; // 置顶字段
 

@@ -98,7 +98,7 @@
 						</el-aside>
 
 						<el-container v-show="index == 1">
-							<el-header style="font-size: 20px">
+							<el-header style="font-size: 20px;">
 								<span>教师团队（1) </span>
 								<!-- <span style="float: right;">
 									<el-button type="primary" icon="el-icon-user">添加助教/老师</el-button>
@@ -272,8 +272,9 @@
 						<el-container v-show="activeName == 1">
 							<el-main>
 								<el-row>
-									<el-col :span="6">
-										<el-button icon="el-icon-setting" type="text" @click="dialogVisible = true">
+									<el-col :span="10">
+										<el-button icon="el-icon-setting" type="primary" size="small" plain
+											@click="dialogVisible = true">
 											设置成绩权重</el-button>
 										<el-dialog title="设置成绩权重" :visible.sync="dialogVisible" width="30%"
 											:before-close="handleClose">
@@ -292,24 +293,52 @@
 													:disabled="weightMsg != ''">确 定</el-button>
 											</span>
 										</el-dialog>
+										<el-button type="danger" size="small" icon="el-icon-finished" plain
+											:disabled="selectionButtonState" @click="outExcelDialogVisible = true">{{
+											selectionButtonTitle }}</el-button>
+										<el-dialog title="文件名和sheet不能为空" :visible.sync="outExcelDialogVisible">
+											<div>
+												<el-form ref="form" :model="form" label-width="100px">
+													<el-form-item label="导出文件名">
+														<el-input v-model="form.fileName"></el-input>
+													</el-form-item>
+													<el-form-item label="sheet名称">
+														<el-input v-model="form.sheetName"></el-input>
+													</el-form-item>
+												</el-form>
+											</div>
+											<span slot="footer" class="dialog-footer">
+												<el-button size="small" type="warning"
+													@click="outExcelDialogVisible = false">取消
+												</el-button>
+												<el-button size="small" type="danger" :disabled="form.sheetName == ''"
+													@click="outExcel()">确认导出</el-button>
+											</span>
+										</el-dialog>
 									</el-col>
 									<!-- <el-col :span="6" style="float: right;">
 										<el-input placeholder="学号,姓名" style="width: 200px;" suffix-icon="el-icon-search" v-model="search5">
 										</el-input>
 									</el-col> -->
 								</el-row>
-								<el-table :data="studentCourseGradeData" style="width: 100%" max-height="1000"
-									stripe="true">
-									<el-table-column fixed prop="sno, studentName" label="全部成员" width="200" align="center">
+								<el-table :data="studentCourseGradeData" @selection-change="selection"
+									style="width: 100%" max-height="1000" stripe="true">
+									<el-table-column type="selection" width="55"></el-table-column>
+									<el-table-column fixed prop="sno, studentName" label="成员" width="200"
+										align="center">
 										<template slot-scope="scope">
 											{{scope.row.sno}} &nbsp; <span
 												style="font-weight: 500;color: black;">{{scope.row.studentName}}</span>
 										</template>
 									</el-table-column>
-									<el-table-column prop="hwScore" label="作业" width="150" align="center"></el-table-column>
-									<el-table-column prop="examScore" label="测试" width="150" align="center"></el-table-column>
-									<el-table-column prop="usualScore" label="平时成绩" width="150" align="center"></el-table-column>
-									<el-table-column prop="finalScore" label="期末成绩成绩" width="150" align="center"></el-table-column>
+									<el-table-column prop="hwScore" label="作业成绩" width="150" align="center">
+									</el-table-column>
+									<el-table-column prop="examScore" label="测试成绩" width="150" align="center">
+									</el-table-column>
+									<el-table-column prop="usualScore" label="平时成绩" width="150" align="center">
+									</el-table-column>
+									<el-table-column prop="finalScore" label="期末成绩" width="150" align="center">
+									</el-table-column>
 									<el-table-column label="最终成绩" width="150" align="center">
 										<template slot-scope="scope">
 											{{(scope.row.finalScore * finalWeight * 0.01 +
@@ -332,15 +361,14 @@
 									</el-col>
 								</el-row> -->
 								<el-table :data="computedHwScore" style="width: 100%" max-height="1000" stripe="true">
-									<el-table-column fixed prop="tsNo, realName" label="全部成员" width="200"
-										align="center">
+									<el-table-column fixed prop="tsNo, realName" label="成员" width="200" align="center">
 										<template slot-scope="scope">
 											{{scope.row.tsNo}} &nbsp; <span
 												style="font-weight: 500;color: black;">{{scope.row.realName}}</span>
 										</template>
 									</el-table-column>
 									<el-table-column prop="hw"
-										:label="item.length > 5 ? item.substring(0, 5) + '...' : item" width="150"
+										:label="item.length > 8 ? item.substring(0, 8) + '...' : item" width="150"
 										align="center" v-for="(item, index) in hwTitle" :key=index>
 										<template slot-scope="scope">
 											<span v-show="scope.row.hw[index].status === 0"
@@ -368,14 +396,14 @@
 								</el-row> -->
 								<el-table :data="examStudentScoresData" style="width: 100%" max-height="1000"
 									stripe="true">
-									<el-table-column fixed prop="tsNo, realName" label="全部成员" width="200" align="center">
+									<el-table-column fixed prop="tsNo, realName" label="成员" width="200" align="center">
 										<template slot-scope="scope">
 											{{scope.row.tsNo}} &nbsp; <span
 												style="font-weight: 500;color: black;">{{scope.row.realName}}</span>
 										</template>
 									</el-table-column>
 									<el-table-column prop="examStudentRespList"
-										:label="item.length > 5 ? item.substring(0, 5) + '...' : item" width="150"
+										:label="item.length > 8 ? item.substring(0, 8) + '...' : item" width="150"
 										align="center" v-for="(item, index) in examTitle" :key="index">
 										<template slot-scope="scope">
 											<span v-if="scope.row.examStudentRespList[index].status === 0"
@@ -402,7 +430,7 @@
 									</el-col>
 								</el-row> -->
 								<el-table :data="courseStudentData" style="width: 100%" max-height="1000" stripe="true">
-									<el-table-column fixed prop="tsNo, realName" label="全部成员" width="200" align="center">
+									<el-table-column fixed prop="tsNo, realName" label="成员" width="200" align="center">
 										<template slot-scope="scope">
 											{{scope.row.tsNo}} &nbsp; <span
 												style="font-weight: 500;color: black;">{{scope.row.realName}}</span>
@@ -426,7 +454,7 @@
 								<el-dialog title="修改学生平时成绩" :visible.sync="editScoreFormVisible" width="30%" center
 									destroy-on-close @close="editScoreForm = {}">
 									<el-form style="margin: 20px 0;" :model="editScoreForm" ref="editScoreForm"
-										label-width="60px" class="demo-ruleForm">
+										label-width="90px" class="demo-ruleForm">
 										<el-form-item label="平时成绩" prop="score" :rules="[
 											{ required: true, message: '分数不能为空', trigger: 'blur'},
 											{ type: 'number', message: '分数必须为数字值', trigger: 'blur'}
@@ -455,7 +483,7 @@
 								</el-row> -->
 								<el-table :data="examStudentScoresData" style="width: 100%" max-height="1000"
 									stripe="true">
-									<el-table-column fixed prop="tsNo, realName" label="全部成员" width="200" align="center">
+									<el-table-column fixed prop="tsNo, realName" label="成员" width="200" align="center">
 										<template slot-scope="scope">
 											{{scope.row.tsNo}} &nbsp; <span
 												style="font-weight: 500;color: black;">{{scope.row.realName}}</span>
@@ -465,13 +493,13 @@
 										:label="item.length > 35 ? item.substring(0, 35) + '...' : item" width="150"
 										align="center" v-for="(item, index) in finalExamTitle" :key="index">
 										<template slot-scope="scope">
-											<span v-if="scope.row.examStudentRespList[index].status === 0"
+											<span v-if="scope.row.finalExamStudentRespList[index].status === 0"
 												style="color: red;">未交</span>
 											<span
-												v-if="scope.row.examStudentRespList[index].status === 1">未批/{{scope.row.examStudentRespList[index].totalScore}}</span>
-											<span v-if="scope.row.examStudentRespList[index].status === 2"
-												style="font-weight: 1000;">{{scope.row.examStudentRespList[index].studentScore}}
-												<span>/{{scope.row.examStudentRespList[index].totalScore}}</span>
+												v-if="scope.row.finalExamStudentRespList[index].status === 1">未批/{{scope.row.finalExamStudentRespList[index].totalScore}}</span>
+											<span v-if="scope.row.finalExamStudentRespList[index].status === 2"
+												style="font-weight: 1000;">{{scope.row.finalExamStudentRespList[index].studentScore}}
+												<span>/{{scope.row.finalExamStudentRespList[index].totalScore}}</span>
 											</span>
 										</template>
 									</el-table-column>
@@ -491,6 +519,7 @@
 <script src="https://cdn.bootcss.com/axios/0.19.2/axios.min.js"></script>
 <script src="https://cdn.bootcss.com/element-ui/2.13.2/index.js"></script>
 <script src="./js/common.js"></script>
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/xlsx@0.16.9/dist/xlsx.full.min.js"></script>
 
 <script>
 	new Vue({
@@ -574,8 +603,15 @@
 				examScore: 89,
 				usualScore: 12,
 				finalScore: 45
-			}]
-
+			}],
+			selectionButtonTitle: "未选择数据",
+			selectionButtonState: true,
+			selectionData: [],
+			outExcelDialogVisible: false,
+			form: {
+				fileName: "成绩表",
+				sheetName: "1班",
+			},
 		},
 		methods: {
 			handleSelectFirst(key, keyPath) {
@@ -684,8 +720,10 @@
 						if (data.success) {
 							this.examStudentScoresData = data.queryResult.data;
 							this.examTitle = this.examStudentScoresData[0].examStudentRespList.filter(examStudentResp => !examStudentResp.finalExam).map(examStudentResp => examStudentResp.title);
-							this.examStudentScoresData.finalExamStudentRespList =
-								this.examStudentScoresData[0].examStudentRespList.filter(resp => resp.finalExam)
+							for (let i = 0; i < this.examStudentScoresData.length; i++) {
+								this.examStudentScoresData[i].finalExamStudentRespList =
+									this.examStudentScoresData[i].examStudentRespList.filter(resp => resp.finalExam)
+							}
 							this.finalExamTitle = this.examStudentScoresData[0].examStudentRespList.filter(examStudentResp => examStudentResp.finalExam).map(examStudentResp => examStudentResp.title);
 						}
 					})
@@ -729,6 +767,69 @@
 							this.studentCourseGradeData = data.queryResult.data;
 						}
 					})
+			},
+
+			selection(selectData) {
+				if (
+					selectData.length > 0 &&
+					this.studentCourseGradeData.length != selectData.length
+				) {
+					this.selectionButtonTitle = "导出已选择" + selectData.length;
+					this.selectionButtonState = false;
+					this.selectionData = selectData;
+				} else if (this.studentCourseGradeData.length == selectData.length) {
+					this.selectionButtonTitle = "导出全选";
+					this.selectionButtonState = false;
+					this.selectionData = selectData;
+				} else {
+					this.selectionButtonTitle = "未选择数据";
+					this.selectionButtonState = true;
+				}
+			},
+
+			outExcel() {
+				// 自定义表格表头
+				let tableData = [
+					[
+						"成员",
+						"作业成绩",
+						"测试成绩",
+						"平时成绩",
+						"期末成绩",
+						"最终成绩",
+					],
+				];
+				// 每行对应的数据
+				this.studentCourseGradeData.forEach((item) => {
+					let rowData = [];
+					rowData = [
+						item.sno + " " + item.studentName,
+						item.hwScore,
+						item.examScore,
+						item.usualScore,
+						item.finalScore,
+						(item.finalScore * this.finalWeight * 0.01 +
+							item.examScore * this.examWeight * 0.01 +
+							item.usualScore * this.usualWeight * 0.01 +
+							item.hwScore * this.hwWeight * 0.01).toFixed(2)
+					];
+					tableData.push(rowData);
+				});
+				let ws = XLSX.utils.aoa_to_sheet(tableData);
+				// 设置每一列的宽度
+				ws["!cols"] = [
+					{ wch: 25 },
+					{ wch: 10 },
+					{ wch: 10 },
+					{ wch: 10 },
+					{ wch: 10 },
+					{ wch: 10 }
+				];
+				let wb = XLSX.utils.book_new();
+				XLSX.utils.book_append_sheet(wb, ws, this.form.sheetName); // 工作簿名称
+				XLSX.writeFile(wb, this.form.fileName + ".xlsx"); // 保存的文件名
+				this.$message.success("已导出选中数据成功，请您查看下载的excel");
+				this.outExcelDialogVisible = false;
 			}
 
 		},

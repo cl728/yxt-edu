@@ -31,9 +31,9 @@
                         <el-menu mode="horizontal">
                             <el-menu-item index="1" class="header-text" @click="location.href = '../homePage.html'">课堂
                             </el-menu-item>
-                            <el-menu-item index="2" class="header-text">精品课程</el-menu-item>
+                            <!-- <el-menu-item index="2" class="header-text">精品课程</el-menu-item>
                             <el-menu-item index="3" class="header-text">本校课程</el-menu-item>
-                            <el-menu-item index="4" class="header-text">我的精品</el-menu-item>
+                            <el-menu-item index="4" class="header-text">我的精品</el-menu-item> -->
                         </el-menu>
                     </el-col>
                     <!-- 消息提醒 -->
@@ -167,7 +167,8 @@
                                             </el-form-item>
                                             <el-form-item label="年龄" prop="age">
                                                 <el-input type="number" prefix-icon="el-icon-date" placeholder="请输入年龄"
-                                                    v-model.native.lazy="userInfo.age" autocomplete="off" clearable></el-input>
+                                                    v-model.native.lazy="userInfo.age" autocomplete="off" clearable>
+                                                </el-input>
                                             </el-form-item>
                                             <el-form-item label="角色" prop="rname">
                                                 <el-input prefix-icon="el-icon-s-custom" v-model="userInfo.role.rname"
@@ -180,8 +181,8 @@
                                                     </el-radio>
                                                 </el-radio-group>
                                             </el-form-item>
-                                            <!-- <br>
-                                            <el-form-item>
+                                            <br><br><br>
+                                            <!-- <el-form-item>
                                                 <el-button type="primary" @click="updateUsers('settingForm')"
                                                     style="width: 150px">确认修改</el-button>
                                             </el-form-item> -->

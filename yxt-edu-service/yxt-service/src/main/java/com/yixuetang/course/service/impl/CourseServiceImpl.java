@@ -691,7 +691,7 @@ public class CourseServiceImpl implements CourseService {
         double hwAverageScore = Double.parseDouble( df.format( totalHomeworkScore / homeworkIds.size() ) );
 
         // 获取测试平均分
-        List<Exam> exams = examList.stream().filter( exam -> !exam.getStatus() ).collect( Collectors.toList() );
+        List<Exam> exams = examList.stream().filter( exam -> !exam.getFinalExam() ).collect( Collectors.toList() );
         double totalExamScore = 0.0;
         for (Exam exam : exams) {
             totalExamScore += examUtils.getTotalScore( exam.getId(), studentId );
@@ -699,7 +699,7 @@ public class CourseServiceImpl implements CourseService {
         double examAverageScore = Double.parseDouble( df.format( totalExamScore / exams.size() ) );
 
         // 获取期末分数
-        Exam exam = examList.stream().filter( Exam::getStatus ).collect( Collectors.toList() ).get( 0 );
+        Exam exam = examList.stream().filter( Exam::getFinalExam ).collect( Collectors.toList() ).get( 0 );
         double finalScore = examUtils.getTotalScore( exam.getId(), studentId );
 
         scoreMap.put( "hwAverageScore", hwAverageScore );

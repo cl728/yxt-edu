@@ -57,7 +57,8 @@ public class ExamUtils {
 
         double totalScore = 0.0;
         for (ExamQuestionStudent examQuestionStudent : examQuestionStudents) {
-            totalScore += examQuestionStudent.getScore();
+            Double examQuestionStudentScore = examQuestionStudent.getScore();
+            totalScore += examQuestionStudentScore == null ? 0.0 : examQuestionStudentScore;
         }
 
         return totalScore;

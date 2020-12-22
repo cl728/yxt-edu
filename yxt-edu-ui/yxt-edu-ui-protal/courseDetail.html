@@ -49,9 +49,9 @@
                         <el-menu :default-active="activeIndex" mode="horizontal">
                             <el-menu-item index="1" class="header-text" @click="location.href = '../homePage.html'">课堂
                             </el-menu-item>
-                            <el-menu-item index="2" class="header-text">精品课程</el-menu-item>
+                            <!-- <el-menu-item index="2" class="header-text">精品课程</el-menu-item>
                             <el-menu-item index="3" class="header-text">本校课程</el-menu-item>
-                            <el-menu-item index="4" class="header-text">我的精品</el-menu-item>
+                            <el-menu-item index="4" class="header-text">我的精品</el-menu-item> -->
                         </el-menu>
                     </el-col>
                     <!-- 消息提醒 -->
@@ -179,7 +179,7 @@
                                     <el-col :span="24">
                                         <div id="box-box" style="padding-left: 40px;padding-top: 20px">
                                             <el-row :gutter="30">
-                                                <el-col :span="5">
+                                                <!-- <el-col :span="5">
                                                     <div id="qr-code"
                                                         style="border-radius: 3px;color: white;height: 24px;background-color: #909399;font-size: 12px">
                                                         <el-link :underline="false" style="color: white">
@@ -189,7 +189,7 @@
                                                             </div>
                                                         </el-link>
                                                     </div>
-                                                </el-col>
+                                                </el-col> -->
                                                 <el-col :span="6">
                                                     <div id="course-code"
                                                         style="border-radius: 3px;color: white;height: 24px;background-color: #909399;font-size: 12px">
@@ -228,7 +228,15 @@
                                                     <div id="course-member"
                                                         style="border-radius: 3px;color: white;height: 24px;background-color: #909399;font-size: 12px">
                                                         <el-link :underline="false" style="color: white"
+                                                            v-if="user.isTeacher"
                                                             :href="'courseMembers.html?courseId=' + course.id">
+                                                            <div id="course-member-content" style="padding-top: 3px">
+                                                                <i class="fa fa-user-o"></i>
+                                                                <span>成员</span>
+                                                                <span v-text="course.scount + 1">25</span>
+                                                            </div>
+                                                        </el-link>
+                                                        <el-link :underline="false" style="color: white" v-else>
                                                             <div id="course-member-content" style="padding-top: 3px">
                                                                 <i class="fa fa-user-o"></i>
                                                                 <span>成员</span>
@@ -237,7 +245,7 @@
                                                         </el-link>
                                                     </div>
                                                 </el-col>
-                                                <el-col :span="5">
+                                                <!-- <el-col :span="5">
                                                     <div id="course-data"
                                                         style="border-radius: 3px;color: white;height: 24px;background-color: #909399;font-size: 12px">
                                                         <el-link :underline="false" style="color: white">
@@ -247,11 +255,12 @@
                                                             </div>
                                                         </el-link>
                                                     </div>
-                                                </el-col>
-                                                <el-col :span="4">
+                                                </el-col> -->
+                                                <el-col :span="4" v-if="user.isTeacher">
                                                     <div id="course-score"
                                                         style="border-radius: 3px;color: white;width: 80px;height: 24px;background-color: #909399;font-size: 12px">
-                                                        <el-link :underline="false" style="color: white">
+                                                        <el-link :underline="false" style="color: white"
+                                                            :href="'courseMembers.html?courseId=' + yxt.getUrlParam('id')">
                                                             <div id="course-score-content" style="padding-top: 3px">
                                                                 <i class="fa fa-mortar-board"></i>
                                                                 <span>成绩管理</span>
@@ -326,7 +335,8 @@
                                 </el-col>
                                 <el-col :span="12">
                                     <div id="homework-manage" style="float:right;">
-                                        <el-link :underline="false">
+                                        <el-link :underline="false"
+                                            :href="'courseMembers.html?courseId=' + yxt.getUrlParam('id')">
                                             <i class="fa fa-file-text-o"></i>
                                             <span>作业成绩管理</span>
                                         </el-link>
@@ -652,7 +662,8 @@
                                         <el-link type="primary" :underline="false" style="padding-left: 30px">先去备课区组卷
                                         </el-link> -->
                                         <div style="float: right;">
-                                            <el-link :underline="false">
+                                            <el-link :underline="false"
+                                                :href="'courseMembers.html?courseId=' + yxt.getUrlParam('id')">
                                                 <i class="el-icon-document"></i>
                                                 测试成绩管理
                                             </el-link>
@@ -2693,6 +2704,7 @@
                 yxt.http.get("exam/courseId/" + yxt.getUrlParam("id") + "/userId/" + this.user.id).then(({ data }) => {
                     if (data.success) {
                         this.examList = data.queryResult.data;
+                        this.examCount = data.queryResult.total;
                         this.examList.forEach(exam => {
                             exam.examStatus = this.getExamStatus(exam);
                         });

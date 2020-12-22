@@ -84,7 +84,7 @@
 											v-text="examQuestion.questionTypeName">单选题</span>
 										<span style="margin-left: 5px;" v-text="examQuestion.score">20</span> 分
 									</el-col>
-									<el-col :span="2" :push="10">
+									<el-col :span="3" :push="10">
 										<span style="color: #9facb2">得分：</span>
 										<span style="color: red;" v-text="examStudentAnswerList[questionIndex].studentScore === null 
 											? 0 : examStudentAnswerList[questionIndex].studentScore">5</span>

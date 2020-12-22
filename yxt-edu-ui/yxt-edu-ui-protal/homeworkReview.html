@@ -48,18 +48,51 @@
                         <el-menu mode="horizontal" @select="handleSelect">
                             <el-menu-item index="1" class="header-text" @click="location.href = './homePage.html'">课堂
                             </el-menu-item>
-                            <el-menu-item index="2" class="header-text">精品课程</el-menu-item>
+                            <!-- <el-menu-item index="2" class="header-text">精品课程</el-menu-item>
                             <el-menu-item index="3" class="header-text">本校课程</el-menu-item>
-                            <el-menu-item index="4" class="header-text">我的精品</el-menu-item>
+                            <el-menu-item index="4" class="header-text">我的精品</el-menu-item> -->
+                        </el-menu>
+                    </el-col>
+                    <!-- 消息提醒 -->
+                    <el-col :span="1.5">
+                        <el-menu class="el-menu-demo" mode="horizontal">
+                            <el-submenu>
+                                <template slot="title">
+                                    <i class="el-icon-bell"></i>
+                                    <el-badge v-show="totalUnreadCount != 0" :value="totalUnreadCount" :max="10"
+                                        class="item">
+                                </template>
+                                <el-menu-item @click="location.href = 'user/message.html' "><i
+                                        class="el-icon-message-solid"></i> 系统通知 <el-badge
+                                        v-if="unreadMessageCount.systemMessageCount != 0"
+                                        :value="unreadMessageCount.systemMessageCount" class="item">
+                                </el-menu-item>
+                                <el-menu-item @click="location.href = 'user/message.html' "><i
+                                        class="el-icon-notebook-2"></i> 课程相关 <el-badge
+                                        v-if="unreadMessageCount.courseMessageCount != 0"
+                                        :value="unreadMessageCount.courseMessageCount" class="item">
+                                </el-menu-item>
+                                <el-menu-item @click="location.href = 'user/message.html' "><i
+                                        class="fa fa-mail-forward" style="margin-left: 6px; margin-right: 10px;"></i>
+                                    回复我的 <el-badge v-if="unreadMessageCount.replyMessageCount != 0"
+                                        :value="unreadMessageCount.replyMessageCount" class="item">
+                                </el-menu-item>
+                                <el-menu-item @click="location.href = 'user/message.html' "><i class="fa fa-thumbs-o-up"
+                                        style="margin-left: 6px; margin-right: 12px;"></i> 收到的赞 <el-badge
+                                        v-if="unreadMessageCount.voteUpMessageCount != 0"
+                                        :value="unreadMessageCount.voteUpMessageCount" class="item">
+                                </el-menu-item>
+                                <el-menu-item @click="location.href = 'user/message.html' "><i
+                                        class="el-icon-chat-dot-round"></i> 我的私信 <el-badge
+                                        v-if="unreadMessageCount.chatMessageCount != 0"
+                                        :value="unreadMessageCount.chatMessageCount" class="item">
+                                </el-menu-item>
+                            </el-submenu>
                         </el-menu>
                     </el-col>
                     <!-- 头像下拉菜单 -->
-                    <el-col :span="4">
+                    <el-col :span="2.5">
                         <el-menu class="el-menu-demo" mode="horizontal">
-                            <el-menu-item>
-                                <i class="el-icon-bell"></i>
-                                <el-badge is-dot class="item"></el-badge>
-                            </el-menu-item>
                             <el-submenu>
                                 <template slot="title">
                                     <span v-text="user.username" style="color: black; margin: 20px 10px;">用户名</span>
@@ -68,8 +101,11 @@
                                 </template>
                                 <el-menu-item @click="location.href = 'user/setting.html' "><i
                                         class="el-icon-setting"></i> 个人设置</el-menu-item>
+                                <el-menu-item @click="location.href = 'user/message.html' "><i
+                                        class="el-icon-position"></i> 消息中心</el-menu-item>
                                 <el-menu-item @click="logout()"><i class="fa fa-sign-out"
-                                        style="margin-left: 6px; margin-right: 8px;"></i> <span>退出账户</span>
+                                        style="margin-left: 6px; margin-right: 9px;"></i>
+                                    <span>退出账户</span>
                                 </el-menu-item>
                             </el-submenu>
                         </el-menu>
@@ -116,8 +152,7 @@
                                 <el-link type="primary" slot-scope="scope" v-if="scope.row.homeworkStudent.status===0">
                                     催交
                                 </el-link>
-                                <el-link type="primary" v-else
-                                    @click="showPreviewHomeworkList(scope.row)">
+                                <el-link type="primary" v-else @click="showPreviewHomeworkList(scope.row)">
                                     批阅</el-link>
                             </el-table-column>
                         </el-table>
@@ -198,6 +233,7 @@
                     </el-card>
                 </el-container>
             </el-dialog>
+            <br><br><br><br><br><br><br><br>
             <!-- 底部 -->
             <el-footer>
                 <el-row type="flex" justify="center">
@@ -244,7 +280,9 @@
             previewingStudentName: "",
             previewingStudentId: -1,
             showDownloadResourceId: -1,
-            homeworkScoreForm: {}
+            homeworkScoreForm: {},
+            unreadMessageCount: {},
+            websocket: {}
         },
         methods: {
             nameStyle(column) {
@@ -416,12 +454,35 @@
                 this.previewingStudentName = "";
                 this.previewingStudentId = -1;
                 this.homeworkScoreForm = {}
+            },
+            getUnreadMessageCount() {
+                yxt.http.get("message/unreadCount/userId/" + this.user.id).then(({ data }) => {
+                    if (data.success) {
+                        this.unreadMessageCount = data.queryResult.data[0];
+                    }
+                })
+            },
+            initWebSocket() {
+                this.websocket = new WebSocket('ws://127.0.0.1:8888/message/' + this.user.id + '/unreadCount');
+                this.websocket.onmessage = this.setOnmessageMessage;
+            },
+            setOnmessageMessage({ data }) {
+                this.unreadMessageCount = JSON.parse(data);
             }
         },
         created() {
             this.verify();
             this.getHomeworkData();
             this.getHomeworkStudentData();
+        },
+        computed: {
+            totalUnreadCount() {
+                let totalCount = 0;
+                for (let key in this.unreadMessageCount) {
+                    totalCount += this.unreadMessageCount[key];
+                }
+                return totalCount;
+            }
         },
         watch: {
             pageData: {
