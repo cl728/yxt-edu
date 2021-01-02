@@ -43,6 +43,15 @@ const routes = [{
   },
 },
 {
+  path: '/1',
+  name: 'home',
+  component: resolve => require(['@/views/home/Home.vue'], resolve),
+  meta: {
+    title: '主页',
+    loginState: true,
+  },
+},
+{
   path: '/',
   name: 'home',
   component: resolve => require(['@/views/home/Home.vue'], resolve),

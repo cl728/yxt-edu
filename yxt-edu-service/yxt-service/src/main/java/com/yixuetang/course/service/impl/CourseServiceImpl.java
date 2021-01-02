@@ -420,7 +420,7 @@ public class CourseServiceImpl implements CourseService {
         }
 
         // 6. 判断接受转让课程的教师是否与请求转让课程的教师为同一人，是则不允许转让课程
-        if (ObjectUtils.equals( newTeacher.getId(), oldTeacher.getId() )) {
+        if (Objects.equals( newTeacher.getId(), oldTeacher.getId() )) {
             return new CommonResponse( CourseCode.TRANSFER_COURSE_FAIL_SAME_TEACHER );
         }
 

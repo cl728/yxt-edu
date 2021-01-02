@@ -48,7 +48,7 @@ public interface CourseMapper extends BaseMapper<Course> {
             "<if test='request.minStudentCount != null and request.maxStudentCount != null and request.maxStudentCount > request.minStudentCount'> and s_count between #{request.minStudentCount} and #{request.maxStudentCount}</if>" +
             "</where>" +
             "</script>")
-    List<Course> findByPage(Page<Course> page, QueryPageRequestCourse request);
+    List<Course> findByPage(@Param("page") Page<Course> page, @Param("request") QueryPageRequestCourse request);
 
     @ResultMap("courseMap")
     @Select("select id, teacher_id, s_count from t_course where c_code = #{code}")
