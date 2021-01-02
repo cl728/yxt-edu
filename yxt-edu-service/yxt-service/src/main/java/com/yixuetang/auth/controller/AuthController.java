@@ -150,4 +150,16 @@ public class AuthController implements AuthControllerApi {
                 1, null, true );
         return new CommonResponse( CommonCode.SUCCESS );
     }
+
+    @Override
+    @PutMapping("viewCount")
+    public CommonResponse viewCount() {
+        return authService.viewCount();
+    }
+
+    @Override
+    @GetMapping("webDataCount")
+    public QueryResponse findWebDataCount() {
+        return authService.webDataCount();
+    }
 }

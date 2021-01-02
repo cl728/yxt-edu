@@ -632,4 +632,10 @@ const yxt = yixuetang = {
      * 将请求参数字符串格式化为js对象
      */
     parse,
+    /**
+     * 用户访问量计数
+     */
+    viewCount() {
+        yxt.http.put("auth/viewCount");
+    },
 }

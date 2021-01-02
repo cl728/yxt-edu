@@ -1,22 +1,21 @@
 <template>
   <div>
     <el-row :gutter="20">
-      <el-col v-for="(car,index) in web_card_data" :key="index" :span="6">
+      <el-col v-for="(car, index) in webData" :key="index" :span="6">
         <el-card shadow="never">
           <div slot="header" class="clearfix">
             <span>
-              <i :class="car.card_title_icon" />
-              {{car.card_title}}
+              <i :class="car.titleIcon" />
+              {{ car.title }}
             </span>
-            <div id="cycle" :style="{backgroundColor:car.card_cycle_back_color}">{{car.card_cycle}}</div>
           </div>
           <div>
-            <h1 style="font-size:150%;color:#909399">{{car.vist_num}}</h1>
+            <h1 style="font-size: 150%; color: #909399">{{ car.vistNum }}</h1>
             <br />
-            <p style="float:left;color:#909399">{{car.bottom_title}}</p>
-            <p style="float:right;color:#909399">
-              {{car.vist_all_num}}万
-              <i :class="car.vist_all_icon" />
+            <p style="float: left; color: #909399">{{ car.bottomTitle }}</p>
+            <p style="float: right; color: #909399">
+              {{ car.vistAllNum }}
+              <i :class="car.vistAllIcon" />
             </p>
           </div>
           <br />
@@ -29,49 +28,49 @@
 export default {
   data() {
     return {
-      web_card_data: [
+      webData: [
         {
-          card_title_icon: "el-icon-user",
-          card_title: "访问",
-          card_cycle: "年",
-          card_cycle_back_color: "#409EFF",
-          bottom_title: "访问总量",
-          vist_num: Math.ceil(Math.random() * 100000),
-          vist_all_num: Math.ceil(Math.random() * 100),
-          vist_all_icon: "el-icon-trophy",
+          titleIcon: "el-icon-view",
+          title: "访问",
+          cycleBackColor: "#409EFF",
+          bottomTitle: "访问总量",
+          vistNum: Math.ceil(Math.random() * 100000),
+          vistAllNum: Math.ceil(Math.random() * 100),
+          vistAllIcon: "el-icon-trophy",
         },
         {
-          card_title_icon: "el-icon-download",
-          card_title: "下载",
-          card_cycle: "月",
-          card_cycle_back_color: "#67C23A",
-          bottom_title: "下载总量",
-          vist_num: Math.ceil(Math.random() * 100000),
-          vist_all_num: Math.ceil(Math.random() * 100),
-          vist_all_icon: "el-icon-download",
+          titleIcon: "el-icon-download",
+          title: "下载",
+          cycleBackColor: "#67C23A",
+          bottomTitle: "下载总量",
+          vistNum: Math.ceil(Math.random() * 100000),
+          vistAllNum: Math.ceil(Math.random() * 100),
+          vistAllIcon: "el-icon-download",
         },
         {
-          card_title_icon: "el-icon-wallet",
-          card_title: "收入",
-          card_cycle: "日",
-          card_cycle_back_color: "#F56C6C",
-          bottom_title: "总收入",
-          vist_num: Math.ceil(Math.random() * 100000),
-          vist_all_num: Math.ceil(Math.random() * 100),
-          vist_all_icon: "el-icon-coin",
-        },
-        {
-          card_title_icon: "el-icon-coordinate",
-          card_title: "用户",
-          card_cycle: "月",
-          card_cycle_back_color: "#E6A23C",
-          bottom_title: "总用户",
-          vist_num: Math.ceil(Math.random() * 100000),
-          vist_all_num: Math.ceil(Math.random() * 100),
-          vist_all_icon: "el-icon-data-line",
+          titleIcon: "el-icon-user",
+          title: "用户",
+          cycleBackColor: "#E6A23C",
+          bottomTitle: "总用户",
+          vistNum: Math.ceil(Math.random() * 100000),
+          vistAllNum: Math.ceil(Math.random() * 100),
+          vistAllIcon: "el-icon-data-line",
         },
       ],
     };
+  },
+  created() {
+    this.$axios.get("auth/webDataCount").then(({ data }) => {
+      if (data.success) {
+        let webDataCount = data.queryResult.data[0];
+        this.webData[0].vistAllNum = webDataCount.totalVisitCount;
+        this.webData[0].vistNum = webDataCount.dateVisitCount;
+        this.webData[1].vistAllNum = webDataCount.totalDownloadCount;
+        this.webData[1].vistNum = webDataCount.dateDownloadCount;
+        this.webData[2].vistAllNum = webDataCount.totalRegisterCount;
+        this.webData[2].vistNum = webDataCount.dateRegisterCount;
+      }
+    });
   },
 };
 </script>

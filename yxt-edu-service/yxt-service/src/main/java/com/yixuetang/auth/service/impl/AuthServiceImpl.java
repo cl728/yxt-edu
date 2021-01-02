@@ -2,7 +2,11 @@ package com.yixuetang.auth.service.impl;
 
 import com.yixuetang.auth.service.AuthService;
 import com.yixuetang.entity.auth.UserInfo;
+import com.yixuetang.entity.response.CommonResponse;
+import com.yixuetang.entity.response.QueryResponse;
 import com.yixuetang.entity.response.code.CommonCode;
+import com.yixuetang.entity.response.result.QueryResult;
+import com.yixuetang.entity.response.result.WebDataCount;
 import com.yixuetang.entity.user.User;
 import com.yixuetang.user.mapper.UserMapper;
 import com.yixuetang.utils.auth.JwtConfig;
@@ -14,6 +18,12 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
+
+import java.text.SimpleDateFormat;
+import java.util.Collections;
+import java.util.Date;
+import java.util.Objects;
+import java.util.concurrent.TimeUnit;
 
 /**
  * @author Colin
@@ -67,6 +77,16 @@ public class AuthServiceImpl implements AuthService {
         return getToken( user, rememberMe, userType );
     }
 
+    @Override
+    public CommonResponse viewCount() {
+        SimpleDateFormat sdf = new SimpleDateFormat( "yyyy-MM-dd" );
+        String dateKey = "count:vi:" + sdf.format( new Date() );
+        redisTemplate.opsForValue().setIfAbsent( dateKey, "0", 25L, TimeUnit.HOURS );
+        redisTemplate.opsForValue().increment( dateKey );
+        redisTemplate.opsForValue().increment( "count:vi" );
+        return CommonResponse.SUCCESS();
+    }
+
     private String getToken(User user, boolean rememberMe, int userType) {
         if (user == null) {
             return null;
@@ -101,5 +121,22 @@ public class AuthServiceImpl implements AuthService {
                 }
         }
         return true;
+    }
+
+    @Override
+    public QueryResponse webDataCount() {
+        String currentDate = new SimpleDateFormat( "yyyy-MM-dd" ).format( new Date() );
+        String dateVisitCount = this.redisTemplate.opsForValue().get( "count:vi:" + currentDate );
+        String dateRegisterCount = this.redisTemplate.opsForValue().get( "count:rg:" + currentDate );
+        String dateDownloadCount = this.redisTemplate.opsForValue().get( "count:dl:" + currentDate );
+        WebDataCount webDataCount = WebDataCount.builder()
+                .totalVisitCount( Integer.valueOf( Objects.requireNonNull( this.redisTemplate.opsForValue().get( "count:vi" ) ) ) )
+                .dateVisitCount( Integer.valueOf( dateVisitCount == null ? "0" : dateVisitCount ) )
+                .totalDownloadCount( Integer.valueOf( Objects.requireNonNull( this.redisTemplate.opsForValue().get( "count:dl" ) ) ) )
+                .dateDownloadCount( Integer.valueOf( dateDownloadCount == null ? "0" : dateDownloadCount ) )
+                .totalRegisterCount( Integer.valueOf( Objects.requireNonNull( this.redisTemplate.opsForValue().get( "count:rg" ) ) ) )
+                .dateRegisterCount( Integer.valueOf( dateRegisterCount == null ? "0" : dateRegisterCount ) )
+                .build();
+        return new QueryResponse( CommonCode.SUCCESS, new QueryResult<>( Collections.singletonList( webDataCount ), 1 ) );
     }
 }

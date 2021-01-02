@@ -32,6 +32,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.data.redis.core.ZSetOperations;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -39,6 +40,7 @@ import org.springframework.util.CollectionUtils;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletResponse;
+import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
@@ -74,7 +76,7 @@ public class ResourceServiceImpl implements ResourceService {
     private HomeworkResourceMapper homeworkResourceMapper;
 
     @Autowired
-    private ScMapper scMapper;
+    private StringRedisTemplate redisTemplate;
 
     @javax.annotation.Resource(name = "template")
     private RedisTemplate<String, Object> template;
@@ -206,6 +208,7 @@ public class ResourceServiceImpl implements ResourceService {
             ExceptionThrowUtils.cast( CommonCode.INVALID_PARAM );
         }
         resourceUtils.download( response, resource );
+        downloadCount();
     }
 
     @Override
@@ -466,5 +469,13 @@ public class ResourceServiceImpl implements ResourceService {
                 .reverseRangeWithScores( ANCESTORS_KEY_PREFIX + resource.getId(), 0, -1 ) )) {
             this.template.delete( ANCESTORS_KEY_PREFIX + resource.getId() );
         }
+    }
+
+    private void downloadCount() {
+        SimpleDateFormat sdf = new SimpleDateFormat( "yyyy-MM-dd" );
+        String dateKey = "count:dl:" + sdf.format( new Date() );
+        redisTemplate.opsForValue().setIfAbsent( dateKey, "0", 25L, TimeUnit.HOURS );
+        redisTemplate.opsForValue().increment( dateKey );
+        redisTemplate.opsForValue().increment( "count:dl" );
     }
 }

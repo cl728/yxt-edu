@@ -2761,6 +2761,7 @@
             this.getNoticeData();
             this.getResourceData(yxt.getUrlParam("id"), -1);
             window.getResourceData = this.getResourceData;
+            yxt.viewCount();
         },
         computed: {
             resourceListRows() {

@@ -2,6 +2,7 @@ package com.yixuetang.api.auth;
 
 import com.yixuetang.entity.request.auth.LoginUser;
 import com.yixuetang.entity.response.CommonResponse;
+import com.yixuetang.entity.response.QueryResponse;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
@@ -38,4 +39,10 @@ public interface AuthControllerApi {
     @ApiImplicitParam(name = "userType", value = "用户类型 1管理员 2普通用户", required = true,
             paramType = "path", dataType = "int")
     CommonResponse logout(int userType, HttpServletRequest request, HttpServletResponse response);
+
+    @ApiOperation("用户访问计数")
+    CommonResponse viewCount();
+
+    @ApiOperation("获取网站统计数据")
+    QueryResponse findWebDataCount();
 }

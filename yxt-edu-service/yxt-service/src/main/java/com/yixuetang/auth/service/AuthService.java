@@ -1,5 +1,8 @@
 package com.yixuetang.auth.service;
 
+import com.yixuetang.entity.response.CommonResponse;
+import com.yixuetang.entity.response.QueryResponse;
+
 /**
  * @author Colin
  * @version 1.0.0
@@ -40,4 +43,19 @@ public interface AuthService {
      * @return 生成的 token 信息
      */
     String authByPhone(String phone, String code, boolean rememberMe, int userType);
+
+    /**
+     * 用户访问量计数
+     *
+     * @return 通用响应结果实体类
+     */
+    CommonResponse viewCount();
+
+    /**
+     * 获取网站统计数据
+     *
+     * @return 网站数据统计实体类
+     */
+    QueryResponse webDataCount();
+
 }

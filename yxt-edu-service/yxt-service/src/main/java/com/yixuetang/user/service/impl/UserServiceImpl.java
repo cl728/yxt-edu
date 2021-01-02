@@ -51,6 +51,7 @@ import org.springframework.util.CollectionUtils;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
@@ -281,6 +282,8 @@ public class UserServiceImpl implements UserService {
         this.userMapper.insert( user );
         // 5. 更新用户的角色id信息
         this.userMapper.updateRoleIdByUsername( user.getUsername(), role.getId() );
+
+        registerCount();
 
         return new CommonResponse( CommonCode.SUCCESS );
     }
@@ -675,7 +678,6 @@ public class UserServiceImpl implements UserService {
                                 : filterUsers.size() ) ); // 否则为过滤后的成员
     }
 
-
     private void getCourseUserRespList(List<CourseUserResp> courseUserRespList, List<Long> courseIds) {
         if (!CollectionUtils.isEmpty( courseIds )) {
             // 查询每一门课程下的成员列表
@@ -745,5 +747,13 @@ public class UserServiceImpl implements UserService {
             queryPageRequestUser.setPhone( "%" + queryPageRequestUser.getPhone() + "%" );
             queryWrapper.like( "phone", queryPageRequestUser.getPhone() );
         }
+    }
+
+    private void registerCount() {
+        SimpleDateFormat sdf = new SimpleDateFormat( "yyyy-MM-dd" );
+        String dateKey = "count:rg:" + sdf.format( new Date() );
+        redisTemplate.opsForValue().setIfAbsent( dateKey, "0", 25L, TimeUnit.HOURS );
+        redisTemplate.opsForValue().increment( dateKey );
+        redisTemplate.opsForValue().increment( "count:rg" );
     }
 }
