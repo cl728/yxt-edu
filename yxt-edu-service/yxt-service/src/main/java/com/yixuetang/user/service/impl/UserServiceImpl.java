@@ -18,9 +18,10 @@ import com.yixuetang.entity.response.CommonResponse;
 import com.yixuetang.entity.response.QueryResponse;
 import com.yixuetang.entity.response.code.CommonCode;
 import com.yixuetang.entity.response.code.user.UserCode;
-import com.yixuetang.entity.response.result.course.CourseUserResp;
 import com.yixuetang.entity.response.result.QueryResult;
+import com.yixuetang.entity.response.result.course.CourseUserResp;
 import com.yixuetang.entity.response.result.user.UserResp;
+import com.yixuetang.entity.response.result.user.UserTypeCount;
 import com.yixuetang.entity.user.Role;
 import com.yixuetang.entity.user.School;
 import com.yixuetang.entity.user.User;
@@ -676,6 +677,20 @@ public class UserServiceImpl implements UserService {
                         StringUtils.isBlank( search )
                                 ? ids.size() // 如果搜索字段为空，则 total 为总的作业成员
                                 : filterUsers.size() ) ); // 否则为过滤后的成员
+    }
+
+    @Override
+    public QueryResponse findUserTypeCount() {
+        List<UserTypeCount> userTypeCounts = new ArrayList<>();
+        this.roleMapper.selectList( null )
+                .forEach( role -> {
+                    UserTypeCount userTypeCount = UserTypeCount.builder()
+                            .name( role.getRName() )
+                            .value( userMapper.selectCount( new QueryWrapper<User>().eq( "role_id", role.getId() ) ) )
+                            .build();
+                    userTypeCounts.add( userTypeCount );
+                } );
+        return new QueryResponse( CommonCode.SUCCESS, new QueryResult<>( userTypeCounts, userTypeCounts.size() ) );
     }
 
     private void getCourseUserRespList(List<CourseUserResp> courseUserRespList, List<Long> courseIds) {

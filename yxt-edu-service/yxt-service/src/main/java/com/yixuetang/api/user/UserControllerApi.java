@@ -140,4 +140,7 @@ public interface UserControllerApi {
                     paramType = "query", dataType = "String")
     })
     QueryResponse findPageByExamId(long examId, long currentPage, long pageSize, String search);
+
+    @ApiOperation("查询用户类别及其数量")
+    QueryResponse findUserTypeCount();
 }

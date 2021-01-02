@@ -20,9 +20,7 @@ import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
 
 import java.text.SimpleDateFormat;
-import java.util.Collections;
-import java.util.Date;
-import java.util.Objects;
+import java.util.*;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -80,9 +78,13 @@ public class AuthServiceImpl implements AuthService {
     @Override
     public CommonResponse viewCount() {
         SimpleDateFormat sdf = new SimpleDateFormat( "yyyy-MM-dd" );
+        SimpleDateFormat sdf2 = new SimpleDateFormat( "yyyy-MM-dd:HH" );
         String dateKey = "count:vi:" + sdf.format( new Date() );
+        String hourKey = "count:vi:" + sdf2.format( new Date() );
         redisTemplate.opsForValue().setIfAbsent( dateKey, "0", 25L, TimeUnit.HOURS );
+        redisTemplate.opsForValue().setIfAbsent( hourKey, "0", 25L, TimeUnit.HOURS );
         redisTemplate.opsForValue().increment( dateKey );
+        redisTemplate.opsForValue().increment( hourKey );
         redisTemplate.opsForValue().increment( "count:vi" );
         return CommonResponse.SUCCESS();
     }
@@ -138,5 +140,17 @@ public class AuthServiceImpl implements AuthService {
                 .dateRegisterCount( Integer.valueOf( dateRegisterCount == null ? "0" : dateRegisterCount ) )
                 .build();
         return new QueryResponse( CommonCode.SUCCESS, new QueryResult<>( Collections.singletonList( webDataCount ), 1 ) );
+    }
+
+    @Override
+    public QueryResponse perHourViewCount() {
+        String currentDate = new SimpleDateFormat( "yyyy-MM-dd" ).format( new Date() );
+        List<Integer> hourViewCounts = new ArrayList<>();
+        for (int i = 0; i < 24; i++) {
+            String hour = i < 10 ? "0" + i : String.valueOf( i );
+            String hourViewCount = redisTemplate.opsForValue().get( "count:vi:" + currentDate + ":" + hour );
+            hourViewCounts.add( Integer.valueOf( hourViewCount == null ? "0" : hourViewCount ) );
+        }
+        return new QueryResponse( CommonCode.SUCCESS, new QueryResult<>( hourViewCounts, 24 ) );
     }
 }

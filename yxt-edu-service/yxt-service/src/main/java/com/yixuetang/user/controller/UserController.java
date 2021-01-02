@@ -160,6 +160,12 @@ public class UserController implements UserControllerApi {
         return this.userService.findPageByExamId( examId, currentPage, pageSize, search );
     }
 
+    @Override
+    @GetMapping("userTypeCount")
+    public QueryResponse findUserTypeCount() {
+        return this.userService.findUserTypeCount();
+    }
+
     private boolean checkIdIfInvalid(@PathVariable long id, HttpServletRequest request) {
         String token = CookieUtils.getCookieValue( request, id == 3 ? config.getAdminCookieName() : config.getUserCookieName() );
         UserInfo userInfo;

@@ -162,4 +162,10 @@ public class AuthController implements AuthControllerApi {
     public QueryResponse findWebDataCount() {
         return authService.webDataCount();
     }
+
+    @Override
+    @GetMapping("perHourViewCount")
+    public QueryResponse findViewCountPerHour() {
+        return authService.perHourViewCount();
+    }
 }

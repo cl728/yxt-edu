@@ -45,4 +45,7 @@ public interface AuthControllerApi {
 
     @ApiOperation("获取网站统计数据")
     QueryResponse findWebDataCount();
+
+    @ApiOperation("获取网站每小时的访问量")
+    QueryResponse findViewCountPerHour();
 }

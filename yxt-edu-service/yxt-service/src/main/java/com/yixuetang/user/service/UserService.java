@@ -172,4 +172,12 @@ public interface UserService {
      * @return 响应结果实体类
      */
     QueryResponse findPageByExamId(long examId, long currentPage, long pageSize, String search);
+
+    /**
+     * 查询用户类别及其数量
+     *
+     * @return 响应结果实体类
+     */
+    QueryResponse findUserTypeCount();
+
 }

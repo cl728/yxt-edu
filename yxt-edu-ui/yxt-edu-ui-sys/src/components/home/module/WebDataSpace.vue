@@ -6,10 +6,14 @@
     <div>
       <el-row :gutter="20">
         <el-col :span="16">
-          <div id="myChart" style="width:100%;height:400px"></div>
+          <div id="myChart" style="width: 100%; height: 400px"></div>
         </el-col>
         <el-col :span="8">
-          <div class="grid-content bg-purple" id="label_vist" style="width:100%;height:400px"></div>
+          <div
+            class="grid-content bg-purple"
+            id="labelVist"
+            style="width: 100%; height: 400px"
+          ></div>
         </el-col>
       </el-row>
     </div>
@@ -20,7 +24,41 @@
 import "echarts/theme/macarons.js";
 export default {
   data() {
-    return {};
+    return {
+      perHourViewCount: [
+        Math.ceil(Math.random() * 1000),
+        Math.ceil(Math.random() * 1000),
+        Math.ceil(Math.random() * 1000),
+        Math.ceil(Math.random() * 1000),
+        Math.ceil(Math.random() * 1000),
+        Math.ceil(Math.random() * 1000),
+        Math.ceil(Math.random() * 1000),
+        Math.ceil(Math.random() * 1000),
+        Math.ceil(Math.random() * 1000),
+        Math.ceil(Math.random() * 1000),
+        Math.ceil(Math.random() * 1000),
+        Math.ceil(Math.random() * 1000),
+        Math.ceil(Math.random() * 1000),
+        Math.ceil(Math.random() * 1000),
+        Math.ceil(Math.random() * 1000),
+        Math.ceil(Math.random() * 1000),
+        Math.ceil(Math.random() * 1000),
+        Math.ceil(Math.random() * 1000),
+        Math.ceil(Math.random() * 1000),
+        Math.ceil(Math.random() * 1000),
+        Math.ceil(Math.random() * 1000),
+        Math.ceil(Math.random() * 1000),
+        Math.ceil(Math.random() * 1000),
+        Math.ceil(Math.random() * 1000),
+        Math.ceil(Math.random() * 1000),
+      ],
+      userTypeCount: [
+        { value: Math.ceil(Math.random() * 1000), name: "超级管理员" },
+        { value: Math.ceil(Math.random() * 1000), name: "管理员" },
+        { value: Math.ceil(Math.random() * 1000), name: "教师" },
+        { value: Math.ceil(Math.random() * 1000), name: "学生" },
+      ],
+    };
   },
   methods: {
     drawLine() {
@@ -33,19 +71,19 @@ export default {
       myChart.setOption({
         title: {
           text: "网站访问数据",
-          subtext: "Http://www.yixuetang.com",
+          subtext: "http://www.yixuetang.com",
         },
         tooltip: {
           trigger: "axis",
         },
         legend: {
-          data: ["访问量", "登录人数"],
+          data: ["访问量"],
         },
         toolbox: {
           show: true,
           feature: {
-            dataView: { show: true, readOnly: false },
             magicType: { show: true, type: ["line", "bar"] },
+            dataView: { show: true, readOnly: false },
             restore: { show: true },
             saveAsImage: { show: true },
           },
@@ -91,33 +129,7 @@ export default {
           {
             name: "访问量",
             type: "bar",
-            data: [
-              Math.ceil(Math.random() * 1000),
-              Math.ceil(Math.random() * 1000),
-              Math.ceil(Math.random() * 1000),
-              Math.ceil(Math.random() * 1000),
-              Math.ceil(Math.random() * 1000),
-              Math.ceil(Math.random() * 1000),
-              Math.ceil(Math.random() * 1000),
-              Math.ceil(Math.random() * 1000),
-              Math.ceil(Math.random() * 1000),
-              Math.ceil(Math.random() * 1000),
-              Math.ceil(Math.random() * 1000),
-              Math.ceil(Math.random() * 1000),
-              Math.ceil(Math.random() * 1000),
-              Math.ceil(Math.random() * 1000),
-              Math.ceil(Math.random() * 1000),
-              Math.ceil(Math.random() * 1000),
-              Math.ceil(Math.random() * 1000),
-              Math.ceil(Math.random() * 1000),
-              Math.ceil(Math.random() * 1000),
-              Math.ceil(Math.random() * 1000),
-              Math.ceil(Math.random() * 1000),
-              Math.ceil(Math.random() * 1000),
-              Math.ceil(Math.random() * 1000),
-              Math.ceil(Math.random() * 1000),
-              Math.ceil(Math.random() * 1000),
-            ],
+            data: this.perHourViewCount,
             markPoint: {
               data: [
                 { type: "max", name: "最大值" },
@@ -128,60 +140,20 @@ export default {
               data: [{ type: "average", name: "平均值" }],
             },
           },
-          {
-            name: "登录人数",
-            type: "bar",
-            data: [
-              Math.ceil(Math.random() * 100),
-              Math.ceil(Math.random() * 100),
-              Math.ceil(Math.random() * 100),
-              Math.ceil(Math.random() * 100),
-              Math.ceil(Math.random() * 100),
-              Math.ceil(Math.random() * 100),
-              Math.ceil(Math.random() * 100),
-              Math.ceil(Math.random() * 100),
-              Math.ceil(Math.random() * 100),
-              Math.ceil(Math.random() * 100),
-              Math.ceil(Math.random() * 100),
-              Math.ceil(Math.random() * 100),
-              Math.ceil(Math.random() * 100),
-              Math.ceil(Math.random() * 100),
-              Math.ceil(Math.random() * 100),
-              Math.ceil(Math.random() * 100),
-              Math.ceil(Math.random() * 100),
-              Math.ceil(Math.random() * 100),
-              Math.ceil(Math.random() * 100),
-              Math.ceil(Math.random() * 100),
-              Math.ceil(Math.random() * 100),
-              Math.ceil(Math.random() * 100),
-              Math.ceil(Math.random() * 100),
-              Math.ceil(Math.random() * 100),
-              Math.ceil(Math.random() * 100),
-            ],
-            markPoint: {
-              data: [
-                { name: "年最高", value: 182.2, xAxis: 7, yAxis: 183 },
-                { name: "年最低", value: 800, xAxis: 11, yAxis: 3 },
-              ],
-            },
-            markLine: {
-              data: [{ type: "average", name: "平均值" }],
-            },
-          },
         ],
       });
     },
-    label_vist() {
+    labelVist() {
       // 基于准备好的dom，初始化echarts实例
       let myChart = this.$echarts.init(
-        document.getElementById("label_vist"),
+        document.getElementById("labelVist"),
         "macarons"
       );
       // 绘制图表
       myChart.setOption({
         title: {
-          text: "网站访问用户类别",
-          subtext: "EuiAdmin",
+          text: "网站用户类别",
+          subtext: "yxt",
           left: "center",
         },
         tooltip: {
@@ -191,21 +163,15 @@ export default {
         legend: {
           orient: "vertical",
           left: "left",
-          data: ["超级管理员", "管理员", "作者", "普通用户", "普通用户","访客"],
+          data: ["超级管理员", "管理员", "老师/助教", "学生"],
         },
         series: [
           {
-            name: "用户类别",
+            name: "用户数量",
             type: "pie",
             radius: "55%",
             center: ["50%", "60%"],
-            data: [
-              { value: Math.ceil(Math.random() * 1000), name: "超级管理员" },
-              { value: Math.ceil(Math.random() * 1000), name: "管理员" },
-              { value: Math.ceil(Math.random() * 1000), name: "作者" },
-              { value: Math.ceil(Math.random() * 1000), name: "普通用户" },
-              { value: Math.ceil(Math.random() * 1000), name: "访客" },
-            ],
+            data: this.userTypeCount,
             emphasis: {
               itemStyle: {
                 shadowBlur: 10,
@@ -217,10 +183,24 @@ export default {
         ],
       });
     },
+    getPerHourViewCount() {
+      this.$axios.get("auth/perHourViewCount").then(({ data }) => {
+        if (data.success) {
+          this.perHourViewCount = data.queryResult.data;
+          this.drawLine();
+        }
+      });
+    },
+    getUserTypeCount() {
+      this.$axios.get("users/userTypeCount").then(({ data }) => {
+        this.userTypeCount = data.queryResult.data;
+        this.labelVist();
+      });
+    },
   },
   mounted() {
-    this.drawLine();
-    this.label_vist()
+    this.getPerHourViewCount();
+    this.getUserTypeCount();
   },
 };
 </script>

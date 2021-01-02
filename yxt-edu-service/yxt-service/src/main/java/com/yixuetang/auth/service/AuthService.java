@@ -54,8 +54,14 @@ public interface AuthService {
     /**
      * 获取网站统计数据
      *
-     * @return 网站数据统计实体类
+     * @return 响应结果实体类
      */
     QueryResponse webDataCount();
 
+    /**
+     * 获取网站每小时访问量
+     *
+     * @return 响应结果实体类
+     */
+    QueryResponse perHourViewCount();
 }
