@@ -1,8 +1,8 @@
 package com.yixuetang.resource.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.yixuetang.course.mapper.CourseMapper;
-import com.yixuetang.course.mapper.ScMapper;
 import com.yixuetang.entity.course.Course;
 import com.yixuetang.entity.homework.Homework;
 import com.yixuetang.entity.homework.HomeworkResource;
@@ -338,8 +338,9 @@ public class ResourceServiceImpl implements ResourceService {
         }
 
         // 2. 判断当前用户是否为资源上传者或管理员
+        Long roleId = this.userMapper.findById( userId ).getRole().getId();
         if (ObjectUtils.notEqual( userId, resource.getUser().getId() ) &&
-                ObjectUtils.notEqual( 1L, this.userMapper.findById( userId ).getRole().getId() )) {
+                ObjectUtils.notEqual( 1L, roleId ) && ObjectUtils.notEqual( 4L, roleId )) {
             return new CommonResponse( ResourceCode.USER_IS_NOT_RESOURCE_OWNER_OR_ADMIN );
         }
 
@@ -408,6 +409,13 @@ public class ResourceServiceImpl implements ResourceService {
         this.delCacheFromRedis( draggingNode );
 
         return CommonResponse.SUCCESS();
+    }
+
+    @Override
+    public QueryResponse findResourcesByPage(long currentPage, long pageSize) {
+        List<Resource> resourceList = resourceMapper.findByPage( new Page<>( currentPage, pageSize ) );
+        return new QueryResponse( CommonCode.SUCCESS,
+                new QueryResult<>( resourceList, resourceMapper.selectCount( new QueryWrapper<>( null ) ) ) );
     }
 
     private void saveToDatabase(Long userId, Long parentResourceId, Resource resource) {

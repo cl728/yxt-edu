@@ -133,6 +133,15 @@ const routes = [{
   },
 },
 {
+  path: '/resources',
+  name: 'resources',
+  component: resolve => require(['@/views/resources/Resources.vue'], resolve),
+  meta: {
+    title: '资源管理',
+    loginState: true,
+  },
+},
+{
   path: '/module/editor',
   name: 'editor',
   component: resolve => require(['@/views/module/Editor.vue'], resolve),

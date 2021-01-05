@@ -1,6 +1,7 @@
 package com.yixuetang.resource.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.yixuetang.entity.resource.Resource;
 import org.apache.ibatis.annotations.*;
 import org.apache.ibatis.mapping.FetchType;
@@ -65,6 +66,13 @@ public interface ResourceMapper extends BaseMapper<Resource> {
     @Select("select * from t_resource where parent_resource_id = #{resourceId} order by type, create_time")
     List<Resource> findChildResourceListByResourceId(Long resourceId);
 
-    @Update( "update t_resource set parent_resource_id = null where id= #{draggingId}" )
+    @Update("update t_resource set parent_resource_id = null where id= #{draggingId}")
     void setParentResourceIdToNullById(long draggingId);
+
+    @Results(
+            @Result(column = "user_id", property = "user",
+                    one = @One(select = "com.yixuetang.user.mapper.UserMapper.findById", fetchType = FetchType.EAGER))
+    )
+    @Select("select id, user_id, type, name, create_time from t_resource")
+    List<Resource> findByPage(Page<Resource> page);
 }

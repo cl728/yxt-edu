@@ -121,4 +121,13 @@ public interface ResourceService {
      * @return 响应结果实体类
      */
     CommonResponse dropResource(long draggingId, DropResource dropResource);
+
+    /**
+     * 分页查询资源列表
+     *
+     * @param currentPage 当前页码数
+     * @param pageSize    每页显示条数
+     * @return 响应结果实体类
+     */
+    QueryResponse findResourcesByPage(long currentPage, long pageSize);
 }

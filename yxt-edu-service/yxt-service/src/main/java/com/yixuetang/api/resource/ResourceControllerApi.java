@@ -106,4 +106,13 @@ public interface ResourceControllerApi {
     @ApiImplicitParam(name = "draggingId", value = "被拖拽的资源id", required = true,
             paramType = "path", dataType = "long")
     CommonResponse dropResource(long draggingId, DropResource dropResource);
+
+    @ApiOperation("分页查询资源列表")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "currentPage", value = "当前页码数", required = true,
+                    paramType = "path", dataType = "long"),
+            @ApiImplicitParam(name = "pageSize", value = "每页显示条数", required = true,
+                    paramType = "path", dataType = "long")
+    })
+    QueryResponse findResourcesByPage(long currentPage, long pageSize);
 }
