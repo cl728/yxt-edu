@@ -123,7 +123,7 @@ public class UserServiceImpl implements UserService {
 
     private final List<Integer> SEND_TYPE = new ArrayList<>( Arrays.asList( 1, 2 ) );
 
-    private final List<Long> ROLE_ID_LIST = new ArrayList<>( Arrays.asList( 1L, 2L, 3L ) );
+    private final List<Long> ROLE_ID_LIST = new ArrayList<>( Arrays.asList( 1L, 2L, 3L, 4L ) );
 
     private final List<Integer> CODE_TYPE = new ArrayList<>( Arrays.asList( 1, 2, 3, 4 ) );
 
@@ -459,7 +459,7 @@ public class UserServiceImpl implements UserService {
         if (!ROLE_ID_LIST.contains( roleId )) {
             ExceptionThrowUtils.cast( CommonCode.INVALID_PARAM );
         }
-        if (roleId == 1) { // 管理员不允许被调用接口注销
+        if (roleId == 1) { // 超级管理员不允许被调用接口注销
             return CommonResponse.FAIL();
         } else if (roleId == 2) { // 如果注销的是教师用户，需先把其创建的课程删除
             List<Long> courseIds = this.courseMapper
@@ -691,6 +691,21 @@ public class UserServiceImpl implements UserService {
                     userTypeCounts.add( userTypeCount );
                 } );
         return new QueryResponse( CommonCode.SUCCESS, new QueryResult<>( userTypeCounts, userTypeCounts.size() ) );
+    }
+
+    @Override
+    public CommonResponse addUser(UserForm userForm) {
+        User user = User.builder().id( null )
+                .username( userForm.getUsername() ).password( userForm.getPassword() )
+                .email( userForm.getEmail() ).phone( userForm.getPhone() )
+                .roleId( userForm.getRoleId() ).realName( userForm.getUsername() )
+                .gender( userForm.getGender() ).age( 0 )
+                .avatar( "http://www.pava.run/group1/M00/00/00/rBAABV-SdsqAMUUKAAANQYGm1Cs894.jpg" )
+                .school( userForm.getSchool() ).tsNo( userForm.getTeSno() )
+                .createTime( new Date() ).updateTime( new Date() )
+                .build();
+        userMapper.insert( user );
+        return CommonResponse.SUCCESS();
     }
 
     private void getCourseUserRespList(List<CourseUserResp> courseUserRespList, List<Long> courseIds) {

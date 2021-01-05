@@ -10,8 +10,9 @@
             type="index"
             label="序号"
             width="50"
+            align="center"
           ></el-table-column>
-          <el-table-column property="rname" label="角色名称"></el-table-column>
+          <el-table-column property="rname" label="角色名称" align="center"></el-table-column>
         </el-table>
         <el-pagination
           @size-change="pageSizeChange"

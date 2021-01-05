@@ -1,6 +1,7 @@
 package com.yixuetang.comment.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.yixuetang.entity.comment.Comment;
 import org.apache.ibatis.annotations.*;
 import org.apache.ibatis.mapping.FetchType;
@@ -67,4 +68,8 @@ public interface CommentMapper extends BaseMapper<Comment> {
     void updateNoticeIdAndUserIdById(@Param("noticeId") long noticeId,
                                      @Param("userId") long userId,
                                      @Param("commentId") Long commentId);
+
+    @ResultMap("commentMap")
+    @Select("select id, user_id, content, parent_comment_id, create_time from t_comment")
+    List<Comment> findByPage(Page<Comment> page);
 }

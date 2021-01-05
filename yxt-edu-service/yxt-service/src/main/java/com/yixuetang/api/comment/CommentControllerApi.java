@@ -54,4 +54,13 @@ public interface CommentControllerApi {
 
     @ApiOperation("查询评论的点赞数量")
     QueryResponse findCommentVoteUpCount();
+
+    @ApiOperation("分页查询评论列表")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "currentPage", value = "当前页码数", required = true,
+                    paramType = "path", dataType = "long"),
+            @ApiImplicitParam(name = "pageSize", value = "每页显示条数", required = true,
+                    paramType = "path", dataType = "long")
+    })
+    QueryResponse findCommentByPage(long currentPage, long pageSize);
 }

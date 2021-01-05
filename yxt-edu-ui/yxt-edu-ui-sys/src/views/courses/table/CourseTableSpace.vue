@@ -62,24 +62,28 @@
             type="index"
             label="序号"
             width="50"
+            align="center"
           ></el-table-column>
           <el-table-column
-            property="teacher.realName"
+            property="teacher.username"
             label="创建者"
+            align="center"
           ></el-table-column>
-          <el-table-column property="cname" label="课程名称"></el-table-column>
-          <el-table-column property="clazz" label="课程班级"></el-table-column>
+          <el-table-column property="cname" label="课程名称" align="center"></el-table-column>
+          <el-table-column property="clazz" label="课程班级" align="center"></el-table-column>
           <el-table-column
             property="schoolYear"
             label="课程学年"
+            align="center"
           ></el-table-column>
           <el-table-column
             property="semester"
             label="课程学期"
+            align="center"
           ></el-table-column>
-          <el-table-column property="ccode" label="加课码"></el-table-column>
-          <el-table-column property="scount" label="加课人数"></el-table-column>
-          <el-table-column label="操作" width="120">
+          <el-table-column property="ccode" label="加课码" align="center"></el-table-column>
+          <el-table-column property="scount" label="加课人数" align="center"></el-table-column>
+          <el-table-column label="操作" width="120" align="center">
             <template slot-scope="scope">
               <el-popconfirm
                 confirmButtonText="确认删除"

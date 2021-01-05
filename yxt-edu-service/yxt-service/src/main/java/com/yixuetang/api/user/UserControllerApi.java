@@ -143,4 +143,7 @@ public interface UserControllerApi {
 
     @ApiOperation("查询用户类别及其数量")
     QueryResponse findUserTypeCount();
+
+    @ApiOperation("管理员新增用户")
+    CommonResponse addUser(UserForm userForm);
 }

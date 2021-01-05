@@ -51,18 +51,19 @@
             type="index"
             label="序号"
             width="50"
+            align="center"
           ></el-table-column>
-          <el-table-column label="发布者">
+          <el-table-column label="发布者" align="center">
             <template slot-scope="scope">
               {{ scope.row.publisher.username }}
             </template>
           </el-table-column>
-          <el-table-column label="接收者类型">
+          <el-table-column label="接收者类型" align="center">
             <template slot-scope="scope">
               {{ scope.row.receiverType === 0 ? "全部用户" : "单一用户" }}
             </template>
           </el-table-column>
-          <el-table-column label="接收者">
+          <el-table-column label="接收者" align="center">
             <template slot-scope="scope">
               {{
                 scope.row.receiverType === 0
@@ -71,7 +72,7 @@
               }}
             </template>
           </el-table-column>
-          <el-table-column property="title" label="通知标题"></el-table-column>
+          <el-table-column property="title" label="通知标题" align="center"></el-table-column>
           <el-table-column label="通知状态">
             <template slot-scope="scope">
               <el-tag
@@ -84,12 +85,14 @@
           <el-table-column
             property="publishTime"
             label="发布时间"
+            align="center"
           ></el-table-column>
           <el-table-column
             property="updateTime"
             label="更新时间"
+            align="center"
           ></el-table-column>
-          <el-table-column label="操作" width="120">
+          <el-table-column label="操作" width="120" align="center">
             <template slot-scope="scope">
               <el-button
                 size="mini"

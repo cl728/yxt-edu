@@ -1,6 +1,7 @@
 package com.yixuetang.comment.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.yixuetang.comment.mapper.CommentMapper;
 import com.yixuetang.comment.mapper.CommentUserMapper;
 import com.yixuetang.comment.service.CommentService;
@@ -16,8 +17,8 @@ import com.yixuetang.entity.response.code.CommonCode;
 import com.yixuetang.entity.response.code.comment.CommentCode;
 import com.yixuetang.entity.response.code.notice.NoticeCode;
 import com.yixuetang.entity.response.code.user.UserCode;
-import com.yixuetang.entity.response.result.comment.CommentVoteUpCountResp;
 import com.yixuetang.entity.response.result.QueryResult;
+import com.yixuetang.entity.response.result.comment.CommentVoteUpCountResp;
 import com.yixuetang.entity.user.User;
 import com.yixuetang.mq.AmqpUtils;
 import com.yixuetang.notice.mapper.NoticeMapper;
@@ -35,6 +36,7 @@ import org.springframework.util.ObjectUtils;
 
 import javax.annotation.Resource;
 import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * @author Colin
@@ -145,6 +147,7 @@ public class CommentServiceImpl implements CommentService {
      */
     @Transactional
     @Override
+    @SuppressWarnings("unchecked")
     public CommonResponse deleteComment(long commentId) {
 
         // 1. 根据评论id查询出已有的评论信息
@@ -159,6 +162,20 @@ public class CommentServiceImpl implements CommentService {
         if (!CollectionUtils.isEmpty( childComments )) {
             // 先删除子评论
             childComments.forEach( childComment -> this.deleteComment( childComment.getId() ) );
+        }
+
+        // 删除此评论的点赞记录
+        commentUserMapper.delete( new QueryWrapper<CommentUser>().eq( "comment_id", commentId ) );
+        Set<String> userLikedKeys = redisTemplate.opsForHash().keys( MAP_KEY_USER_LIKED );
+        List<String> delUserLikedKeys = userLikedKeys.stream().filter( key -> key.endsWith( String.valueOf( commentId ) ) ).collect( Collectors.toList() );
+        for (String delUserLikedKey : delUserLikedKeys) {
+            redisTemplate.opsForHash().delete( MAP_KEY_USER_LIKED, delUserLikedKey );
+        }
+        // 删除此评论的点赞数量缓存记录
+        Set<String> likedCountKeys = redisTemplate.opsForHash().keys( MAP_KEY_COMMENT_LIKED_COUNT );
+        List<String> delLikedCountKeys = likedCountKeys.stream().filter( key -> key.equals( String.valueOf( commentId ) ) ).collect( Collectors.toList() );
+        for (String delCountKey : delLikedCountKeys) {
+            redisTemplate.opsForHash().delete( MAP_KEY_COMMENT_LIKED_COUNT, delCountKey );
         }
 
         // 3. 再根据评论id删除此评论
@@ -284,6 +301,13 @@ public class CommentServiceImpl implements CommentService {
         }
         return new QueryResponse( CommonCode.SUCCESS,
                 new QueryResult<>( commentVoteUpCountRespList, commentVoteUpCountRespList.size() ) );
+    }
+
+    @Override
+    public QueryResponse findCommentByPage(long currentPage, long pageSize) {
+        List<Comment> comments = commentMapper.findByPage( new Page<>( currentPage, pageSize ) );
+        return new QueryResponse( CommonCode.SUCCESS,
+                new QueryResult<>( comments, commentMapper.selectCount( new QueryWrapper<>( null ) ) ) );
     }
 
     private List<Comment> eachComment(List<Comment> comments) {

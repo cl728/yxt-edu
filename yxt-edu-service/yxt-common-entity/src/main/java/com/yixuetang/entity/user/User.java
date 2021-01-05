@@ -50,6 +50,9 @@ public class User {
 
     private String school; // 学校
 
+    @TableField("role_id")
+    private Long roleId;    // 角色id
+
     @TableField("ts_no")
     private String tsNo; // 学/工号
 

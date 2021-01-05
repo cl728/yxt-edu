@@ -124,6 +124,15 @@ const routes = [{
   },
 },
 {
+  path: '/comments',
+  name: 'comments',
+  component: resolve => require(['@/views/comments/Comments.vue'], resolve),
+  meta: {
+    title: '评论管理',
+    loginState: true,
+  },
+},
+{
   path: '/module/editor',
   name: 'editor',
   component: resolve => require(['@/views/module/Editor.vue'], resolve),

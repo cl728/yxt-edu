@@ -24,31 +24,31 @@ public class CommentController implements CommentControllerApi {
     @Override
     @DeleteMapping("/admin/id/{commentId}")
     public CommonResponse deleteComment(@PathVariable long commentId) {
-        return this.commentService.deleteComment(commentId);
+        return this.commentService.deleteComment( commentId );
     }
 
     @Override
     @PostMapping("/noticeId/{noticeId}/userId/{userId}")
     public CommonResponse postCommentToNotice(@PathVariable long noticeId, @PathVariable long userId, @RequestBody PostComment postComment) {
-        return this.commentService.postCommentToNotice(noticeId, userId, postComment);
+        return this.commentService.postCommentToNotice( noticeId, userId, postComment );
     }
 
     @Override
     @GetMapping("topComments/noticeId/{noticeId}")
     public QueryResponse findTopCommentsByNoticeId(@PathVariable long noticeId) {
-        return this.commentService.findTopCommentsByNoticeId(noticeId);
+        return this.commentService.findTopCommentsByNoticeId( noticeId );
     }
 
     @Override
     @PutMapping("voteUpCount/commentId/{commentId}/userId/{userId}")
     public CommonResponse likeComment(@PathVariable long commentId, @PathVariable long userId) {
-        return commentService.likeComment(commentId, userId);
+        return commentService.likeComment( commentId, userId );
     }
 
     @Override
     @GetMapping("commentUser/userId/{userId}")
     public QueryResponse findLike(@PathVariable long userId) {
-        return commentService.findLike(userId);
+        return commentService.findLike( userId );
     }
 
     @Override
@@ -57,4 +57,10 @@ public class CommentController implements CommentControllerApi {
         return this.commentService.findCommentVoteUpCount();
     }
 
+    @Override
+    @GetMapping("page/{currentPage}/{pageSize}")
+    public QueryResponse findCommentByPage(@PathVariable long currentPage,
+                                         @PathVariable long pageSize) {
+        return commentService.findCommentByPage( currentPage, pageSize );
+    }
 }

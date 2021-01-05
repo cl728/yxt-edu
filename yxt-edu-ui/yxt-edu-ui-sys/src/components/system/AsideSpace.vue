@@ -55,6 +55,26 @@
         <el-menu-item index="/messages">通知列表</el-menu-item>
         <el-menu-item index="/messages/input">发布通知</el-menu-item>
       </el-submenu>
+      <el-submenu index="4">
+        <template slot="title">
+          <i
+            class="el-icon-s-comment"
+            :style="{ color: aside.aside_icon_color }"
+          ></i>
+          <span>评论管理</span>
+        </template>
+        <el-menu-item index="/comments">评论列表</el-menu-item>
+      </el-submenu>
+      <el-submenu index="5">
+        <template slot="title">
+          <i
+            class="el-icon-folder-opened"
+            :style="{ color: aside.aside_icon_color }"
+          ></i>
+          <span>资源管理</span>
+        </template>
+        <el-menu-item index="/resources">资源列表</el-menu-item>
+      </el-submenu>
       <!-- <el-submenu index="4">
         <template slot="title">
           <i

@@ -113,7 +113,7 @@ public class AuthServiceImpl implements AuthService {
     private boolean checkIfValid(int userType, Long roleId) {
         switch (userType) {
             case 1: // 管理员登录
-                if (roleId != 1) {
+                if (roleId != 1 && roleId != 4) {
                     return false;
                 }
                 break;

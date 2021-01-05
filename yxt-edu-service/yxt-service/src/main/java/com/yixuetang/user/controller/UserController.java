@@ -166,6 +166,12 @@ public class UserController implements UserControllerApi {
         return this.userService.findUserTypeCount();
     }
 
+    @Override
+    @PostMapping("admin")
+    public CommonResponse addUser(@RequestBody UserForm userForm) {
+        return this.userService.addUser( userForm );
+    }
+
     private boolean checkIdIfInvalid(@PathVariable long id, HttpServletRequest request) {
         String token = CookieUtils.getCookieValue( request, id == 3 ? config.getAdminCookieName() : config.getUserCookieName() );
         UserInfo userInfo;

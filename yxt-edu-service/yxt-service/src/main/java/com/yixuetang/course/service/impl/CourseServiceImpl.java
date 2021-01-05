@@ -647,7 +647,7 @@ public class CourseServiceImpl implements CourseService {
         scMapper.selectList(
                 new QueryWrapper<StudentCourse>()
                         .eq( "course_id", courseId )
-                        .orderByAsc( "student_id" ))
+                        .orderByAsc( "student_id" ) )
                 .stream()
                 .map( StudentCourse::getStudentId )
                 .forEach( studentId -> {
@@ -657,7 +657,7 @@ public class CourseServiceImpl implements CourseService {
                     StudentCourseGradeResp studentCourseGradeResp = StudentCourseGradeResp.builder()
                             .sno( student.getTsNo() )
                             .studentName( student.getRealName() )
-                            .usualScore( studentCourse.getUsualScore() )
+                            .usualScore( studentCourse.getUsualScore() == null ? 0.0 : studentCourse.getUsualScore() )
                             .hwScore( scoreMap.get( "hwAverageScore" ) )
                             .examScore( scoreMap.get( "examAverageScore" ) )
                             .finalScore( scoreMap.get( "finalScore" ) )
@@ -688,7 +688,7 @@ public class CourseServiceImpl implements CourseService {
         for (Long homeworkId : homeworkIds) {
             totalHomeworkScore += homeworkStudentMapper.selectOne( new QueryWrapper<HomeworkStudent>().eq( "homework_id", homeworkId ).eq( "student_id", studentId ) ).getScore();
         }
-        double hwAverageScore = Double.parseDouble( df.format( totalHomeworkScore / homeworkIds.size() ) );
+        double hwAverageScore = homeworkIds.size() == 0 ? 0.0 : Double.parseDouble( df.format( totalHomeworkScore / homeworkIds.size() ) );
 
         // 获取测试平均分
         List<Exam> exams = examList.stream().filter( exam -> !exam.getFinalExam() ).collect( Collectors.toList() );
@@ -696,11 +696,11 @@ public class CourseServiceImpl implements CourseService {
         for (Exam exam : exams) {
             totalExamScore += examUtils.getTotalScore( exam.getId(), studentId );
         }
-        double examAverageScore = Double.parseDouble( df.format( totalExamScore / exams.size() ) );
+        double examAverageScore = exams.size() == 0 ? 0.0 : Double.parseDouble( df.format( totalExamScore / exams.size() ) );
 
         // 获取期末分数
-        Exam exam = examList.stream().filter( Exam::getFinalExam ).collect( Collectors.toList() ).get( 0 );
-        double finalScore = examUtils.getTotalScore( exam.getId(), studentId );
+        List<Exam> finalExamList = examList.stream().filter( Exam::getFinalExam ).collect( Collectors.toList() );
+        double finalScore = finalExamList.size() == 0 ? 0.0 : examUtils.getTotalScore( finalExamList.get( 0 ).getId(), studentId );
 
         scoreMap.put( "hwAverageScore", hwAverageScore );
         scoreMap.put( "examAverageScore", examAverageScore );

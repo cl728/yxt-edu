@@ -65,4 +65,13 @@ public interface CommentService {
      * @return 响应结果实体类
      */
     QueryResponse findCommentVoteUpCount();
+
+    /**
+     * 分页查询评论列表
+     *
+     * @param currentPage 当前页码
+     * @param pageSize    每页显示条数
+     * @return 响应结果实体类
+     */
+    QueryResponse findCommentByPage(long currentPage, long pageSize);
 }

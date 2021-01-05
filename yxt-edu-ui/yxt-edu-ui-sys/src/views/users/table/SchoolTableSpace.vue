@@ -14,8 +14,9 @@
             type="index"
             label="序号"
             width="50"
+            align="center"
           ></el-table-column>
-          <el-table-column property="value" label="学校名"></el-table-column>
+          <el-table-column property="value" label="学校名" align="center"></el-table-column>
         </el-table>
         <el-pagination
           @size-change="pageSizeChange"

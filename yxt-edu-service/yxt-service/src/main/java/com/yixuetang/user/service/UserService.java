@@ -180,4 +180,11 @@ public interface UserService {
      */
     QueryResponse findUserTypeCount();
 
+    /**
+     * 管理员新增用户
+     *
+     * @param userForm 用户信息表单
+     * @return 响应结果实体类
+     */
+    CommonResponse addUser(UserForm userForm);
 }
