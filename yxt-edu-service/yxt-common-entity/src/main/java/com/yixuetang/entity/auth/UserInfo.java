@@ -20,6 +20,7 @@ public class UserInfo {
     private Boolean isTeacher;
     private String avatar;
     private Boolean rememberMe;
+    private Boolean status;
 
     public UserInfo(Long id, String username) {
         this.id = id;

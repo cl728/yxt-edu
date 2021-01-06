@@ -50,6 +50,8 @@ public class User {
 
     private String school; // 学校
 
+    private Boolean status; // 用户状态，true正常 false被注销
+
     @TableField("role_id")
     private Long roleId;    // 角色id
 

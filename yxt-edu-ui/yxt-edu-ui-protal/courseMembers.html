@@ -709,7 +709,11 @@
 
 			getHomeworkScoresData() {
 				yxt.http.get("homework/scores/courseId/" + yxt.getUrlParam("courseId") + "/" + this.user.id).then(({ data }) => {
-					this.homeworkScoresData = data.queryResult.data[0]
+					if (data.success) {
+						if (data.queryResult.data.length > 0) {
+							this.homeworkScoresData = data.queryResult.data[0]
+						}
+					}
 				})
 			},
 
@@ -718,13 +722,15 @@
 					+ "/teacherId/" + this.user.id)
 					.then(({ data }) => {
 						if (data.success) {
-							this.examStudentScoresData = data.queryResult.data;
-							this.examTitle = this.examStudentScoresData[0].examStudentRespList.filter(examStudentResp => !examStudentResp.finalExam).map(examStudentResp => examStudentResp.title);
-							for (let i = 0; i < this.examStudentScoresData.length; i++) {
-								this.examStudentScoresData[i].finalExamStudentRespList =
-									this.examStudentScoresData[i].examStudentRespList.filter(resp => resp.finalExam)
+							if (data.queryResult.data.length > 0) {
+								this.examStudentScoresData = data.queryResult.data;
+								this.examTitle = this.examStudentScoresData[0].examStudentRespList.filter(examStudentResp => !examStudentResp.finalExam).map(examStudentResp => examStudentResp.title);
+								for (let i = 0; i < this.examStudentScoresData.length; i++) {
+									this.examStudentScoresData[i].finalExamStudentRespList =
+										this.examStudentScoresData[i].examStudentRespList.filter(resp => resp.finalExam)
+								}
+								this.finalExamTitle = this.examStudentScoresData[0].examStudentRespList.filter(examStudentResp => examStudentResp.finalExam).map(examStudentResp => examStudentResp.title);
 							}
-							this.finalExamTitle = this.examStudentScoresData[0].examStudentRespList.filter(examStudentResp => examStudentResp.finalExam).map(examStudentResp => examStudentResp.title);
 						}
 					})
 			},
@@ -839,7 +845,7 @@
 			this.getCourseData();
 			this.getCourseStudentData();
 			this.getStudentCourseGradeData();
-            yxt.viewCount();
+			yxt.viewCount();
 		},
 		watch: {
 			pageData: {
@@ -873,8 +879,9 @@
 					returnVal.push(singleUserData)
 				}
 
-				this.hwTitle = returnVal[0].hw.map(hw => hw.title)
-
+				this.hwTitle = returnVal.length > 0
+					? returnVal[0].hw.map(hw => hw.title)
+					: ""
 				return returnVal;
 			}
 		},

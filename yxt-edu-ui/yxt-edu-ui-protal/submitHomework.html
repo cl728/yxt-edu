@@ -204,18 +204,16 @@
 										</el-row>
 									</el-main>
 
-									<el-divider></el-divider>
-
-									<el-row style="margin: 0 10px 10px 10px;" v-show="homeworkStudent.status === 2">
-										<div
-											style="font-size: 15px; line-height: 15px; margin-bottom: 8px; color: #008000;">
-											教师批语：</div>
-										<div v-text="homeworkStudent.message === null ? '暂无批语' : homeworkStudent.message"
-										style="font-size: 12px;">
-										</div>
-									</el-row>
 								</el-container>
 							</el-card>
+						</el-row>
+						<el-divider></el-divider>
+						
+						<el-row style="margin: 0 10px 10px 10px;" v-show="homeworkStudent.status === 2">
+							<div style="font-size: 15px; line-height: 15px; margin-bottom: 8px; color: #008000;">
+								教师批语：</div>
+							<div v-text="homeworkStudent.message === null ? '暂无批语' : homeworkStudent.message" style="font-size: 12px;">
+							</div>
 						</el-row>
 						<!--查看提交日志-->
 						<!-- <el-row>

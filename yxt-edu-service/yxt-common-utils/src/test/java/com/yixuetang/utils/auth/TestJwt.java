@@ -31,7 +31,7 @@ public class TestJwt {
     @Test
     public void testGenerateToken() throws Exception {
         // 生成token
-        String token = JwtUtils.generateToken( new UserInfo( 20L, "Colin", false, "http://www.pava.run/group1/M00/00/00/rBAABV9oD7yAZtXEAAAnvyJPq-0710.jpg", true ), privateKey, 5 );
+        String token = JwtUtils.generateToken( new UserInfo( 20L, "Colin", false, "http://www.pava.run/group1/M00/00/00/rBAABV9oD7yAZtXEAAAnvyJPq-0710.jpg", true, true ), privateKey, 5 );
         System.out.println( "token = " + token );
     }
 

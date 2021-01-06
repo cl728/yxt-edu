@@ -166,7 +166,7 @@
                 </div>
             </el-main>
             <el-dialog :title="'批阅 ' + previewingStudentName + ' 的作业'" :visible.sync="previewHomeworkVisible"
-                destroy-on-close>
+                destroy-on-close >
                 <el-container>
                     <el-card class="box-card" id="homework-resources-card" shadow="never"
                         style="margin-top: 10px;width: 850px;height: auto; border-radius: 6px;border-width: 2px;padding: 0;">
@@ -222,8 +222,7 @@
                                 </el-input-number>
                             </el-form-item>
                             <el-form-item label="批语" prop="message">
-                                <el-input type="textarea" style="width: 200px; height: 50px;"
-                                    v-model="homeworkScoreForm.message"></el-input>
+                                <textarea id="commentForm" style="width: 200px; height: 50px;"></textarea>
                             </el-form-item>
                             <el-form-item>
                                 <el-button type="primary" @click="submitForm('homeworkScoreForm')">确定</el-button>
@@ -371,7 +370,9 @@
                         this.previewingStudentName = realName;
                         this.previewingStudentId = studentId;
                         this.homeworkScoreForm.score = obj.homeworkStudent.score;
-                        this.homeworkScoreForm.message = obj.homeworkStudent.message;
+                        setTimeout(() => {
+                            document.getElementById("commentForm").value = obj.homeworkStudent.message;
+                        }, 20);
                     } else {
                         this.$message.error(data.message);
                     }
@@ -435,6 +436,7 @@
             submitForm(formName) {
                 this.$refs[formName].validate((valid) => {
                     if (valid) {
+                        this.homeworkScoreForm.message = document.getElementById("commentForm").value;
                         yxt.http.put("homework/homeworkId/" + yxt.getUrlParam("id") + "/studentId/" + this.previewingStudentId, this.homeworkScoreForm).then(({ data }) => {
                             if (data.success) {
                                 this.$message.success(data.message);

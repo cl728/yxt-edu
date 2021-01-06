@@ -92,6 +92,14 @@ public class AuthController implements AuthControllerApi {
                     return new CommonResponse( AuthCode.LOGIN_FAIL_BY_PHONE );
                 }
         }
+        try {
+            UserInfo userInfo = JwtUtils.getInfoFromToken( token, config.getPublicKey() );
+            if (!userInfo.getStatus()) {
+                return new CommonResponse( AuthCode.INVALID_USER );
+            }
+        } catch (Exception e) {
+            LOGGER.error( "获取token中的用户信息异常！异常原因：{}", e );
+        }
         // 将 token 写入 cookie ,并指定 httpOnly 为 true ，防止通过 JS 获取和修改
         String cookieName = userType == 1 ? config.getAdminCookieName() : config.getUserCookieName();
         CookieUtils.setCookie( request, response, cookieName, token,

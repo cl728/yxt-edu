@@ -29,7 +29,8 @@ public class JwtUtils {
                 .claim( JwtConstant.JWT_KEY_USERNAME, userInfo.getUsername() )
                 .claim( JwtConstant.JWT_KEY_IS_TEACHER, userInfo.getIsTeacher() )
                 .claim( JwtConstant.JWT_KEY_AVATAR, userInfo.getAvatar() )
-                .claim( JwtConstant.JWT_KEY_REMEMBER_ME, userInfo.getRememberMe())
+                .claim( JwtConstant.JWT_KEY_REMEMBER_ME, userInfo.getRememberMe() )
+                .claim( JwtConstant.JWT_KEY_STATUS, userInfo.getStatus() )
                 .setExpiration( DateTime.now().plusMinutes( expireMinutes ).toDate() )
                 .signWith( SignatureAlgorithm.RS256, privateKey )
                 .compact();
@@ -51,6 +52,7 @@ public class JwtUtils {
                 .claim( JwtConstant.JWT_KEY_IS_TEACHER, userInfo.getIsTeacher() )
                 .claim( JwtConstant.JWT_KEY_AVATAR, userInfo.getAvatar() )
                 .claim( JwtConstant.JWT_KEY_REMEMBER_ME, userInfo.getRememberMe() )
+                .claim( JwtConstant.JWT_KEY_STATUS, userInfo.getStatus() )
                 .setExpiration( DateTime.now().plusMinutes( expireMinutes ).toDate() )
                 .signWith( SignatureAlgorithm.RS256, RsaUtils.getPrivateKey( privateKey ) )
                 .compact();
@@ -97,8 +99,8 @@ public class JwtUtils {
                 ObjectUtils.toString( body.get( JwtConstant.JWT_KEY_USERNAME ) ),
                 ObjectUtils.toBoolean( body.get( JwtConstant.JWT_KEY_IS_TEACHER ) ),
                 ObjectUtils.toString( body.get( JwtConstant.JWT_KEY_AVATAR ) ),
-                ObjectUtils.toBoolean( body.get( JwtConstant.JWT_KEY_REMEMBER_ME ) )
-                );
+                ObjectUtils.toBoolean( body.get( JwtConstant.JWT_KEY_REMEMBER_ME ) ),
+                ObjectUtils.toBoolean( body.get( JwtConstant.JWT_KEY_STATUS ) ) );
     }
 
     /**
@@ -131,6 +133,7 @@ public class JwtUtils {
         static final String JWT_KEY_AVATAR = "avatar";
         static final String JWT_KEY_IS_TEACHER = "isTeacher";
         static final String JWT_KEY_REMEMBER_ME = "rememberMe";
+        static final String JWT_KEY_STATUS = "status";
 
     }
 }

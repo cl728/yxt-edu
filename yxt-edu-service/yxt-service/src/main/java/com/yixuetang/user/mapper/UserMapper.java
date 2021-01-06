@@ -45,7 +45,7 @@ public interface UserMapper extends BaseMapper<User> {
                     one = @One(select = "com.yixuetang.user.mapper.RoleMapper.findById", fetchType = FetchType.EAGER))
     })
     @Select("<script>" +
-            "select id, username, email, phone, age, gender, role_id " +
+            "select id, username, email, phone, age, gender, role_id, status " +
             " from t_user <where>" +
             "<if test='request.gender != null and request.gender.length() == 1'> and gender = #{request.gender}</if>" +
             "<if test='request.roleId != null'> and role_id = #{request.roleId}</if>" +
@@ -66,7 +66,7 @@ public interface UserMapper extends BaseMapper<User> {
      * @return 用户实体类
      */
     @ResultMap("userMap")
-    @Select("select id, username, real_name, avatar, role_id from t_user where username = #{username} and password = #{password}")
+    @Select("select id, username, real_name, avatar, role_id, status from t_user where username = #{username} and password = #{password}")
     User findByUsernameAndPassword(@Param("username") String username, @Param("password") String password);
 
     /**
@@ -76,7 +76,7 @@ public interface UserMapper extends BaseMapper<User> {
      * @return 用户实体类
      */
     @ResultMap("userMap")
-    @Select("select id, username, real_name, avatar,role_id from t_user where email = #{email}")
+    @Select("select id, username, real_name, avatar, role_id, status from t_user where email = #{email}")
     User findByEmail(String email);
 
     /**
@@ -95,7 +95,7 @@ public interface UserMapper extends BaseMapper<User> {
      * @return 用户实体类
      */
     @ResultMap("userMap")
-    @Select("select id, username, real_name, avatar, role_id from t_user where phone = #{phone}")
+    @Select("select id, username, real_name, avatar, role_id, status from t_user where phone = #{phone}")
     User findByPhone(String phone);
 
     @Select("select u.avatar, u.real_name from t_user u, t_course c where c.id = #{courseId} and u.id = c.teacher_id")
@@ -143,4 +143,7 @@ public interface UserMapper extends BaseMapper<User> {
     List<User> findPageByExamId(@Param("page") Page<User> page,
                                 @Param("examId") long examId,
                                 @Param("search") String search);
+
+    @Update("update t_user set status = #{status} where id = #{userId}")
+    void updateStatusById(@Param("userId") long userId, @Param("status") Boolean status);
 }

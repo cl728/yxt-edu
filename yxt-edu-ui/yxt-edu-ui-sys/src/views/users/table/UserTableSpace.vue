@@ -97,6 +97,16 @@
               >
             </template>
           </el-table-column>
+          <el-table-column label="用户状态" align="center">
+            <template slot-scope="scope">
+              <el-tag
+                size="medium"
+                :type="scope.row.status ? 'success' : 'danger'"
+                effect="dark"
+                >{{ scope.row.status ? '正常' : '已被注销' }}</el-tag
+              >
+            </template>
+          </el-table-column>
           <el-table-column label="操作" width="120" align="center">
             <template slot-scope="scope">
               <el-popconfirm
@@ -105,15 +115,15 @@
                 confirmButtonType="danger"
                 cancelButtonType="success"
                 @confirm="deleteUser(scope.row.id)"
-                title="确认要注销此用户吗？"
+                :title="scope.row.status ? '确认要注销此用户吗？' : '确认要还原此用户吗？'"
               >
                 <el-button
                   size="mini"
                   slot="reference"
-                  type="danger"
+                  :type="scope.row.status ? 'danger' : 'success'"
                   :disabled="scope.row.role.id === 1 || scope.row.role.id === 4 && user.role.id !== 1"
                 >
-                  <i class="el-icon-delete" />
+                  <i :class="scope.row.status ? 'el-icon-delete' : 'el-icon-refresh-left'" />
                 </el-button>
               </el-popconfirm>
             </template>

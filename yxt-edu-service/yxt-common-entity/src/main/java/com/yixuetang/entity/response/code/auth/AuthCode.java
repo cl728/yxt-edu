@@ -18,7 +18,9 @@ public enum AuthCode implements ResponseCode {
 
     VERIFY_SUCCESS( true, 40003, "校验用户身份成功！" ),
 
-    LOGIN_FAIL_BY_PHONE( false, 40004, "验证码错误！" );
+    LOGIN_FAIL_BY_PHONE( false, 40004, "验证码错误！" ),
+
+    INVALID_USER( false, 40005, "该用户已被注销，请联系管理员！" );
 
     private boolean success;
     private int code;

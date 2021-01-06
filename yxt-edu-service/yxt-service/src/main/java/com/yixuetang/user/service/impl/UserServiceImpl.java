@@ -435,7 +435,7 @@ public class UserServiceImpl implements UserService {
             // 重新生成 token 信息
             UserInfo userInfo = JwtUtils.getInfoFromToken( token, config.getPublicKey() );
             String newToken = JwtUtils.generateToken( new UserInfo( userInfo.getId(), userInfo.getUsername(),
-                            userInfo.getIsTeacher(), avatar, userInfo.getRememberMe() ),
+                            userInfo.getIsTeacher(), avatar, userInfo.getRememberMe(), userInfo.getStatus() ),
                     config.getPrivateKey(), config.getExpire() );
             // 重新写入cookie
             CookieUtils.setCookie( request, response, cookieName, newToken,
@@ -461,21 +461,8 @@ public class UserServiceImpl implements UserService {
         }
         if (roleId == 1) { // 超级管理员不允许被调用接口注销
             return CommonResponse.FAIL();
-        } else if (roleId == 2) { // 如果注销的是教师用户，需先把其创建的课程删除
-            List<Long> courseIds = this.courseMapper
-                    .selectList( new QueryWrapper<Course>().eq( "teacher_id", userId )
-                            .select( "id" ) ).stream().map( Course::getId ).collect( Collectors.toList() );
-            courseIds.forEach( courseId -> {
-                // 将选课表里关于该课程的记录删除
-                this.scMapper.delete( new QueryWrapper<StudentCourse>().eq( "course_id", courseId ) );
-
-                // 将该课程删除
-                this.courseMapper.deleteById( courseId );
-            } );
-        } else { // 如果注销的是学生用户，需先将其选课记录删除
-            this.scMapper.delete( new QueryWrapper<StudentCourse>().eq( "student_id", userId ) );
         }
-        this.userMapper.deleteById( userId );
+        this.userMapper.updateStatusById( userId, !user.getStatus() );
         return CommonResponse.SUCCESS();
     }
 
@@ -495,6 +482,11 @@ public class UserServiceImpl implements UserService {
                 .stream()
                 .map( StudentCourse::getStudentId )
                 .collect( Collectors.toList() );
+
+        if (CollectionUtils.isEmpty( ids )) {
+            return new QueryResponse( CommonCode.SUCCESS,
+                    new QueryResult<>( new ArrayList<>(), 0 ) );
+        }
 
         List<User> filterUsers = new ArrayList<>();
         // 如果 search 字段不为空，先在 User 总表里查询出符合条件的 User 列表，再将其中不是该门课程成员的 User 过滤掉
