@@ -16,6 +16,7 @@ import com.yixuetang.entity.notice.NoticeUser;
 import com.yixuetang.entity.request.course.*;
 import com.yixuetang.entity.request.user.AvatarUser;
 import com.yixuetang.entity.request.user.DelCourseUser;
+import com.yixuetang.entity.resource.CourseResource;
 import com.yixuetang.entity.response.CommonResponse;
 import com.yixuetang.entity.response.QueryResponse;
 import com.yixuetang.entity.response.code.CommonCode;
@@ -33,6 +34,7 @@ import com.yixuetang.homework.mapper.HomeworkMapper;
 import com.yixuetang.homework.mapper.HomeworkStudentMapper;
 import com.yixuetang.notice.mapper.NoticeMapper;
 import com.yixuetang.notice.mapper.NoticeUserMapper;
+import com.yixuetang.resource.mapper.CourseResourceMapper;
 import com.yixuetang.user.mapper.RoleMapper;
 import com.yixuetang.user.mapper.UserMapper;
 import com.yixuetang.utils.course.GenCodeUtils;
@@ -87,6 +89,9 @@ public class CourseServiceImpl implements CourseService {
 
     @Autowired
     private NoticeUserMapper noticeUserMapper;
+
+    @Autowired
+    private CourseResourceMapper courseResourceMapper;
 
     @Autowired
     private ExamUtils examUtils;
@@ -329,10 +334,13 @@ public class CourseServiceImpl implements CourseService {
             return new CommonResponse( CourseCode.COURSE_NOT_FOUND );
         }
 
-        // 先删除选课表的记录
+        // 1. 删除选课表的记录
         this.scMapper.delete( new QueryWrapper<StudentCourse>().eq( "course_id", courseId ) );
 
-        // 再删除这门课程的记录
+        // 2. 删除课程-资源表的记录
+        this.courseResourceMapper.delete( new QueryWrapper<CourseResource>().eq( "course_id", courseId ) );
+
+        // 3. 删除这门课程的记录
         this.courseMapper.deleteById( courseId );
 
         return CommonResponse.SUCCESS();

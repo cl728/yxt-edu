@@ -45,27 +45,27 @@
                                     <el-badge v-show="totalUnreadCount != 0" :value="totalUnreadCount" :max="10"
                                         class="item">
                                 </template>
-                                <el-menu-item @click="location.href = 'message.html' "><i
+                                <el-menu-item @click="location.href = 'message.html?show=isSystemMessageVisible' "><i
                                         class="el-icon-message-solid"></i> 系统通知 <el-badge
                                         v-if="unreadMessageCount.systemMessageCount != 0"
                                         :value="unreadMessageCount.systemMessageCount" class="item">
                                 </el-menu-item>
-                                <el-menu-item @click="location.href = 'message.html' "><i
+                                <el-menu-item @click="location.href = 'message.html?show=isCourseMessageVisible' "><i
                                         class="el-icon-notebook-2"></i> 课程相关 <el-badge
                                         v-if="unreadMessageCount.courseMessageCount != 0"
                                         :value="unreadMessageCount.courseMessageCount" class="item">
                                 </el-menu-item>
-                                <el-menu-item @click="location.href = 'message.html' "><i class="fa fa-mail-forward"
+                                <el-menu-item @click="location.href = 'message.html?show=isReplyMessageVisible' "><i class="fa fa-mail-forward"
                                         style="margin-left: 6px; margin-right: 10px;"></i>
                                     回复我的 <el-badge v-if="unreadMessageCount.replyMessageCount != 0"
                                         :value="unreadMessageCount.replyMessageCount" class="item">
                                 </el-menu-item>
-                                <el-menu-item @click="location.href = 'message.html' "><i class="fa fa-thumbs-o-up"
+                                <el-menu-item @click="location.href = 'message.html?show=isVoteUpMessageVisible' "><i class="fa fa-thumbs-o-up"
                                         style="margin-left: 6px; margin-right: 12px;"></i> 收到的赞 <el-badge
                                         v-if="unreadMessageCount.voteUpMessageCount != 0"
                                         :value="unreadMessageCount.voteUpMessageCount" class="item">
                                 </el-menu-item>
-                                <el-menu-item @click="location.href = 'message.html' "><i
+                                <el-menu-item @click="location.href = 'message.html?show=isChatMessageVisible' "><i
                                         class="el-icon-chat-dot-round"></i> 我的私信 <el-badge
                                         v-if="unreadMessageCount.chatMessageCount != 0"
                                         :value="unreadMessageCount.chatMessageCount" class="item">

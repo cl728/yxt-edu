@@ -86,12 +86,15 @@ export default {
           labelName: "单一用户",
         },
       ],
+      admin: {
+        role: {}
+      }
     };
   },
   methods: {
     inputMessage() {
       this.$axios
-        .post("message/admin/adminId/" + 3, this.messageForm) // 管理员id暂时写死
+        .post("message/admin/adminId/" + this.admin.id, this.messageForm)
         .then(({ data }) => {
           if (data.success) {
             this.$message.success(data.message);
@@ -107,7 +110,17 @@ export default {
     goback() {
       this.$router.push({ path: "/messages" });
     },
+    getAdminData() {
+      this.$axios.get("auth/verify/1").then(({ data }) => {
+        if (data.success) {
+          this.admin = data.queryResult.data[0];
+        }
+      });
+    },
   },
+  mounted() {
+    this.getAdminData();
+  }
 };
 </script>
 <style scoped>

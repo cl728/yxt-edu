@@ -505,7 +505,7 @@
                                                     </span>
                                                 </el-row>
                                                 <el-divider></el-divider>
-                                                <div style="height: 400px; width: 870px; overflow-y: auto;"
+                                                <div style="height: 390px; width: 870px; overflow-y: auto;"
                                                     id="chat-box">
                                                     <el-row v-for="(content, index) in chat.messageList" :key="index"
                                                         style="line-height: 40px;">
@@ -829,6 +829,9 @@
                 })
             },
             show(key) {
+                if (!key) {
+                    key = 'isSystemMessageVisible'
+                }
                 for (let k in this.visible) {
                     this.visible[k] = k === key;
                 }
@@ -987,6 +990,7 @@
         },
         created() {
             this.verify();
+            this.show(yxt.getUrlParam('show'));
             yxt.viewCount();
         },
         watch: {

@@ -227,7 +227,7 @@ public class NoticeServiceImpl implements NoticeService {
 
     @Override
     public CommonResponse updateReadStatus(long noticeId, long userId) {
-        /*Notice notice = noticeMapper.selectOne(new QueryWrapper<Notice>().eq("id", noticeId));
+        Notice notice = noticeMapper.selectOne(new QueryWrapper<Notice>().eq("id", noticeId));
         NoticeUser noticeUser = this.noticeUserMapper.selectOne(new QueryWrapper<NoticeUser>().eq("notice_id", noticeId).eq("user_id", userId));
         //  公告是否存在
         if (notice == null) {
@@ -238,7 +238,7 @@ public class NoticeServiceImpl implements NoticeService {
         if (!noticeUser.getView()) {
             noticeUser.setView(!noticeUser.getView());
             noticeUserMapper.updateById(noticeUser);
-        }*/
+        }
         return CommonResponse.SUCCESS();
     }
 
